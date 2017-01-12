@@ -42,6 +42,6 @@
                     
   Template pris pour ce projet :
   
-                   - react-create component <nom_component> --jsx --es5 --css
+                   - react-create component <nom_component> --jsx --css
 
   
