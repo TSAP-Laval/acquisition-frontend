@@ -4,7 +4,7 @@
   "description": "React app for TSAP-Acquisition",
   "main": "index.js",
   "repository": "git@github.com:TSAP-Laval/acquisition-frontend.git",
-  "author": "Alexandre Hebert-Vincent <alexandre.hebertvincent@gmail.com>",
+  "author": "William Dussault <dalloriam@gmail.com>",
   "license": "MIT",
   "scripts": {
     "test": "echo Not Implemented",
