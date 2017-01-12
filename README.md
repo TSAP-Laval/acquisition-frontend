@@ -1,3 +1,4 @@
+
 # acquisition-frontend
 
 
@@ -45,3 +46,21 @@
                    - react-create component <nom_component> --jsx --css
 
   
+                    ```
+                    
+  Template pris pour ce projet :
+  
+                   ```- react-create component <nom_component> --jsx --css```
+
+
+## Configurations de l'environnement de développement
+
+### Prérequis
+* Python
+* Yarn (npm install -g yarn)
+* webpack (npm install -g webpack ou yarn add webpack)
+
+##### Lors du développement exécuter :
+```$ python -m SimpleHTTPServer (dans le dossier /dist du projet)```
+
+```$ webpack --watch (dans un autre terminal)```

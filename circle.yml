@@ -1,0 +1,19 @@
+machine:  
+  python:
+    version: 2.7.10
+
+dependencies:  
+  pre:
+    - pip install ansible
+    - pip install --upgrade setuptools
+
+general:
+  artifacts:
+    - "dist/"
+
+deployment:  
+  prod:
+    branch: master
+    commands:
+      - webpack
+      - ansible-playbook deployment/deploy.yml -i deployment/vars

@@ -1,0 +1,15 @@
+- hosts: web
+  remote_user: tsap
+
+  tasks:
+
+  - name: Delete old website version
+    file: path=/home/tsap/web state=absent
+
+  - name: Create web directory
+    file: path=/home/tsap/web state=directory
+
+  - name: Upload new build
+    copy:
+      src: ../dist/
+      dest: /home/tsap/web/
