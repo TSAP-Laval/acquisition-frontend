@@ -1,5 +1,6 @@
 
 # acquisition-frontend
+![CircleCI](https://circleci.com/gh/TSAP-Laval/acquisition-frontend.svg?style=svg)
 
 
 ## Création de la structure du projet :
