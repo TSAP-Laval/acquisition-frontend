@@ -1,18 +1,39 @@
 {
-  "name": "TSAP-Frontend",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "react-scripts": "0.8.5"
-  },
-  "dependencies": {
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2"
-  },
+  "name": "acquisition-frontend",
+  "version": "1.0.0",
+  "description": "React app for TSAP-Acquisition",
+  "main": "index.js",
+  "repository": "git@github.com:TSAP-Laval/acquisition-frontend.git",
+  "author": "William Dussault <dalloriam@gmail.com>",
+  "license": "MIT",
   "scripts": {
+    "test": "echo Not Implemented",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@types/node": "^7.0.0",
+    "@types/react": "^15.0.0",
+    "@types/react-dom": "^0.14.20",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-scripts": "^0.8.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.6.1",
+    "awesome-typescript-loader": "^3.0.0-beta.18",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.26.0",
+    "node-sass": "^4.2.0",
+    "postcss-loader": "^1.2.2",
+    "react-addons-test-utils": "^15.4.2",
+    "sass-loader": "^4.1.1",
+    "source-map-loader": "^0.1.6",
+    "style-loader": "^0.13.1",
+    "ts-loader": "^1.3.3",
+    "typescript": "^2.1.4",
+    "webpack": "^1.14.0"
   }
 }
