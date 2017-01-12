@@ -17,7 +17,8 @@
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-scripts": "^0.8.5"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
