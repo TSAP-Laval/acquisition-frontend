@@ -1,6 +1,4 @@
 import * as React from "react";
-
-import Header from "./Header"
 import Footer from "./Footer"
 
 require('../../sass/Layout.scss');
@@ -12,7 +10,6 @@ export class Layout extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
             <div>
-                <Header />
                 <Footer />
             </div>
         );
