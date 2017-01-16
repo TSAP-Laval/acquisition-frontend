@@ -1,12 +1,48 @@
 import * as React from "react";
 
-export interface ILayoutProps {}
-export interface ILayoutState {}
+export interface ILayoutProps {
+    params: string
+}
+export interface ILayoutState {
+    hasVideo: boolean
+}
 
 export default class Layout extends React.Component<ILayoutProps, ILayoutState> {
+
+    constructor(props: any) {
+        super(props);
+        this.state = {hasVideo: (props.params === 'true')};
+        console.log(this.state.hasVideo);
+    }
+
     render() {
-        return (
-            <div className="column col-sm-9 col-xs-11" id="main">
+        let video = null;
+        if (!this.state.hasVideo) {
+            video = 
+            <div>
+                <video
+                    id="video-player"
+                    className="video-js"
+                    controls
+                    preload="auto"
+                    poster="//vjs.zencdn.net/v/oceans.png"
+                    data-setup='{}'>
+                <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+                <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+                <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source>
+                <p className="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="http://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                    </a>
+                </p>
+                </video>
+            </div>;               
+        }
+        else {
+            video =
+            <div>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-6 absolute">
@@ -23,8 +59,14 @@ export default class Layout extends React.Component<ILayoutProps, ILayoutState> 
                     </div>
                 </div>
                 <div className="upload-drop-zone" id="drop-zone">
-                    Just drag and drop files here
+                    <p>Just drag and drop files here</p>
                 </div>
+            </div>;
+        }
+
+        return (            
+            <div className="column col-sm-12 col-xs-12" id="main">
+                {video}
             </div>
         )
     }

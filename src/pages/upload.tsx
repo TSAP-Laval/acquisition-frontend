@@ -7,7 +7,9 @@ import Footer from "../layouts/Layout/Footer"
 import Uploader from "../layouts/Layout/Uploader"
 import SideBar from "../layouts/Layout/SideBar"
 
-export interface ILayoutProps {}
+export interface ILayoutProps {
+    hasVideo: boolean
+}
 export interface ILayoutState {}
 
 export class Upload extends React.Component<ILayoutProps, ILayoutState> {
@@ -17,7 +19,7 @@ export class Upload extends React.Component<ILayoutProps, ILayoutState> {
                 <div className="row row-offcanvas row-offcanvas-left">
                     <Header title="Page d'upload"/>
                     <SideBar />
-                    <Uploader />
+                    <Uploader params={ window.location.href.split('is_new=')[1] }/>
                 </div>
                 <Footer />
             </div>
