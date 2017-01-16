@@ -1,0 +1,123 @@
+/* Default template */
+/*=================================*/
+
+#root {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+header {
+    font-family: $font;
+    font-size: 20px;
+    text-align: center;
+}
+
+footer {
+    font-family: $font;
+    font-size: 13px;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+}
+
+/* Upload page */
+/*=================================*/
+
+/* Drag and drop upload section */
+.absolute {
+    position: absolute;
+}
+
+.drag-name {
+    margin:auto;
+    text-align:center;
+}
+
+.upload-drop-zone {
+    height: 300px;
+    margin: 0 2%;
+    border-width: 2px;
+    margin-bottom: 20px;
+}
+
+.upload-drop-zone {
+    color: #ccc;
+    border-style: dashed;
+    border-color: #ccc;
+    line-height: 200px;
+    text-align: center
+}
+
+.upload-drop-zone.drop {
+    color: #222;
+    border-color: #222;
+}
+
+/* Upload button*/
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+@media screen and (max-width: 500px) {
+    .absolute {
+        position: relative;
+    }
+} 
+
+/* Side bar */
+/*==============================*/
+
+.wrapper, .row {
+   min-height: 100%;
+   margin-left:0;
+   margin-right:0;
+}
+
+#sidebar {
+    background-color: #eee;
+    padding-left: 0;
+    float: left;
+    max-height: 100%;
+}
+
+#sidebar > .nav > li {
+    margin: 10px 0;
+}
+
+#sidebar > .nav > li > a {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Off canvas sidebar */
+/*==============================*/
+
+@media screen and (max-width: 768px) {
+    #sidebar {
+        min-width: 44px;
+    }
+    
+    #sidebar .visible-xs {
+       display:inline !important;
+    }
+} 
