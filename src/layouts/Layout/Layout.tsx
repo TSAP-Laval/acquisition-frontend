@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import Header from "./Header"
-import Footer from "./Footer"
 import Video from "./Video"
+import Footer from "./Footer"
 
 require('../../sass/Layout.scss');
 
