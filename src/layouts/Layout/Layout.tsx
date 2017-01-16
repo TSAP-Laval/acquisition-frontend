@@ -2,6 +2,7 @@ import * as React from "react";
 
 import Header from "./Header"
 import Footer from "./Footer"
+import Video from "./Video"
 
 require('../../sass/Layout.scss');
 
@@ -13,6 +14,7 @@ export class Layout extends React.Component<ILayoutProps, ILayoutState> {
         return (
             <div>
                 <Header />
+                <Video />
                 <Footer />
             </div>
         );
