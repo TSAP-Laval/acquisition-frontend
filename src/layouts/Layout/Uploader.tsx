@@ -19,13 +19,13 @@ export default class Layout extends React.Component<ILayoutProps, ILayoutState> 
                         </div>
                         <div className="drag-name">
                             <h4>Or drag and drop files below</h4>
-                        </div>
+                         </div>
                     </div>
                 </div>
                 <div className="upload-drop-zone" id="drop-zone">
                     Just drag and drop files here
                 </div>
             </div>
-        )
+        );
     }
 }
