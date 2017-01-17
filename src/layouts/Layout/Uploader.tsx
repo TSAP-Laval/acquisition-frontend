@@ -179,6 +179,6 @@ export default class Layout extends React.Component<ILayoutProps, ILayoutState> 
             <div className="column col-sm-12 col-xs-12" id="main">
                 {video}
             </div>
-        )
+        );
     }
 }
