@@ -10,7 +10,7 @@ export default class Title extends React.Component<ILayoutProps, ILayoutState> {
         super(props);
         this.state = { title: this.props.title };
     }
-
+    
     render() {
         return (
             <h1>{this.props.title}</h1>
