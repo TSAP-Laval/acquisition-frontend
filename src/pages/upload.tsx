@@ -6,6 +6,7 @@ import Header from "../layouts/Layout/Header"
 import Footer from "../layouts/Layout/Footer"
 import Uploader from "../layouts/Layout/Uploader"
 import SideBar from "../layouts/Layout/SideBar"
+import VideoPlayer from "../layouts/layout/VideoPlayer"
 
 export interface ILayoutProps {
     hasVideo: boolean
