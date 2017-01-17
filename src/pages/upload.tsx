@@ -15,9 +15,9 @@ export interface ILayoutState {}
 export class Upload extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
-            <div className="wrapper">
+            <div className="wrapper absolute">
                 <div className="row row-offcanvas row-offcanvas-left">
-                    <Header title="Page d'upload"/>
+                    <Header title="Page d'analyse vidéo"/>
                     <SideBar />
                     <Uploader params={ window.location.href.split('is_new=')[1] }/>
                 </div>
