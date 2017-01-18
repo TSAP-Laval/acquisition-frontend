@@ -27,7 +27,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     onPlay = (e: React.MouseEvent<HTMLElement>) => {
         let _video = document.getElementById("my-player") as HTMLVideoElement;
-        let _playButton = document.getElementById("play-button");
+        let _playButton = document.getElementById("play-button") as HTMLVideoElement;
         if (this.playState == true) {
             _video.pause();
             console.log(_video.currentTime);
@@ -42,7 +42,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     onPause = (e: React.MouseEvent<HTMLElement>) => {
         let _video = document.getElementById("my-player") as HTMLVideoElement;
-        let _playButton = document.getElementById("play-button");
+        let _playButton = document.getElementById("play-button") as HTMLVideoElement;
         if (this.playState == true) {
             _video.pause();
             console.log(_video.currentTime);
@@ -54,7 +54,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     onStop = (e: React.MouseEvent<HTMLElement>) => {
         let _video = document.getElementById("my-player") as HTMLVideoElement;
-        let _playButton = document.getElementById("play-button");
+        let _playButton = document.getElementById("play-button") as HTMLVideoElement;
         if (this.playState == true) {
             _video.pause();
             console.log(_video.currentTime);
@@ -82,16 +82,14 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     onSlide = (e: React.FormEvent<HTMLElement>) => {
         let _video = document.getElementById("my-player") as HTMLVideoElement;
-        let _slider = document.getElementById("my-slider")as HTMLInputElement;
-        let _value = parseFloat(_slider.value);
-        _video.currentTime = (_value / 300) * _video.duration;
+        let _slider = document.getElementById("my-slider") as HTMLInputElement;
+        _video.currentTime = (parseInt(_slider.value) / 300) * _video.duration;
     }
 
     onVideoRunning = (e: React.FormEvent<HTMLElement>) => {
         let _video = document.getElementById("my-player") as HTMLVideoElement;
         let _slider = document.getElementById("my-slider") as HTMLInputElement;
-        let _value = (_video.currentTime / _video.duration) * 300;
-        _slider.value = _value.toString();
+        _slider.value = ((_video.currentTime / _video.duration) * 300).toString();
     }
 
     getPlayStateButton = () => {

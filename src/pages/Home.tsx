@@ -9,7 +9,7 @@ require('../sass/Layout.scss');
 export interface ILayoutProps {}
 export interface ILayoutState {}
 
-export class Accueil extends React.Component<ILayoutProps, ILayoutState> {
+export class Home extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
             <div>
