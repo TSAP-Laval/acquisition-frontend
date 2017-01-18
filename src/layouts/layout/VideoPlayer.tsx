@@ -16,18 +16,18 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     playState = false;
 
     componentDidMount() {
-        let _slider = document.getElementById("my-slider");
-        _slider.value = 0;
+        let _slider = document.getElementById("my-slider") as HTMLInputElement;
+        _slider.value = "0";
     }
 
     getVideoLenght = () => {
-        let _video = document.getElementById("my-player");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
         return _video.duration;
     }
 
     onPlay = (e: React.MouseEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
-        let _playButton = document.getElementById("play-button");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
+        let _playButton = document.getElementById("play-button") as HTMLVideoElement;
         if (this.playState == true) {
             _video.pause();
             console.log(_video.currentTime);
@@ -41,8 +41,8 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     onPause = (e: React.MouseEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
-        let _playButton = document.getElementById("play-button");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
+        let _playButton = document.getElementById("play-button") as HTMLVideoElement;
         if (this.playState == true) {
             _video.pause();
             console.log(_video.currentTime);
@@ -53,8 +53,8 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     onStop = (e: React.MouseEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
-        let _playButton = document.getElementById("play-button");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
+        let _playButton = document.getElementById("play-button") as HTMLVideoElement;
         if (this.playState == true) {
             _video.pause();
             console.log(_video.currentTime);
@@ -66,30 +66,30 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     onBackFive = (e: React.MouseEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
         _video.currentTime -= 5;
     }
 
     onRestart = (e: React.MouseEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
         _video.currentTime = 0;
     }
 
     onForwardFive = (e: React.MouseEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
         _video.currentTime += 5;
     }
 
     onSlide = (e: React.FormEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
-        let _slider = document.getElementById("my-slider");
-        _video.currentTime = (_slider.value / 300) * _video.duration;
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
+        let _slider = document.getElementById("my-slider") as HTMLInputElement;
+        _video.currentTime = (parseInt(_slider.value) / 300) * _video.duration;
     }
 
     onVideoRunning = (e: React.FormEvent<HTMLElement>) => {
-        let _video = document.getElementById("my-player");
-        let _slider = document.getElementById("my-slider");
-        _slider.value = (_video.currentTime / _video.duration) * 300;
+        let _video = document.getElementById("my-player") as HTMLVideoElement;
+        let _slider = document.getElementById("my-slider") as HTMLInputElement;
+        _slider.value = ((_video.currentTime / _video.duration) * 300).toString();
     }
 
     getPlayStateButton = () => {
