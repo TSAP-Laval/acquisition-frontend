@@ -4,7 +4,7 @@ import dispatcher from "../dispatcher";
 
 class UploadStore extends EventEmitter {
 
-    classes: String[];
+    classes: string[];
 
     constructor() {
         super();
@@ -12,18 +12,39 @@ class UploadStore extends EventEmitter {
     }
 
     addAction(action: string) {
-        this.classes.push(action);
+        console.log('index : ' + this.classes.indexOf(action));
+        if (this.classes.indexOf(action) === -1)
+            this.classes.push(action);
+    }
+
+    removeAction(action: string) {
+        var index = this.classes.indexOf(action)
+        this.classes.splice(index, 1);
     }
 
     getAll() {
         return this.classes;
     }
 
-    handleActions(action: IAction){
+    handleActions(action: IAction, file: File){
         switch(action.type) {
-            case "DRAG_OVER":
-                this.classes.push(action.type);
+            case "dragenter":
+                this.addAction(action.type);
                 this.emit("change");
+                break;
+            case "dragleave":
+                this.removeAction(action.type);
+                this.emit("change");
+                break;
+            case "drop":
+                if (!file == null) {
+                    console.log('file is here \n' + file);
+                }
+                this.removeAction("dragenter");
+                this.addAction(action.type);
+                this.emit("change");
+                break;
+
         }
     }
 }

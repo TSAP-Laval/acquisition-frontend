@@ -1,7 +1,15 @@
 import dispatcher from "../dispatcher"
-import * as Actions from "./actions/dragOver"
+//import * as Actions from "./actions/dragEnter"
 
-export function DragOver() {
-    const action = new Actions.DragOver()
-    dispatcher.dispatch(action);
+export function Add(type: string, file: File = null) {
+    dispatcher.dispatch({
+        type : type,
+        file : file
+    });
+}
+
+export function Remove(type: string) {
+    dispatcher.dispatch({
+        type : type
+    });
 }

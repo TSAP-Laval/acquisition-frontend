@@ -1,40 +1,53 @@
 import * as React from "react";
+import * as  Dropzone from "react-dropzone";
+
 import * as Actions from "../../Uploader/Actions"
 import Store from "../../Uploader/uploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: String[]
+    actions: string[]
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
 
-    actions: String[];
-
-    constructor () {
-        super();
+    constructor (props: any) {
+        super(props);
         this.state = {actions: []};
     }
 
-    addAction(e:MouseEvent){
-        Actions.DragOver();
+    onDrop(acceptedFiles: File){
+        console.clear();
+        console.log(acceptedFiles);
+        Actions.Add('drop');
     }
 
     componentWillMount(){
         Store.on("change", () => {
-            this.state = {actions: Store.getAll()};
+            this.setState({actions: Store.getAll()});
+            console.log(this.state.actions);
         })
     }
     
     render() {
+        var style = {width: "45%"};
+
+        var dropzone = <Dropzone className="upload-drop-zone" activeClassName="upload-drop-zone drop" onDrop={ this.onDrop}>
+                        <div id="drop-zone">
+                            Déposer le fichier ici
+                        </div>
+                    </Dropzone>
 
         this.state.actions.forEach(element => {
             switch (element) {
-                case "drag":
-                    
+                case "dragenter":
                     break;
                 case "drop":
-                    
+                    dropzone = <div className="progress">
+                                    <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={style}>
+                                        <span className="sr-only">45% Complete</span>
+                                    </div>
+                                </div>;
                     break;
                 default:
                     break;
@@ -43,27 +56,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         return (
             <div className="absolute wide">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-6 absolute" onDrag={this.addAction.bind(this)}>
-                            <form ref="uploadForm" action='http://localhost.com:3000/' method='GET' 
-                            onDrag={ e => this.handleSubmit(e) }
-                            onSubmit={ e => this.handleSubmit(e) } encType="multipart/form-data">
-                                <label className="file-upload btn btn-primary btn-file">
-                                    Envoyer 
-                                    <input ref="file" type='file' id="file" name='file' className="upload" />
-                                </label>
-                            </form>
-                        </div>
-                        <div className="drag-name">
-                            <h4>Ou glisser le fichier ci-dessous</h4>
-                        </div>
-                    </div>
-                </div>
-                <div ref="dragDropFile" className="upload-drop-zone" id="drop-zone" onDrop={ e => this.onDrop(e)} 
-                onDragOver={ e => this.dragOver(e) } onDragLeave={ e => this.dragLeave(e) }>
-                    Déposer le fichier ici
-                </div>
+                {dropzone}
             </div>
         );
     }

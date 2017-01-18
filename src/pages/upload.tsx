@@ -14,12 +14,14 @@ export interface ILayoutProps {
 export interface ILayoutState {}
 
 export class Upload extends React.Component<ILayoutProps, ILayoutState> {
+
+    //      <div className="video-container">
+    //         <VideoPlayer />
+    //      </div>
+
     render() {
         return (
             <div className="wrapper absolute">
-                <div className="video-container">
-                    <VideoPlayer />
-                </div>
                 <div className="row row-offcanvas row-offcanvas-left">
                     <Header title="Page d'analyse vidéo"/>
                     <SideBar />

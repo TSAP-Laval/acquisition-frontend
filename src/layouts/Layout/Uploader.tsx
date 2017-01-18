@@ -19,7 +19,7 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
         console.log(this.state.hasVideo);
     }
 
-    handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    /*handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
     }
 
@@ -57,18 +57,14 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
         createForm.style.setProperty("display", "none");
         bkgDiv.style.setProperty("display", "none");
         bkgDiv.style.setProperty("z-index", "-1");
-    }
+    }*/
 
 
     render() {
-        var divStyle = {
-            display: "none",
-        };
-
         return (          
             <div className="column col-sm-12 col-xs-12" id="main">
-                {DragDrop}
-                {Form}
+                <DragDrop />
+                <Form />
             </div>
         );
     }

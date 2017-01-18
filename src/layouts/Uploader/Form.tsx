@@ -4,18 +4,18 @@ export interface ILayoutProps {}
 export interface ILayoutState {}
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
-    constructor () {
-        super();
-    }
-    
     render() {
+
+        var divStyle = {
+            display: "none",
+        };
+
         return (
             <div>
                 <div className="modal-dialog relative" id="modal" style={divStyle}>
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button type="button" onClick={ e => this.closeForm(e) } className="close" 
-                            data-dismiss="modal">
+                            <button type="button" className="close" data-dismiss="modal">
                                 <span aria-hidden="true">&times;</span>
                                 <span className="sr-only">Close</span>
                             </button>
@@ -59,7 +59,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                         </div>
                         
                         <div className="modal-footer">
-                            <button type="button" onClick={ e => this.closeForm(e) } className="btn btn-default"
+                            <button type="button" className="btn btn-default"
                                     data-dismiss="modal">
                                         Fermer
                             </button>
