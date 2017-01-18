@@ -116,6 +116,41 @@ footer {
     }
 } 
 
+/* Upload form */
+
+#modal {
+    display: block;
+    z-index: 2;
+}
+
+#blur-bkg {
+    display: block;
+    z-index: 1;
+}
+
+/* Confirmation form */
+
+#confirm {
+    margin: auto;
+    max-width: 200px;
+    max-height: 150px;
+    display: block;
+    position: absolute;
+    z-index: 5;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.3);
+    background-color: white;
+}
+
+#confirm .modal-footer, #confirm .modal-body {
+    background-color: white;
+}
+
+#blur-bkg-2 {
+    z-index: 3;
+}
+
 /* Side bar */
 /*==============================*/
 
