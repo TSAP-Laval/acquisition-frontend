@@ -40,8 +40,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         this.state.actions.forEach(element => {
             switch (element) {
-                case "dragenter":
-                    break;
                 case "drop":
                     dropzone = <div className="progress">
                                     <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={style}>
