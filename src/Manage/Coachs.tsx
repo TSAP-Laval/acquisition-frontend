@@ -3,10 +3,10 @@ import * as React from "react";
 export interface ILayoutProps {}
 export interface ILayoutState {}
 
-export default class Title extends React.Component<ILayoutProps, ILayoutState> {
+export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
-            <h1>TSAP-Acquisition</h1>
+           <h1>Coachs</h1>
         );
     }
 }

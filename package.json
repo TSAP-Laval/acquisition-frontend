@@ -2,11 +2,12 @@
   "name": "acquisition-frontend",
   "version": "1.0.0",
   "description": "React app for TSAP-Acquisition",
-  "main": "index.js",
+  "main": "index",
   "repository": "git@github.com:TSAP-Laval/acquisition-frontend.git",
-  "author": "William Dussault <dalloriam@gmail.com>",
+  "author": "Mehdi Laribi <m.laribi@hotmail.com>",
   "license": "MIT",
   "scripts": {
+    "dev": "webpack-dev-server --content-base src --inline --hot",
     "test": "echo Not Implemented",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -16,11 +17,16 @@
     "@types/node": "^7.0.0",
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
+    "@types/react-tabs": "^0.5.21",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "react": "^15.4.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
-    "react-scripts": "^0.8.5"
+    "react-icons": "^2.2.3",
+    "react-scripts": "^0.8.5",
+    "react-simple-sidenav": "^0.1.1",
+    "react-tabs": "^0.8.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
