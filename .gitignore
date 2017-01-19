@@ -13,3 +13,12 @@ build
 .DS_Store
 .env
 npm-debug.log
+
+# Dist
+dist
+
+#vscode
+.vscode
+
+# Yarn
+yarn.lock
