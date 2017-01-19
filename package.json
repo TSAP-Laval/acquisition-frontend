@@ -1,6 +1,6 @@
 {
   "name": "acquisitin",
-  "version": "1",
+  "version": "1.0.0",
   "description": "React app for TSAP-Acquisition",
   "main": "index.js",
   "repository": "git@github.com:TSAP-Laval/acquisition-frontend.git",
