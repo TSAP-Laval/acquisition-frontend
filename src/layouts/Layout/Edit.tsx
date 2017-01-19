@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
+import * as $ from "jquery";
 
 import Header from "./Header"
 import Footer from "./Footer"
@@ -15,55 +16,53 @@ var numJoueur =0;
 var TypeAction=0;
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
- RightClick(e){
-e.preventDefault()
-console.log(e.pageX);
-console.log(e.target.value)
-numJoueur=e.target.value
-console.log(numJoueur);
- /*
- if(e.target.name == "def")
- {
-   e.target.name ='off';
- }
- else if(e.target.name == "off")
- {
-   e.target.name ='cent'
- }
- else
- {
-   e.target.name ='def'
- }
- */
-  var x = document.getElementById('Enr');
- $(x).css({
-   "left" : e.pageX+40+"px",
-   "top": e.pageY - $(x).height()
- })
-    console.log(x);
-    if (x.style.display === 'none') {
-        x.style.display = 'block';
-    } else {
-        x.style.display = 'none';
+  RightClick(e: React.MouseEvent<HTMLInputElement>){
+    e.preventDefault()
+    let _button = e.target as HTMLInputElement;
+    console.log(_button)
+    numJoueur = parseInt(_button.value)
+    console.log(numJoueur);
+    /*
+    if(e.target.name == "def")
+    {
+    e.target.name ='off';
     }
+    else if(e.target.name == "off")
+    {
+    e.target.name ='cent'
+    }
+    else
+    {
+    e.target.name ='def'
+    }
+    */
+    var x = document.getElementById('Enr');
+    $(x).css({
+      "left": e.pageX + "px",
+      "top": (e.pageY - $(".video-container").height() - $(x).height()) + "px"
+    })
+    $(x).toggleClass("form-open")
+  }
 
-}
+  closeFormModal(e: React.MouseEvent<HTMLInputElement>) {
+    e.preventDefault()
+    var x = document.getElementById('Enr');
+    $(x).toggleClass("form-open")
+  }
 
-sendFormData(e) {
-   e.preventDefault()
-  var form = e.target
-  TypeAction=form.elements.NomActivite.value
-   var Test = form.elements.NomActivite.value
-   console.log("Wow " +Test)
-
-  var resultatAction = form.elements.resultat.value
-  
+sendFormData(e: React.MouseEvent<HTMLInputElement>) {
+  e.preventDefault()
+  var form = e.target as HTMLFormElement
+  let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement
+  let _resultat = document.getElementsByName("resultat")[0] as HTMLInputElement
+  TypeAction = parseInt(_typeSelect.value)
+  var resultatAction = _resultat.value
   if(TypeAction !=0&&resultatAction !="")
   {
     console.log(TypeAction)
 
 var text = '{'
-       +'"TypeActionID" :' +TypeAction+','
+       +'"TypeActionID" :'+TypeAction+','
        +'"ActionPositive" : '+resultatAction + ','
        +'"ZoneID" : 1 ,'
        +'"PartieID" : 1 ,'
@@ -75,7 +74,7 @@ var text = '{'
        +'"PointageMaison" : 30 ,'
        +'"PointageAdverse" : 30 ,'
        +'"JoueurID" :'+numJoueur
-       +'}';
+       +'}'
   
   console.log(text);
   var data = JSON.parse(text);
@@ -125,7 +124,7 @@ var text = '{'
        
         //Remplis le tableau
         var TableauNumero = [];
-        var TableauID =[];
+        var TableauID:any = [];
         console.log("yeee")
         var xmlhttp = new XMLHttpRequest();
         var _this = this;
@@ -148,13 +147,12 @@ var text = '{'
        //Crée une liste de bouton
         var LstButtonNumero = TableauNumero.map(function(leNum,index){
           console.log()
-        return <li><button type="button"  onClick={this.RightClick.bind(this)} name="def" value={TableauID[index]} >Joueur numéro {leNum}</button></li>;
-                      },this)
+        return <li><div className="col-xs-3"><button className="player-btn" type="button"  onClick={this.RightClick.bind(this)} name="def" value={TableauID[index]} >Joueur numéro {leNum}</button></div></li>; },this)
                          
       //tableau qui contiendra tout les numéros des joueurs
        
          var TableauAction = [];
-         var TableauActionID = [];
+         var TableauActionID:any = [];
          var xmlhttp = new XMLHttpRequest();
          var _this = this;
          console.log(_this);
@@ -174,14 +172,14 @@ var text = '{'
       
        //Crée une liste de bouton
         var LstAction = TableauAction.map(function(leNum,index){
-          
-                        return <option name="TypeAction" value={TableauActionID[index]}>{leNum}</option>;
-                      })
+              return <option name="TypeAction" value={TableauActionID[index]}>{leNum}</option>;
+            })
 
         return (
             <div>
                  <form onSubmit={this.sendFormData.bind(this)}>  
                  <div id="Enr">
+                   <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={this.closeFormModal.bind(this)}><span aria-hidden="true">&times;</span></button>
                     <h3>enregistrer une action</h3>   
                           
                     <label htmlFor="Type">Type de l'action</label>
@@ -200,7 +198,7 @@ var text = '{'
                  </form> 
                          
                 <div id="Les joueurs">
-                <ul>{ LstButtonNumero }</ul>
+                  <ul>{ LstButtonNumero }</ul>
                 </div>
                 
                
