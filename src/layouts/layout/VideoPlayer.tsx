@@ -15,7 +15,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     playState = false;
 
-    componentDidMount() {
+    componentDidMount = () => {
         let _slider = document.getElementById("my-slider") as HTMLInputElement;
         _slider.value = "0";
     }
