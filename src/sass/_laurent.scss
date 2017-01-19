@@ -139,6 +139,23 @@ footer {
     border-radius: 5px;
 }
 
+/* File success */
+
+.success {
+    text-align: center;
+    margin: 0 100px 5px;
+    min-height: 20px;
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.7);
+    border-radius: 5px;
+}
+
+/* Progress bar */
+
+.progress {
+    margin-right: 40px;
+}
+
 /* Confirmation form */
 
 #confirm {
