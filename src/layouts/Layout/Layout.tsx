@@ -14,7 +14,7 @@ export class Layout extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
                 <div>
-                    <Header />
+                    <Header title="bonjour" />
                     <Manage/>
                     <Footer />
                 </div>
