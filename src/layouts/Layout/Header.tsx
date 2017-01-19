@@ -1,6 +1,10 @@
 import * as React from "react";
 
-import Title from "../Header/Title"
+import Title from "../Header/Title";
+import Navbar from "./Navbar";
+
+
+
 
 export interface ILayoutProps {
     title: string
@@ -18,8 +22,14 @@ export default class Header extends React.Component<ILayoutProps, ILayoutState> 
 
     render() {
         return (
+<<<<<<< HEAD
             <header className="page-header">
                 <Title title={this.state.title}/>
+=======
+            
+            <header>
+                <Title />
+>>>>>>> 13b7b752d95074fd6d2a3a54998ea95766383e94
             </header>
         );
     }
