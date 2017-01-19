@@ -18,14 +18,17 @@ li {
 }
 #Enr{
    
-   position: absolute;
-    z-index: 99;
+    position: absolute;
+    z-index: 99999;
     top:0;
     right:0;
     padding:20px;
     width:400px;
-
-   
+    display: none;
     background-color: white;
- 
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+#Enr.form-open {
+    display: block;
 }
