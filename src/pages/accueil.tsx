@@ -15,6 +15,7 @@ export class Accueil extends React.Component<ILayoutProps, ILayoutState> {
             <div>
                 <Header title="Page d'accueil"/>
                 <Link to="upload">Upload</Link>
+                <Link to="edit">edit</Link>
                 <Footer />
             </div>
         )
