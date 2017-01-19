@@ -15,18 +15,18 @@ export interface ILayoutState {}
 export class Edit extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
-            <div className="container">
-                <div className="row">
-                    <div className="wrapper col-xs-12">   
-
-                        <div className="video-container">
-                            <VideoPlayer />
+            <div>
+                <div className="video-container">
+                    <VideoPlayer />
+                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="wrapper col-xs-12">   
+                            <h2>Les joueurs de l'équipe</h2>
+                            <span id="rep"></span> 
+                            <EditTest />
+                            <Footer />
                         </div>
-
-                        <h2>Les joueurs de l'équipe</h2>
-                        <span id="rep"></span> 
-                        <EditTest />
-                        <Footer />
                     </div>
                 </div>
             </div>
