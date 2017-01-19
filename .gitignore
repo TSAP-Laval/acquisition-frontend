@@ -19,3 +19,6 @@ dist
 
 #vscode
 .vscode
+
+# Yarn
+yarn.lock

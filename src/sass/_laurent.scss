@@ -19,16 +19,25 @@ footer {
     font-family: $font;
     font-size: 13px;
     text-align: center;
-    position: relative;
+    position: absolute;
     bottom: 0;
+    width:400px;
+    margin-left:-200px;
+    left:50%;
 }
 
 /* Upload page */
 /*=================================*/
 
 /* Drag and drop upload section */
+
 .absolute {
     position: absolute;
+    padding-left: 50px;
+}
+
+.relative {
+    position: relative;
 }
 
 .drag-name {
@@ -36,15 +45,17 @@ footer {
     text-align:center;
 }
 
-.upload-drop-zone {
+.upload-drop-zone, #video-player {
     height: 300px;
-    margin: 0 2%;
+    margin: 0 100px 20px 100px;
     border-width: 2px;
-    margin-bottom: 20px;
+}
+
+.upload-drop-zone, #video-player {
+    color: #ccc;
 }
 
 .upload-drop-zone {
-    color: #ccc;
     border-style: dashed;
     border-color: #ccc;
     line-height: 200px;
@@ -82,26 +93,110 @@ footer {
     .absolute {
         position: relative;
     }
+
+    .row {
+        margin: auto;
+    }
+
+    .upload-drop-zone {
+        font-size: 12px;
+        text-align: center;
+        line-height: 15px;
+        margin-top: 50px;
+    }
+
+    .file-upload {
+        font-size: 8px;
+        padding: 6px;
+    }
+
+    .upload-drop-zone {
+        margin-left: 35px;
+        margin-right: 35px;
+    }
 } 
+
+/* Upload form */
+
+#modal {
+    display: block;
+    z-index: 2;
+}
+
+#blur-bkg {
+    display: block;
+    z-index: 1;
+}
+
+/* File error */
+
+.error {
+    text-align: center;
+    margin: 0 100px 5px;
+    min-height: 20px;
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.7);
+    border-radius: 5px;
+}
+
+/* Confirmation form */
+
+#confirm {
+    margin: auto;
+    max-width: 200px;
+    max-height: 150px;
+    display: block;
+    position: absolute;
+    z-index: 5;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.3);
+    background-color: white;
+}
+
+#confirm .modal-footer, #confirm .modal-body {
+    background-color: white;
+}
+
+#blur-bkg-2 {
+    z-index: 3;
+}
 
 /* Side bar */
 /*==============================*/
 
+.wide {
+    min-width: 100%;
+}
+
 .wrapper, .row {
    min-height: 100%;
+   min-width: 100%;
    margin-left:0;
    margin-right:0;
 }
 
+.wrapper {
+    padding: 0;
+}
+
 #sidebar {
+    width: 44px;
     background-color: #eee;
-    padding-left: 0;
     float: left;
+    position: fixed;
     max-height: 100%;
+    z-index: 1 !important;
+    border: 0px solid #eee;
+    border-radius: 0 5px 5px 0;
 }
 
 #sidebar > .nav > li {
     margin: 10px 0;
+}
+
+#sidebar:hover {
+    width: 115px;
 }
 
 #sidebar > .nav > li > a {
@@ -109,10 +204,14 @@ footer {
     overflow: hidden;
 }
 
+#sidebar > .nav > li span {
+    padding-left: 12px;
+}
+
 /* Off canvas sidebar */
 /*==============================*/
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1768px) {
     #sidebar {
         min-width: 44px;
     }

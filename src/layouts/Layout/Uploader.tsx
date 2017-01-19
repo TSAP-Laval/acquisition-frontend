@@ -1,31 +1,29 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
+import DragDrop from "../Uploader/DragDrop";
 
-export interface ILayoutProps {}
-export interface ILayoutState {}
+export interface ILayoutProps {
+    params: string
+}
+export interface ILayoutState {
+    hasVideo: boolean
+}
 
-export default class Layout extends React.Component<ILayoutProps, ILayoutState> {
+export default class Uploader extends React.Component<ILayoutProps, ILayoutState> {
+
+    constructor(props: any) {
+        super(props);
+        // Check if a new upload needs to be done
+        this.state = {hasVideo: (props.params === 'true')};
+        console.log(this.state.hasVideo);
+    }
+
+
     render() {
-        return (
-            <div className="column col-sm-9 col-xs-11" id="main">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-6 absolute">
-                            <form action='http://localhost.com:3000/receive' method='POST'>
-                                <label className="file-upload btn btn-primary btn-file">
-                                    Upload 
-                                    <input type='file' id="file" name='file' className="upload" />
-                                </label>
-                            </form>
-                        </div>
-                        <div className="drag-name">
-                            <h4>Or drag and drop files below</h4>
-                        </div>
-                    </div>
-                </div>
-                <div className="upload-drop-zone" id="drop-zone">
-                    Just drag and drop files here
-                </div>
+        return (          
+            <div className="column col-sm-12 col-xs-12" id="main">
+                <DragDrop />
             </div>
-        )
+        );
     }
 }
