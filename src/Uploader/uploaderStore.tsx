@@ -3,60 +3,75 @@ import { IAction } from "../interfaces"
 import dispatcher from "../dispatcher";
 import * as axios from 'axios';
 
-interface Dict {
-    [key: string]: string;
-}
 
 class UploadStore extends EventEmitter {
 
-    actions: {[key: string]: string} = { };
+    actions: string[] = [];
+    progress: string[] = [];
 
     constructor() {
         super();
     }
 
-    addAction(action: string, text: string = null) {
-        this.actions[action]
-        var index = this.actions[action];
-        if (index === null)
-            this.actions[action] = text;
+    addAction(action: string) {
+        var index = this.actions.indexOf(action);
+        if (index === -1)
+            this.actions.push(action);
     }
 
     removeAction(action: string) {
-        var index = this.actions[action];
-        if (index !== null)
-            delete this.actions[action];
+        var index = this.actions.indexOf(action);
+        if (index !== -1)
+            this.actions.splice(index, 1);
     }
 
-    getAll() {
+    addProgress(text: string) {
+        console.log('TEXT ' + text);
+        this.progress.push(text);
+    }
+
+    removeProgress() {
+        this.progress.pop();
+    }
+
+    getActions() {
         return this.actions;
+    }
+
+    getProgress() {
+        return this.progress;
     }
 
     onProgress(progressEvent: any) {
         var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-        console.log(percentCompleted);
-        //this.removeAction("PROGRESS:" + percentCompleted);
-        this.addAction("PROGRESS:", percentCompleted.toString());
+        this.removeProgress();
+        this.addProgress(percentCompleted.toString());
+        if (percentCompleted == 100) {
+            this.addAction('ERROR');
+            this.addAction('UPLOAD_SUCCESS');
+        }
+        console.log("PROGRESS " + this.progress.toString() + " %");
+        this.emit("change");
     }
 
     sendVideo(file: File) {
 
+                var boundary = Math.random().toString().substr(2);
+
         var config = {
             onUploadProgress: this.onProgress.bind(this),
-            headers: {'Content-Type': "multipart/form-data; boundary=------------------------" + boundary}
+            headers: {'Content-Type': "multipart/form-data; filename=" + file.name + "; boundary=------------------------" + boundary}
         };
-
 
         var form = new FormData()
         form.append('file', file, file.name);
 
-        var boundary = Math.random().toString().substr(2);
-
-        console.log(file);
         axios.post('http://localhost:3000/api/video', form, config).then(function (r: any) {
-            console.log("RESULT: \n" + r.data + "\nSTATUS: " + r.status);
+            console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
+            if (r.data === 'Exist')
+                this.addAction('EXIST');
         }).catch(function (error: string) {
-            console.log("ERROR: \n" + error);
+            console.log("ERROR (XHR): \n" + error);
         });
     }
 
@@ -69,9 +84,17 @@ class UploadStore extends EventEmitter {
                 this.sendVideo(action.video);
                 this.emit("change");
                 break;
+            case "SAVE":
+                this.removeAction('OPEN_FORM');
+                this.removeAction('OPEN_CONFIRM_FORM');
+                this.removeAction('ERROR');
+                this.emit("change");
+                break;
             case "CLOSE_FORM":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('DROP');
+                this.removeAction('OPEN_CONFIRM_FORM');
+                this.removeAction('ERROR');
                 this.emit("change");
                 break;
             case "OPEN_CONFIRM_FORM":
@@ -80,6 +103,7 @@ class UploadStore extends EventEmitter {
                 break;
             case "CLOSE_CONFIRM_FORM":
                 this.removeAction('OPEN_CONFIRM_FORM');
+                this.removeAction('ERROR');
                 this.emit("change");
                 break;
             case "OPEN_ERROR":
