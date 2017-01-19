@@ -1,21 +1,59 @@
 import * as React from "react";
 
+import * as Actions from "../../Uploader/Actions"
+import Store from "../../Uploader/uploaderStore"
+
+import ConfForm from "./Confirmation"
+
 export interface ILayoutProps {}
-export interface ILayoutState {}
+export interface ILayoutState {
+    actions: {[key: string]: string};
+}
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
+    constructor() {
+        super();
+        // Bind listener
+        this._onChange = this._onChange.bind(this);
+        this.state = {actions: Store.getAll()};
+    }
+
+    componentWillMount(){
+        Store.on("change", this._onChange);
+    }
+
+    componentWillUnmount() {
+        Store.removeListener("change", this._onChange);
+    }
+
+    _onChange(){
+        this.setState({actions: Store.getAll()});
+        console.log('Action : ' + this.state.actions);
+    }
+
+    closeForm(e:React.FormEvent<HTMLButtonElement>) {
+        Actions.Add('OPEN_CONFIRM_FORM');
+    }
+
     render() {
 
-        var divStyle = {
-            display: "none",
-        };
+        var confForm = null;
+
+        for (var element in this.state.actions) {
+            switch (element) {
+                case "OPEN_CONFIRM_FORM":
+                    confForm = <ConfForm/>
+                default:
+                    break;
+            }
+        }
 
         return (
             <div>
-                <div className="modal-dialog relative" id="modal" style={divStyle}>
+                <div className="modal-dialog relative" id="modal">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal">
+                            <button onClick={ e => this.closeForm(e) } type="button" className="close" data-dismiss="modal">
                                 <span aria-hidden="true">&times;</span>
                                 <span className="sr-only">Close</span>
                             </button>
@@ -26,40 +64,38 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                         
                         <div className="modal-body">
                             <form className="form-horizontal" role="form">
-                            <div className="form-group">
-                                <label  className="col-sm-2 control-label">Email</label>
-                                <div className="col-sm-10">
-                                    <input type="email" className="form-control" 
-                                    id="inputEmail3" placeholder="Email"/>
+                                <div className="form-group">
+                                    <label  className="col-sm-2 control-label">Équipe locale</label>
+                                    <div className="col-sm-10">
+                                        <input type="text" className="form-control" 
+                                        placeholder="Équipe locale"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="col-sm-2 control-label"
-                                    htmlFor="inputPassword3" >Password</label>
-                                <div className="col-sm-10">
-                                    <input type="password" className="form-control"
-                                        id="inputPassword3" placeholder="Password"/>
+                                <div className="form-group">
+                                    <label  className="col-sm-2 control-label">Équipe visiteure</label>
+                                    <div className="col-sm-10">
+                                        <input type="text" className="form-control" 
+                                        placeholder="Équipe visiteure"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="form-group">
-                                <div className="col-sm-offset-2 col-sm-10">
-                                <div className="checkbox">
-                                    <label>
-                                        <input type="checkbox"/> Remember me
-                                    </label>
+                                <div className="form-group">
+                                    <label  className="col-sm-2 control-label">Terrain</label>
+                                    <div className="col-sm-10">
+                                        <input type="text" className="form-control" 
+                                        placeholder="Terrain"/>
+                                    </div>
                                 </div>
+                                <div className="form-group">
+                                    <label  className="col-sm-2 control-label">Date</label>
+                                    <div className="col-sm-10">
+                                        <input type="date" className="form-control" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="form-group">
-                                <div className="col-sm-offset-2 col-sm-10">
-                                <button type="submit" className="btn btn-default">Sign in</button>
-                                </div>
-                            </div>
                             </form>
                         </div>
                         
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-default"
+                            <button onClick={ e => this.closeForm(e) } type="button" className="btn btn-default"
                                     data-dismiss="modal">
                                         Fermer
                             </button>
@@ -69,7 +105,8 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                         </div>
                     </div>
                 </div>
-                <div className="modal-backdrop fade in" style={divStyle}></div>
+                <div id="blur-bkg" className="modal-backdrop fade in"></div>
+                {confForm}
             </div>
         );
     }

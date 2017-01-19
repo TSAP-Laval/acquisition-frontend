@@ -1,15 +1,9 @@
 import dispatcher from "../dispatcher"
-//import * as Actions from "./actions/dragEnter"
 
-export function Add(type: string, file: File = null) {
+export function Add(type: string, video: File = null, text: string = null) {
     dispatcher.dispatch({
-        type : type,
-        file : file
-    });
-}
-
-export function Remove(type: string) {
-    dispatcher.dispatch({
-        type : type
+        type: type,
+        video,
+        text
     });
 }
