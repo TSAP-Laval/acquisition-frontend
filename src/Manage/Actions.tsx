@@ -42,7 +42,7 @@ var xmlhttp = new XMLHttpRequest();
         return (
                     
 
-                    <div className="container-fluid">
+                    <div className="container">
                         <div className="row">
                             <div className="col-md-6 col-sm-6 col-xs-12">
 
