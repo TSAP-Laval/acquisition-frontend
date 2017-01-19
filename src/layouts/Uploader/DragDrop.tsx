@@ -8,7 +8,8 @@ import Error from "./Error";
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: {[key: string]: string};
+    actions: string[]
+    progress: string[]
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
@@ -17,7 +18,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         super(props);
         // Bind listener
         this._onChange = this._onChange.bind(this);
-        this.state = {actions: Store.getAll()};
+        this.state = {actions: Store.getActions(), progress: ["0"]};
     }
 
     componentWillMount(){
@@ -29,13 +30,10 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     _onChange() {
-        console.log("COUNT : " + Store.listenerCount('change'));
-        this.setState({actions: Store.getAll()});
-        console.log('State : ' + this.state.actions);
+        this.setState({actions: Store.getActions(), progress: Store.getProgress()});
     }
 
     onDrop(acceptedFiles: Array<File>){
-        console.log(acceptedFiles);
         if (acceptedFiles[0].type !== "video/mp4")
             Actions.Add('OPEN_ERROR', null, "FORMAT");
         else if (acceptedFiles.length > 1) 
@@ -47,11 +45,10 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
     
     render() {
-        var style = {width: "45%"};
-
         var form = null;
         var error = null;
 
+        var progress = this.state.progress == null ? 0 : this.state.progress;
         var dropzone = <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                         onDrop={ this.onDrop}>
                         <div id="drop-zone">
@@ -59,14 +56,14 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                         </div>
                     </Dropzone>
 
-        for (var element in this.state.actions) {
-            console.log('PROGRESS ' + this.state.actions['PROGRESS']);
-            console.log('ELEMENTS ' + this.state.actions[element]);
+        this.state.actions.forEach(function(element: any) {
+            console.log('ELEMENT ' + element);
             switch (element) {
                 case "DROP":
+                    var style = {width: progress + "%"};
                     dropzone = <div className="progress">
                                     <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={style}>
-                                        <span className="sr-only">45% Complete</span>
+                                        <span className="sr-only">{progress}% Complete</span>
                                     </div>
                                 </div>;
                     break;
@@ -79,7 +76,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                 default:
                     break;
             }
-        }
+        });
 
         return (
             <div className="absolute wide">

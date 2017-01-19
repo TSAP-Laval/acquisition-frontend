@@ -3,7 +3,6 @@ import { Link } from "react-router"
 
 import Header from "../layouts/Layout/Header"
 import Footer from "../layouts/Layout/Footer"
-import VideoPlayer from "../layouts/layout/VideoPlayer"
 
 require('../sass/Layout.scss');
 

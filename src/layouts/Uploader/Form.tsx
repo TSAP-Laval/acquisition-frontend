@@ -7,7 +7,7 @@ import ConfForm from "./Confirmation"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: {[key: string]: string};
+    actions: string[];
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -15,7 +15,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         super();
         // Bind listener
         this._onChange = this._onChange.bind(this);
-        this.state = {actions: Store.getAll()};
+        this.state = {actions: Store.getActions()};
     }
 
     componentWillMount(){
@@ -27,7 +27,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     _onChange(){
-        this.setState({actions: Store.getAll()});
+        this.setState({actions: Store.getActions()});
         console.log('Action : ' + this.state.actions);
     }
 
@@ -35,18 +35,23 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         Actions.Add('OPEN_CONFIRM_FORM');
     }
 
+
+    save(e:React.FormEvent<HTMLButtonElement>) {
+        Actions.Add('SAVE');
+    }
     render() {
 
         var confForm = null;
 
-        for (var element in this.state.actions) {
+        this.state.actions.forEach(function(element: any) {
             switch (element) {
                 case "OPEN_CONFIRM_FORM":
                     confForm = <ConfForm/>
                 default:
                     break;
             }
-        }
+        });
+
 
         return (
             <div>
@@ -99,7 +104,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                     data-dismiss="modal">
                                         Fermer
                             </button>
-                            <button type="button" className="btn btn-primary">
+                            <button onClick={ e => this.save(e) } type="button" className="btn btn-primary">
                                 Sauvegarder
                             </button>
                         </div>
