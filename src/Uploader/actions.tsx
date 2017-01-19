@@ -1,8 +1,9 @@
 import dispatcher from "../dispatcher"
 
-export function Add(type: string, file: File = null) {
+export function Add(type: string, video: File = null, text: string = null) {
     dispatcher.dispatch({
-        type : type,
-        file : file
+        type: type,
+        video,
+        text
     });
 }

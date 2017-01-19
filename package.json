@@ -13,6 +13,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@types/axios": "^0.9.35",
     "@types/flux": "^3.0.0",
     "@types/history": "2.*",
     "@types/node": "^7.0.0",
@@ -21,6 +22,7 @@
     "@types/react-dropzone": "^0.0.30",
     "@types/react-router": "^2.0.44",
     "@types/videojs": "0.0.31",
+    "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "flux": "^3.1.2",

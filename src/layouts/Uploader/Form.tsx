@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Actions from "../../Uploader/Actions"
 import Store from "../../Uploader/uploaderStore"
 
-import ConfForm from "../Layout/Confirmation"
+import ConfForm from "./Confirmation"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -13,21 +13,17 @@ export interface ILayoutState {
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     constructor() {
         super();
+        // Bind listener
         this._onChange = this._onChange.bind(this);
         this.state = {actions: []};
     }
 
     componentWillMount(){
-        console.clear();
-        console.log('COUNT : ' + Store.listenerCount('change'));
         Store.on("change", this._onChange);
     }
 
     componentWillUnmount() {
-        console.clear();
-        console.log(Store.listenerCount('change'));
         Store.removeListener("change", this._onChange);
-        console.log(Store.listenerCount('change'));
     }
 
     _onChange(){

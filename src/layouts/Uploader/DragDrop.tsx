@@ -4,6 +4,7 @@ import * as  Dropzone from "react-dropzone";
 import * as Actions from "../../Uploader/Actions"
 import Store from "../../Uploader/uploaderStore"
 import Form from "./Form";
+import Error from "./Error";
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -14,22 +15,17 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
     constructor (props: any) {
         super(props);
+        // Bind listener
         this._onChange = this._onChange.bind(this);
         this.state = {actions: []};
     }
 
     componentWillMount(){
-        console.clear();
-        console.log("COUNT : " + Store.listenerCount('change'));
         Store.addListener("change", this._onChange);
-        console.log("COUNT : " + Store.listenerCount('change'));
     }
 
     componentWillUnmount() {
-        console.clear();
-        console.log(Store.listenerCount('change'));
         Store.removeListener("change", this._onChange);
-        console.log(Store.listenerCount('change'));
     }
 
     _onChange() {
@@ -38,14 +34,22 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         console.log('State : ' + this.state.actions);
     }
 
-    onDrop(acceptedFiles: File){
-        Actions.Add('DROP');
+    onDrop(acceptedFiles: Array<File>){
+        if (acceptedFiles[0].type !== "video/mp4")
+            Actions.Add('OPEN_ERROR', null, "FORMAT");
+        else if (acceptedFiles.length > 1) 
+            Actions.Add('OPEN_ERROR', null, "TOO_MANY");
+        else if (acceptedFiles.length > 1) 
+            Actions.Add('OPEN_ERROR', null, "NO_FILE");
+        else
+            Actions.Add('DROP', acceptedFiles[0]);
     }
     
     render() {
         var style = {width: "45%"};
 
         var form = null;
+        var error = null;
 
         var dropzone = <Dropzone className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                         onDrop={ this.onDrop}>
@@ -54,6 +58,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                         </div>
                     </Dropzone>
 
+        console.log("1: STATE : " + this.state.actions);
         this.state.actions.forEach(element => {
             switch (element) {
                 case "DROP":
@@ -65,6 +70,10 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                     break;
                 case "OPEN_FORM":
                     form = <Form />
+                    break;
+                case "ERROR":
+                    error = <Error />
+                    break;
                 default:
                     break;
             }
@@ -72,6 +81,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         return (
             <div className="absolute wide">
+                {error}
                 {dropzone}
                 {form}
             </div>

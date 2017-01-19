@@ -11,7 +11,7 @@ export interface ILayoutState {
 export default class Footer extends React.Component<ILayoutProps, ILayoutState> {
     constructor() {
         super();
-        // Bind listeners
+        // Bind listener
         this._onChange = this._onChange.bind(this);
         this.state = {actions: []};
     }
@@ -21,10 +21,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
     }
 
     componentWillUnmount() {
-        console.clear();
-        console.log(Store.listenerCount('change'));
         Store.removeListener("change", this._onChange);
-        console.log(Store.listenerCount('change'));
     }
 
     _onChange() {
