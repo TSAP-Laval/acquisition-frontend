@@ -17,6 +17,7 @@ var TypeAction=0;
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
  RightClick(e){
 e.preventDefault()
+console.log(e.pageX);
 console.log(e.target.value)
 numJoueur=e.target.value
 console.log(numJoueur);
@@ -35,6 +36,10 @@ console.log(numJoueur);
  }
  */
   var x = document.getElementById('Enr');
+ $(x).css({
+   "left" : e.pageX+40+"px",
+   "top": e.pageY - $(x).height()
+ })
     console.log(x);
     if (x.style.display === 'none') {
         x.style.display = 'block';

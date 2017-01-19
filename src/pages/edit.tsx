@@ -16,7 +16,11 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
             <div className="wrapper">   
-                <VideoPlayer />
+
+                <div className="video-container">
+                    <VideoPlayer />
+                </div>
+
                 <h2>Les joueurs de l'équipe</h2>
                  <span id="rep"></span> 
                 <EditTest />
