@@ -15,8 +15,8 @@ Platform:
 
 npm manifest: 
   {
-    "name": "acquisition-frontend",
-    "version": "1.0.0",
+    "name": "acquisitin",
+    "version": "1",
     "description": "React app for TSAP-Acquisition",
     "main": "index.js",
     "repository": "git@github.com:TSAP-Laval/acquisition-frontend.git",
@@ -29,7 +29,6 @@ npm manifest:
       "eject": "react-scripts eject"
     },
     "dependencies": {
-  
       "@types/axios": "^0.9.35",
       "@types/flux": "^3.0.0",
       "@types/history": "2.*",
@@ -55,9 +54,7 @@ npm manifest:
       "react-router": "^3.0.1",
       "react-scripts": "^0.8.5",
       "react-select": "^1.0.0-rc.2",
-  
       "video.js": "^5.15.1"
-  
     },
     "devDependencies": {
       "autoprefixer": "^6.6.1",
@@ -84,5 +81,6 @@ Lockfile:
   No lockfile
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\alexEcole\Desktop\New folder\wtf\node_modules\node-sass\vendor\win32-x64-48\binding.node'
-      at Error (native)
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com registry.yarnpkg.com:443
+      at errnoException (dns.js:28:10)
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:76:26)
