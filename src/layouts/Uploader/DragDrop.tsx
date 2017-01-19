@@ -49,7 +49,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         var error = null;
 
         var progress = this.state.progress == null ? 0 : this.state.progress;
-
         var dropzone = <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                         onDrop={ this.onDrop}>
                         <div id="drop-zone">

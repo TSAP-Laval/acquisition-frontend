@@ -3,7 +3,6 @@ import { IAction } from "../interfaces"
 import dispatcher from "../dispatcher";
 import * as axios from 'axios';
 
-
 class UploadStore extends EventEmitter {
 
     actions: string[] = [];
@@ -56,7 +55,7 @@ class UploadStore extends EventEmitter {
 
     sendVideo(file: File) {
 
-                var boundary = Math.random().toString().substr(2);
+        var boundary = Math.random().toString().substr(2);
 
         var config = {
             onUploadProgress: this.onProgress.bind(this),
