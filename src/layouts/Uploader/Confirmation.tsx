@@ -5,7 +5,7 @@ import Store from "../../Uploader/uploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: {[key: string]: string};
+    actions: string[];
 }
 
 export default class Footer extends React.Component<ILayoutProps, ILayoutState> {
@@ -13,7 +13,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
         super();
         // Bind listener
         this._onChange = this._onChange.bind(this);
-        this.state = {actions: Store.getAll()};
+        this.state = {actions: Store.getActions()};
     }
 
     componentWillMount(){
@@ -25,7 +25,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
     }
 
     _onChange() {
-        this.setState({actions: Store.getAll()});
+        this.setState({actions: Store.getActions()});
         console.log('Action : ' + this.state.actions);
     }
 

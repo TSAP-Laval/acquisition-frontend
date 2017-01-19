@@ -1,6 +1,10 @@
 import * as React from "react";
 
-import Title from "../Header/Title"
+import Title from "../Header/Title";
+import Navbar from "./Navbar";
+
+
+
 
 export interface ILayoutProps {
     title: string
