@@ -17,40 +17,24 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
 
       function SubmitAction(){
-          var http = new XMLHttpRequest();
-          var url = "http://localhost:3000/api/PostActionType";
-
+       
          
         var text = '{'
        +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
        +'"Description" : '+ '"' +$('#action_desc').val() + '"'
        +'}';
-
-       var stringg = JSON.stringify(text);
-
-          console.log(text);
-          console.log(url);
-
-        http.open('POST', url, true);
-
-        http.setRequestHeader("Content-type", "application/json");
-
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4) {
-                console.log("test");
-            
-                
-                console.log("response text : " +http.responseText);
-                console.log("response" + http.getResponseHeader);
-                console.log("response :" + http.response);
-                console.log("response :" + http.responseURL);
-            }else{
-                console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            }
-        }
-        console.log(stringg);
-        
-        http.send(stringg);
+var xmlhttp = new XMLHttpRequest();
+     
+  xmlhttp.open('POST', 'http://localhost:3000/api/PostActionType', true);
+  xmlhttp.setRequestHeader('Content-type', 'application/json');
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState === 4) {
+       var response = xmlhttp.responseText;
+       console.log(response)
+    }
+   
+  };
+  xmlhttp.send(text);
 
       }
         
