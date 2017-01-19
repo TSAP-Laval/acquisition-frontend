@@ -22,40 +22,40 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
     
     render() {
         return (
+            <div className="container">
+                <Tabs>
 
-            <Tabs>
-
-                <TabList> 
-                    <Tab>Saison</Tab>
-                    <Tab>Équipe</Tab>
-                    <Tab>Entraîneurs</Tab>
-                    <Tab>Joueurs</Tab>
-                    <Tab>Actions</Tab>
-                </TabList>
+                    <TabList> 
+                        <Tab>Saison</Tab>
+                        <Tab>Équipe</Tab>
+                        <Tab>Entraîneurs</Tab>
+                        <Tab>Joueurs</Tab>
+                        <Tab>Actions</Tab>
+                    </TabList>
 
 
-                <TabPanel> 
-                    <Seasons/>
-                </TabPanel>
+                    <TabPanel> 
+                        <Seasons/>
+                    </TabPanel>
 
-                <TabPanel> 
-                    <Teams/>
-                </TabPanel>
+                    <TabPanel> 
+                        <Teams/>
+                    </TabPanel>
 
-                <TabPanel> 
-                    <Coachs/>
-                </TabPanel>
+                    <TabPanel> 
+                        <Coachs/>
+                    </TabPanel>
 
-                <TabPanel> 
-                    <Players/>
-                </TabPanel>
+                    <TabPanel> 
+                        <Players/>
+                    </TabPanel>
 
-                <TabPanel> 
-                    <Actions/>
-                </TabPanel>
+                    <TabPanel> 
+                        <Actions/>
+                    </TabPanel>
 
-            </Tabs>
-
+                </Tabs>
+            </div>
 
         );
     }

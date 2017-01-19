@@ -4,6 +4,7 @@ import { Link } from "react-router"
 import Header from "../layouts/Layout/Header"
 import Manager from "../Manage/Manage"
 import Footer from "../layouts/Layout/Footer"
+import SideBar from "../layouts/Layout/SideBar"
 
 require('../sass/Layout.scss');
 
@@ -15,8 +16,7 @@ export class Home extends React.Component<ILayoutProps, ILayoutState> {
         return (
             <div>
                 <Header title="Page d'accueil"/>
-                <Link to="upload">Upload</Link>
-                <Link to="edit">edit</Link>
+                <SideBar />
                 <Manager />
                 <Footer />
             </div>
