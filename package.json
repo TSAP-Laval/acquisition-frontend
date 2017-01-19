@@ -1,6 +1,6 @@
 {
-  "name": "acquisition-frontend",
-  "version": "1.0.0",
+  "name": "acquisitin",
+  "version": "1",
   "description": "React app for TSAP-Acquisition",
   "main": "index.js",
   "repository": "git@github.com:TSAP-Laval/acquisition-frontend.git",
@@ -13,7 +13,6 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-
     "@types/axios": "^0.9.35",
     "@types/flux": "^3.0.0",
     "@types/history": "2.*",
@@ -39,9 +38,7 @@
     "react-router": "^3.0.1",
     "react-scripts": "^0.8.5",
     "react-select": "^1.0.0-rc.2",
-
     "video.js": "^5.15.1"
-
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
