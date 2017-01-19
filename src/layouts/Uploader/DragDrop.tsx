@@ -8,7 +8,7 @@ import Error from "./Error";
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: string[]
+    actions: {[key: string]: string};
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
@@ -17,7 +17,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         super(props);
         // Bind listener
         this._onChange = this._onChange.bind(this);
-        this.state = {actions: []};
+        this.state = {actions: Store.getAll()};
     }
 
     componentWillMount(){
@@ -35,6 +35,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     onDrop(acceptedFiles: Array<File>){
+        console.log(acceptedFiles);
         if (acceptedFiles[0].type !== "video/mp4")
             Actions.Add('OPEN_ERROR', null, "FORMAT");
         else if (acceptedFiles.length > 1) 
@@ -51,15 +52,16 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         var form = null;
         var error = null;
 
-        var dropzone = <Dropzone className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
+        var dropzone = <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                         onDrop={ this.onDrop}>
                         <div id="drop-zone">
                             Déposer le fichier ici
                         </div>
                     </Dropzone>
 
-        console.log("1: STATE : " + this.state.actions);
-        this.state.actions.forEach(element => {
+        for (var element in this.state.actions) {
+            console.log('PROGRESS ' + this.state.actions['PROGRESS']);
+            console.log('ELEMENTS ' + this.state.actions[element]);
             switch (element) {
                 case "DROP":
                     dropzone = <div className="progress">
@@ -77,7 +79,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                 default:
                     break;
             }
-        });
+        }
 
         return (
             <div className="absolute wide">

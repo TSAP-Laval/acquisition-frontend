@@ -7,7 +7,7 @@ import ConfForm from "./Confirmation"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: string[]
+    actions: {[key: string]: string};
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -15,7 +15,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         super();
         // Bind listener
         this._onChange = this._onChange.bind(this);
-        this.state = {actions: []};
+        this.state = {actions: Store.getAll()};
     }
 
     componentWillMount(){
@@ -39,14 +39,14 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
         var confForm = null;
 
-        this.state.actions.forEach(element => {
+        for (var element in this.state.actions) {
             switch (element) {
                 case "OPEN_CONFIRM_FORM":
                     confForm = <ConfForm/>
                 default:
                     break;
             }
-        });
+        }
 
         return (
             <div>

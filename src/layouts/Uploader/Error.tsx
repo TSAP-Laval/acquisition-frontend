@@ -5,7 +5,7 @@ import Store from "../../Uploader/uploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: string[]
+    actions: {[string:string] : string}
 }
 
 export default class Footer extends React.Component<ILayoutProps, ILayoutState> {
@@ -31,7 +31,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
 
     render() {
         var msg = null;
-        this.state.actions.forEach(element => {
+        for (var element in this.state.actions) {
             console.log('ELEMENT ' + element);
             switch (element) {
                 case "FORMAT":
@@ -44,7 +44,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
                     msg = "Veuillez sélectionner un fichier à ajouter"
                     break;
             }
-        });
+        }
 
         return (
             <div className="error">

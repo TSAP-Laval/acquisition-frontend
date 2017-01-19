@@ -3,37 +3,57 @@ import { IAction } from "../interfaces"
 import dispatcher from "../dispatcher";
 import * as axios from 'axios';
 
+interface Dict {
+    [key: string]: string;
+}
+
 class UploadStore extends EventEmitter {
 
-    actions: string[];
+    actions: {[key: string]: string} = { };
 
     constructor() {
         super();
-        this.actions = [];
     }
 
-    addAction(action: string) {
-        if (this.actions.indexOf(action) === -1)
-            this.actions.push(action);
+    addAction(action: string, text: string = null) {
+        this.actions[action]
+        var index = this.actions[action];
+        if (index === null)
+            this.actions[action] = text;
     }
 
     removeAction(action: string) {
-        var index = this.actions.indexOf(action)
-        if (index !== -1)
-            this.actions.splice(index, 1);
+        var index = this.actions[action];
+        if (index !== null)
+            delete this.actions[action];
     }
 
     getAll() {
         return this.actions;
     }
 
+    onProgress(progressEvent: any) {
+        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+        console.log(percentCompleted);
+        //this.removeAction("PROGRESS:" + percentCompleted);
+        this.addAction("PROGRESS:", percentCompleted.toString());
+    }
+
     sendVideo(file: File) {
-        axios.post('http://localhost:3000/api/video', {
-            file: file
-        },
-        {
-            headers: {'Content-Type': 'multipart/form-data'}
-        }).then(function (r: any) {
+
+        var config = {
+            onUploadProgress: this.onProgress.bind(this),
+            headers: {'Content-Type': "multipart/form-data; boundary=------------------------" + boundary}
+        };
+
+
+        var form = new FormData()
+        form.append('file', file, file.name);
+
+        var boundary = Math.random().toString().substr(2);
+
+        console.log(file);
+        axios.post('http://localhost:3000/api/video', form, config).then(function (r: any) {
             console.log("RESULT: \n" + r.data + "\nSTATUS: " + r.status);
         }).catch(function (error: string) {
             console.log("ERROR: \n" + error);
@@ -41,8 +61,6 @@ class UploadStore extends EventEmitter {
     }
 
     handleActions(action: IAction){
-        console.log('TYPE' + action.type);
-        console.log('TEXTE' + action.text);
         switch(action.type) {
             case "DROP":
                 this.addAction(action.type);
