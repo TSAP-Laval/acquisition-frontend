@@ -35,10 +35,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         Actions.Add('OPEN_CONFIRM_FORM');
     }
 
-
     save(e:React.FormEvent<HTMLButtonElement>) {
         Actions.Add('SAVE');
     }
+
     render() {
 
         var confForm = null;
@@ -51,7 +51,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                     break;
             }
         });
-
 
         return (
             <div>

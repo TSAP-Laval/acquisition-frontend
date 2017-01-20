@@ -3,6 +3,10 @@ import { IAction } from "../interfaces"
 import dispatcher from "../dispatcher";
 import * as axios from 'axios';
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
 class UploadStore extends EventEmitter {
 
     actions: string[] = [];
@@ -48,6 +52,10 @@ class UploadStore extends EventEmitter {
         if (percentCompleted == 100) {
             this.addAction('ERROR');
             this.addAction('UPLOAD_SUCCESS');
+<<<<<<< HEAD
+            this.removeAction('DROP');
+=======
+>>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
         }
         console.log("PROGRESS " + this.progress.toString() + " %");
         this.emit("change");
@@ -55,7 +63,11 @@ class UploadStore extends EventEmitter {
 
     sendVideo(file: File) {
 
+<<<<<<< HEAD
+                var boundary = Math.random().toString().substr(2);
+=======
         var boundary = Math.random().toString().substr(2);
+>>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
 
         var config = {
             onUploadProgress: this.onProgress.bind(this),
