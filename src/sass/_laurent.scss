@@ -1,4 +1,6 @@
 /* Default template */
+
+
 /*=================================*/
 
 #root {
@@ -21,13 +23,17 @@ footer {
     text-align: center;
     position: absolute;
     bottom: 0;
-    width:400px;
-    margin-left:-200px;
-    left:50%;
+    width: 400px;
+    margin-left: -200px;
+    left: 50%;
 }
 
+
 /* Upload page */
+
+
 /*=================================*/
+
 
 /* Drag and drop upload section */
 
@@ -41,17 +47,19 @@ footer {
 }
 
 .drag-name {
-    margin:auto;
-    text-align:center;
+    margin: auto;
+    text-align: center;
 }
 
-.upload-drop-zone, #video-player {
+.upload-drop-zone,
+#video-player {
     height: 300px;
     margin: 0 100px 20px 100px;
     border-width: 2px;
 }
 
-.upload-drop-zone, #video-player {
+.upload-drop-zone,
+#video-player {
     color: #ccc;
 }
 
@@ -67,7 +75,9 @@ footer {
     border-color: #222;
 }
 
+
 /* Upload button*/
+
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -93,28 +103,25 @@ footer {
     .absolute {
         position: relative;
     }
-
     .row {
         margin: auto;
     }
-
     .upload-drop-zone {
         font-size: 12px;
         text-align: center;
         line-height: 15px;
         margin-top: 50px;
     }
-
     .file-upload {
         font-size: 8px;
         padding: 6px;
     }
-
     .upload-drop-zone {
         margin-left: 35px;
         margin-right: 35px;
     }
-} 
+}
+
 
 /* Upload form */
 
@@ -128,6 +135,7 @@ footer {
     z-index: 1;
 }
 
+
 /* File error */
 
 .error {
@@ -139,7 +147,7 @@ footer {
     border-radius: 5px;
 }
 
-<<<<<<< HEAD
+
 /* File success */
 
 .success {
@@ -151,14 +159,14 @@ footer {
     border-radius: 5px;
 }
 
+
 /* Progress bar */
 
 .progress {
     margin-right: 40px;
 }
 
-=======
->>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
+
 /* Confirmation form */
 
 #confirm {
@@ -170,11 +178,12 @@ footer {
     z-index: 5;
     border: 1px solid black;
     border-radius: 4px;
-    box-shadow: 0 3px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
     background-color: white;
 }
 
-#confirm .modal-footer, #confirm .modal-body {
+#confirm .modal-footer,
+#confirm .modal-body {
     background-color: white;
 }
 
@@ -182,18 +191,22 @@ footer {
     z-index: 3;
 }
 
+
 /* Side bar */
+
+
 /*==============================*/
 
 .wide {
     min-width: 100%;
 }
 
-.wrapper, .row {
-   min-height: 100%;
-   min-width: 100%;
-   margin-left:0;
-   margin-right:0;
+.wrapper,
+.row {
+    min-height: 100%;
+    min-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .wrapper {
@@ -211,7 +224,7 @@ footer {
     border-radius: 0 5px 5px 0;
 }
 
-#sidebar > .nav > li {
+#sidebar>.nav>li {
     margin: 10px 0;
 }
 
@@ -219,24 +232,26 @@ footer {
     width: 115px;
 }
 
-#sidebar > .nav > li > a {
+#sidebar>.nav>li>a {
     white-space: nowrap;
     overflow: hidden;
 }
 
-#sidebar > .nav > li span {
+#sidebar>.nav>li span {
     padding-left: 12px;
 }
 
+
 /* Off canvas sidebar */
+
+
 /*==============================*/
 
 @media screen and (max-width: 1768px) {
     #sidebar {
         min-width: 44px;
     }
-    
     #sidebar .visible-xs {
-       display:inline !important;
+        display: inline !important;
     }
-} 
+}
