@@ -25,7 +25,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
        +'}';
 var xmlhttp = new XMLHttpRequest();
      
-  xmlhttp.open('POST', 'http://localhost:3000/api/PostActionType', true);
+  xmlhttp.open('POST', 'http://67.205.146.224:3000/api/PostActionType', true);
   xmlhttp.setRequestHeader('Content-type', 'application/json');
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState === 4) {

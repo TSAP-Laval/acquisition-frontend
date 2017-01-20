@@ -9,9 +9,6 @@
 
         "moduleResolution": "node"
     },
-    "files": [
-        "typings/react-simple-sidenav.d.ts"
-    ],
     "include": [
         "src/**/*"
     ],
