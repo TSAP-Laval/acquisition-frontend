@@ -56,15 +56,17 @@ var xmlhttp = new XMLHttpRequest();
   };
   xmlhttp.send(text);
     AddNewRow(String($('#action_name').val()), String($('#action_desc').val()));
-    
+
+    $('#action_name').val('');
+    $('#action_desc').val('');
 }
         
     function AddNewRow(actionName:string, actionDesc:string){
         
         
          var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td>" + String(actionDesc) + 
-         "</td><td><button className='btn btn-default btn-warning'>Modifier</button>"
-         + "<button className='btn btn-danger btn-default'>Supprimer</button></td></tr>"
+         "</td><td><button className=\"btn btn-default btn-warning\">Modifier</button>"
+         + "<Button className=\"btn btn-danger btn-default\">Supprimer</button></td></tr>"
 
 
             $('#action_table tbody').append(trToAdd)
