@@ -19,7 +19,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         $(function() {
             var table = $('#action_table');
             var http = new XMLHttpRequest();
-            var url = "http://67.205.146.224:3000/api/GetActionType";
+            var url = "http://67.205.146.224/api/GetActionType";
             http.open("GET", url, true);
             http.setRequestHeader('Content-type', 'application/json');
             http.send(null);
