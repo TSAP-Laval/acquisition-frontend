@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as  Dropzone from "react-dropzone";
 
-import * as Actions from "../../Uploader/Actions"
+import * as Actions from "../../Uploader/actions"
 import Store from "../../Uploader/uploaderStore"
 import Form from "./Form";
 import Error from "./Error";
