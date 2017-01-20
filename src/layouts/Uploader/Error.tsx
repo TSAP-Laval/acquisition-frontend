@@ -48,7 +48,11 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
                     break;
                 case "UPLOAD_SUCCESS":
                     msg = "Le fichier a bel et bien été envoyé sur le serveur"
+<<<<<<< HEAD
+                    style = "success"
+=======
                     var style = "success"
+>>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
                     break;
             }
         });
