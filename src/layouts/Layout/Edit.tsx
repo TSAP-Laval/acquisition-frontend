@@ -7,13 +7,13 @@ import Footer from "./Footer"
 
 
 require('../../sass/Layout.scss');
-var data = require('json!./joueurs.json');
-var actionJson = require('json!./action.json');
+
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
+  //Variable global pour avoir le numero du joueur
 var numJoueur =0;
-var TypeAction=0;
+
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   RightClick(e: React.MouseEvent<HTMLInputElement>){
@@ -36,6 +36,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     e.target.name ='def'
     }
     */
+
+    //Va set la position du div
     var x = document.getElementById('Enr');
     $(x).css({
       "left": e.pageX + "px",
@@ -43,18 +45,20 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     })
     $(x).toggleClass("form-open")
   }
-
+//Fermer le div
   closeFormModal(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault()
     var x = document.getElementById('Enr');
     $(x).toggleClass("form-open")
   }
-
+//Envoie du formulaire à l'api 
 sendFormData(e: React.MouseEvent<HTMLInputElement>) {
   e.preventDefault()
+  //Va rechercher le formulaire
   var form = e.target as HTMLFormElement
   let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement
   let _resultat = document.getElementsByName("resultat")[0] as HTMLInputElement
+  var TypeAction=0;
   TypeAction = parseInt(_typeSelect.value)
   var resultatAction = _resultat.value
   if(TypeAction !=0&&resultatAction !="")
