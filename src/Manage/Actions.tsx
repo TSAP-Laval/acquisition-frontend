@@ -16,6 +16,25 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
             alert("Ajout réussi")
         }
 
+        $(function() {
+            var table = $('#action_table');
+            var http = new XMLHttpRequest();
+            var url = "http://localhost:3000/api/GetActionType";
+            http.open("GET", url, true);
+            http.setRequestHeader('Content-type', 'application/json');
+            http.send(null);
+            http.onreadystatechange = function() {
+                if (http.readyState === 4) {
+                var data = JSON.parse(http.responseText);
+                        console.log(data);
+                    for(var i = 0; i < data.length; i++){
+                        var objAction = data[i];
+
+                    AddNewRow(String(objAction.Nom), String(objAction.Description));
+                    }
+                }
+            }
+        });
 
       function SubmitAction(){
        
@@ -37,17 +56,10 @@ var xmlhttp = new XMLHttpRequest();
   };
   xmlhttp.send(text);
     AddNewRow(String($('#action_name').val()), String($('#action_desc').val()));
-
-    console.log(String($('#action_name').val()));
-    console.log( String($('#action_desc').val()));
-    
     
 }
         
     function AddNewRow(actionName:string, actionDesc:string){
-
-        console.log(actionName);
-        console.log(actionDesc);
         
         
          var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td>" + String(actionDesc) + 
