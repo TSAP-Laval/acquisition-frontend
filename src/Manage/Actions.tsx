@@ -2,6 +2,7 @@ import * as React from "react";
 
 import {Button, Alert} from "react-bootstrap";
 import * as $ from "jquery"
+
 //require("bootstrap-sass/assets/stylesheets/_bootstrap.scss");
 
 export interface ILayoutProps {}
@@ -15,6 +16,25 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
             alert("Ajout réussi")
         }
 
+        $(function() {
+            var table = $('#action_table');
+            var http = new XMLHttpRequest();
+            var url = "http://localhost:3000/api/GetActionType";
+            http.open("GET", url, true);
+            http.setRequestHeader('Content-type', 'application/json');
+            http.send(null);
+            http.onreadystatechange = function() {
+                if (http.readyState === 4) {
+                var data = JSON.parse(http.responseText);
+                        console.log(data);
+                    for(var i = 0; i < data.length; i++){
+                        var objAction = data[i];
+
+                    AddNewRow(String(objAction.Nom), String(objAction.Description));
+                    }
+                }
+            }
+        });
 
       function SubmitAction(){
        
@@ -35,10 +55,22 @@ var xmlhttp = new XMLHttpRequest();
    
   };
   xmlhttp.send(text);
+    AddNewRow(String($('#action_name').val()), String($('#action_desc').val()));
 
-      }
+    $('#action_name').val('');
+    $('#action_desc').val('');
+}
         
+    function AddNewRow(actionName:string, actionDesc:string){
+        
+        
+         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td>" + String(actionDesc) + 
+         "</td><td><button className=\"btn btn-default btn-warning\">Modifier</button>"
+         + "<Button className=\"btn btn-danger btn-default\">Supprimer</button></td></tr>"
 
+
+            $('#action_table tbody').append(trToAdd)
+    }
         return (
                     
 
@@ -104,9 +136,9 @@ var xmlhttp = new XMLHttpRequest();
                                         </span>
                                         </label>
                                         <select className="select form-control" id="mov_type" name="mov_type">
-                                            <option value="Defensive"></option>
-                                            <option value="Offensive"></option>
-                                            <option value="Neutre"></option>
+                                            <option value="Defensive">Defensive</option>
+                                            <option value="Offensive">Offensive</option>
+                                            <option value="Neutre">Neutre</option>
                                         </select>
                                     </div>
                                     <div className="form-group">
