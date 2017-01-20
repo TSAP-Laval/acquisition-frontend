@@ -136,9 +136,9 @@ var xmlhttp = new XMLHttpRequest();
                                         </span>
                                         </label>
                                         <select className="select form-control" id="mov_type" name="mov_type">
-                                            <option value="Defensive"></option>
-                                            <option value="Offensive"></option>
-                                            <option value="Neutre"></option>
+                                            <option value="Defensive">Defensive</option>
+                                            <option value="Offensive">Offensive</option>
+                                            <option value="Neutre">Neutre</option>
                                         </select>
                                     </div>
                                     <div className="form-group">
