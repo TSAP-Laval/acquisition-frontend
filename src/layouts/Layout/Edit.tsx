@@ -7,13 +7,10 @@ import Footer from "./Footer"
 
 
 require('../../sass/Layout.scss');
-var data = require('json!./joueurs.json');
-var actionJson = require('json!./action.json');
-
 export interface ILayoutProps {}
 export interface ILayoutState {}
-var numJoueur=0;
-var TypeAction=0;
+var numJoueur = 0;
+var TypeAction = 0;
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   RightClick(e: React.MouseEvent<HTMLInputElement>){
