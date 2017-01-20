@@ -48,13 +48,13 @@ class UploadStore extends EventEmitter {
         if (percentCompleted == 100) {
             this.addAction('ERROR');
             this.addAction('UPLOAD_SUCCESS');
+            this.removeAction('DROP');
         }
         console.log("PROGRESS " + this.progress.toString() + " %");
         this.emit("change");
     }
 
     sendVideo(file: File) {
-
         var boundary = Math.random().toString().substr(2);
 
         var config = {
@@ -65,7 +65,7 @@ class UploadStore extends EventEmitter {
         var form = new FormData()
         form.append('file', file, file.name);
 
-        axios.post('http://localhost:3000/api/video', form, config).then(function (r: any) {
+        axios.post('http://67.205.146.224/:3000/api/video', form, config).then(function (r: any) {
             console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
             if (r.data === 'Exist')
                 this.addAction('EXIST');
