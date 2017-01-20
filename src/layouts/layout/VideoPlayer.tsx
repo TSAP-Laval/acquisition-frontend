@@ -6,8 +6,6 @@ export interface ILayoutState {
 
 }
 
-var FontAwesome = require('react-fontawesome');
-
 export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutState> {
     constructor (props: any) {
         super(props);
@@ -37,7 +35,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
              this.playState = true;
         }
         _playButton.setAttribute("name", this.getPlayStateButton());
-        _playButton.setAttribute("class", "fa " + "fa-" + this.getPlayStateButton());
+        _playButton.setAttribute("class", "glyphicon " + "glyphicon-" + this.getPlayStateButton());
     }
 
     onPause = (e: React.MouseEvent<HTMLElement>) => {
@@ -126,19 +124,19 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                 </video>
                 <div className="video-controls-container">
                     <button className="video-controls" onClick={e => this.onRestart(e)}>
-                        <FontAwesome name='fast-backward' />
+                        <i className="glyphicon glyphicon-fast-backward"></i>
                     </button>
                     <button className="video-controls" onClick={e => this.onBackFive(e)}>
-                        <FontAwesome name='step-backward' /> <span className="time-jump">(5 secondes)</span>
+                        <i className="glyphicon glyphicon-step-backward"></i> <span className="time-jump">(5 secondes)</span>
                     </button>
                     <button className="video-controls" onClick={e => this.onStop(e)}>
-                        <FontAwesome name='stop' />
+                        <i className="glyphicon glyphicon-stop"></i>
                     </button>
                     <button className="video-controls" onClick={e => this.onPlay(e)}>
-                        <FontAwesome id="play-button" name={this.getPlayStateButton()} />
+                        <i id="play-button" className="glyphicon glyphicon-play"></i>
                     </button>
                     <button className="video-controls" onClick={e => this.onForwardFive(e)}>
-                        <FontAwesome name='step-forward' /> <span className="time-jump">(5 secondes)</span>
+                        <i className="glyphicon glyphicon-step-forward"></i> <span className="time-jump">(5 secondes)</span>
                     </button>
                 </div>
             </div>

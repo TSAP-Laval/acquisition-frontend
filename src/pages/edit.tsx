@@ -16,6 +16,7 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
             <div>
+                <SideBar />
                 <div className="video-container">
                     <VideoPlayer />
                 </div>
