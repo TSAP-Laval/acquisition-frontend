@@ -2,6 +2,7 @@ import * as React from "react";
 
 import {Button, Alert} from "react-bootstrap";
 import * as $ from "jquery"
+
 //require("bootstrap-sass/assets/stylesheets/_bootstrap.scss");
 
 export interface ILayoutProps {}
@@ -35,10 +36,27 @@ var xmlhttp = new XMLHttpRequest();
    
   };
   xmlhttp.send(text);
+    AddNewRow(String($('#action_name').val()), String($('#action_desc').val()));
 
-      }
+    console.log(String($('#action_name').val()));
+    console.log( String($('#action_desc').val()));
+    
+    
+}
         
+    function AddNewRow(actionName:string, actionDesc:string){
 
+        console.log(actionName);
+        console.log(actionDesc);
+        
+        
+         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td>" + String(actionDesc) + 
+         "</td><td><button className='btn btn-default btn-warning'>Modifier</button>"
+         + "<button className='btn btn-danger btn-default'>Supprimer</button></td></tr>"
+
+
+            $('#action_table tbody').append(trToAdd)
+    }
         return (
                     
 
