@@ -82,7 +82,7 @@ var text = '{'
   var _this = this;
   console.log(_this);
  
-  xmlhttp.open('POST', 'http://localhost:3000/api/edition/PostJoueur', true);
+  xmlhttp.open('POST', 'http://67.205.146.224:3000/api/edition/PostJoueur', true);
   xmlhttp.setRequestHeader('Content-type', 'application/json');
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState === 4) {
@@ -127,7 +127,7 @@ var text = '{'
         var _this = this;
         console.log(_this);
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", "http://localhost:3000/api/edition/GetJoueurs", false ); // false for synchronous request
+        xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetJoueurs", false ); // false for synchronous request
         xmlHttp.send( null );
         var data =JSON.parse(xmlHttp.responseText)
         console.log(xmlHttp.responseText)
@@ -154,7 +154,7 @@ var text = '{'
          var _this = this;
          console.log(_this);
          var xmlHttp = new XMLHttpRequest();
-         xmlHttp.open( "GET", "http://localhost:3000/api/edition/GetActions", false ); // false for synchronous request
+         xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetActions", false ); // false for synchronous request
          xmlHttp.send( null );
          var dataAction =JSON.parse(xmlHttp.responseText)
          console.log(xmlHttp.responseText)
