@@ -7,10 +7,12 @@ import Footer from "./Footer"
 
 
 require('../../sass/Layout.scss');
+
+
 export interface ILayoutProps {}
 export interface ILayoutState {}
-var numJoueur = 0;
-var TypeAction = 0;
+  //Variable global pour avoir le numero du joueur
+var numJoueur =0;
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   RightClick(e: React.MouseEvent<HTMLInputElement>){
@@ -33,6 +35,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     e.target.name ='def'
     }
     */
+
+    //Va set la position du div
     var x = document.getElementById('Enr');
     $(x).css({
       "left": e.pageX + "px",
@@ -40,25 +44,28 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     })
     $(x).toggleClass("form-open")
   }
-
+//Fermer le div
   closeFormModal(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault()
     var x = document.getElementById('Enr');
     $(x).toggleClass("form-open")
   }
-
+//Envoie du formulaire à l'api 
 sendFormData(e: React.MouseEvent<HTMLInputElement>) {
   e.preventDefault()
+  //Va rechercher le formulaire
   var form = e.target as HTMLFormElement
+  //Va chercher le type de l'active
   let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement
+  //Va chercher le resutltat de l'action
   let _resultat = document.getElementsByName("resultat")[0] as HTMLInputElement
+  var TypeAction=0;
   TypeAction = parseInt(_typeSelect.value)
   var resultatAction = _resultat.value
   if(TypeAction !=0&&resultatAction !="")
   {
-    console.log(TypeAction)
-
-var text = '{'
+      //Preparation du json que l'on va envoyer au server
+        var text = '{'
        +'"TypeActionID" :'+TypeAction+','
        +'"ActionPositive" : '+resultatAction + ','
        +'"ZoneID" : 1 ,'
@@ -73,21 +80,26 @@ var text = '{'
        +'"JoueurID" :'+numJoueur
        +'}'
   
-  console.log(text);
-  var data = JSON.parse(text);
-  console.log(data);
-  this.RightClick.bind(this)
-
+  //Fermer le fenetre
+  this.closeFormModal.bind(this)
+  //Preparation HTTPRequest
   var xmlhttp = new XMLHttpRequest();
+<<<<<<< HEAD
   var _this = this;
   console.log(_this);
  
   xmlhttp.open('POST', 'http://67.205.146.224:3000/api/edition/PostJoueur', true);
+=======
+  //Information sur la httpRequest
+  xmlhttp.open('POST', 'http://67.205.146.224:3000/api/edition/PostJoueur', true);
+  //Set content-type
+>>>>>>> 735d92b235eb8035c47faf7766da01218c373f8f
   xmlhttp.setRequestHeader('Content-type', 'application/json');
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState === 4) {
+      //Va rechercher la reponse du server
        var response = xmlhttp.responseText;
-       console.log(response)
+    //Si reussi message de confirmation sinon msg d'erreur
       if ( response === "ok") {
 
         var span = document.getElementById("rep");
@@ -100,11 +112,10 @@ var text = '{'
     }
    
   };
+  //Envoi
   xmlhttp.send(text);
   }
   else{
-     console.log(TypeAction)
-     console.log(resultatAction)
 
      var span = document.getElementById("rep");
         span.innerHTML="Veuillez rentrer toute les informations sur l'action"
@@ -117,20 +128,20 @@ var text = '{'
     render() {
 
          
-      //tableau qui contiendra tout les numéros des joueurs
-       
-        //Remplis le tableau
+        //Tableau d'id et tableau du numero du joueur
         var TableauNumero = [];
         var TableauID:any = [];
-        console.log("yeee")
-        var xmlhttp = new XMLHttpRequest();
-        var _this = this;
-        console.log(_this);
+        //Préparation HTTPRequest
         var xmlHttp = new XMLHttpRequest();
+<<<<<<< HEAD
         xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetJoueurs", false ); // false for synchronous request
+=======
+        xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetJoueurs", false );
+>>>>>>> 735d92b235eb8035c47faf7766da01218c373f8f
         xmlHttp.send( null );
+        //Va rechercher les joueurs
         var data =JSON.parse(xmlHttp.responseText)
-        console.log(xmlHttp.responseText)
+       //Rentre le id et le numéro du joueur dans le tableau correspondant
         for(var i = 0; i < data.length; i++) {
           var obj = data[i];
          
@@ -146,33 +157,30 @@ var text = '{'
           console.log()
         return <li><div className="col-xs-3"><button className="player-btn" type="button"  onClick={this.RightClick.bind(this)} name="def" value={TableauID[index]} >Joueur numéro {leNum}</button></div></li>; },this)
                          
-      //tableau qui contiendra tout les numéros des joueurs
-       
+          //Tableau d'id et tableau du nom de l'action
          var TableauAction = [];
          var TableauActionID:any = [];
-         var xmlhttp = new XMLHttpRequest();
-         var _this = this;
-         console.log(_this);
+        //Preparation httpRequest      
          var xmlHttp = new XMLHttpRequest();
          xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetActions", false ); // false for synchronous request
          xmlHttp.send( null );
+         //Data action
          var dataAction =JSON.parse(xmlHttp.responseText)
-         console.log(xmlHttp.responseText)
+         //Rentre le id et le nom de l'action dans le tableau correspondant
         for(var i = 0; i < dataAction.length; i++) {
          var objAction= dataAction[i];
-         console.log(objAction.Nom)
-          console.log("test" + objAction.ID)
           TableauAction.push(objAction.Nom);
           TableauActionID.push(objAction.ID);
    }
 
       
-       //Crée une liste de bouton
+       //Crée une liste d'option
         var LstAction = TableauAction.map(function(leNum,index){
               return <option name="TypeAction" value={TableauActionID[index]}>{leNum}</option>;
             })
 
         return (
+          //Retourne html 
             <div>
                  <form onSubmit={this.sendFormData.bind(this)}>  
                  <div id="Enr">

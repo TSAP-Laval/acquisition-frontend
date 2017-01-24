@@ -48,13 +48,13 @@ class UploadStore extends EventEmitter {
         if (percentCompleted == 100) {
             this.addAction('ERROR');
             this.addAction('UPLOAD_SUCCESS');
+            this.removeAction('DROP');
         }
         console.log("PROGRESS " + this.progress.toString() + " %");
         this.emit("change");
     }
 
     sendVideo(file: File) {
-
         var boundary = Math.random().toString().substr(2);
 
         var config = {

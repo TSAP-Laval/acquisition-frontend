@@ -22,6 +22,8 @@ dist
 
 # Yarn
 yarn.lock
+yarn.*
 
 # Typings
 typings
+
