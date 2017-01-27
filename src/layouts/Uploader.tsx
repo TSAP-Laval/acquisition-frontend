@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import DragDrop from "../Uploader/DragDrop";
+import DragDrop from "../components/Uploader/DragDrop";
 
 export interface ILayoutProps {
     params: string

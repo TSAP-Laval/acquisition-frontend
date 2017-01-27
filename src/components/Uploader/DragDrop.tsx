@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as  Dropzone from "react-dropzone";
 
-import * as Actions from "../../Uploader/actions"
-import Store from "../../Uploader/uploaderStore"
+import * as Actions from "./Actions"
+import Store from "./UploaderStore"
 import Form from "./Form";
-import Error from "./Error";
+import Error from "./Messages";
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -18,19 +18,25 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         super(props);
         // Bind listener
         this._onChange = this._onChange.bind(this);
+        // Get current actions and set progress at 0%
         this.state = {actions: Store.getActions(), progress: ["0"]};
     }
 
     componentWillMount(){
         Store.addListener("change", this._onChange);
+        Store.addListener("PROGRESS", this._onChange);
     }
 
     componentWillUnmount() {
-        Store.removeListener("change", this._onChange);
+        Store.removeListener("PROGRESS", this._onChange);
     }
 
     _onChange() {
-        this.setState({actions: Store.getActions(), progress: Store.getProgress()});
+        this.state.actions = Store.getActions();
+    }
+
+    _onProgress() {
+        this.state.progress = Store.getProgress();
     }
 
     onDrop(acceptedFiles: Array<File>){

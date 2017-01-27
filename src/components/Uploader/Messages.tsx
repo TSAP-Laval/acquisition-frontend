@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import * as Actions from "../../Uploader/actions"
-import Store from "../../Uploader/uploaderStore"
+import * as Actions from "./Actions"
+import Store from "./UploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -32,6 +32,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
     render() {
         var msg = null;
         var style = "error"
+        
         this.state.actions.forEach(function(element: any) {
             console.log('ERROR : ' + element);
             switch (element) {

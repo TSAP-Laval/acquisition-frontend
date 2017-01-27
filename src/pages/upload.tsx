@@ -2,12 +2,10 @@ import * as React from "react";
 
 require('../sass/Layout.scss');
 
-import Header from "../layouts/Layout/Header"
-import Footer from "../layouts/Layout/Footer"
-import Uploader from "../layouts/Layout/Uploader"
-import SideBar from "../layouts/Layout/SideBar"
-import VideoPlayer from "../layouts/layout/VideoPlayer"
-import EditTest from "../layouts/Layout/Edit"
+import Header from "../layouts/Header"
+import Footer from "../layouts/Footer"
+import Uploader from "../layouts/Uploader"
+import SideBar from "../layouts/SideBar"
 
 export interface ILayoutProps {
     hasVideo: boolean

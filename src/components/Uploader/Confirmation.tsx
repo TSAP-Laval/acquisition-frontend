@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import * as Actions from "../../Uploader/actions"
-import Store from "../../Uploader/uploaderStore"
+import * as Actions from "./Actions"
+import Store from "./UploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {

@@ -8,7 +8,7 @@ import Teams from "./Teams";
 import Actions from "./Actions";
 import Players from "./Players";
 
-require('./manage_style.scss');
+require('../../sass/manage_style.scss');
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
