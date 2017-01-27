@@ -17,11 +17,11 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
     }
 
     componentWillMount(){
-        Store.on("change", this._onChange);
+        Store.on("CHANGE", this._onChange);
     }
 
     componentWillUnmount() {
-        Store.removeListener("change", this._onChange);
+        Store.removeListener("CHANGE", this._onChange);
     }
 
     _onChange() {
@@ -29,11 +29,11 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
         console.log('Action : ' + this.state.actions);
     }
 
-    closeForm(e:React.FormEvent<HTMLButtonElement>) {
+    closeForm() {
         Actions.Add('CLOSE_FORM');
     }
 
-    closeConfirm(e:React.FormEvent<HTMLButtonElement>) {
+    closeConfirm() {
         Actions.Add('CLOSE_CONFIRM_FORM');
     }
 
@@ -45,8 +45,8 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
                         Êtes-vous sûr de vouloir terminer l'importation ?
                     </div>
                     <div className="modal-footer">
-                        <button onClick={ e => this.closeConfirm(e) } className="btn">Annuler</button>
-                        <button onClick={ e => this.closeForm(e) } className="btn btn-primary" id="delete">Terminer</button>
+                        <button onClick={ this.closeConfirm } className="btn">Annuler</button>
+                        <button onClick={ this.closeForm } className="btn btn-primary" id="delete">Terminer</button>
                     </div>
                 </div>
                 <div id="blur-bkg-2" className="modal-backdrop fade in"></div>

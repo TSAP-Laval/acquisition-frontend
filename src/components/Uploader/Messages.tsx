@@ -12,19 +12,19 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
     constructor() {
         super();
         // Bind listener
-        this._onChange = this._onChange.bind(this);
+        this._onMessage = this._onMessage.bind(this);
         this.state = {actions: Store.getActions()};
     }
 
     componentWillMount(){
-        Store.on("change", this._onChange);
+        Store.on("MESSAGE", this._onMessage);
     }
 
     componentWillUnmount() {
-        Store.removeListener("change", this._onChange);
+        Store.removeListener("MESSAGE", this._onMessage);
     }
 
-    _onChange() {
+    _onMessage() {
         this.setState({actions: Store.getActions()});
         console.log('Action : ' + this.state.actions);
     }
@@ -34,7 +34,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
         var style = "error"
         
         this.state.actions.forEach(function(element: any) {
-            console.log('ERROR : ' + element);
+            console.log('MESSAGE : ' + element);
             switch (element) {
                 case "FORMAT":
                     msg = "Le fichier choisi n'est pas dans un format vidéo reconnu"

@@ -25,12 +25,8 @@ class UploadStore extends EventEmitter {
     }
 
     addProgress(text: string) {
-        console.log('TEXT ' + text);
-        this.progress.push(text);
-    }
-
-    removeProgress() {
         this.progress.pop();
+        this.progress.push(text);
     }
 
     getActions() {
@@ -43,15 +39,14 @@ class UploadStore extends EventEmitter {
 
     onProgress(progressEvent: any) {
         var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-        this.removeProgress();
         this.addProgress(percentCompleted.toString());
         if (percentCompleted == 100) {
-            this.addAction('ERROR');
+            this.addAction('MESSAGE');
             this.addAction('UPLOAD_SUCCESS');
             this.removeAction('DROP');
         }
         console.log("PROGRESS " + this.progress.toString() + " %");
-        this.emit("change");
+        this.emit("PROGRESS");
     }
 
     sendVideo(file: File) {
@@ -86,14 +81,14 @@ class UploadStore extends EventEmitter {
             case "SAVE":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('ERROR');
+                this.removeAction('MESSAGE');
                 this.emit("change");
                 break;
             case "CLOSE_FORM":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('DROP');
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('ERROR');
+                this.removeAction('MESSAGE');
                 this.emit("change");
                 break;
             case "OPEN_CONFIRM_FORM":
@@ -102,11 +97,11 @@ class UploadStore extends EventEmitter {
                 break;
             case "CLOSE_CONFIRM_FORM":
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('ERROR');
+                this.removeAction('MESSAGE');
                 this.emit("change");
                 break;
             case "OPEN_ERROR":
-                this.addAction('ERROR');
+                this.addAction('MESSAGE');
                 this.addAction(action.text)
                 this.emit("change");
                 break;
