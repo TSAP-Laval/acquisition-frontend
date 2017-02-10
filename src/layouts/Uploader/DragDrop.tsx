@@ -1,11 +1,7 @@
 import * as React from "react";
 import * as  Dropzone from "react-dropzone";
-
-<<<<<<< HEAD
-import * as Actions from "../../Uploader/Actions"
-=======
 import * as Actions from "../../Uploader/actions"
->>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
+
 import Store from "../../Uploader/uploaderStore"
 import Form from "./Form";
 import Error from "./Error";
@@ -53,10 +49,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         var error = null;
 
         var progress = this.state.progress == null ? 0 : this.state.progress;
-<<<<<<< HEAD
 
-=======
->>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
         var dropzone = <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                         onDrop={ this.onDrop}>
                         <div id="drop-zone">
@@ -73,10 +66,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                                     <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={style}>
                                         <span className="sr-only">{progress}% Complete</span>
                                     </div>
-<<<<<<< HEAD
                                     <p> {progress}% Complété</p>
-=======
->>>>>>> d315ee2212f360adde47f8d63f8ec6ccfb43164e
                                 </div>;
                     break;
                 case "OPEN_FORM":
