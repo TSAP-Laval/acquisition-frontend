@@ -122,13 +122,16 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 
          
         //Tableau d'id et tableau du numero du joueur
-        var TableauNumero = [];
+        var TableauNumero:any = [];
         var TableauID:any = [];
         //Préparation HTTPRequest
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetJoueurs", false );
-        xmlHttp.send( null );
-        //Va rechercher les joueurs
+        xmlHttp.open( "GET", "http://localhost:3000/api/edition/GetJoueurs", true );
+        xmlHttp.onload = function (e) {
+       if (xmlHttp.readyState === 4) {
+       if (xmlHttp.status === 200) {
+        console.log(xmlHttp.responseText);
+           //Va rechercher les joueurs
         var data =JSON.parse(xmlHttp.responseText)
        //Rentre le id et le numéro du joueur dans le tableau correspondant
         for(var i = 0; i < data.length; i++) {
@@ -138,6 +141,13 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
           TableauID.push(obj.ID);
           
    }
+       } else {
+      console.error(xmlHttp.statusText);
+       }
+      }
+      };
+        xmlHttp.send( null );
+   
     
         
    
@@ -147,20 +157,30 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         return <li><div className="col-xs-3"><button className="player-btn" type="button"  onClick={this.RightClick.bind(this)} name="def" value={TableauID[index]} >Joueur numéro {leNum}</button></div></li>; },this)
                          
           //Tableau d'id et tableau du nom de l'action
-         var TableauAction = [];
+         var TableauAction:any = [];
          var TableauActionID:any = [];
         //Preparation httpRequest      
-         var xmlHttp = new XMLHttpRequest();
-         xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetActions", false ); 
-         xmlHttp.send( null );
-         //Data action
-         var dataAction =JSON.parse(xmlHttp.responseText)
+         var xmlHttp2 = new XMLHttpRequest();
+         xmlHttp2.open( "GET", "http://localhost:3000/api/edition/GetActions", true ); 
+           xmlHttp2.onload = function (e) {
+       if (xmlHttp2.readyState === 4) {
+       if (xmlHttp2.status === 200) {
+      console.log(xmlHttp2.responseText);
+       //Data action
+         var dataAction =JSON.parse(xmlHttp2.responseText)
          //Rentre le id et le nom de l'action dans le tableau correspondant
         for(var i = 0; i < dataAction.length; i++) {
          var objAction= dataAction[i];
           TableauAction.push(objAction.Nom);
           TableauActionID.push(objAction.ID);
    }
+       } else {
+      console.error(xmlHttp.statusText);
+       }
+      }
+      };
+         xmlHttp2.send( null );
+        
 
       
        //Crée une liste d'option

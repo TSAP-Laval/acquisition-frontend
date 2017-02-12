@@ -8,6 +8,7 @@ import Teams from "./Teams";
 import Actions from "./Actions";
 import Players from "./Players";
 
+
 require('./manage_style.scss');
 
 export interface ILayoutProps {}
@@ -26,7 +27,7 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                 <Tabs>
 
                     <TabList> 
-                        <Tab>Saison</Tab>
+                        <Tab>Saison22</Tab>
                         <Tab>Équipe</Tab>
                         <Tab>Entraîneurs</Tab>
                         <Tab>Joueurs</Tab>
