@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router"
 
-import Header from "../layouts/Layout/Header"
-import Manager from "../Manage/Manage"
-import Footer from "../layouts/Layout/Footer"
-import SideBar from "../layouts/Layout/SideBar"
+import Header from "../layouts/Header"
+import Manager from "../components/Manage/Manage"
+import Footer from "../layouts/Footer"
+import SideBar from "../layouts/SideBar"
 
 require('../sass/Layout.scss');
 

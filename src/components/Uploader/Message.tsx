@@ -1,14 +1,15 @@
-import * as React from "react";
+import * as React   from "react";
 
-import * as Actions from "../../Uploader/actions"
-import Store from "../../Uploader/uploaderStore"
+import * as Actions from "./Actions"
+import Store        from "./UploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
     actions: string[]
 }
 
-export default class Footer extends React.Component<ILayoutProps, ILayoutState> {
+export default class Message extends React.Component<ILayoutProps, ILayoutState> {
+    
     constructor() {
         super();
         // Bind listener
@@ -17,23 +18,22 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
     }
 
     componentWillMount(){
-        Store.on("change", this._onChange);
+        Store.on("CHANGE", this._onChange);
     }
 
     componentWillUnmount() {
-        Store.removeListener("change", this._onChange);
+        Store.removeListener("CHANGE", this._onChange);
     }
 
     _onChange() {
         this.setState({actions: Store.getActions()});
-        console.log('Action : ' + this.state.actions);
     }
 
     render() {
         var msg = null;
         var style = "error"
+        
         this.state.actions.forEach(function(element: any) {
-            console.log('ERROR : ' + element);
             switch (element) {
                 case "FORMAT":
                     style = "error"
