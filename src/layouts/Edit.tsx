@@ -6,7 +6,7 @@ import Header from "./Header"
 import Footer from "./Footer"
 
 
-require('../../sass/Layout.scss');
+require('../sass/Layout.scss');
 
 
 export interface ILayoutProps {}

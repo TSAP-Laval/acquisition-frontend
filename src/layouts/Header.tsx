@@ -1,10 +1,6 @@
 import * as React from "react";
 
-import Title from "../Header/Title";
 import Navbar from "./Navbar";
-
-
-
 
 export interface ILayoutProps {
     title: string
@@ -14,6 +10,7 @@ export interface ILayoutState {
 }
 
 export default class Header extends React.Component<ILayoutProps, ILayoutState> {
+    
     constructor (props: any) {
         super(props);
         console.log(props);
@@ -23,7 +20,7 @@ export default class Header extends React.Component<ILayoutProps, ILayoutState> 
     render() {
         return (
             <header className="page-header">
-                <Title title={this.state.title}/>
+                <h1>{this.props.title}</h1>
             </header>
         );
     }

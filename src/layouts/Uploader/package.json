@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@types/react-dropzone": "^0.0.30",
-    "react-dropzone": "^3.9.0"
-  }
-}
