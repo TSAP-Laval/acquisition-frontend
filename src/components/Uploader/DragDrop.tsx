@@ -1,10 +1,10 @@
-import * as React from "react";
-import * as  Dropzone from "react-dropzone";
+import * as React     from "react";
+import * as Dropzone  from "react-dropzone";
+import * as Actions   from "./Actions"
 
-import * as Actions from "./Actions"
-import Store from "./UploaderStore"
-import Form from "./Form";
-import Error from "./Messages";
+import Store          from "./UploaderStore"
+import Form           from "./Form";
+import Message        from "./Message";
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -18,27 +18,20 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         super(props);
         // Bind listeners
         this._onChange = this._onChange.bind(this);
-        this._onProgress = this._onProgress.bind(this);
         // Get current actions and set progress at 0%
-        this.state = {actions: Store.getActions(), progress: ["0"]};
+        this.state = { actions: Store.getActions(), progress: ["0"] };
     }
 
     componentWillMount(){
         Store.addListener("CHANGE", this._onChange);
-        Store.addListener("PROGRESS", this._onProgress);
     }
 
     componentWillUnmount() {
         Store.removeListener("CHANGE", this._onChange);
-        Store.removeListener("PROGRESS", this._onProgress);
     }
 
     _onChange() {
-        this.state.actions = Store.getActions();
-    }
-
-    _onProgress() {
-        this.state.progress = Store.getProgress();
+        this.setState({ actions: Store.getActions(), progress: Store.getProgress() });
     }
 
     onDrop(acceptedFiles: Array<File>){
@@ -56,7 +49,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     
     render() {
         var form =      null;
-        var error =     null;
+        var message =   null;
         var progress =  this.state.progress == null ? 0 : this.state.progress;
         var dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                             onDrop={ this.onDrop}>
@@ -66,7 +59,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                         </Dropzone>
 
         this.state.actions.forEach(function(element: any) {
-            console.log('ELEMENT ' + element);
             switch (element) {
                 case "DROP":
                     var style = {width: progress + "%"};
@@ -82,17 +74,17 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                 case "OPEN_FORM":
                     form = <Form />
                     break;
-                case "ERROR":
-                    error = <Error />
+                case "MESSAGE":
+                    message = <Message />
                     break;
                 default:
                     break;
             }
         });
-
+        
         return (
             <div className="absolute wide">
-                {error}
+                {message}
                 {dropzone}
                 {form}
             </div>

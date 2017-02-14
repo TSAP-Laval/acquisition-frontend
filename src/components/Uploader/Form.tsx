@@ -1,9 +1,8 @@
-import * as React from "react";
+import * as React   from "react";
 
 import * as Actions from "./Actions"
-import Store from "./UploaderStore"
-
-import ConfForm from "./Confirmation"
+import Store        from "./UploaderStore"
+import ConfForm     from "./Confirmation"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -11,6 +10,7 @@ export interface ILayoutState {
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
+    
     constructor() {
         super();
         // Bind listener
@@ -28,7 +28,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
     _onChange(){
         this.setState({actions: Store.getActions()});
-        console.log('Action : ' + this.state.actions);
     }
 
     closeForm() {

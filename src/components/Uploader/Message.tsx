@@ -1,32 +1,32 @@
-import * as React from "react";
+import * as React   from "react";
 
 import * as Actions from "./Actions"
-import Store from "./UploaderStore"
+import Store        from "./UploaderStore"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
     actions: string[]
 }
 
-export default class Footer extends React.Component<ILayoutProps, ILayoutState> {
+export default class Message extends React.Component<ILayoutProps, ILayoutState> {
+    
     constructor() {
         super();
         // Bind listener
-        this._onMessage = this._onMessage.bind(this);
+        this._onChange = this._onChange.bind(this);
         this.state = {actions: Store.getActions()};
     }
 
     componentWillMount(){
-        Store.on("MESSAGE", this._onMessage);
+        Store.on("CHANGE", this._onChange);
     }
 
     componentWillUnmount() {
-        Store.removeListener("MESSAGE", this._onMessage);
+        Store.removeListener("CHANGE", this._onChange);
     }
 
-    _onMessage() {
+    _onChange() {
         this.setState({actions: Store.getActions()});
-        console.log('Action : ' + this.state.actions);
     }
 
     render() {
@@ -34,7 +34,6 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
         var style = "error"
         
         this.state.actions.forEach(function(element: any) {
-            console.log('MESSAGE : ' + element);
             switch (element) {
                 case "FORMAT":
                     msg = "Le fichier choisi n'est pas dans un format vidéo reconnu"

@@ -1,4 +1,5 @@
-var debug = false;
+var debug = !(process.env.ENV === 'production');
+console.log("DEBUG: " + debug.valueOf());
 var webpack = require('webpack');
 var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -6,31 +7,50 @@ const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const sassLoaders = [
-  'css-loader',
-  'postcss-loader',
-  'sass-loader?includePaths[]='+ path.resolve(__dirname, 'node_modules')
+    'css-loader',
+    'postcss-loader',
+    'sass-loader?includePaths[]=' + path.resolve(__dirname, 'node_modules')
 ]
 
 module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "bundle.js",
-        path: "dist"
+        path: "dist",
+        publicPath: '/'
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "eval-cheap-source-map",
+    devtool: debug ? "eval-cheap-source-map" : "source-map",
 
-    plugins: debug ? [] : [
-        new webpack.optimize.DedupePlugin(),
+    plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin({ mangle: true, sourcemap: false }),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: true,
+            compressor: {
+                warnings: false
+            }
+        }),
         new ExtractTextPlugin('bundle.css'),
         new HtmlWebpackPlugin({
             title: "TSAP",
             template: "templates/index.ejs"
         })
     ],
+
+    externals: {
+        'config': JSON.stringify(debug ? {
+            serverURL: "http://localhost:3000/api"
+        } : {
+            serverURL: "http://67.205.146.224:3000/api"
+        })
+    },
 
     postcss: [
         autoprefixer({
