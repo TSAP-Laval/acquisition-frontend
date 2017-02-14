@@ -36,14 +36,18 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
         this.state.actions.forEach(function(element: any) {
             switch (element) {
                 case "FORMAT":
+                    style = "error"
                     msg = "Le fichier choisi n'est pas dans un format vidéo reconnu"
                     break;
                 case "TOO_MANY":
+                    style = "error"
                     msg = "Veuillez ne sélectionner qu'un seul fichier"
                     break;
                 case "NO_FILE":
+                    style = "error"
                     msg = "Veuillez sélectionner un fichier à ajouter"
                 case "EXIST":
+                    style = "error"
                     msg = "Un fichier de même nom existe déjà dans notre base de donnée.\n Veuillez choisir un fichier de nom différent"
                     break;
                 case "UPLOAD_SUCCESS":
