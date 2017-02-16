@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import store from "./manageStore";
+import * as manageActions from "./manageActions";
 
 import {Button, ButtonToolbar} from "react-bootstrap";
 
@@ -8,105 +9,116 @@ import {Button, ButtonToolbar} from "react-bootstrap";
 export interface ILayoutProps {}
 export interface ILayoutState {}
 var numJoueur ="";
-
-const buttonsInstance = (
-  <ButtonToolbar>
-    {/* Standard button */}
-    <Button>Default</Button>
-<Button bsStyle="primary">Primary</Button>
-    {/* Provides extra visual weight and identifies the primary action in a set of buttons */}
-    
-
-    {/* Indicates a successful or positive action */}
-    <Button bsStyle="success">Success</Button>
-
-    {/* Contextual button for informational alert messages */}
-    <Button bsStyle="info">Info</Button>
-
-    {/* Indicates caution should be taken with this action */}
-    <Button bsStyle="warning">Warning</Button>
-
-    {/* Indicates a dangerous or potentially negative action */}
-    <Button bsStyle="danger">Danger</Button>
-
-    {/* Deemphasize a button by making it look like a link while maintaining button behavior */}
-    <Button bsStyle="link">Link</Button>
-  </ButtonToolbar>
-);
-
-
+var TableauJoueurs:any=[];
+var TableauJoueursId:any=[];
 
 
 export default class Players extends React.Component<ILayoutProps, ILayoutState> {
+
 componentWillMount(){
-    store.on("change",() =>{
-        store.getActions();
+		manageActions.getSport();
+        manageActions.getJoueur();
+		manageActions.getNiveau();
+		manageActions.getEquipes();
+		store.on("change",() =>{
+		this.LstJoueurs();
+        this.RemplirSelect();
+		
     })
+    
+	}
+    LstJoueurs()
+	{
+      	var AllJoueurs= store.GetAllJoueurs();
+	    var datastringify =JSON.stringify(AllJoueurs);
+		var tabJson = JSON.parse(datastringify);
+		
+		//Rentre le id et le nom de l'action dans le tableau correspondant
+        for(var i = 0; i < tabJson.length; i++) {
+		var doc = document.getElementById("tempo");
+        var data =tabJson[i];
+            console.log("wowoowwaaaddd");
+            console.log(data);
+        	 
+			 var x = document.createElement("Li");
+			 x.innerHTML=data.Nom;
+			 x.nodeValue=data.ID;
+			 doc.appendChild(x);
+		}
+	}
+    RemplirSelect()
+	{
+		
+      	var allSport= store.GetAllequipe();
+	
+	    var datastringify =JSON.stringify(allSport);
+		var tabJson = JSON.parse(datastringify);
+		
+		//Rentre le id et le nom de l'action dans le tableau correspondant
+        for(var i = 0; i < tabJson.length; i++) {
+             var data =tabJson[i];
+            var doc = document.getElementById("equipe");
+			 var x = document.createElement("OPTION");
+			 x.innerHTML=data.Nom;
+			 x.nodeValue=data.ID;
+			 doc.appendChild(x);
+		}
 
-}
-Test(){
-   
-        store.getActions();
+	}
+sendFormData(e: React.MouseEvent<HTMLInputElement>) {
+  e.preventDefault()
+  //Va rechercher le formulaire
+  var form = e.target as HTMLFormElement
+  //Va chercher le type de l'active
+  let _NomJoueur = document.getElementById("Nom")as HTMLInputElement
+  var nomjoueur= _NomJoueur.value
+  let _PrenomJoueur = document.getElementById("Prenom")as HTMLInputElement
+  var prenomjoueur= _PrenomJoueur.value
+  let _NumeroJoueur = document.getElementById("Numero")as HTMLInputElement
+  var numerojoueur= _NumeroJoueur.value
+  console.log("le num " + numerojoueur)
+  let _EmailJoueur = document.getElementById("Email")as HTMLInputElement
+  var emailJoueur= _EmailJoueur.value
 
+      //Preparation du json que l'on va envoyer au server
+      
+        var text = '{'
+       +'"Nom" :'+ '"'+ nomjoueur+'",'
+       +'"Prenom" :'+ '"'+prenomjoueur + '",'
+	   +'"Numero" : '+numerojoueur + ','
+	   +'"Email" : '+ '"'+emailJoueur + '",'
+       +'"PassHash" : "test22" ,'
+       +'"TokenInvitation" : "test" ,'
+       +'"TokenReinitialisation" : "test ",'
+       +'"TokenConnexion" : "test"'
+       +'}'
+       console.log("text" + text);
+       manageActions.PostJoueur(text);
 }
+
     render() {
         return (
-         <div className="container">
-<h1> Teams :</h1>
 
-    <div className="row clearfix">
-		<div className="col-md-12 column">
-			<table className="table table-bordered table-hover" id="tab_logic">
-				<thead>
-					<tr >
-						<th className="text-center">
-							#
-						</th>
-						<th className="text-center">
-							Nom équipe
-						</th>
-						<th className="text-center">
-							Localistion
-						</th>
-						<th className="text-center">
-							Sport
-						</th>
-						<th className="text-center">
-							Division
-						</th>
-						<th className="text-center">
-							Actions
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr id='addr0'>
-						<td>
-						1
-						</td>
-						<td>
-						<input type="text" name='nom'  placeholder='Nom' className="form-control"/>
-						</td>
-						<td>
-						<input type="text" name='localisation'  placeholder='Localisation' className="form-control"/>
-						</td>
-						<td>
-						<input type="text" name='sport'  placeholder='Sport' className="form-control"/>
-						</td>
-						<td>
-						<input type="text" name='division'  placeholder='Division' className="form-control"/>
-						</td>
-						<td>
-						<button className="btn btn-default btn-warning">Modifier</button>
-                        <button className="btn btn-danger btn-default">Supprimer</button>
-						</td>
-					</tr>
-                    <tr id='addr1'></tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
+			<div id="test">
+				<h2> test</h2>
+                <ul id = "tempo">
+	            </ul>
+			 <form onSubmit={this.sendFormData.bind(this)}>  
+                    <h3>Creer un nouveaux joueur</h3>     
+                    <label htmlFor="Nom">Nom</label>
+                    <input type="text" id="Nom" name="Nom"/> 
+					<label htmlFor="Prenom">Prenom</label>
+                    <input type="text"id="Prenom" name="Prenom"/>
+					<label htmlFor="Numero">Numero</label>
+                    <input type="text"id="Numero" name="Numero"/> 
+					<label htmlFor="Email">Email</label>
+                    <input type="text"id="Email" name="Email"/> 			
+                    <label htmlFor="equipe">Sport</label>                  
+                     <select id="equipe" name="equipe"></select><br></br>    
+                    <input type="submit" value="Submit"  />  
+                             
+                 </form> 
+			</div>
         );
     }
 }

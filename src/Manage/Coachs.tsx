@@ -6,7 +6,7 @@ export interface ILayoutState {}
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
     render() {
         return (
-           <h1>Coachsjjjjj</h1>
+           <h1>Coachs</h1>
         );
     }
 }
