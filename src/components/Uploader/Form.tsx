@@ -1,9 +1,8 @@
-import * as React from "react";
+import * as React   from "react";
 
-import * as Actions from "../../Uploader/actions"
-import Store from "../../Uploader/uploaderStore"
-
-import ConfForm from "./Confirmation"
+import * as Actions from "./Actions"
+import Store        from "./UploaderStore"
+import ConfForm     from "./Confirmation"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -11,6 +10,7 @@ export interface ILayoutState {
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
+    
     constructor() {
         super();
         // Bind listener
@@ -19,23 +19,22 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     componentWillMount(){
-        Store.on("change", this._onChange);
+        Store.on("CHANGE", this._onChange);
     }
 
     componentWillUnmount() {
-        Store.removeListener("change", this._onChange);
+        Store.removeListener("CHANGE", this._onChange);
     }
 
     _onChange(){
         this.setState({actions: Store.getActions()});
-        console.log('Action : ' + this.state.actions);
     }
 
-    closeForm(e:React.FormEvent<HTMLButtonElement>) {
+    closeForm() {
         Actions.Add('OPEN_CONFIRM_FORM');
     }
 
-    save(e:React.FormEvent<HTMLButtonElement>) {
+    onSave() {
         Actions.Add('SAVE');
     }
 
@@ -57,7 +56,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                 <div className="modal-dialog relative" id="modal">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button onClick={ e => this.closeForm(e) } type="button" className="close" data-dismiss="modal">
+                            <button onClick={ this.closeForm } type="button" className="close" data-dismiss="modal">
                                 <span aria-hidden="true">&times;</span>
                                 <span className="sr-only">Close</span>
                             </button>
@@ -99,11 +98,11 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                         </div>
                         
                         <div className="modal-footer">
-                            <button onClick={ e => this.closeForm(e) } type="button" className="btn btn-default"
+                            <button onClick={ this.closeForm } type="button" className="btn btn-default"
                                     data-dismiss="modal">
                                         Fermer
                             </button>
-                            <button onClick={ e => this.save(e) } type="button" className="btn btn-primary">
+                            <button onClick={ this.onSave } type="button" className="btn btn-primary">
                                 Sauvegarder
                             </button>
                         </div>

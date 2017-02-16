@@ -3,11 +3,11 @@ import * as React from "react";
 
 require('../sass/Layout.scss');
 
-import Header from "../layouts/Layout/Header"
-import Footer from "../layouts/Layout/Footer"
-import EditTest from "../layouts/Layout/Edit"
-import VideoPlayer from "../layouts/layout/VideoPlayer"
-import SideBar from "../layouts/Layout/SideBar"
+import Header from "../layouts/Header"
+import Footer from "../layouts/Footer"
+import EditTest from "../layouts/Edit"
+import VideoPlayer from "../layouts/VideoPlayer"
+import SideBar from "../layouts/SideBar"
 
 export interface ILayoutProps {}
 export interface ILayoutState {}

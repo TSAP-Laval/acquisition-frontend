@@ -1,7 +1,9 @@
 import { EventEmitter } from "events"
-import { IAction } from "../interfaces"
-import dispatcher from "../dispatcher";
-import * as axios from 'axios';
+import * as axios       from 'axios';
+
+import { IAction }      from "../interfaces"
+import dispatcher       from "../dispatcher";
+import { serverURL }    from "config"
 
 class UploadStore extends EventEmitter {
 
@@ -25,12 +27,8 @@ class UploadStore extends EventEmitter {
     }
 
     addProgress(text: string) {
-        console.log('TEXT ' + text);
-        this.progress.push(text);
-    }
-
-    removeProgress() {
         this.progress.pop();
+        this.progress.push(text);
     }
 
     getActions() {
@@ -43,15 +41,16 @@ class UploadStore extends EventEmitter {
 
     onProgress(progressEvent: any) {
         var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-        this.removeProgress();
+        
         this.addProgress(percentCompleted.toString());
+        
         if (percentCompleted == 100) {
-            this.addAction('ERROR');
+            this.addAction('MESSAGE');
             this.addAction('UPLOAD_SUCCESS');
             this.removeAction('DROP');
         }
-        console.log("PROGRESS " + this.progress.toString() + " %");
-        this.emit("change");
+        
+        this.emit("CHANGE");
     }
 
     sendVideo(file: File) {
@@ -59,13 +58,14 @@ class UploadStore extends EventEmitter {
 
         var config = {
             onUploadProgress: this.onProgress.bind(this),
-            headers: {'Content-Type': "multipart/form-data; filename=" + file.name + "; boundary=------------------------" + boundary}
+            headers: {'Content-Type': "multipart/form-data; filename=" + 
+            file.name + "; boundary=------------------------" + boundary}
         };
 
         var form = new FormData()
         form.append('file', file, file.name);
 
-        axios.post('http://67.205.146.224/:3000/api/video', form, config).then(function (r: any) {
+        axios.post(serverURL + '/video', form, config).then(function (r: any) {
             console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
             if (r.data === 'Exist')
                 this.addAction('EXIST');
@@ -81,34 +81,34 @@ class UploadStore extends EventEmitter {
                 this.addAction('OPEN_FORM');
                 this.removeAction('ERROR');
                 this.sendVideo(action.video);
-                this.emit("change");
+                this.emit("CHANGE");
                 break;
             case "SAVE":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('ERROR');
-                this.emit("change");
+                this.removeAction('MESSAGE');
+                this.emit("CHANGE");
                 break;
             case "CLOSE_FORM":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('DROP');
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('ERROR');
-                this.emit("change");
+                this.removeAction('MESSAGE');
+                this.emit("CHANGE");
                 break;
             case "OPEN_CONFIRM_FORM":
                 this.addAction('OPEN_CONFIRM_FORM');
-                this.emit("change");
+                this.emit("CHANGE");
                 break;
             case "CLOSE_CONFIRM_FORM":
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('ERROR');
-                this.emit("change");
+                this.removeAction('MESSAGE');
+                this.emit("CHANGE");
                 break;
             case "OPEN_ERROR":
-                this.addAction('ERROR');
+                this.addAction('MESSAGE');
                 this.addAction(action.text)
-                this.emit("change");
+                this.emit("CHANGE");
                 break;
         }
     }

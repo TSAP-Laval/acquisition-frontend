@@ -1,6 +1,6 @@
 import * as React from "react";
-import store from "./manageStore";
-import * as manageActions from "./manageActions";
+import store from "../../Manage/manageStore";
+import * as manageActions from "../../Manage/manageActions";
 export interface ILayoutProps {}
 export interface ILayoutState {}
 var TableauSport:any=[];

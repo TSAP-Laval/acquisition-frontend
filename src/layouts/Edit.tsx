@@ -6,7 +6,8 @@ import Header from "./Header"
 import Footer from "./Footer"
 
 
-require('../../sass/Layout.scss');
+
+require('../sass/Layout.scss');
 
 
 export interface ILayoutProps {}
@@ -122,6 +123,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 
          
         //Tableau d'id et tableau du numero du joueur
+
         var TableauNumero:any = [];
         var TableauID:any = [];
         //Préparation HTTPRequest
@@ -132,6 +134,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
        if (xmlHttp.status === 200) {
         console.log(xmlHttp.responseText);
            //Va rechercher les joueurs
+
         var data =JSON.parse(xmlHttp.responseText)
        //Rentre le id et le numéro du joueur dans le tableau correspondant
         for(var i = 0; i < data.length; i++) {
@@ -156,7 +159,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
           console.log()
         return <li><div className="col-xs-3"><button className="player-btn" type="button"  onClick={this.RightClick.bind(this)} name="def" value={TableauID[index]} >Joueur numéro {leNum}</button></div></li>; },this)
                          
-          //Tableau d'id et tableau du nom de l'action
+          //Tableau d'id et tableau du nom
          var TableauAction:any = [];
          var TableauActionID:any = [];
         //Preparation httpRequest      
@@ -168,6 +171,8 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
       console.log(xmlHttp2.responseText);
        //Data action
          var dataAction =JSON.parse(xmlHttp2.responseText)
+
+
          //Rentre le id et le nom de l'action dans le tableau correspondant
         for(var i = 0; i < dataAction.length; i++) {
          var objAction= dataAction[i];
