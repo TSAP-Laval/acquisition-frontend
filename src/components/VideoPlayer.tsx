@@ -94,7 +94,6 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     render() {
         return (
             <div>
-                
                 <div className="time-selector">
                     <input 
                         type="range" 
