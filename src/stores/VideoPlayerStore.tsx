@@ -66,11 +66,11 @@ class VideoPlayerStore extends EventEmitter {
     }
 
     restoreDefaultSlowSlider = (slider: HTMLInputElement) => {
-        slider.value = "50";
+        slider.value = (parseFloat(slider.max) / 2).toString();
     }
 
     slowSliderSlide = (slider: HTMLInputElement, video: HTMLVideoElement) => {
-        let slidingValue = (parseFloat(slider.value) - 50) / 75;
+        let slidingValue = (parseFloat(slider.value) - (parseFloat(slider.max) / 2)) / (parseFloat(slider.max) * 0,75);
         video.currentTime = this.currentTime + slidingValue;
     }
 

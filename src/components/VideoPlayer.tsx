@@ -96,7 +96,15 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
             <div>
                 
                 <div className="time-selector">
-                    <input type="range" id="my-slider" className="time-range" step="1" min="0" max="300" onMouseDown={this.onPause.bind(this)} onChange={this.onSlide.bind(this)} />
+                    <input 
+                        type="range" 
+                        id="my-slider" 
+                        className="time-range" 
+                        step="1" 
+                        min="0" 
+                        max="300" 
+                        onMouseDown={this.onPause.bind(this)} 
+                        onChange={this.onSlide.bind(this)} />
                 </div>
                 <video
                     id="my-player"
@@ -135,7 +143,15 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     <div id="slowFinder">
                         <div id="slideTrack"></div>
                         <label htmlFor="slowRange">Recherche précise:</label>
-                        <input id="slowRange" onMouseDown={this.onSlowSliderMouseDown.bind(this)} onMouseUp={this.onSlowSliderMouseUp.bind(this)} onChange={this.onSlowSliderSlide.bind(this)} type="range" min="0" step="1" max="100" />
+                        <input 
+                            id="slowRange" 
+                            onMouseDown={this.onSlowSliderMouseDown.bind(this)} 
+                            onMouseUp={this.onSlowSliderMouseUp.bind(this)} 
+                            onChange={this.onSlowSliderSlide.bind(this)} 
+                            type="range" 
+                            min="0" 
+                            step="1" 
+                            max="100" />
                     </div>
                 </div>
             </div>
