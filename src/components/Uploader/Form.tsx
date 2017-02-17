@@ -31,7 +31,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     closeForm() {
-        Actions.Add('OPEN_CONFIRM_FORM');
+        if (Store.getProgress()[0] === "100")
+            Actions.Add('CLOSE_FORM')
+        else
+            Actions.Add('OPEN_CONFIRM_FORM');
     }
 
     onSave() {

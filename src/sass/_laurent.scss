@@ -167,7 +167,23 @@ footer {
 /* Progress bar */
 
 .progress {
-    margin-right: 40px;
+    padding: 0 !important;
+    margin-right: 0;
+    width: 90%;
+    position: absolute;
+}
+
+.cancel {
+    display: inline;
+    float: right;
+    position: absolute;
+    top: 0;
+}
+
+.wrap {
+    max-width: 700px;
+    position: relative;
+    margin: auto;
 }
 
 

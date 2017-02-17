@@ -9,9 +9,12 @@ class UploadStore extends EventEmitter {
 
     actions: string[] = [];
     progress: string[] = [];
+    source: axios.CancelTokenSource
 
     constructor() {
         super();
+        // Cancellation
+        this.source = axios.default.CancelToken.source();
     }
 
     addAction(action: string) {
@@ -59,13 +62,14 @@ class UploadStore extends EventEmitter {
         var config = {
             onUploadProgress: this.onProgress.bind(this),
             headers: {'Content-Type': "multipart/form-data; filename=" + 
-            file.name + "; boundary=------------------------" + boundary}
+            file.name + "; boundary=------------------------" + boundary},
+            cancelToken: this.source.token
         };
 
         var form = new FormData()
         form.append('file', file, file.name);
 
-        axios.post(serverURL + '/video', form, config).then(function (r: any) {
+        axios.default.post(serverURL + '/video', form, config).then(function (r: any) {
             console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
             if (r.data === 'Exist')
                 this.addAction('EXIST');
@@ -74,19 +78,37 @@ class UploadStore extends EventEmitter {
         });
     }
 
+    cancelUpload() {
+        // We re-initialize the progress counter to 0 to
+        // avoid problem in further execution
+        this.addProgress("0");
+        this.source.cancel('Operation has been canceled.');
+        this.addAction('MESSAGE');
+        this.addAction('CANCEL');
+        this.removeAction('DROP');
+        this.source = axios.default.CancelToken.source();
+    }
+
     handleActions(action: IAction){
         switch(action.type) {
             case "DROP":
                 this.addAction(action.type);
                 this.addAction('OPEN_FORM');
                 this.removeAction('ERROR');
+                this.removeAction('CANCEL');
+                this.removeAction('MESSAGE');
                 this.sendVideo(action.video);
                 this.emit("CHANGE");
+                break;
+            case "CANCEL":
+                this.cancelUpload()
+                this.emit("CANCEL");
                 break;
             case "SAVE":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('MESSAGE');
+                this.addAction('MESSAGE');
+                this.addAction("SAVE")
                 this.emit("CHANGE");
                 break;
             case "CLOSE_FORM":
