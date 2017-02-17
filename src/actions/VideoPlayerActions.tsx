@@ -61,15 +61,24 @@ export function videoPlaying(video: HTMLVideoElement, slider: HTMLInputElement) 
     });
 }
 
-export function slideExpend(expension: number) {
+export function restoreDefaultSlowSliderValue(slider: HTMLInputElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.SLIDER_EXPEND",
-        value: expension,  
+        type: "VIDEO_PLAYER.RESTORE_SLOW_SLIDER",
+        slider: slider,
     });
 }
 
-export function slideBackToNormalWidth() {
+export function slowSliderSlide(slider: HTMLInputElement, video: HTMLVideoElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.SLIDER_BACK_TO_NORMAL",
-    })
+        type: "VIDEO_PLAYER.SLOW_SLIDER_SLIDE",
+        slider: slider,
+        video: video,
+    });
+}
+
+export function setCurrentTime(time: number) {
+    dispatcher.dispatch({
+        type: "VIDEO_PLAYER.SET_CURRENT_TIME",
+        time: time,
+    });
 }

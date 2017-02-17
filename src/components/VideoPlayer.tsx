@@ -41,7 +41,6 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     onPause = () => {
         let video = document.getElementById("my-player") as HTMLVideoElement;
         Actions.pauseVideo(this.state.playing, video);
-        this.onSliderMouseDown();
     }
 
     onStop = () => {
@@ -76,12 +75,20 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         Actions.videoPlaying(video, slider);
     }
 
-    onSliderMouseDown = () => {
-        Actions.slideExpend(500);
+    onSlowSliderMouseUp = () => {
+        let slowSlider = document.getElementById("slowRange") as HTMLInputElement;
+        Actions.restoreDefaultSlowSliderValue(slowSlider);
     }
 
-    onSliderMouseRelease = () => {
-        Actions.slideBackToNormalWidth();
+    onSlowSliderSlide = () => {
+        let slowSlider = document.getElementById("slowRange") as HTMLInputElement;
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.slowSliderSlide(slowSlider, video);
+    }
+
+    onSlowSliderMouseDown = () => {
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.setCurrentTime(video.currentTime);
     }
 
     render() {
@@ -89,7 +96,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
             <div>
                 
                 <div className="time-selector">
-                    <input type="range" id="my-slider" className="time-range" step="1" min="0" max="300" onMouseDown={this.onPause.bind(this)} onMouseUp={this.onSliderMouseRelease.bind(this)} onChange={this.onSlide.bind(this)} />
+                    <input type="range" id="my-slider" className="time-range" step="1" min="0" max="300" onMouseDown={this.onPause.bind(this)} onChange={this.onSlide.bind(this)} />
                 </div>
                 <video
                     id="my-player"
@@ -125,6 +132,11 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     <button className="video-controls" onClick={this.onForwardFive.bind(this)}>
                         <i className="glyphicon glyphicon-step-forward"></i> <span className="time-jump">(5 secondes)</span>
                     </button>
+                    <div id="slowFinder">
+                        <div id="slideTrack"></div>
+                        <label htmlFor="slowRange">Recherche précise:</label>
+                        <input id="slowRange" onMouseDown={this.onSlowSliderMouseDown.bind(this)} onMouseUp={this.onSlowSliderMouseUp.bind(this)} onChange={this.onSlowSliderSlide.bind(this)} type="range" min="0" step="1" max="100" />
+                    </div>
                 </div>
             </div>
         );

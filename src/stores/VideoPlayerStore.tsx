@@ -2,22 +2,11 @@ import { EventEmitter } from "events";
 import dispatcher from "../components/dispatcher";
 
 class VideoPlayerStore extends EventEmitter {
+    currentTime: number;
+
     constructor() {
         super();
-    }
-
-    expendSlider = (value: number) => {
-        $("#my-slider")
-            .css({
-                "width": value + "%",
-            });
-    }
-
-    sliderBackToNormal = () => {
-        $("#my-slider")
-            .css({
-                "width": "100%",
-            });
+        this.currentTime = 0;
     }
 
     play = (state: boolean, video: HTMLVideoElement) => {
@@ -69,17 +58,30 @@ class VideoPlayerStore extends EventEmitter {
     }
 
     slide = (video: HTMLVideoElement, slider: HTMLInputElement) => {
-        video.currentTime = (parseInt(slider.value) / 300) * video.duration;
+        video.currentTime = (parseInt(slider.value) / parseFloat(slider.max)) * video.duration;
     }
 
     videoPlaying = (video: HTMLVideoElement, slider: HTMLInputElement) => {
-        slider.value = ((video.currentTime / video.duration) * 300).toString();
+        slider.value = ((video.currentTime / video.duration) * parseFloat(slider.max)).toString();
+    }
+
+    restoreDefaultSlowSlider = (slider: HTMLInputElement) => {
+        slider.value = "50";
+    }
+
+    slowSliderSlide = (slider: HTMLInputElement, video: HTMLVideoElement) => {
+        let slidingValue = (parseFloat(slider.value) - 50) / 75;
+        video.currentTime = this.currentTime + slidingValue;
+    }
+
+    setCurrentTime = (time: number) => {
+        this.currentTime = time;
     }
 
     handlerActions = (action: any) => {
         switch(action.type) {
             case "VIDEO_PLAYER.PLAY_VIDEO": {
-                this.play(action.state, action.video, action.bouton);
+                this.play(action.state, action.video);
                 this.emit("stateChanged");
                 break;
             }
@@ -111,12 +113,17 @@ class VideoPlayerStore extends EventEmitter {
                 this.videoPlaying(action.video, action.slider);
                 break;
             }
-            case "VIDEO_PLAYER.SLIDER_EXPEND": {
-                this.expendSlider(action.value);
+            case "VIDEO_PLAYER.RESTORE_SLOW_SLIDER": {
+                this.restoreDefaultSlowSlider(action.slider);
                 break;
             }
-            case "VIDEO_PLAYER.SLIDER_BACK_TO_NORMAL": {
-                this.sliderBackToNormal();
+            case "VIDEO_PLAYER.SLOW_SLIDER_SLIDE": {
+                this.slowSliderSlide(action.slider, action.video);
+                break;
+            }
+            case "VIDEO_PLAYER.SET_CURRENT_TIME": {
+                this.setCurrentTime(action.time);
+                break;
             }
             default:
                 break;

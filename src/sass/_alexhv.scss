@@ -35,6 +35,7 @@ body {
             -webkit-appearance: none;
             width: 100%;
             background: transparent;
+            padding-bottom: 32px;
         }
 
         input[type=range]::-webkit-slider-thumb {
@@ -100,6 +101,76 @@ body {
         -webkit-transition: all 0.3s ease-in-out;
         -o-transition: all 0.3s ease-in-out;
         -moz-transition: all 0.3s ease-in-out;
+
+        div#slowFinder {
+            height: 32px;
+            width: 275px;
+            display: inline-flex;
+            background-color: #fafafa;
+            vertical-align: bottom;
+            position: relative;
+
+            div#slideTrack {
+                height: 2px;
+                width: 200px;
+                top: 14px;
+                background: rgba(56, 178, 255, 0.43);
+                position: absolute;
+                left: 75px;
+            }
+
+            input[type=range] {
+                -webkit-appearance: none;
+                width: 100%;
+                background: transparent;
+                padding-bottom: 32px;
+                z-index: 999;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+            }
+
+            input[type=range]:focus {
+                outline: none;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 64px;
+                width: 20px;
+                background: $brand-primary;
+                cursor: pointer;
+                bottom:0;
+            }
+
+            input[type=range]::-moz-range-thumb {
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+                border: 1px solid #000000;
+                height: 64px;
+                width: 16px;
+                border-radius: 3px;
+                background: $brand-primary;
+                cursor: pointer;
+                bottom:0;
+            }
+
+            input[type=range]::-ms-thumb {
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+                border: 1px solid #000000;
+                height: 64px;
+                width: 16px;
+                border-radius: 3px;
+                background: $brand-primary;
+                cursor: pointer;
+                bottom:0;
+            }
+
+            label {
+                font-weight: 100;
+                font-size: 10px;
+            }
+        }
 
         button.video-controls {
             border: 0px;
