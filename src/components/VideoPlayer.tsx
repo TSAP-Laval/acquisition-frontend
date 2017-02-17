@@ -16,83 +16,8 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     componentWillMount = () => {
-        Store.on("playing", this.changeState);
+        Store.on("stateChanged", this.changeState);
         Store.on("pausing", this.pauseVideo);
-        Store.on("stoping", this.stopVideo);
-        Store.on("backing", this.back);
-        Store.on("forwarding", this.forward);
-        Store.on("restarting", this.restart);
-        Store.on("sliding", this.slide);
-        Store.on("videoPlaying", this.videoPlaying);
-    }
-
-    changeState = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        let playButton = document.getElementById("play-button") as HTMLElement;
-        if (this.state.playing) {
-            $("#play-button")
-                .removeClass("glyphicon-pause")
-                .addClass("glyphicon-play");
-            video.pause();
-        } else {
-            $("#play-button")
-                .removeClass("glyphicon-play")
-                .addClass("glyphicon-pause");
-            video.play();
-        }
-        this.state.playing = !this.state.playing;
-    }
-
-    pauseVideo = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        if (this.state.playing) {
-            video.pause();
-            console.log(video.currentTime);
-            this.state.playing = false;
-            $("#play-button")
-                .removeClass("glyphicon-pause")
-                .addClass("glyphicon-play");
-        }
-    }
-
-    stopVideo = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        if (this.state.playing) {
-            video.pause();
-            console.log(video.currentTime);
-            this.state.playing = false;
-            $("#play-button")
-                .removeClass("glyphicon-pause")
-                .addClass("glyphicon-play");
-            video.currentTime = 0; 
-        }
-    }
-
-    back = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        video.currentTime -= 5;
-    }
-
-    forward = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        video.currentTime += 5;
-    }
-
-    restart = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        video.currentTime = 0;
-    }
-
-    slide = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        let slider = document.getElementById("my-slider") as HTMLInputElement;
-        video.currentTime = (parseInt(slider.value) / 300) * video.duration;
-    }
-
-    videoPlaying = () => {
-        let video = document.getElementById("my-player") as HTMLVideoElement;
-        let slider = document.getElementById("my-slider") as HTMLInputElement;
-        slider.value = ((video.currentTime / video.duration) * 300).toString();
     }
 
     componentDidMount = () => {
@@ -100,36 +25,63 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         slider.value = "0";
     }
 
+    changeState = () => {
+        this.state.playing = !this.state.playing;
+    }
+
+    pauseVideo = () => {
+        this.state.playing = false;
+    }
+
     onPlay = () => {
-        Actions.playVideo();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.playVideo(this.state.playing, video);
     }
 
     onPause = () => {
-        Actions.pauseVideo();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.pauseVideo(this.state.playing, video);
+        this.onSliderMouseDown();
     }
 
     onStop = () => {
-        Actions.stopVideo();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.stopVideo(this.state.playing, video);
     }
     
     onBackFive = () => {
-        Actions.backFive();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.backFive(video);
     }
 
     onForwardFive = () => {
-        Actions.forwardFive();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.forwardFive(video);
     }
 
     onRestart = () => {
-        Actions.restart();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.restart(video);
     }
 
     onSlide = () => {
-        Actions.slideTime();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        let slider = document.getElementById("my-slider") as HTMLInputElement;
+        Actions.slideTime(video, slider);
     }
 
     onVideoPlaying = () => {
-        Actions.videoPlaying();
+        let video = document.getElementById("my-player") as HTMLVideoElement;
+        let slider = document.getElementById("my-slider") as HTMLInputElement;
+        Actions.videoPlaying(video, slider);
+    }
+
+    onSliderMouseDown = () => {
+        Actions.slideExpend(500);
+    }
+
+    onSliderMouseRelease = () => {
+        Actions.slideBackToNormalWidth();
     }
 
     render() {
@@ -137,7 +89,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
             <div>
                 
                 <div className="time-selector">
-                    <input type="range" id="my-slider" className="time-range" step="1" min="0" max="300" onMouseDown={this.onPause.bind(this)} onChange={this.onSlide.bind(this)} />
+                    <input type="range" id="my-slider" className="time-range" step="1" min="0" max="300" onMouseDown={this.onPause.bind(this)} onMouseUp={this.onSliderMouseRelease.bind(this)} onChange={this.onSlide.bind(this)} />
                 </div>
                 <video
                     id="my-player"

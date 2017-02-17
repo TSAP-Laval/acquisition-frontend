@@ -26,6 +26,7 @@ body {
 
     .time-selector {
         position: absolute; 
+        overflow-x: hidden;
         bottom: 0;
         width: 100%;
         z-index: 99;
