@@ -3,7 +3,7 @@ body {
   color: $primary-color;
     font-family:  $primary-font;
 }
-ul {
+#LesJoueurs>ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -11,7 +11,7 @@ ul {
  
 }
 
-li {
+#LesJoueurs>ul>li {
     float: left;
     margin-left: 6px;
     margin-bottom: 6px;
