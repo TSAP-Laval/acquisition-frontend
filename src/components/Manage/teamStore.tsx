@@ -38,8 +38,7 @@ class teamStore extends EventEmitter {
          for(var i=0;i<tabJson.length;i++)
             {
                 var data =tabJson[i];
-                console.log(id);
-                console.log(data.ID)
+               
                 if(data.ID==parseInt(id))
                 {
                     console.log("yes");
@@ -48,7 +47,6 @@ class teamStore extends EventEmitter {
                 
               
             }
-            console.log(dataRetour);
             return dataRetour;
 
 
@@ -69,7 +67,6 @@ class teamStore extends EventEmitter {
                 
               
             }
-            console.log(dataRetour);
             return dataRetour;
     }
    
@@ -116,7 +113,12 @@ class teamStore extends EventEmitter {
          this.emit("change");
          break;
           case "PostTeam" :
-        console.log("im so good");
+         if(action.text !="error")
+         {
+             var laTeam =JSON.parse(action.text);
+             this.equipe.push(laTeam);
+           
+         }
          this.emit("change");
          break;
          

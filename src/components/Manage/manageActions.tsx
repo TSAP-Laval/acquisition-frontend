@@ -73,7 +73,8 @@ export function getEquipesJoueur() {
  export function   PostSaison(stringContenu: string) {
 
         axios.post('http://localhost:3000/api/PostSaison', stringContenu).then(function (r: any) {
-          
+          console.log("wow");
+          console.log(r.data);
         
             dispatcher.dispatch({ type: "postAction", text: stringContenu  });
         }).catch(function (error: string) {

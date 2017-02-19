@@ -8,7 +8,7 @@ class playersStore extends EventEmitter {
 
     niveau: string[] = [];
     equipeJoueur: string[] = [];
-    testJoueurs: string[] = [];
+    lesJoueurs: string[] = [];
     sports: string[]=[];
 
     constructor() {
@@ -19,8 +19,8 @@ class playersStore extends EventEmitter {
 
     GetAllJoueurs() {
         console.log("wowo2222");
-        console.log(this.testJoueurs);
-        return this.testJoueurs;
+        console.log(this.lesJoueurs);
+        return this.lesJoueurs;
         
     }
      GetAllequipeJoueur() {
@@ -71,8 +71,8 @@ class playersStore extends EventEmitter {
          if(action.text !="error")
          {
            
-             var onTest =JSON.parse(action.text);
-             this.testJoueurs.push(onTest);
+             var leJoueur =JSON.parse(action.text);
+             this.lesJoueurs.push(leJoueur);
             this.emit("change");
          }
         
@@ -89,12 +89,12 @@ class playersStore extends EventEmitter {
          this.emit("change");
          break;
           case "getJoueur" :
-          this.testJoueurs=[];      
+          this.lesJoueurs=[];      
             for(var i=0;i<action.text.length;i++)
             {
                 
                 
-                this.testJoueurs.push(action.text[i]);
+                this.lesJoueurs.push(action.text[i]);
                
             }
          this.emit("change");

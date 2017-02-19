@@ -121,13 +121,13 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 
     render() {
         return (
-   <div id="test">
+
     <div className="container">
                         <div className="row">
                             <div className="col-md-6 col-sm-6 col-xs-12">
 
                                 <h3>Les joueurs :</h3>
-                                <div id="test2">
+                                <div id="TableSelect">
                                 <table className="table table-bordered table-hover" id="action_table">
                                     <thead>
                                         <tr >
@@ -170,7 +170,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
                  </div>
                  </div> 
                  </div>
-			</div>
+		
         );
     }
 }

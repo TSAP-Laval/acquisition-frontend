@@ -37,9 +37,9 @@ class SeasonStore extends EventEmitter {
          case "postAction" :
          if(action.text !="error")
          {
-           
-             var onTest =JSON.parse(action.text);
-             this.seasons.push(onTest);
+            
+             var laction =JSON.parse(action.text);
+             this.seasons.push(laction);
             this.emit("change");
          }
         

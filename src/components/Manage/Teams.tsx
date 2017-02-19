@@ -46,6 +46,8 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 
 		
 	}
+	
+	
 	LstEquipe()
 	{
 		this.ClearDomElement("tbody")
@@ -64,8 +66,8 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 	
 		    var doc = document.getElementById("tbody");
 			  var x = document.createElement("tr");
-			  var td = document.createElement("td");
-			  td.innerHTML=data.ID
+			   var tdBtn =  document.createElement("BUTTON");;
+			  tdBtn.innerHTML= "Ajouter"
 			  var tdNom = document.createElement("td");
 			  tdNom.innerHTML=data.Nom;
               var tdVille = document.createElement("td");
@@ -74,11 +76,11 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 			  tdSportID.innerHTML=sportNom;			 
               var tdNiveauID = document.createElement("td");
 			  tdNiveauID.innerHTML=NiveauNom;
-			  x.appendChild(td);
 			  x.appendChild(tdNom);
               x.appendChild(tdVille);
               x.appendChild(tdSportID);
               x.appendChild(tdNiveauID);
+			  x.appendChild(tdBtn);
 			  doc.appendChild(x);
 			
 		}
@@ -138,19 +140,17 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 		 
 
         return (
-	<div id="test">
+	
       <div className="container">
                         <div className="row">
                             <div className="col-md-6 col-sm-6 col-xs-12">
 
                                 <h3>Les équipes :</h3>
-								<div id="test2">
+								<div id="TableSelect">
                                 <table className="table table-bordered table-hover" id="">
                                     <thead>
                                         <tr >
-                                            <th className="text-center">
-                                                ID
-                                            </th>
+                               
                                             <th className="text-center">
                                                 Nom
                                             </th>
@@ -162,7 +162,10 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
                                              </th>
                                             <th className="text-center">
                                                 Niveau
-                                            </th>                                           
+                                            </th>  
+										 <th className="text-center">
+                                               action
+                                            </th>                                         
                                         </tr>
                                     </thead>
                                     <tbody id="tbody">
@@ -170,6 +173,7 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
                                     </tbody>
                                 </table>
 								</div>
+
 
 	<form onSubmit={this.sendFormData.bind(this)} id="nouvSaison">  
      <h3>Creer une nouvelle équipe</h3>     
@@ -186,7 +190,7 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 	</div>
 	</div>
 	</div>
-</div>
+
 
         );
     }

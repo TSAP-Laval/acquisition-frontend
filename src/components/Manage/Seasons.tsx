@@ -29,13 +29,13 @@ RemplirSaison(){
 	 	 var data =tabJson[i];
 		  	  var doc = document.getElementById("tbody");
 			  var x = document.createElement("tr");
-			  var td = document.createElement("td");
-			  td.innerHTML=data.ID
+			  
 			  var tdAnnnee = document.createElement("td");
 			  tdAnnnee.innerHTML=data.Annees;
-			  x.appendChild(td);
-			  console.log(x);
+              var td =  document.createElement("BUTTON");;
+			  td.innerHTML= "Modifier"
 			  x.appendChild(tdAnnnee);
+              x.appendChild(td);
 			  console.log(x);
 			  doc.appendChild(x);
          
@@ -80,21 +80,22 @@ deleteChild(){
 		
         return (
 			
-	<div id="test">
+
 	     <div className="container">
                         <div className="row">
                             <div className="col-md-6 col-sm-6 col-xs-12">
 
-                                <h3>Les saisons :</h1>
-								<div id="test2">
+                                <h3>Les saisons :</h3>
+								<div id="TableSelect">
                                 <table className="table table-bordered table-hover" >
                                     <thead>
                                         <tr >
-                                            <th className="text-center">
-                                                ID
-                                            </th>
+                                        
                                             <th className="text-center">
                                                 Annee
+                                            </th>
+                                           <th className="text-center">
+                                               action
                                             </th>
                                            
                                         </tr>
@@ -112,7 +113,7 @@ deleteChild(){
 	</div>
 	</div>
 	</div>
-</div>
+
         );
     }
 }
