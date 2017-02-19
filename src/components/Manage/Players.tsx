@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import store from "../../Manage/manageStore";
-import * as manageActions from "../../Manage/manageActions";
+import store from "./playersStore";
+import * as manageActions from "./manageActions";
 
 import {Button, ButtonToolbar} from "react-bootstrap";
 
@@ -16,10 +16,10 @@ var TableauJoueursId:any=[];
 export default class Players extends React.Component<ILayoutProps, ILayoutState> {
 
 componentWillMount(){
-		manageActions.getSport();
+		manageActions.getSportJoueur();
         manageActions.getJoueur();
-		manageActions.getNiveau();
-		manageActions.getEquipes();
+		manageActions.getNiveauJoueur();
+		manageActions.getEquipesJoueur();
 		store.on("change",() =>{
 		this.LstJoueurs();
         this.RemplirSelect();
@@ -29,27 +29,44 @@ componentWillMount(){
 	}
     LstJoueurs()
 	{
+        this.ClearDomElement("tbody");
       	var AllJoueurs= store.GetAllJoueurs();
 	    var datastringify =JSON.stringify(AllJoueurs);
 		var tabJson = JSON.parse(datastringify);
 		
 		//Rentre le id et le nom de l'action dans le tableau correspondant
         for(var i = 0; i < tabJson.length; i++) {
-		var doc = document.getElementById("tempo");
-        var data =tabJson[i];
-            console.log("wowoowwaaaddd");
-            console.log(data);
-        	 
-			 var x = document.createElement("Li");
-			 x.innerHTML=data.Nom;
-			 x.nodeValue=data.ID;
-			 doc.appendChild(x);
+		
+        var data =tabJson[i];        	 
+             var doc = document.getElementById("tbody");
+			  var x = document.createElement("tr");
+			  var tdNom = document.createElement("td");
+			  tdNom.innerHTML=data.Nom;
+              var tdPrenom = document.createElement("td");
+			  tdPrenom.innerHTML=data.Prenom;
+              var tdNumero = document.createElement("td");
+			  tdNumero.innerHTML=data.Numero;
+              var tdEmail = document.createElement("td");
+			  tdEmail.innerHTML=data.Email;
+			  x.appendChild(tdNom);
+              x.appendChild(tdPrenom);
+              x.appendChild(tdNumero);
+              x.appendChild(tdEmail);
+			  doc.appendChild(x);
 		}
 	}
+    ClearDomElement(nom:string){
+        console.log(nom);
+        var doc = document.getElementById(nom);
+        console.log("YEPPP");
+        while (doc.hasChildNodes()) {
+        doc.removeChild(doc.lastChild);
+        }
+    }
     RemplirSelect()
 	{
-		
-      	var allSport= store.GetAllequipe();
+		this.ClearDomElement("equipe");
+      	var allSport= store.GetAllequipeJoueur();
 	
 	    var datastringify =JSON.stringify(allSport);
 		var tabJson = JSON.parse(datastringify);
@@ -58,9 +75,10 @@ componentWillMount(){
         for(var i = 0; i < tabJson.length; i++) {
              var data =tabJson[i];
             var doc = document.getElementById("equipe");
-			 var x = document.createElement("OPTION");
+			 var x = document.createElement("OPTION") as HTMLInputElement;
 			 x.innerHTML=data.Nom;
-			 x.nodeValue=data.ID;
+			 x.value=data.ID;
+             console.log(x);
 			 doc.appendChild(x);
 		}
 
@@ -76,10 +94,13 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
   var prenomjoueur= _PrenomJoueur.value
   let _NumeroJoueur = document.getElementById("Numero")as HTMLInputElement
   var numerojoueur= _NumeroJoueur.value
-  console.log("le num " + numerojoueur)
   let _EmailJoueur = document.getElementById("Email")as HTMLInputElement
   var emailJoueur= _EmailJoueur.value
+  let _EquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
+  var optEquipe = _EquipeSelect.options[_EquipeSelect.selectedIndex];
+ 
 
+		
       //Preparation du json que l'on va envoyer au server
       
         var text = '{'
@@ -90,21 +111,49 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
        +'"PassHash" : "test22" ,'
        +'"TokenInvitation" : "test" ,'
        +'"TokenReinitialisation" : "test ",'
-       +'"TokenConnexion" : "test"'
+       +'"TokenConnexion" : "test",'
+       +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
        +'}'
-       console.log("text" + text);
+       console.log(text);
+
        manageActions.PostJoueur(text);
 }
 
     render() {
         return (
+   <div id="test">
+    <div className="container">
+                        <div className="row">
+                            <div className="col-md-6 col-sm-6 col-xs-12">
 
-			<div id="test">
-				<h2> test</h2>
-                <ul id = "tempo">
-	            </ul>
-			 <form onSubmit={this.sendFormData.bind(this)}>  
-                    <h3>Creer un nouveaux joueur</h3>     
+                                <h3>Les joueurs :</h3>
+                                <div id="test2">
+                                <table className="table table-bordered table-hover" id="action_table">
+                                    <thead>
+                                        <tr >
+                                            <th className="text-center">
+                                                Nom
+                                            </th>
+                                            <th className="text-center">
+                                                Prenom
+                                            </th>
+                                            <th className="text-center">
+                                                Numero
+                                             </th>
+                                            <th className="text-center">
+                                                Email
+                                            </th>                                                                               
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        
+                                    </tbody>
+                                </table>
+                                </div>
+
+				
+			 <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
+                    <h3>Creer un nouveau joueur</h3>     
                     <label htmlFor="Nom">Nom</label>
                     <input type="text" id="Nom" name="Nom"/> 
 					<label htmlFor="Prenom">Prenom</label>
@@ -113,11 +162,14 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
                     <input type="text"id="Numero" name="Numero"/> 
 					<label htmlFor="Email">Email</label>
                     <input type="text"id="Email" name="Email"/> 			
-                    <label htmlFor="equipe">Sport</label>                  
+                    <label htmlFor="equipe">Équipe</label>                  
                      <select id="equipe" name="equipe"></select><br></br>    
                     <input type="submit" value="Submit"  />  
                              
-                 </form> 
+                 </form>
+                 </div>
+                 </div> 
+                 </div>
 			</div>
         );
     }

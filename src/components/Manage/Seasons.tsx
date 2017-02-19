@@ -1,37 +1,46 @@
 import * as React from "react";
-import store from "../../Manage/manageStore";
-import * as manageActions from "../../Manage/manageActions";
+import store from "./seasonStore";
+import * as manageActions from "./manageActions";
 
 import { Button } from "react-bootstrap";
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
-var TableauSeason:any = [];
-var TableauJoueurs:any=[];
-var TableauJoueursId:any=[];
 
 
 export default class Seasons extends React.Component<ILayoutProps, ILayoutState> {
 	componentWillMount(){
 		manageActions.getSaison();
-	// 	store.on("change",() =>{
-	// 	console.log("changing...");
-    //   	var allSaison=store.GetAllSeasons();
-	//     var datastringify =JSON.stringify(allSaison);
-	// 	var tabJson = JSON.parse(datastringify);
+	 	store.on("change",() =>{
+			 this.RemplirSaison();
 		
-
-	// 	//Rentre le id et le nom de l'action dans le tableau correspondant
-    //     for(var i = 0; i < tabJson.length; i++) {
-	// 	 var data =tabJson[i];
-    //      TableauSeason.push(data.Annees);
-  	// 	 }
-	// 	this.test();
-		
-    // })
+     })
 
      
 
+}
+RemplirSaison(){
+	this.ClearDomElement("tbody")
+	var allSaison=store.GetAllSeasons();
+	     var datastringify =JSON.stringify(allSaison);
+ 	var tabJson = JSON.parse(datastringify);
+	//Rentre le id et le nom de l'action dans le tableau correspondant
+    for(var i = 0; i < tabJson.length; i++) {
+	 	 var data =tabJson[i];
+		  	  var doc = document.getElementById("tbody");
+			  var x = document.createElement("tr");
+			  var td = document.createElement("td");
+			  td.innerHTML=data.ID
+			  var tdAnnnee = document.createElement("td");
+			  tdAnnnee.innerHTML=data.Annees;
+			  x.appendChild(td);
+			  console.log(x);
+			  x.appendChild(tdAnnnee);
+			  console.log(x);
+			  doc.appendChild(x);
+         
+	}
+	 	
 }
 	sendFormData(e: React.MouseEvent<HTMLInputElement>) {
   e.preventDefault()
@@ -46,21 +55,16 @@ export default class Seasons extends React.Component<ILayoutProps, ILayoutState>
        +'"Annees" :'+'"'+annee+'"'
        +'}'
 manageActions.PostSaison(text);
-}
-test(){
-	
-	
-	var LstAction = TableauSeason.map(function(leNum){
-			 console.log("gogogogo");
-			 var doc = document.getElementById("wow");
-			 console.log(doc);
-			 console.log(leNum);
-			 var x = document.createElement("LI");
-			 x.innerHTML=leNum;
-			 doc.appendChild(x);
-              return <li name="TypeAction">{leNum}</li>;
-    	})
-}
+}  
+  ClearDomElement(nom:string){
+        console.log(nom);
+        var doc = document.getElementById(nom);
+        console.log("YEPPP");
+        while (doc.hasChildNodes()) {
+        doc.removeChild(doc.lastChild);
+        }
+ }
+
 deleteChild(){
 	var list = document.getElementById("wow");
 	
@@ -77,14 +81,37 @@ deleteChild(){
         return (
 			
 	<div id="test">
-	<ul id="wow">
-	</ul>
-    <form onSubmit={this.sendFormData.bind(this)}>  
+	     <div className="container">
+                        <div className="row">
+                            <div className="col-md-6 col-sm-6 col-xs-12">
+
+                                <h3>Les saisons :</h1>
+								<div id="test2">
+                                <table className="table table-bordered table-hover" >
+                                    <thead>
+                                        <tr >
+                                            <th className="text-center">
+                                                ID
+                                            </th>
+                                            <th className="text-center">
+                                                Annee
+                                            </th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+                                </table>
+								</div>
+    <form onSubmit={this.sendFormData.bind(this)} id="nouvSaison">   
       <h3>Creer une nouvelle saison</h3>     
       <label htmlFor="Annee">Année</label>
-      <input type="text" id="Annee" name="Annee"/>  			
-	  <input type="submit" value="Submit"  />           
+      <input type="text" id="Annee" name="Annee"/>  		
+	  <input type="submit" value="Ajouter"  />           
 	</form> 
+	</div>
+	</div>
+	</div>
 </div>
         );
     }

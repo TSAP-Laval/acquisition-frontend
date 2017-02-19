@@ -3,22 +3,18 @@ import { IAction } from "../interfaces"
 import dispatcher from "../dispatcher";
 import * as axios from 'axios';
 
-class ManageStore extends EventEmitter {
+class playersStore extends EventEmitter {
 
-    actions: string[] = [];
+
     niveau: string[] = [];
-    equipe: string[] = [];
+    equipeJoueur: string[] = [];
     testJoueurs: string[] = [];
-    seasons: string[]=[];
     sports: string[]=[];
-    progress: string[] = [];
 
     constructor() {
         super();
     }
-     addAction(testJoueurs2: string[]) {
-       this.testJoueurs=testJoueurs2
-    }
+
 
 
     GetAllJoueurs() {
@@ -27,73 +23,62 @@ class ManageStore extends EventEmitter {
         return this.testJoueurs;
         
     }
-     GetAllequipe() {
-        return this.equipe;
+     GetAllequipeJoueur() {
+        return this.equipeJoueur;
         
     }
      GetAllSports() {
         return this.sports;
         
     }
-    GetAllSeasons() {
-        return this.seasons;
-        
-    }
+
      GetAllNiveau() {
         return this.niveau;
         
     }
-
-
-   
-    
-    
-   
-    sendEntraineur(stringContenu: string) {
-        var test = JSON.parse(stringContenu)
-        axios.post('http://localhost:3000/api/PostJoueur', test).then(function (r: any) {
-            console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
-                this.addAction(stringContenu);
-        }).catch(function (error: string) {
-            console.log("ERROR (XHR): \n" + error);
-        });
+       getEquipeSelonID(id:string)
+    {
+         var datastringify =JSON.stringify(this.equipeJoueur);
+		var tabJson = JSON.parse(datastringify);
+        var dataRetour="";
+         for(var i=0;i<tabJson.length;i++)
+            {
+                var data =tabJson[i];
+                console.log(data);
+                console.log(id);
+                if(data.ID==parseInt(id))
+                {
+                   
+                    dataRetour= data;
+                }
+                
+              
+            }
+            console.log(dataRetour);
+            return dataRetour;
     }
+
+
+   
+    
+    
+
     
     handleActions(action: IAction){
-        console.log(action);
+       // console.log(action);
         switch(action.type) {
-            case "getActions":
-            for(var i=0;i<action.text.length;i++)
-            {
-                this.seasons.push(action.text[i]);
-            }
-         this.emit("change");
-         
-         break;
-         case "postAction" :
-         if(action.text !="error")
-         {
-           
-             var onTest =JSON.parse(action.text);
-             this.seasons.push(onTest);
-            this.emit("change");
-         }
-        
-         break;
          case "PostJoueur" :
          if(action.text !="error")
          {
            
              var onTest =JSON.parse(action.text);
              this.testJoueurs.push(onTest);
-             console.log("wow omg lets go");
-             console.log(onTest);
             this.emit("change");
          }
         
          break;
-         case "getSports" :
-       
+         case "getSportJoueur" :
+            this.sports=[];
             for(var i=0;i<action.text.length;i++)
             {
                 
@@ -104,7 +89,7 @@ class ManageStore extends EventEmitter {
          this.emit("change");
          break;
           case "getJoueur" :
-            console.log("omgggggggggg finaly");
+          this.testJoueurs=[];      
             for(var i=0;i<action.text.length;i++)
             {
                 
@@ -114,7 +99,8 @@ class ManageStore extends EventEmitter {
             }
          this.emit("change");
          break;
-          case "getNiveau" :
+          case "getNiveauJoueur" :
+          this.niveau=[];
    
             for(var i=0;i<action.text.length;i++)
             {
@@ -125,13 +111,14 @@ class ManageStore extends EventEmitter {
             }
          this.emit("change");
          break;
-          case "getEquipe" :
+          case "getEquipesJoueur" :
+          this.equipeJoueur=[];
          
             for(var i=0;i<action.text.length;i++)
             {
                 
             
-                this.equipe.push(action.text[i]);
+                this.equipeJoueur.push(action.text[i]);
                
             }
          this.emit("change");
@@ -149,6 +136,6 @@ class ManageStore extends EventEmitter {
 
 
 
-const store = new ManageStore;
+const store = new playersStore;
 export default store;
 dispatcher.register(store.handleActions.bind(store));
