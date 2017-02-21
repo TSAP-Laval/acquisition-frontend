@@ -20,7 +20,7 @@ export interface ILayoutState {}
 export default class Manage extends React.Component<ILayoutProps, ILayoutState> {
     handleSelect(index: any, last: any)
     {
-        console.log("Selected tab :" + index + ', last tab: ' + last);
+        
     }
     
     render() {

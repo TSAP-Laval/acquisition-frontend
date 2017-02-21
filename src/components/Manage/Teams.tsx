@@ -10,7 +10,6 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 		manageActions.getNiveau();
 		manageActions.getEquipes();
 		store.on("change",() =>{
-		console.log("wtf");
 		this.RemplirSelect();
 		this.RemplirNiveau();
 		this.LstEquipe();
@@ -39,7 +38,7 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 		 var data =tabJson[i];
 		 var doc = document.getElementById("Sport");
 			 var x = document.createElement("OPTION") as HTMLInputElement;
-			 x.innerHTML=data.Nom;
+			 x.innerHTML=data.Name;
 			 x.value=data.ID;
 			 doc.appendChild(x);
 		}
@@ -62,16 +61,16 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 		
 		 var data =tabJson[i];
 		 var sportNom=store.getSportNom(data.SportID);
-		 var NiveauNom=store.getNiveauNom(data.NiveauID);
+		 var NiveauNom=store.getNiveauNom(data.CategoryID);
 	
 		    var doc = document.getElementById("tbody");
 			  var x = document.createElement("tr");
 			   var tdBtn =  document.createElement("BUTTON");;
 			  tdBtn.innerHTML= "Ajouter"
 			  var tdNom = document.createElement("td");
-			  tdNom.innerHTML=data.Nom;
+			  tdNom.innerHTML=data.Name;
               var tdVille = document.createElement("td");
-			  tdVille.innerHTML=data.Ville;
+			  tdVille.innerHTML=data.City;
               var tdSportID= document.createElement("td");
 			  tdSportID.innerHTML=sportNom;			 
               var tdNiveauID = document.createElement("td");
@@ -101,7 +100,7 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 		 var data =tabJson[i];
 		 	var doc = document.getElementById("Niveau");
 			 var x = document.createElement("OPTION") as HTMLInputElement;
-			 x.innerHTML=data.Nom;
+			 x.innerHTML=data.Name;
 			 x.value=data.ID;
 			 doc.appendChild(x);
 
@@ -125,13 +124,12 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 
 
 
-
       //Preparation du json que l'on va envoyer au server
     var text = '{'
-       +'"Nom" :'+'"'+nomTeam+'",'
-       +'"Ville" : '+'"'+VilleTeam + '",'
+       +'"Name" :'+'"'+nomTeam+'",'
+       +'"City" : '+'"'+VilleTeam + '",'
 	   +'"SportID" : '+optSport.value + ','
-	   +'"NiveauID" : '+niveau.value + ''
+	   +'"CategoryID" : '+niveau.value + ''
        +'}'
 	manageActions.PostTeam(text)
 }

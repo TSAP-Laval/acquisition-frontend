@@ -31,12 +31,11 @@ RemplirSaison(){
 			  var x = document.createElement("tr");
 			  
 			  var tdAnnnee = document.createElement("td");
-			  tdAnnnee.innerHTML=data.Annees;
+			  tdAnnnee.innerHTML=data.Years;
               var td =  document.createElement("BUTTON");;
 			  td.innerHTML= "Modifier"
 			  x.appendChild(tdAnnnee);
               x.appendChild(td);
-			  console.log(x);
 			  doc.appendChild(x);
          
 	}
@@ -52,14 +51,12 @@ RemplirSaison(){
 
       //Preparation du json que l'on va envoyer au server
         var text = '{'
-       +'"Annees" :'+'"'+annee+'"'
+       +'"Years" :'+'"'+annee+'"'
        +'}'
 manageActions.PostSaison(text);
 }  
   ClearDomElement(nom:string){
-        console.log(nom);
         var doc = document.getElementById(nom);
-        console.log("YEPPP");
         while (doc.hasChildNodes()) {
         doc.removeChild(doc.lastChild);
         }

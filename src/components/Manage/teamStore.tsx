@@ -41,8 +41,7 @@ class teamStore extends EventEmitter {
                
                 if(data.ID==parseInt(id))
                 {
-                    console.log("yes");
-                    dataRetour= data.Nom;
+                    dataRetour= data.Name;
                 }
                 
               
@@ -62,7 +61,7 @@ class teamStore extends EventEmitter {
                 if(data.ID==parseInt(id))
                 {
                    
-                    dataRetour= data.Nom;
+                    dataRetour= data.Name;
                 }
                 
               

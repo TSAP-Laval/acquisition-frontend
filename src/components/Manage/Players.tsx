@@ -41,11 +41,11 @@ componentWillMount(){
              var doc = document.getElementById("tbody");
 			  var x = document.createElement("tr");
 			  var tdNom = document.createElement("td");
-			  tdNom.innerHTML=data.Nom;
+			  tdNom.innerHTML=data.Lname;
               var tdPrenom = document.createElement("td");
-			  tdPrenom.innerHTML=data.Prenom;
+			  tdPrenom.innerHTML=data.Fname;
               var tdNumero = document.createElement("td");
-			  tdNumero.innerHTML=data.Numero;
+			  tdNumero.innerHTML=data.Number;
               var tdEmail = document.createElement("td");
 			  tdEmail.innerHTML=data.Email;
 			  x.appendChild(tdNom);
@@ -56,9 +56,7 @@ componentWillMount(){
 		}
 	}
     ClearDomElement(nom:string){
-        console.log(nom);
         var doc = document.getElementById(nom);
-        console.log("YEPPP");
         while (doc.hasChildNodes()) {
         doc.removeChild(doc.lastChild);
         }
@@ -74,11 +72,11 @@ componentWillMount(){
 		//Rentre le id et le nom de l'action dans le tableau correspondant
         for(var i = 0; i < tabJson.length; i++) {
              var data =tabJson[i];
+             var leNiv= store.getNiveauNom(data.CategoryID)
             var doc = document.getElementById("equipe");
 			 var x = document.createElement("OPTION") as HTMLInputElement;
-			 x.innerHTML=data.Nom;
+			 x.innerHTML=data.Name + "  "+ leNiv;
 			 x.value=data.ID;
-             console.log(x);
 			 doc.appendChild(x);
 		}
 
@@ -99,14 +97,15 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
   let _EquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
   var optEquipe = _EquipeSelect.options[_EquipeSelect.selectedIndex];
  
+ 
 
 		
       //Preparation du json que l'on va envoyer au server
       
         var text = '{'
-       +'"Nom" :'+ '"'+ nomjoueur+'",'
-       +'"Prenom" :'+ '"'+prenomjoueur + '",'
-	   +'"Numero" : '+numerojoueur + ','
+       +'"Lname" :'+ '"'+ nomjoueur+'",'
+       +'"Fname" :'+ '"'+prenomjoueur + '",'
+	   +'"Number" : '+numerojoueur + ','
 	   +'"Email" : '+ '"'+emailJoueur + '",'
        +'"PassHash" : "test22" ,'
        +'"TokenInvitation" : "test" ,'
@@ -114,7 +113,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
        +'"TokenConnexion" : "test",'
        +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
        +'}'
-       console.log(text);
+      
 
        manageActions.PostJoueur(text);
 }

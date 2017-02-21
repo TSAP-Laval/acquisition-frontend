@@ -18,8 +18,6 @@ class playersStore extends EventEmitter {
 
 
     GetAllJoueurs() {
-        console.log("wowo2222");
-        console.log(this.lesJoueurs);
         return this.lesJoueurs;
         
     }
@@ -36,6 +34,25 @@ class playersStore extends EventEmitter {
         return this.niveau;
         
     }
+     getNiveauNom(id:string)
+    {
+         var datastringify =JSON.stringify(this.niveau);
+		var tabJson = JSON.parse(datastringify);
+        var dataRetour="";
+         for(var i=0;i<tabJson.length;i++)
+            {
+                var data =tabJson[i];
+                if(data.ID==parseInt(id))
+                {
+                   
+                    dataRetour= data.Name;
+                }
+                
+              
+            }
+            return dataRetour;
+    }
+   
        getEquipeSelonID(id:string)
     {
          var datastringify =JSON.stringify(this.equipeJoueur);
@@ -44,8 +61,6 @@ class playersStore extends EventEmitter {
          for(var i=0;i<tabJson.length;i++)
             {
                 var data =tabJson[i];
-                console.log(data);
-                console.log(id);
                 if(data.ID==parseInt(id))
                 {
                    
@@ -54,7 +69,6 @@ class playersStore extends EventEmitter {
                 
               
             }
-            console.log(dataRetour);
             return dataRetour;
     }
 
@@ -65,7 +79,6 @@ class playersStore extends EventEmitter {
 
     
     handleActions(action: IAction){
-       // console.log(action);
         switch(action.type) {
          case "PostJoueur" :
          if(action.text !="error")

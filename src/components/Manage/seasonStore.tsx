@@ -23,7 +23,6 @@ class SeasonStore extends EventEmitter {
    
     
     handleActions(action: IAction){
-       // console.log(action);
         switch(action.type) {
             case "getActions":
             this.seasons=[];

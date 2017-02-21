@@ -42,10 +42,9 @@ CreerButtons(){
 		
 		 var data =tabJson[i];
 		 var doc = document.getElementById("lstJoueur")
-     console.log(doc);
      var unli = document.createElement("LI");
 			 var x = document.createElement("button") as HTMLButtonElement;
-			 x.innerHTML=data.Numero;
+			 x.innerHTML=data.Number;
        x.onclick=this.RightClick.bind(this);
 			 x.value=data.ID;
        console.log(unli)
@@ -71,7 +70,7 @@ RemplirSelect(){
 		 var data =tabJson[i];
 		 var doc = document.getElementById("NomActivite");
 			 var x = document.createElement("OPTION") as HTMLInputElement;
-			 x.innerHTML=data.Nom;
+			 x.innerHTML=data.Name;
 			 x.value=data.ID;
 			 doc.appendChild(x);
 		}
@@ -137,22 +136,23 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 
   TypeAction = parseInt(_typeSelect.value)
   var resultatAction = _resultat.value
+
   if(TypeAction !=0&&resultatAction !="")
   {
       //Preparation du json que l'on va envoyer au server
         var text = '{'
-       +'"TypeActionID" :'+TypeAction+','
-       +'"ActionPositive" : '+resultatAction + ','
+       +'"ActionTypeID" :'+TypeAction+','
+       +'"IsPositive" : '+resultatAction + ','
        +'"ZoneID" : 1 ,'
-       +'"PartieID" : 1 ,'
+       +'"GameID" : 1 ,'
        +'"X1" : 1 ,'
        +'"Y1" : 1 ,'
        +'"X2" : 1 ,'
        +'"Y2" : 0 ,'
-       +'"Temps" : 30 ,'
-       +'"PointageMaison" : 30 ,'
-       +'"PointageAdverse" : 30 ,'
-       +'"JoueurID" :'+numJoueur
+       +'"Time" : 30 ,'
+       +'"HomeScore" : 30 ,'
+       +'"GuestScore" : 30 ,'
+       +'"PlayerID" :'+numJoueur
        +'}'
        editActions.PostAction(text);
   
@@ -189,9 +189,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
                     <label htmlFor="resultat">Résultat de l'action</label>
                     <input type="radio" name="resultat" value="true" /> Reussi
                     <input type="radio" name="resultat" value="false"/> Manqué<br></br>
-                    <input type="submit" value="Submit"  />
-                  
-                    
+                    <input type="submit" value="Submit"  />    
                    </div>  
                  </form> 
                          
