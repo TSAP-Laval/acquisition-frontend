@@ -4,7 +4,7 @@ import * as axios from 'axios';
 //Va rechercher toutes les Saisons
 export function getSaison() {
 
-     axios.get('http://localhost:3000/api/Seasons')
+     axios.get('http://localhost:3000/api/seasons')
     .then(function(response){
 
     dispatcher.dispatch({ type: "getActions", text: response.data  });     
@@ -13,7 +13,7 @@ export function getSaison() {
 //Va rechercher toutes les sports
 export function getSport() {
    
-     axios.get('http://localhost:3000/api/Sports')
+     axios.get('http://localhost:3000/api/sports')
     .then(function(response){
 
     dispatcher.dispatch({ type: "getSports", text: response.data  });     
@@ -22,7 +22,7 @@ export function getSport() {
 //Va rechercher toutes les sports pour les joueurs
 export function getSportJoueur() {
    
-     axios.get('http://localhost:3000/api/Sports')
+     axios.get('http://localhost:3000/api/sports')
     .then(function(response){
 
     dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });     
@@ -31,7 +31,7 @@ export function getSportJoueur() {
 //Va rechercher toutes les niveaux
 export function getNiveau() {
    
-     axios.get('http://localhost:3000/api/Niveau')
+     axios.get('http://localhost:3000/api/niveau')
     .then(function(response){
 
 
@@ -41,7 +41,7 @@ export function getNiveau() {
 //Va rechercher toutes les niveaux pour les joueurs
 export function getNiveauJoueur() {
    
-     axios.get('http://localhost:3000/api/Niveau')
+     axios.get('http://localhost:3000/api/niveau')
     .then(function(response){
 
 
@@ -51,7 +51,7 @@ export function getNiveauJoueur() {
 //Va rechercher toutes les joueurs
 export function getJoueur() {
 
-     axios.get('http://localhost:3000/api/Joueur')
+     axios.get('http://localhost:3000/api/joueur')
     .then(function(response){
    
     dispatcher.dispatch({ type: "getJoueur", text: response.data  });     
@@ -79,7 +79,7 @@ export function getEquipesJoueur() {
 
  export function   PostSaison(stringContenu: string) {
 
-        axios.post('http://localhost:3000/api/Seasons', stringContenu).then(function (r: any) {
+        axios.post('http://localhost:3000/api/seasons', stringContenu).then(function (r: any) {
 
             dispatcher.dispatch({ type: "postAction", text: stringContenu  });
         }).catch(function (error: string) {
@@ -92,7 +92,7 @@ export function getEquipesJoueur() {
 //ajout d'une équipe
 export function   PostTeam(stringContenu: string) {
 
-        axios.post('http://localhost:3000/api/Team', stringContenu).then(function (r: any) {
+        axios.post('http://localhost:3000/api/team', stringContenu).then(function (r: any) {
           
         
             dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
@@ -106,7 +106,7 @@ export function   PostTeam(stringContenu: string) {
 //ajout d'un joueur
      export function   PostJoueur(stringContenu: string) {
 
-        axios.post('http://localhost:3000/api/Joueur', stringContenu).then(function (r: any) {
+        axios.post('http://localhost:3000/api/joueur', stringContenu).then(function (r: any) {
         
         
             dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });
