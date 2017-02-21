@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as $ from "jquery";
 
-import {Button, Alert} from "react-bootstrap";
+import {Button, Alert, Modal} from "react-bootstrap";
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
@@ -10,6 +10,59 @@ const  BootstrapTable = require('react-bootstrap-table');
 const  TableHeaderColumn  = require('react-bootstrap-table');
 
 import CoachStore from "./Stores/CoachStore";
+
+const modalInstance = React.createClass({
+    render() {
+        return (
+    <div className="static-modal">
+        <Modal.Dialog>
+        <Modal.Header>
+            <Modal.Title>Assigner des équipes</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+            <div className="form-group">
+                                            
+                <label className="control-label" htmlFor="sport_select">
+                    Sport :
+                    <span className="asteriskField">
+                        *
+                    </span>
+                </label>
+                    <select className="select form-control" id="sport_select" name="sport_select">
+                        <option value="Soccer">Soccer</option>
+                    </select>
+            </div>
+
+            <div className="form-group">
+                                            
+                <label className="control-label" htmlFor="teams_multi">
+                    Équipes Disponibles :
+                    <span className="asteriskField">
+                        *
+                    </span>
+                </label>
+                    <select multiple className="select multiple form-control" id="teams_multi" name="teams_multi">
+                        <option value="A">A</option>
+                        <option value="AA">AA</option>
+                        <option value="AAA">AAA</option>
+                        <option value="recreatif">Récreatif</option>
+                    </select>
+            </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+            <Button onClick={this.props.onHide}>Close</Button>
+            <Button bsStyle="primary">Save changes</Button>
+        </Modal.Footer>
+
+        </Modal.Dialog>
+        </div>
+        );
+    }
+});
+
+
 
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
 
@@ -20,7 +73,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         super();
         this.lstCoachs = CoachStore.GetAllCoachs();
         this.ListAllCoachs(this.lstCoachs);
-
+    
         }
 
 
@@ -62,6 +115,10 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
 
+    ShowModal(){
+        return modalInstance; 
+    }
+
 
     render() {
 
@@ -89,7 +146,8 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         
          var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
                         + String(coachName) + "</td><td contenteditable='true'>" 
-                        + String(coachMail) + "</td><td contenteditable='true'></tr>";
+                        + String(coachMail) + "</td>"
+                        + "<td><a onClick={{this.ShowModal}}><i className='glyphicon glyphicon-edit'></i></td></tr>";
 
             $('#coach_table tbody').append(trToAdd);
     }
@@ -153,6 +211,37 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                         </label>
                                         <input className="form-control requiredField" id="coach_mail" name="Email" type="email" required/>
                                     </div>
+
+
+                                    <div className="form-group">
+                                                                        
+                                            <label className="control-label" htmlFor="sport_select">
+                                                Sport :
+                                                <span className="asteriskField">
+                                                    *
+                                                </span>
+                                            </label>
+                                                <select className="select form-control" id="sport_select" name="sport_select">
+                                                    <option value="Soccer">Soccer</option>
+                                                </select>
+                                        </div>
+
+                                        <div className="form-group">
+                                                                        
+                                            <label className="control-label" htmlFor="teams_multi">
+                                                Équipes Disponibles :
+                                                <span className="asteriskField">
+                                                    *
+                                                </span>
+                                            </label>
+                                                <select multiple className="select multiple form-control" id="teams_multi" name="teams_multi">
+                                                    <option value="A">A</option>
+                                                    <option value="AA">AA</option>
+                                                    <option value="AAA">AAA</option>
+                                                    <option value="recreatif">Récreatif</option>
+                                                </select>
+                                        </div>
+
                                 </form>
 
                                 <Button bsStyle="primary" onClick={SubmitAction}>
