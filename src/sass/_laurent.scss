@@ -64,10 +64,14 @@ footer {
 }
 
 .upload-drop-zone {
+    position: absolute;
     border-style: dashed;
     border-color: #ccc;
     line-height: 200px;
-    text-align: center
+    text-align: center;
+    max-width: 100%;
+    width: 93%;
+    margin: 0 0 100px 0;
 }
 
 .upload-drop-zone.drop {
@@ -163,7 +167,23 @@ footer {
 /* Progress bar */
 
 .progress {
-    margin-right: 40px;
+    padding: 0 !important;
+    margin-right: 0;
+    width: 90%;
+    position: absolute;
+}
+
+.cancel {
+    display: inline;
+    float: right;
+    position: absolute;
+    top: 0;
+}
+
+.wrap {
+    max-width: 700px;
+    position: relative;
+    margin: auto;
 }
 
 
@@ -174,7 +194,6 @@ footer {
     max-width: 200px;
     max-height: 150px;
     display: block;
-    position: absolute;
     z-index: 5;
     border: 1px solid black;
     border-radius: 4px;
@@ -189,6 +208,21 @@ footer {
 
 #blur-bkg-2 {
     z-index: 3;
+}
+
+
+/* DropDownMenu search */
+
+#dropdown-menu {
+    max-height: 493px;
+    overflow: hidden;
+    min-height: 42px;
+}
+
+#dropdown-menu>ul {
+    max-height: 439px;
+    overflow-y: auto;
+    min-height: 0px;
 }
 
 
