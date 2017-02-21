@@ -6,7 +6,7 @@ require('../sass/Layout.scss');
 import Header from "../layouts/Header"
 import Footer from "../layouts/Footer"
 import EditTest from "../layouts/Edit"
-import VideoPlayer from "../components/VideoPlayer"
+import VideoPlayer from "../layouts/VideoPlayer"
 import SideBar from "../layouts/SideBar"
 
 export interface ILayoutProps {}

@@ -12,21 +12,31 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
     
     constructor() {
         super();
-        // Bind listener
+        // Bind listeners
         this._onChange = this._onChange.bind(this);
+        this._onCancel = this._onCancel.bind(this);
+
         this.state = {actions: Store.getActions()};
     }
 
     componentWillMount(){
         Store.on("CHANGE", this._onChange);
+        Store.on("CANCEL", this._onChange);
     }
 
     componentWillUnmount() {
         Store.removeListener("CHANGE", this._onChange);
+        Store.removeListener("CANCEL", this._onChange);
     }
 
     _onChange() {
         this.setState({actions: Store.getActions()});
+    }
+
+    _onCancel() {
+        console.log("CANCELLLLL")
+        this.setState({actions: Store.getActions()});
+        console.log("Actions : " + this.state.actions);
     }
 
     render() {
@@ -52,6 +62,14 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                     break;
                 case "UPLOAD_SUCCESS":
                     msg = "Le fichier a bel et bien été envoyé sur le serveur"
+                    style = "success"
+                    break;
+                case "CANCEL":
+                    msg = "Importation annulée avec succès!"
+                    style = "success"
+                    break;
+                case "SAVE":
+                    msg = "Les informations sur la partie en cours ont bel et bien été sauvegardées"
                     style = "success"
                     break;
             }
