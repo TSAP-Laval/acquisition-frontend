@@ -107,10 +107,6 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
        +'"Fname" :'+ '"'+prenomjoueur + '",'
 	   +'"Number" : '+numerojoueur + ','
 	   +'"Email" : '+ '"'+emailJoueur + '",'
-       +'"PassHash" : "test22" ,'
-       +'"TokenInvitation" : "test" ,'
-       +'"TokenReinitialisation" : "test ",'
-       +'"TokenConnexion" : "test",'
        +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
        +'}'
       

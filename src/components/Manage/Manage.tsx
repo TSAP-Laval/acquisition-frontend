@@ -18,10 +18,7 @@ export interface ILayoutState {}
 
 
 export default class Manage extends React.Component<ILayoutProps, ILayoutState> {
-    handleSelect(index: any, last: any)
-    {
-        
-    }
+  
     
     render() {
         return (

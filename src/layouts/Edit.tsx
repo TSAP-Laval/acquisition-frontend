@@ -149,7 +149,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
        +'"Y1" : 1 ,'
        +'"X2" : 1 ,'
        +'"Y2" : 0 ,'
-       +'"Time" : 30 ,'
+       +'"Time" :' +tempsAction +','
        +'"HomeScore" : 30 ,'
        +'"GuestScore" : 30 ,'
        +'"PlayerID" :'+numJoueur
