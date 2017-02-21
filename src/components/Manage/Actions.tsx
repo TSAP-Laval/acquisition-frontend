@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { serverURL }    from "config"
+
 import {Button, Alert} from "react-bootstrap";
 import * as $ from "jquery"
 
@@ -19,7 +21,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         $(function() {
             var table = $('#action_table');
             var http = new XMLHttpRequest();
-            var url = "http://67.205.146.224:3000/api/GetActionType";
+            var url = serverURL + "/GetActionType";
             http.open("GET", url, true);
             http.setRequestHeader('Content-type', 'application/json');
             http.send(null);
@@ -45,7 +47,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
        +'}';
 var xmlhttp = new XMLHttpRequest();
      
-  xmlhttp.open('POST', 'http://67.205.146.224:3000/api/PostActionType', true);
+  xmlhttp.open('POST', serverURL + '/PostActionType', true);
   xmlhttp.setRequestHeader('Content-type', 'application/json');
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState === 4) {

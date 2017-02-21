@@ -12,7 +12,6 @@ require('../../sass/Layout.scss');
 
 require('../../sass/manage_style.scss');
 
-
 export interface ILayoutProps {}
 export interface ILayoutState {}
 

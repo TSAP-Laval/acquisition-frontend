@@ -26,11 +26,11 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
 
     _onChange() {
         this.setState({actions: Store.getActions()});
-        console.log('Action : ' + this.state.actions);
     }
 
     closeForm() {
         Actions.Add('CLOSE_FORM');
+        Actions.Add('CANCEL');
     }
 
     closeConfirm() {

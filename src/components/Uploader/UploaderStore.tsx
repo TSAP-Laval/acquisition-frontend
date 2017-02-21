@@ -9,9 +9,13 @@ class UploadStore extends EventEmitter {
 
     actions: string[] = [];
     progress: string[] = [];
+    teams: Object = null;
+    source: axios.CancelTokenSource
 
     constructor() {
         super();
+        // Cancellation
+        this.source = axios.default.CancelToken.source();
     }
 
     addAction(action: string) {
@@ -31,12 +35,20 @@ class UploadStore extends EventEmitter {
         this.progress.push(text);
     }
 
+    addTeams(t: Object) {
+        this.teams = t
+    }
+
     getActions() {
         return this.actions;
     }
 
     getProgress() {
         return this.progress;
+    }
+
+    getTeams() {
+        return this.teams;
     }
 
     onProgress(progressEvent: any) {
@@ -59,19 +71,48 @@ class UploadStore extends EventEmitter {
         var config = {
             onUploadProgress: this.onProgress.bind(this),
             headers: {'Content-Type': "multipart/form-data; filename=" + 
-            file.name + "; boundary=------------------------" + boundary}
+            file.name + "; boundary=------------------------" + boundary},
+            cancelToken: this.source.token
         };
 
         var form = new FormData()
         form.append('file', file, file.name);
 
-        axios.post(serverURL + '/video', form, config).then(function (r: any) {
+        axios.default.post(serverURL + '/upload', form, config).then(function (r: any) {
             console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
             if (r.data === 'Exist')
                 this.addAction('EXIST');
-        }).catch(function (error: string) {
+        }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
         });
+    }
+
+    searchTeam(text: string) {
+        var config = {
+            headers: {'Content-Type': "application/json;"}
+        };
+
+        axios.default.get(serverURL + '/equipes/' + text, config).then(function (r: any) {
+            console.log("RESULT (XHR): \n" + r.data[0] + "\nSTATUS: " + r.status);
+            this.addTeams(r.data[0]);
+        }.bind(this)).catch(function (error: string) {
+            console.log("ERROR (XHR): \n" + error);
+        });
+    }
+
+    searchTeamSuccess() {
+        
+    }
+
+    cancelUpload() {
+        // We re-initialize the progress counter to 0 to
+        // avoid problem in further execution
+        this.addProgress("0");
+        this.source.cancel('Operation has been canceled.');
+        this.addAction('MESSAGE');
+        this.addAction('CANCEL');
+        this.removeAction('DROP');
+        this.source = axios.default.CancelToken.source();
     }
 
     handleActions(action: IAction){
@@ -80,13 +121,20 @@ class UploadStore extends EventEmitter {
                 this.addAction(action.type);
                 this.addAction('OPEN_FORM');
                 this.removeAction('ERROR');
+                this.removeAction('CANCEL');
+                this.removeAction('MESSAGE');
                 this.sendVideo(action.video);
                 this.emit("CHANGE");
+                break;
+            case "CANCEL":
+                this.cancelUpload()
+                this.emit("CANCEL");
                 break;
             case "SAVE":
                 this.removeAction('OPEN_FORM');
                 this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('MESSAGE');
+                this.addAction('MESSAGE');
+                this.addAction("SAVE")
                 this.emit("CHANGE");
                 break;
             case "CLOSE_FORM":
@@ -109,6 +157,10 @@ class UploadStore extends EventEmitter {
                 this.addAction('MESSAGE');
                 this.addAction(action.text)
                 this.emit("CHANGE");
+                break;
+            case "SEARCH_TEAM":
+                this.searchTeam(action.text);
+                this.emit("TEAM_SEARCHED");
                 break;
         }
     }
