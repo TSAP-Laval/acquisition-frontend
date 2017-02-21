@@ -3,8 +3,6 @@ import { EventEmitter} from "events";
 import Dispatcher from "../../dispatcher";
 import {IAction} from "../../interfaces";
 
-import * as RequestHandler from "../RequestHandler";
-
 class CoachStore extends EventEmitter{
 
 lstCoachs: any;

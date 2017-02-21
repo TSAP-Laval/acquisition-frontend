@@ -2,62 +2,56 @@ import { EventEmitter} from "events";
 
 import Dispatcher from '../../dispatcher';
 import { IAction } from "../../interfaces"
+
+
 class ActionStore extends EventEmitter{
 
-    actionsType: object[] = [];
+    actionsType: any;
     todo: any;
     constructor(){
         super()
-        
-        //this.todo.push('[{"Nom": Passe, "Description": Desc }]' );
                 
         this.todo = [
             {
                 Nom: "Tes",
-                Description: "descrit"
+                Description: "descrit",
+                TypeControl: "Negative",
+                TypeMouvement : "Acquisition"
             },
             {
                 Nom: "Testt1111",
-                Description: "descru"  
+                Description: "descru",
+                TypeControl: "Positive",
+                TypeMouvement : "Acquisition"
             }
         ]
-        this.actionsType = this.getAllActions();
     }
 
-    getAllActions() :any{
-            var http = new XMLHttpRequest();
-            var url = "http://localhost:3000/api/GetActionType";
-
-            http.open("GET", url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.send(null);
-            var data = null;
-            http.onreadystatechange = function() {
-                if (http.readyState === 4) {
-                data = JSON.parse(http.responseText);
-                }
-            }
-            return data;
+    getAllActions(){
+        if(this.actionsType == null)
+        {
+            return this.todo;
         }
-
-    getAll(){
-        return this.todo;
-    }
-
-
-    CreateAction(actionObj:Object){
-        //
-    }
+        else {
+            return this.actionsType;
+            }
+        }
 
 
     handleActions(action: IAction){
 
         switch (action.type) {
             case "POST_ACTIONTYPE":
-               
+               this.emit("change");
                 break;
             case "GET_ACTIONTYPE":
-             this.getAll();
+
+            this.actionsType= [];
+                for(var i=0;i<action.text.length;i++)
+                {     
+                    this.actionsType.push(action.text[i]);  
+                }
+            this.emit("change");
                 break;
 
             default:
@@ -70,5 +64,4 @@ class ActionStore extends EventEmitter{
 
 const actionStore = new ActionStore;
 Dispatcher.register(actionStore.handleActions.bind(actionStore));
-
 export default actionStore;

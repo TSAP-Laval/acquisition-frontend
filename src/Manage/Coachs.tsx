@@ -10,6 +10,9 @@ const  BootstrapTable = require('react-bootstrap-table');
 const  TableHeaderColumn  = require('react-bootstrap-table');
 
 import CoachStore from "./Stores/CoachStore";
+import * as RequestHandler from "./RequestHandler";
+
+
 
 const modalInstance = React.createClass({
     render() {
@@ -72,14 +75,29 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     constructor(){
         super();
         this.lstCoachs = CoachStore.GetAllCoachs();
-        this.ListAllCoachs(this.lstCoachs);
+        this.ListAllCoachs();
     
         }
 
 
-    ListAllCoachs(lstCoachs:any){
+    componentWillMount(){
+        RequestHandler.GetCoachs();
+        CoachStore.on("change", ()=> {
+            this.ListAllCoachs();
+        })
+    }
 
-        var dataString = JSON.stringify(lstCoachs);
+
+    ListAllCoachs(){
+        var table = document.getElementById("coach_tbody");
+        if(table != null){
+            while (table.lastChild != null) {
+            table.removeChild(table.lastChild);
+            }
+        }
+
+        var listCoachs = CoachStore.GetAllCoachs();
+        var dataString = JSON.stringify(listCoachs);
         var jsonTab = JSON.parse(dataString);
 
         for(var i= 0; i < jsonTab.length; i++)
@@ -110,7 +128,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 			  
               console.log(x);
 			  
-              $('#coach_table tbody').insertAfter(x);
+              $('#coach_tbody').insertAfter(x);
     }
 
 
@@ -124,6 +142,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
         function SubmitAction(){
+
 
             var name = $('#coach_name').val();
             var prenom = $('#coach_prenom').val();
@@ -144,12 +163,13 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         function AddRow(coachName:string, coachPrenom:string, coachMail:string){
         
         
+        
          var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
                         + String(coachName) + "</td><td contenteditable='true'>" 
                         + String(coachMail) + "</td>"
-                        + "<td><a onClick={{this.ShowModal}}><i className='glyphicon glyphicon-edit'></i></td></tr>";
+                        + "<td></td></tr>";
 
-            $('#coach_table tbody').append(trToAdd);
+            $('.coach_table tbody').append(trToAdd);
     }
 
 
@@ -158,7 +178,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                         <div className="row col-lg-12">
                             <div className="col-md-6 col-sm-6 col-xs-12">
                                     <h1>Coachs</h1>
-                               <table style={ {width:500}} className="table table-bordered table-hover striped bordered condensed hover" id="coach_table">
+                               <table style={ {width:500}} className="table table-bordered table-hover striped bordered condensed hover coach_table" >
                                     <thead>
                                         <tr >
                                             <th className="text-center">
@@ -175,7 +195,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="table_action">
+                                    <tbody id="coach_tbody">
                                         
                                     </tbody>
                                 </table>

@@ -16,26 +16,19 @@ export interface ILayoutState {}
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
     
-    
+        lstActionType : any = [];
+
      constructor(props:any){
         super(props);
 
         this.state ={};
-        //this.state = {lstActions: actionStore.getAll()};
-        this.ListAllActions();
+        this.lstActionType = actionStore.getAllActions();
+        this.ListAllActions(this.lstActionType);
     }
 
-    componentWillMount(){
-        requesthandler.getActionTypes();
-        this.ListAllActions();
-        actionStore.on("change", () => {
-            this.ListAllActions();
-        })
-    }
 
-    ListAllActions(){
-        var allActions = actionStore.getAll();
-        var dataString = JSON.stringify(allActions);
+    ListAllActions(lstActionType: any){
+        var dataString = JSON.stringify(lstActionType);
         var jsonTab = JSON.parse(dataString);
 
         for(var i= 0; i < jsonTab.length; i++)
@@ -50,18 +43,18 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
             var doc = document.getElementsByClassName("action_table");
 			  var x = document.createElement("tr");
 			  
-			  var tdAnnnee = document.createElement("td");
-			  tdAnnnee.innerHTML=data.Nom;
-              var td =  document.createElement("td");
-			  td.innerHTML= data.Description
-              var tdsd = document.createElement("td");
-			  tdsd.innerHTML=data.Nom;
-              var sa =  document.createElement("td");
-			  sa.innerHTML= data.Description
-			  x.appendChild(tdAnnnee);
-              x.appendChild(td);
-              x.appendChild(tdsd);
-              x.appendChild(sa);
+			  var tnom = document.createElement("td");
+			  tnom.innerHTML=data['Nom'];
+              var tdesc =  document.createElement("td");
+			  tdesc.innerHTML= data['Description']
+              var tc = document.createElement("td");
+			  tc.innerHTML=data['TypeControl']
+              var tm =  document.createElement("td");
+			  tm.innerHTML= data['TypeMouvement']
+			  x.appendChild(tnom);
+              x.appendChild(tdesc);
+              x.appendChild(tc);
+              x.appendChild(tm);
 			  console.log(x);
 			  $('#table_action').append(x);
     }
