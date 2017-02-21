@@ -73,15 +73,15 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
-        })
-
-        
+        })   
     }
 
     OnCheckedChange(){
-        if ($('input[id="coach_actif"]').is(':checked')){
-                alert("ffff");
+         $(".coach_actif").change(function() {
+            if(this.checked) {
+                alert(this);
             }
+        });
     }
     ListAllCoachs(){
         var table = document.getElementById('coach_tbody');
@@ -149,9 +149,9 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
               var tdActif = document.createElement("td");
                 if(estActif == 'true'){
-                tdActif.innerHTML = "<input id='coach_actif' type='checkbox' name='Actif' value='true' checked >";
+                tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true' checked >";
                 }else {
-                    tdActif.innerHTML = "<input id='coach_actif' type='checkbox' name='Actif' value='true'>";
+                    tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true'>";
                 }
 
               x.appendChild(tdNom);
@@ -181,7 +181,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
          var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
                         + String(coachName) + "</td><td contenteditable='true'>" 
                         + String(coachMail) + "</td>"
-                        + "<td></td><td>type='checkbox' id='coach_actif' value='true' checked></td></tr>";
+                        + "<td></td><td>type='checkbox' className='coach_actif' value='true' checked></td></tr>";
 
                     console.log(trToAdd);
             $('.coach_table tbody').append(trToAdd);
