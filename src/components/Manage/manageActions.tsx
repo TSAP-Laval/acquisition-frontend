@@ -4,7 +4,7 @@ import * as axios from 'axios';
 //Va rechercher toutes les Saisons
 export function getSaison() {
 
-     axios.get('http://localhost:3000/api/seasons')
+     axios.get('http://localhost:3000/api/saison')
     .then(function(response){
 
     dispatcher.dispatch({ type: "getActions", text: response.data  });     
@@ -79,7 +79,7 @@ export function getEquipesJoueur() {
 
  export function   PostSaison(stringContenu: string) {
 
-        axios.post('http://localhost:3000/api/seasons', stringContenu).then(function (r: any) {
+        axios.post('http://localhost:3000/api/saison', stringContenu).then(function (r: any) {
 
             dispatcher.dispatch({ type: "postAction", text: stringContenu  });
         }).catch(function (error: string) {
@@ -92,7 +92,7 @@ export function getEquipesJoueur() {
 //ajout d'une équipe
 export function   PostTeam(stringContenu: string) {
 
-        axios.post('http://localhost:3000/api/team', stringContenu).then(function (r: any) {
+        axios.post('http://localhost:3000/api/equipes', stringContenu).then(function (r: any) {
           
         
             dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
