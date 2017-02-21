@@ -18,7 +18,9 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
             <div>
                 <SideBar />
                 <div className="video-container">
-                    <VideoPlayer />
+                    <VideoPlayer
+                        url="//vjs.zencdn.net/v/oceans.mp4"
+                     />
                 </div>
                 <div className="container">
                     <div className="row">
