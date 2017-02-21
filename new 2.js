@@ -6,18 +6,15 @@ import * as $ from "jquery";
 import * as requesthandler from './RequestHandler';
 import actionStore from './Stores/ActionsStore';
 
-const  BootstrapTable = require('react-bootstrap-table');
-const  TableHeaderColumn  = require('react-bootstrap-table');
-
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
 
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
-    
-    
-     constructor(props:any){
+
+
+    constructor(props:any){
         super(props);
 
         this.state ={};
@@ -44,7 +41,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
             this.AddNew(data);
         }
     }
-    
+
     AddNew(data:any)
     {
             var doc = document.getElementsByClassName("action_table");
@@ -63,21 +60,14 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
               x.appendChild(tdsd);
               x.appendChild(sa);
 			  console.log(x);
-			  $('#table_action').append(x);
-    }
-    
-    
-    OnKeyPress(event:any) {
-    if (event.which === 13 /* Enter */) {
-      event.preventDefault();
-    }
+			  $('.action_body').append(x);
     }
 
 
     render() {
         
         function Reussi() {
-            alert("Ajout réussi")
+            alert("Ajout réussi");
         }
 
         $(function() {
@@ -101,12 +91,11 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         });
 
       function SubmitAction(){
+       
          
         var text = '{'
        +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
        +'"Description" : '+ '"' +$('#action_desc').val() + '"'
-       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"'
-       +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
        +'}';
 var xmlhttp = new XMLHttpRequest();
      
@@ -121,9 +110,6 @@ var xmlhttp = new XMLHttpRequest();
   };
   xmlhttp.send(text);
     AddRow(String($('#action_name').val()), String($('#action_desc').val()),String($('#control_type option:selected').text()), String($('#mov_type option:selected').text()) );
-
-    $('#action_name').val('');
-    $('#action_desc').val('');
 
 $(function(){
     var $tbody = $('#action_table tbody');
@@ -141,26 +127,13 @@ $(function(){
 
 }
 
-        
-    /*function AddNewRow(actionName:string, actionDesc:string){
-        
-        
-         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
-                        + String(actionDesc) + "</td></tr>";
-
-
-            $('#action_table tbody').append(trToAdd)
-    }
-
-*/
-
 
     function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
         
         
          var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
-                        + String(actionDesc) + "</td><td>" 
-                        + String(controlType) + "</td><td>" 
+                        + String(actionDesc) + "</td><td contenteditable='true'>" 
+                        + String(controlType) + "</td><td contenteditable='true'>" 
                         + String(movType) + "</td></tr>";
 
             $('#action_table tbody').append(trToAdd)
@@ -194,7 +167,7 @@ $(function(){
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="table_action">
+                                    <tbody className="action_body">
                                         
                                     </tbody>
                                 </table>
@@ -208,7 +181,7 @@ $(function(){
                                             *
                                         </span>
                                         </label>
-                                        <input className="form-control requiredField" id="action_name" name="Nom" type="text" required/>
+                                        <input className="form-control" id="action_name" name="Nom" type="text"/>
                                     </div>
                                     <div className="form-group ">
                                         <label className="control-label " htmlFor="action_desc">
