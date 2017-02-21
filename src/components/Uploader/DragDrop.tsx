@@ -4,6 +4,7 @@ import * as Actions   from "./Actions"
 
 import Store          from "./UploaderStore"
 import Form           from "./Form";
+import ConfForm       from "./Confirmation";
 import Message        from "./Message";
 
 export interface ILayoutProps {}
@@ -61,6 +62,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     
     render() {
         var form =      null;
+        var confForm =  null;
         var message =   null;
         var progress =  this.state.progress == null ? 0 : this.state.progress;
         var dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
@@ -98,16 +100,22 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                 case "MESSAGE":
                     message = <Message />
                     break;
+                case "OPEN_CONFIRM_FORM":
+                    confForm = <ConfForm/>
+                    break;
                 default:
                     break;
             }
         }.bind(this));
         
         return (
-            <div className="absolute wide">
-                {message}
-                {dropzone}
-                {form}
+            <div>
+                {confForm}
+                <div className="absolute wide">
+                    {message}
+                    {dropzone}
+                    {form}
+                </div>
             </div>
         );
     }

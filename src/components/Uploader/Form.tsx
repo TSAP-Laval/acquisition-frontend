@@ -7,27 +7,36 @@ import ConfForm     from "./Confirmation"
 export interface ILayoutProps {}
 export interface ILayoutState {
     actions: string[];
+    teams: Object
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     
     constructor() {
         super();
-        // Bind listener
+        // Bind listeners
         this._onChange = this._onChange.bind(this);
-        this.state = {actions: Store.getActions()};
+        this._onTeamSearch = this._onTeamSearch.bind(this);
+        this.state = {actions: Store.getActions(), teams: Store.getTeams()};
     }
 
     componentWillMount(){
         Store.on("CHANGE", this._onChange);
+        Store.on("TEAM_SEARCHED", this._onTeamSearch);
     }
 
     componentWillUnmount() {
         Store.removeListener("CHANGE", this._onChange);
+        Store.removeListener("TEAM_SEARCHED", this._onTeamSearch);
     }
 
     _onChange(){
         this.setState({actions: Store.getActions()});
+    }
+
+    _onTeamSearch() {
+        this.setState({teams: Store.getTeams()});
+        console.log("SEARCH : " + this.state.teams)
     }
 
     closeForm() {
@@ -40,6 +49,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     onSave() {
         Actions.Add('SAVE');
     }
+
+    onTeamSearch(event: any) : void {
+        Actions.Add("SEARCH_TEAM", null, event.target.value);
+    }  
 
     render() {
 
@@ -73,7 +86,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Équipe locale</label>
                                     <div className="col-sm-10">
-                                        <input type="text" className="form-control" 
+                                        <input type="text" className="form-control" onInput={ e => this.onTeamSearch(e) }
                                         placeholder="Équipe locale"/>
                                     </div>
                                 </div>

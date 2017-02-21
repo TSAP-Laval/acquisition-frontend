@@ -194,7 +194,6 @@ footer {
     max-width: 200px;
     max-height: 150px;
     display: block;
-    position: absolute;
     z-index: 5;
     border: 1px solid black;
     border-radius: 4px;
@@ -209,6 +208,21 @@ footer {
 
 #blur-bkg-2 {
     z-index: 3;
+}
+
+
+/* DropDownMenu search */
+
+#dropdown-menu {
+    max-height: 493px;
+    overflow: hidden;
+    min-height: 42px;
+}
+
+#dropdown-menu>ul {
+    max-height: 439px;
+    overflow-y: auto;
+    min-height: 0px;
 }
 
 

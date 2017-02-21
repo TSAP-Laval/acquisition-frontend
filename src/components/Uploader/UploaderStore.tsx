@@ -9,6 +9,7 @@ class UploadStore extends EventEmitter {
 
     actions: string[] = [];
     progress: string[] = [];
+    teams: Object = null;
     source: axios.CancelTokenSource
 
     constructor() {
@@ -34,12 +35,20 @@ class UploadStore extends EventEmitter {
         this.progress.push(text);
     }
 
+    addTeams(t: Object) {
+        this.teams = t
+    }
+
     getActions() {
         return this.actions;
     }
 
     getProgress() {
         return this.progress;
+    }
+
+    getTeams() {
+        return this.teams;
     }
 
     onProgress(progressEvent: any) {
@@ -69,13 +78,30 @@ class UploadStore extends EventEmitter {
         var form = new FormData()
         form.append('file', file, file.name);
 
-        axios.default.post(serverURL + '/video', form, config).then(function (r: any) {
+        axios.default.post(serverURL + '/upload', form, config).then(function (r: any) {
             console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
             if (r.data === 'Exist')
                 this.addAction('EXIST');
-        }).catch(function (error: string) {
+        }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
         });
+    }
+
+    searchTeam(text: string) {
+        var config = {
+            headers: {'Content-Type': "application/json;"}
+        };
+
+        axios.default.get(serverURL + '/equipes/' + text, config).then(function (r: any) {
+            console.log("RESULT (XHR): \n" + r.data[0] + "\nSTATUS: " + r.status);
+            this.addTeams(r.data[0]);
+        }.bind(this)).catch(function (error: string) {
+            console.log("ERROR (XHR): \n" + error);
+        });
+    }
+
+    searchTeamSuccess() {
+        
     }
 
     cancelUpload() {
@@ -131,6 +157,10 @@ class UploadStore extends EventEmitter {
                 this.addAction('MESSAGE');
                 this.addAction(action.text)
                 this.emit("CHANGE");
+                break;
+            case "SEARCH_TEAM":
+                this.searchTeam(action.text);
+                this.emit("TEAM_SEARCHED");
                 break;
         }
     }
