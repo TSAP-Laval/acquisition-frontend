@@ -4,6 +4,7 @@ import * as $ from "jquery";
 
 import Header from "./Header"
 import Footer from "./Footer"
+import {serverURL} from "config"
 
 
 require('../sass/Layout.scss');
@@ -85,7 +86,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
   //Preparation HTTPRequest
   var xmlhttp = new XMLHttpRequest();
   //Information sur la httpRequest
-  xmlhttp.open('POST', 'http://67.205.146.224:3000/api/edition/PostJoueur', true);
+  xmlhttp.open('POST', serverURL + '/edition/PostJoueur', true);
   //Set content-type
   xmlhttp.setRequestHeader('Content-type', 'application/json');
   xmlhttp.onreadystatechange = function() {
@@ -126,7 +127,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         var TableauID:any = [];
         //Préparation HTTPRequest
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetJoueurs", false );
+        xmlHttp.open( "GET", serverURL + '/api/edition/GetJoueurs', false );
         xmlHttp.send( null );
         //Va rechercher les joueurs
         var data =JSON.parse(xmlHttp.responseText)
@@ -151,7 +152,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
          var TableauActionID:any = [];
         //Preparation httpRequest      
          var xmlHttp = new XMLHttpRequest();
-         xmlHttp.open( "GET", "http://67.205.146.224:3000/api/edition/GetActions", false ); 
+         xmlHttp.open( "GET", serverURL + '/edition/GetActions', false ); 
          xmlHttp.send( null );
          //Data action
          var dataAction =JSON.parse(xmlHttp.responseText)

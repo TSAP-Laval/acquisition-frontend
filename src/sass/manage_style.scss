@@ -1,5 +1,6 @@
 .bootstrap-iso 
 	.formden_header 
+				
 		h2 {
 			font-family: Arial, Helvetica, sans-serif;
 			color: black;
@@ -12,14 +13,15 @@
 
 	form 
     {
+		
 		font-family: Arial, Helvetica, sans-serif;
 		color: black;
     }
 		button 
         {
-			color: white;
+			color: black;
 			&:hover {
-				color: white;
+				color: red;
             }
         }
 

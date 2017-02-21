@@ -7,6 +7,8 @@ import Coachs from "./Coachs";
 import Teams from "./Teams";
 import Actions from "./Actions";
 import Players from "./Players";
+require('../../sass/Layout.scss');
+
 
 require('../../sass/manage_style.scss');
 
@@ -15,10 +17,7 @@ export interface ILayoutState {}
 
 
 export default class Manage extends React.Component<ILayoutProps, ILayoutState> {
-    handleSelect(index: any, last: any)
-    {
-        console.log("Selected tab :" + index + ', last tab: ' + last);
-    }
+  
     
     render() {
         return (
