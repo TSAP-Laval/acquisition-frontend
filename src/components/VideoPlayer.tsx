@@ -26,11 +26,11 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     changeState = () => {
-        this.state.playing = !this.state.playing;
+    this.setState({playing: !this.state.playing});
     }
 
     pauseVideo = () => {
-        this.state.playing = false;
+        this.setState({playing: false});
     }
 
     onPlay = () => {

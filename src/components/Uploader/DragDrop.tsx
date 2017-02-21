@@ -1,10 +1,10 @@
-import * as React     from "react";
-import * as Dropzone  from "react-dropzone";
-import * as Actions   from "./Actions"
+import * as React from "react";
+import * as  Dropzone from "react-dropzone";
+import * as Actions from "./Actions"
 
-import Store          from "./UploaderStore"
-import Form           from "./Form";
-import Message        from "./Message";
+import Store from "./UploaderStore"
+import Form from "./Form";
+import Message from "./Message";
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -57,7 +57,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                                 Déposer le fichier ici
                             </div>
                         </Dropzone>
-
         this.state.actions.forEach(function(element: any) {
             switch (element) {
                 case "DROP":
