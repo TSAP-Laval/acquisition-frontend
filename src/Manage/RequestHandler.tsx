@@ -38,7 +38,7 @@ export function GetCoachs(){
 
 
 export function PostCoach(coachData:string){
-    axios.post("http://localhost:3000/api/PostActionType", coachData)
+    axios.post("http://localhost:3000/api/coachs/postCoach", coachData)
         .then(function(response){
             console.log(response.data);
                 dispatcher.dispatch({type: "POST_COACH", text: coachData});

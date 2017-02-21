@@ -3,16 +3,14 @@ import * as $ from "jquery";
 
 import {Button, Alert, Modal} from "react-bootstrap";
 
-export interface ILayoutProps {}
-export interface ILayoutState {}
+import CoachStore from "./Stores/CoachStore";
+import * as RequestHandler from "./RequestHandler";
 
 const  BootstrapTable = require('react-bootstrap-table');
 const  TableHeaderColumn  = require('react-bootstrap-table');
 
-import CoachStore from "./Stores/CoachStore";
-import * as RequestHandler from "./RequestHandler";
-
-
+export interface ILayoutProps {}
+export interface ILayoutState {}
 
 const modalInstance = React.createClass({
     render() {
@@ -70,18 +68,9 @@ const modalInstance = React.createClass({
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
 
 
-        lstCoachs: any = [];
-
-    constructor(){
-        super();
-        this.lstCoachs = CoachStore.GetAllCoachs();
-        this.ListAllCoachs();
-    
-        }
-
-
     componentWillMount(){
         RequestHandler.GetCoachs();
+
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
         })
@@ -89,28 +78,50 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
     ListAllCoachs(){
-        var table = document.getElementById("coach_tbody");
-        if(table != null){
-            while (table.lastChild != null) {
-            table.removeChild(table.lastChild);
+        var table = document.getElementById('coach_tbody');
+        if(table != undefined && table.children.length > 0){
+            while (table.hasChildNodes()){
+                table.removeChild(table.firstChild);
             }
         }
 
         var listCoachs = CoachStore.GetAllCoachs();
         var dataString = JSON.stringify(listCoachs);
         var jsonTab = JSON.parse(dataString);
-
+        
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
-            this.AddNew(data['Nom'],data['Prenom'],data['Email']);
+            this.AddNew(data['Nom'],data['Prenom'],data['Email'], data['Equipes']);
         }   
         
     }
 
+    SubmitAction(){
 
-     AddNew(nom:string, prenom:string, email:string)
+
+         var teams : any[] = []; 
+            $('#teams_multi :selected').each(function(i, selected){ 
+            teams[i] = $(selected).text(); 
+            });
+        
+            var jsonTeams = JSON.stringify(teams);
+
+        var text = '{'
+                +'"Prenom" :' + '"' +$('#coach_prenom').val() + '"'+','
+                +'"Nom" : '+ '"' +$('#coach_name').val() + '"' + ','
+                +'"Email" : '+ '"' +$('#coach_mail').val() + '"' 
+                //+'"Equipes" : ' + jsonTeams + ','
+                +'}';
+
+       RequestHandler.PostCoach(text);
+    }
+
+
+     AddNew(nom:string, prenom:string, email:string, equipe:string[])
     {
+
+              var doc = document.getElementById("coach_tbody");
 			  var x = document.createElement("tr");
 
 			  var tdNom = document.createElement("td");
@@ -121,14 +132,19 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               
               var tdEmail = document.createElement("td");
 			  tdEmail.innerHTML= email;
-			  
+
+              var tdTeam = document.createElement("td");
+              if(equipe != undefined && equipe.length > 0){
+                tdEmail.innerHTML = equipe.join(',');
+              }
               x.appendChild(tdNom);
               x.appendChild(tdPrenom);
               x.appendChild(tdEmail);
-			  
+              x.appendChild(tdTeam);
+
               console.log(x);
 			  
-              $('#coach_tbody').insertAfter(x);
+              $('#coach_tbody').append(x);
     }
 
 
@@ -140,26 +156,6 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
     render() {
 
-
-        function SubmitAction(){
-
-
-            var name = $('#coach_name').val();
-            var prenom = $('#coach_prenom').val();
-            var mail = $('#coach_mail').val();
-
-
-            var text = '{'
-                +'"Nom" :' + '"' +$('#coach_prenom').val() + '"'+','
-                +'"Description" : '+ '"' +$('#coach_name').val() + '"'
-                +'"TypeControl" : '+ '"' +$('#coach_mail').val() + '"'
-                +'}';
-
-
-                AddRow(name, prenom, mail);
-        }
-
-
         function AddRow(coachName:string, coachPrenom:string, coachMail:string){
         
         
@@ -169,7 +165,10 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                         + String(coachMail) + "</td>"
                         + "<td></td></tr>";
 
+                    console.log(trToAdd);
             $('.coach_table tbody').append(trToAdd);
+
+           
     }
 
 
@@ -264,7 +263,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
                                 </form>
 
-                                <Button bsStyle="primary" onClick={SubmitAction}>
+                                <Button bsStyle="primary" onClick={this.SubmitAction}>
                                             Soumettre
                                 </Button>
                             </div>

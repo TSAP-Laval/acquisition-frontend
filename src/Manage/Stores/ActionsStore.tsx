@@ -6,8 +6,8 @@ import { IAction } from "../../interfaces"
 
 class ActionStore extends EventEmitter{
 
-    actionsType: any;
-    todo: any;
+    actionsType: any[] = [];
+    todo: any[]=[];
     constructor(){
         super()
                 
@@ -42,6 +42,12 @@ class ActionStore extends EventEmitter{
 
         switch (action.type) {
             case "POST_ACTIONTYPE":
+            if(action.text !="error")
+         {
+             var a =JSON.parse(action.text);
+             this.actionsType.push(a);
+            this.emit("change");
+         }
                this.emit("change");
                 break;
             case "GET_ACTIONTYPE":

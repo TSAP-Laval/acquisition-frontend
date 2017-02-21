@@ -16,21 +16,29 @@ export interface ILayoutState {}
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
     
-        lstActionType : any = [];
 
-     constructor(props:any){
-        super(props);
 
-        this.state ={};
-        this.lstActionType = actionStore.getAllActions();
-        this.ListAllActions(this.lstActionType);
+    componentWillMount(){
+        requesthandler.getActionTypes();
+
+        actionStore.on("change",() =>{
+        this.ListAllActions();
+        });
     }
+    ListAllActions(){
 
+        var table = document.getElementById('table_action');
+        
+        if(table != undefined && table.children.length > 0){
+            while(table.hasChildNodes()){
+                table.removeChild(table.firstChild);
+            }
+        }
 
-    ListAllActions(lstActionType: any){
+        var lstActionType = actionStore.getAllActions();
         var dataString = JSON.stringify(lstActionType);
         var jsonTab = JSON.parse(dataString);
-
+        
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
@@ -38,6 +46,20 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         }
     }
     
+
+    SubmitAction(){
+        var text = '{'
+       +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
+       +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
+       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
+       +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
+       +'}';
+       
+       alert("Ajout Réussi");
+
+       requesthandler.PostNewActionType(text);
+    }
+
     AddNew(data:any)
     {
             var doc = document.getElementsByClassName("action_table");
@@ -56,7 +78,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
               x.appendChild(tc);
               x.appendChild(tm);
 			  console.log(x);
-			  $('#table_action').append(x);
+			  $('#action_table tbody').append(x);
     }
     
     
@@ -74,45 +96,23 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         }
 
         $(function() {
-            var table = $('#action_table');
-            var http = new XMLHttpRequest();
-            var url = "http://localhost:3000/api/GetActionType";
-            http.open("GET", url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.send(null);
-            http.onreadystatechange = function() {
-                if (http.readyState === 4) {
-                var data = JSON.parse(http.responseText);
-                        console.log(data);
-                    for(var i = 0; i < data.length; i++){
-                        var objAction = data[i];
 
-                    AddRow(String(objAction.Nom), String(objAction.Description), String(objAction.TypeControl), String(objAction.TypeMouvement));
-                    }
-                }
-            }
         });
 
       function SubmitAction(){
          
         var text = '{'
        +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
-       +'"Description" : '+ '"' +$('#action_desc').val() + '"'
-       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"'
+       +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
+       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
        +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
        +'}';
-var xmlhttp = new XMLHttpRequest();
-     
-  xmlhttp.open('POST', 'http://localhost:3000/api/PostActionType', true);
-  xmlhttp.setRequestHeader('Content-type', 'application/json');
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState === 4) {
-       var response = xmlhttp.responseText;
-       console.log(response)
-    }
-   
-  };
-  xmlhttp.send(text);
+
+       console.log(text);
+
+       requesthandler.PostNewActionType(text);
+    
+
     AddRow(String($('#action_name').val()), String($('#action_desc').val()),String($('#control_type option:selected').text()), String($('#mov_type option:selected').text()) );
 
     $('#action_name').val('');
@@ -134,19 +134,6 @@ $(function(){
 
 }
 
-        
-    /*function AddNewRow(actionName:string, actionDesc:string){
-        
-        
-         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
-                        + String(actionDesc) + "</td></tr>";
-
-
-            $('#action_table tbody').append(trToAdd)
-    }
-
-*/
-
 
     function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
         
@@ -159,10 +146,7 @@ $(function(){
             $('#action_table tbody').append(trToAdd)
     }
 
-
-
         return (
-                    
 
                 <div className="container action_page" >
                         <div className="row col-lg-12">
@@ -187,7 +171,7 @@ $(function(){
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="table_action">
+                                    <tbody id="table_action">
                                         
                                     </tbody>
                                 </table>
@@ -240,7 +224,7 @@ $(function(){
                                     </div>
                                     <div className="form-group">
                                         <div>
-                                        <Button bsStyle="primary" onClick={SubmitAction}>
+                                        <Button bsStyle="primary" onClick={this.SubmitAction}>
                                             Submit
                                         </Button>
                                         </div>

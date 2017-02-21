@@ -41,8 +41,12 @@ constructor(){
 
         switch (action.type) {
             case "POST_COACH":
-
-               this.emit("change");
+            if(action.text !="error")
+            {
+                var c =JSON.parse(action.text);
+                this.lstCoachs.push(c);
+                this.emit("change");
+            }
                 break;
             case "GET_COACH":
 
