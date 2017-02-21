@@ -2,7 +2,9 @@ import * as React from "react";
 import * as Actions from "../actions/VideoPlayerActions";
 import Store from "../stores/VideoPlayerStore";
 
-export interface ILayoutProps {}
+export interface ILayoutProps {
+    url: string
+}
 export interface ILayoutState {
     playing: boolean,
 }
@@ -26,11 +28,11 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     changeState = () => {
-        this.state.playing = !this.state.playing;
+        this.setState({ playing: !this.state.playing});
     }
 
     pauseVideo = () => {
-        this.state.playing = false;
+        this.setState({ playing: false});
     }
 
     onPlay = () => {
@@ -112,9 +114,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     poster="//vjs.zencdn.net/v/oceans.png"
                     onTimeUpdate={this.onVideoPlaying.bind(this)}
                     data-setup='{}'>
-                    <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
-                    <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
-                    <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source>
+                    <source src={this.props.url} type="video/mp4"></source>
                     <p className="vjs-no-js">
                         To view this video please enable JavaScript, and consider upgrading to a
                         web browser that
