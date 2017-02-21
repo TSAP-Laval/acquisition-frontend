@@ -74,9 +74,15 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
         })
+
+        
     }
 
-
+    OnCheckedChange(){
+        if ($('input[id="coach_actif"]').is(':checked')){
+                alert("ffff");
+            }
+    }
     ListAllCoachs(){
         var table = document.getElementById('coach_tbody');
         if(table != undefined && table.children.length > 0){
@@ -92,7 +98,8 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
-            this.AddNew(data['Nom'],data['Prenom'],data['Email'], data['Equipes']);
+            this.AddNew(data['Nom'],data['Prenom'],data['Email'], data['Equipes'], data['Actif'], i);
+
         }   
         
     }
@@ -110,6 +117,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         var text = '{'
                 +'"Prenom" :' + '"' +$('#coach_prenom').val() + '"'+','
                 +'"Nom" : '+ '"' +$('#coach_name').val() + '"' + ','
+                +'"Actif" : '+ '"' + "true" + '"' + ','
                 +'"Email" : '+ '"' +$('#coach_mail').val() + '"' 
                 //+'"Equipes" : ' + jsonTeams + ','
                 +'}';
@@ -118,11 +126,12 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     }
 
 
-     AddNew(nom:string, prenom:string, email:string, equipe:string[])
+     AddNew(nom:string, prenom:string, email:string, equipe:string[], estActif:string, id:number)
     {
 
               var doc = document.getElementById("coach_tbody");
 			  var x = document.createElement("tr");
+              x.id = String(id);
 
 			  var tdNom = document.createElement("td");
 			  tdNom.innerHTML=nom;
@@ -137,13 +146,22 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               if(equipe != undefined && equipe.length > 0){
                 tdEmail.innerHTML = equipe.join(',');
               }
+
+              var tdActif = document.createElement("td");
+                if(estActif == 'true'){
+                tdActif.innerHTML = "<input id='coach_actif' type='checkbox' name='Actif' value='true' checked >";
+                }else {
+                    tdActif.innerHTML = "<input id='coach_actif' type='checkbox' name='Actif' value='true'>";
+                }
+
               x.appendChild(tdNom);
               x.appendChild(tdPrenom);
               x.appendChild(tdEmail);
               x.appendChild(tdTeam);
+              x.appendChild(tdActif);
 
               console.log(x);
-			  
+
               $('#coach_tbody').append(x);
     }
 
@@ -163,7 +181,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
          var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
                         + String(coachName) + "</td><td contenteditable='true'>" 
                         + String(coachMail) + "</td>"
-                        + "<td></td></tr>";
+                        + "<td></td><td>type='checkbox' id='coach_actif' value='true' checked></td></tr>";
 
                     console.log(trToAdd);
             $('.coach_table tbody').append(trToAdd);
@@ -191,6 +209,9 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             </th>
                                             <th className="text-center">
                                                 Equipes
+                                            </th>
+                                            <th className="text-center">
+                                                Actif
                                             </th>
                                         </tr>
                                     </thead>
