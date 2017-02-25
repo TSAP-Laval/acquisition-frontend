@@ -6,13 +6,9 @@
         "module": "commonjs",
         "target": "es6",
 
-        "jsx": "react",
-        "rootDir": "acquisition-frontend",
-        "moduleResolution": "node"
+        "jsx": "react"
+
     },
-    "files": [
-        "typings/react-simple-sidenav.d.ts"
-    ],
     "include": [
         "src/**/*"
     ],

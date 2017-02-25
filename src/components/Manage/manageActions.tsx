@@ -5,8 +5,8 @@ import * as axios from 'axios';
 //Va rechercher toutes les Saisons
 export function getSaison() {
 
-     axios.get(serverURL + '/saison')
-    .then(function(response){
+    axios.default.get(serverURL + '/saison')
+    .then(function(response:any){
 
     dispatcher.dispatch({ type: "getActions", text: response.data  });     
     });  
@@ -14,8 +14,8 @@ export function getSaison() {
 //Va rechercher toutes les sports
 export function getSport() {
    
-     axios.get(serverURL + '/sports')
-    .then(function(response){
+     axios.default.get(serverURL + '/sports')
+    .then(function(response:any){
 
     dispatcher.dispatch({ type: "getSports", text: response.data  });     
     });  
@@ -23,8 +23,8 @@ export function getSport() {
 //Va rechercher toutes les sports pour les joueurs
 export function getSportJoueur() {
    
-     axios.get(serverURL + '/sports')
-    .then(function(response){
+     axios.default.get(serverURL + '/sports')
+    .then(function(response:any){
 
     dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });     
     });  
@@ -32,8 +32,8 @@ export function getSportJoueur() {
 //Va rechercher toutes les niveaux
 export function getNiveau() {
    
-     axios.get(serverURL + '/niveau')
-    .then(function(response){
+     axios.default.get(serverURL + '/niveau')
+    .then(function(response:any){
 
 
     dispatcher.dispatch({ type: "getNiveau", text: response.data  });     
@@ -42,8 +42,8 @@ export function getNiveau() {
 //Va rechercher toutes les niveaux pour les joueurs
 export function getNiveauJoueur() {
    
-     axios.get(serverURL + '/niveau')
-    .then(function(response){
+     axios.default.get(serverURL + '/niveau')
+    .then(function(response:any){
 
 
     dispatcher.dispatch({ type: "getNiveauJoueur", text: response.data  });     
@@ -52,8 +52,8 @@ export function getNiveauJoueur() {
 //Va rechercher toutes les joueurs
 export function getJoueur() {
 
-     axios.get(serverURL + '/joueur')
-    .then(function(response){
+     axios.default.get(serverURL + '/joueur')
+    .then(function(response:any){
    
     dispatcher.dispatch({ type: "getJoueur", text: response.data  });     
     });  
@@ -61,8 +61,8 @@ export function getJoueur() {
 //Va rechercher toutes les équipes
 export function getEquipes() {
 
-     axios.get(serverURL + '/equipes')
-    .then(function(response){
+     axios.default.get(serverURL + '/equipes')
+    .then(function(response:any){
      
     dispatcher.dispatch({ type: "getEquipe", text: response.data  });     
     });  
@@ -70,8 +70,8 @@ export function getEquipes() {
 //Va rechercher toutes les niveaux
 export function getEquipesJoueur() {
     
-     axios.get(serverURL + '/equipes')
-    .then(function(response){
+     axios.default.get(serverURL + '/equipes')
+    .then(function(response:any){
     
     dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });     
     });  
@@ -80,7 +80,7 @@ export function getEquipesJoueur() {
 
  export function   PostSaison(stringContenu: string) {
 
-        axios.post(serverURL + '/saison', stringContenu).then(function (r: any) {
+        axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
 
             dispatcher.dispatch({ type: "postAction", text: stringContenu  });
         }).catch(function (error: string) {
@@ -93,7 +93,7 @@ export function getEquipesJoueur() {
 //ajout d'une équipe
 export function   PostTeam(stringContenu: string) {
 
-        axios.post(serverURL + '/equipes', stringContenu).then(function (r: any) {
+        axios.default.post(serverURL + '/equipes', stringContenu).then(function (r: any) {
           
         
             dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
@@ -107,7 +107,7 @@ export function   PostTeam(stringContenu: string) {
 //ajout d'un joueur
      export function   PostJoueur(stringContenu: string) {
 
-        axios.post(serverURL + '/joueur', stringContenu).then(function (r: any) {
+        axios.default.post(serverURL + '/joueur', stringContenu).then(function (r: any) {
         
         
             dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });

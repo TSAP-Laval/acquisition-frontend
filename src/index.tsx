@@ -1,13 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
-<<<<<<< HEAD
-=======
 
 
 
-import { Layout } from "./layouts/Layout/Layout"
->>>>>>> test
 import { Home } from "./pages/Home"
 import { Upload } from "./pages/upload"
 import { Edit } from "./pages/edit"

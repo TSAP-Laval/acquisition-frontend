@@ -13,11 +13,9 @@ export default class Title extends React.Component<ILayoutProps, ILayoutState> {
     
     render() {
         return (
-<<<<<<< HEAD
+
             <h1>{this.props.title}</h1>
-=======
-            <h1>TSAP-Acquisition</h1>
->>>>>>> 13b7b752d95074fd6d2a3a54998ea95766383e94
+
         );
     }
 }
