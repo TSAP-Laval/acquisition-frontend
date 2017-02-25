@@ -131,7 +131,7 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 	   +'"SportID" : '+optSport.value + ','
 	   +'"CategoryID" : '+niveau.value + ''
        +'}'
-	manageActions.PostTeam(text)
+	manageActions.postTeam(text)
 }
 
     render() {
@@ -139,40 +139,35 @@ export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 
         return (
 	
-      <div className="container">
-                        <div className="row">
-                            <div className="col-md-6 col-sm-6 col-xs-12">
-
-                                <h3>Les équipes :</h3>
-								<div id="TableSelect">
-                                <table className="table table-bordered table-hover" id="">
-                                    <thead>
-                                        <tr >
-                               
-                                            <th className="text-center">
-                                                Nom
-                                            </th>
-                                            <th className="text-center">
-                                                Ville
-                                            </th>
-                                            <th className="text-center">
-                                                Sport
-                                             </th>
-                                            <th className="text-center">
-                                                Niveau
-                                            </th>  
-										 <th className="text-center">
-                                               action
-                                            </th>                                         
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody">
-                                        
-                                    </tbody>
-                                </table>
-								</div>
-
-
+    <div className="container">
+    <div className="row">
+    <div className="col-md-6 col-sm-6 col-xs-12">
+    <h3>Les équipes :</h3>
+	<div id="TableSelect">
+    <table className="table table-bordered table-hover" id="">
+    <thead>
+    <tr >
+    <th className="text-center">
+     Nom
+    </th>
+    <th className="text-center">
+     Ville
+    </th>
+    <th className="text-center">
+     Sport
+    </th>
+    <th className="text-center">
+     Niveau
+    </th>  
+	<th className="text-center">
+     action
+    </th>                                         
+    </tr>
+    </thead>
+    <tbody id="tbody">                                       
+    </tbody>
+    </table>
+	</div>
 	<form onSubmit={this.sendFormData.bind(this)} id="nouvSaison">  
      <h3>Creer une nouvelle équipe</h3>     
      <label htmlFor="Nom">Nom</label>

@@ -4,7 +4,7 @@ import * as $ from "jquery";
 import store from "./EditStore";
 import * as editActions from "./EditAction";
 import Header from "./Header"
-import Footer from "./Footer"
+
 
 
 
@@ -47,8 +47,6 @@ CreerButtons(){
 			 x.innerHTML=data.Number;
        x.onclick=this.RightClick.bind(this);
 			 x.value=data.ID;
-       console.log(unli)
-       console.log(x)
        unli.appendChild(x)
 			 doc.appendChild(unli);
 		}
@@ -78,7 +76,6 @@ RemplirSelect(){
 
 }
 ClearDomElement(nom:string){
-        console.log(nom);
         var doc = document.getElementById(nom);
         while (doc.hasChildNodes()) {
         doc.removeChild(doc.lastChild);
@@ -87,9 +84,7 @@ ClearDomElement(nom:string){
   RightClick(e: React.MouseEvent<HTMLInputElement>){
     e.preventDefault()
     let _button = e.target as HTMLInputElement;
-    console.log(_button)
     numJoueur = parseInt(_button.value)
-    console.log(numJoueur);
     /*
     if(e.target.name == "def")
     {
@@ -154,7 +149,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
        +'"GuestScore" : 30 ,'
        +'"PlayerID" :'+numJoueur
        +'}'
-       editActions.PostAction(text);
+       editActions.postAction(text);
   
   //Fermer le fenetre
   this.closeFormModal.bind(this)   

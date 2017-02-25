@@ -81,7 +81,6 @@ export function PostTeam(stringContenu: string) {
             dispatcher.dispatch({ type: "PostTeam", text: "error"  });
         });
 }
-
 //Ajout d'un joueur
      export function PostJoueur(stringContenu: string) {
         axios.default.post(serverURL + '/joueur', stringContenu).then(function (r: any) {

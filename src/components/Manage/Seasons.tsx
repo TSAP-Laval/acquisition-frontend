@@ -53,7 +53,7 @@ RemplirSaison(){
         var text = '{'
        +'"Years" :'+'"'+annee+'"'
        +'}'
-manageActions.PostSaison(text);
+manageActions.postSaison(text);
 }  
   ClearDomElement(nom:string){
         var doc = document.getElementById(nom);
@@ -78,34 +78,31 @@ deleteChild(){
         return (
 			
 
-	     <div className="container">
-                        <div className="row">
-                            <div className="col-md-6 col-sm-6 col-xs-12">
-
-                                <h3>Les saisons :</h3>
-								<div id="TableSelect">
-                                <table className="table table-bordered table-hover" >
-                                    <thead>
-                                        <tr >
-                                        
-                                            <th className="text-center">
-                                                Annee
-                                            </th>
-                                           <th className="text-center">
-                                               action
-                                            </th>
-                                           
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody">
-                                    </tbody>
-                                </table>
-								</div>
+    <div className="container">
+    <div className="row">
+    <div className="col-md-6 col-sm-6 col-xs-12">
+    <h3>Les saisons :</h3>
+	<div id="TableSelect">
+    <table className="table table-bordered table-hover" >
+    <thead>
+    <tr>       
+    <th className="text-center">
+     Annee
+    </th>
+    <th className="text-center">
+     action
+    </th>                                         
+    </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+    </table>
+	</div>
     <form onSubmit={this.sendFormData.bind(this)} id="nouvSaison">   
-      <h3>Creer une nouvelle saison</h3>     
-      <label htmlFor="Annee">Année</label>
-      <input type="text" id="Annee" name="Annee"/>  		
-	  <input type="submit" value="Ajouter"  />           
+    <h3>Creer une nouvelle saison</h3>     
+    <label htmlFor="Annee">Année</label>
+    <input type="text" id="Annee" name="Annee"/>  		
+	<input type="submit" value="Ajouter"  />           
 	</form> 
 	</div>
 	</div>
