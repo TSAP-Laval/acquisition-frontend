@@ -5,7 +5,6 @@ import * as axios from 'axios';
 
 class teamStore extends EventEmitter {
 
-   
     niveau: string[] = [];
     equipe: string[] = []; 
     sports: string[]=[];
@@ -13,10 +12,6 @@ class teamStore extends EventEmitter {
     constructor() {
         super();
     }
-    
-
-
-    
      GetAllequipe() {
         return this.equipe;
         
@@ -68,9 +63,7 @@ class teamStore extends EventEmitter {
             }
             return dataRetour;
     }
-   
-    
-    
+
     handleActions(action: IAction){
       
         switch(action.type) {

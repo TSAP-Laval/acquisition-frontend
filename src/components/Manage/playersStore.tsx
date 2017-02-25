@@ -4,8 +4,6 @@ import dispatcher from "../dispatcher";
 import * as axios from 'axios';
 
 class playersStore extends EventEmitter {
-
-
     niveau: string[] = [];
     equipeJoueur: string[] = [];
     lesJoueurs: string[] = [];
@@ -14,9 +12,6 @@ class playersStore extends EventEmitter {
     constructor() {
         super();
     }
-
-
-
     GetAllJoueurs() {
         return this.lesJoueurs;
         
@@ -70,14 +65,7 @@ class playersStore extends EventEmitter {
               
             }
             return dataRetour;
-    }
-
-
-   
-    
-    
-
-    
+    }    
     handleActions(action: IAction){
         switch(action.type) {
          case "PostJoueur" :

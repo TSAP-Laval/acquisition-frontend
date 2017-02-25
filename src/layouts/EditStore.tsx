@@ -4,19 +4,13 @@ import dispatcher from "../components/dispatcher";
 import * as axios from 'axios';
 
 class EditStore extends EventEmitter {
-
-   
+ 
     joueurs: string[] = [];
     actions: string[] = []; 
-    
-
     constructor() {
         super();
     }
-    
 
-
-    
      GetAllJoueurs() {
         return this.joueurs;
         
@@ -25,9 +19,7 @@ class EditStore extends EventEmitter {
         return this.actions;
         
     }
-   
-    
-    
+
     handleActions(action: IAction){
       
         switch(action.type) {
