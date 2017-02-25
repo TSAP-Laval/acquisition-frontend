@@ -10,60 +10,40 @@ class EditStore extends EventEmitter {
     constructor() {
         super();
     }
-
-     GetAllJoueurs() {
-        return this.joueurs;
-        
+    GetAllJoueurs() {
+        return this.joueurs;  
     }
-     GetAllActions() {
+    GetAllActions() {
         return this.actions;
-        
     }
-
-    handleActions(action: IAction){
-      
+    handleActions(action: IAction){ 
         switch(action.type) {
-        
-         case "getJoueurEdit" :
-            this.joueurs=[];
-            for(var i=0;i<action.text.length;i++)
-            {
-                
-                
-                this.joueurs.push(action.text[i]);
-               
-            }
-         this.emit("change");
-         break;
-          case "GetActionsEdit" :
-          this.actions=[];
-   
-            for(var i=0;i<action.text.length;i++)
-            {
-                
-                
-                this.actions.push(action.text[i]);
-              
-            }
-         this.emit("change");
-         break;
-         
-          case "PostAction" :
-         if(action.text !="error")
-         {
-             var laction =JSON.parse(action.text);
-             this.actions.push(laction);
-           
-         }
-         this.emit("change");
-         break;
-         
-         
+            case "getJoueurEdit" :
+                this.joueurs=[];
+                for(var i=0;i<action.text.length;i++)
+                {
+                    this.joueurs.push(action.text[i]);  
+                }
+                this.emit("change");
+            break;
+            case "GetActionsEdit" :
+                this.actions=[];
+                for(var i=0;i<action.text.length;i++)
+                {
+                    this.actions.push(action.text[i]);
+                }
+                this.emit("change");
+            break;
+            case "PostAction" :
+                if(action.text !="error")
+                {
+                    var laction =JSON.parse(action.text);
+                    this.actions.push(laction); 
+                }
+                this.emit("change");
+            break;         
         }
-        
     }
-
-
 }
 
 
