@@ -4,7 +4,7 @@ import * as React from "react";
 require('../sass/Layout.scss');
 
 import Header from "../layouts/Header"
-import Footer from "../layouts/Footer"
+  //import Footer from "../layouts/Footer"
 import EditTest from "../layouts/Edit"
 import VideoPlayer from "../layouts/VideoPlayer"
 import SideBar from "../layouts/SideBar"
@@ -18,9 +18,7 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
             <div>
                 <SideBar />
                 <div className="video-container">
-                    <VideoPlayer
-                        url="//vjs.zencdn.net/v/oceans.mp4"
-                     />
+                    <VideoPlayer />
                 </div>
                 <div className="container">
                     <div className="row">
@@ -28,7 +26,7 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
                             <h2>Les joueurs de l'équipe</h2>
                             <span id="rep"></span> 
                             <EditTest />
-                            <Footer />
+                           
                         </div>
                     </div>
                 </div>
