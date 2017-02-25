@@ -168,32 +168,27 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 
         return (
           //Retourne html 
-            <div>
-            
-                 <form onSubmit={this.sendFormData.bind(this)}>  
-                 <div id="Enr">
-                   <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={this.closeFormModal.bind(this)}><span aria-hidden="true">&times;</span></button>
-                    <h3>enregistrer une action</h3><br></br>   
-                          
-                    <label htmlFor="Type">Type de l'action</label>
-                    <input type="radio" name="Type" value="Defensive" /> Défensive
-                    <input type="radio" name="Type" value="Offensive"/> Offensive
-                    <input type="radio" name="Type" value="Central"/> Central<br></br>
-                    <label htmlFor="Nom">Nom de l'action</label>                  
-                    <select id="NomActivite" name="NomActivite"></select><br></br>
-                    <label htmlFor="resultat">Résultat de l'action</label>
-                    <input type="radio" name="resultat" value="true" /> Reussi
-                    <input type="radio" name="resultat" value="false"/> Manqué<br></br>
-                    <input type="submit" value="Submit"  />    
-                   </div>  
-                 </form> 
-                         
-                <div id="LesJoueurs">
-                  <ul id="lstJoueur"></ul>
-                </div>
-                
-               
-            </div>
+    <div>
+      <form onSubmit={this.sendFormData.bind(this)}>  
+       <div id="enr">
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={this.closeFormModal.bind(this)}><span aria-hidden="true">&times;</span></button>
+          <h3>enregistrer une action</h3><br></br>               
+          <label htmlFor="Type">Type de l'action</label>
+          <input type="radio" name="Type" value="Defensive" /> Défensive
+          <input type="radio" name="Type" value="Offensive"/> Offensive
+          <input type="radio" name="Type" value="Central"/> Central<br></br>
+          <label htmlFor="Nom">Nom de l'action</label>                  
+          <select id="NomActivite" name="NomActivite"></select><br></br>
+          <label htmlFor="resultat">Résultat de l'action</label>
+          <input type="radio" name="resultat" value="true" /> Reussi
+          <input type="radio" name="resultat" value="false"/> Manqué<br></br>
+          <input type="submit" value="Submit"  />    
+       </div>  
+     </form>             
+     <div id="LesJoueurs">
+       <ul id="lstJoueur"></ul>
+     </div>
+    </div>
         );
     }
 }

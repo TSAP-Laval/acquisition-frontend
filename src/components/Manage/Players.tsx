@@ -114,47 +114,47 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         return (
 
     <div className="container">
-    <div className="row">
-    <div className="col-md-6 col-sm-6 col-xs-12">
-    <h3>Les joueurs :</h3>
-    <div id="TableSelect">
-    <table className="table table-bordered table-hover" id="action_table">
-    <thead>
-    <tr >
-    <th className="text-center">
-     Nom
-    </th>
-    <th className="text-center">
-     Prenom
-    </th>
-    <th className="text-center">
-     Numero
-    </th>
-    <th className="text-center">
-     Email
-    </th>                                                                               
-    </tr>
-    </thead>
-    <tbody id="tbody">
-    </tbody>
-    </table>
-    </div>		
-    <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
-    <h3>Creer un nouveau joueur</h3>     
-    <label htmlFor="Nom">Nom</label>
-    <input type="text" id="Nom" name="Nom"/> 
-	<label htmlFor="Prenom">Prenom</label>
-    <input type="text"id="Prenom" name="Prenom"/>
-	<label htmlFor="Numero">Numero</label>
-    <input type="text"id="Numero" name="Numero"/> 
-	<label htmlFor="Email">Email</label>
-    <input type="text"id="Email" name="Email"/> 			
-    <label htmlFor="equipe">Équipe</label>                  
-    <select id="equipe" name="equipe"></select><br></br>    
-    <input type="submit" value="Submit"  />                
-    </form>
-    </div>
-    </div> 
+        <div className="row">
+            <div className="col-md-6 col-sm-6 col-xs-12">
+                 <h3>Les joueurs :</h3>
+                     <div id="TableSelect">
+                     <table className="table table-bordered table-hover" id="action_table">
+                         <thead>
+                                <tr >
+                                    <th className="text-center">
+                                    Nom
+                                </th>
+                                <th className="text-center">
+                                    Prenom
+                                </th>
+                                <th className="text-center">
+                                     Numero
+                                </th>
+                                <th className="text-center">
+                                      Email
+                                </th>                                                                               
+                                </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                     </table>
+        </div>		
+        <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
+            <h3>Creer un nouveau joueur</h3>     
+            <label htmlFor="Nom">Nom</label>
+            <input type="text" id="Nom" name="Nom"/> 
+            <label htmlFor="Prenom">Prenom</label>
+            <input type="text"id="Prenom" name="Prenom"/>
+            <label htmlFor="Numero">Numero</label>
+            <input type="text"id="Numero" name="Numero"/> 
+            <label htmlFor="Email">Email</label>
+            <input type="text"id="Email" name="Email"/> 			
+            <label htmlFor="equipe">Équipe</label>                  
+            <select id="equipe" name="equipe"></select><br></br>    
+            <input type="submit" value="Submit"  />                
+        </form>
+        </div>
+      </div> 
     </div>
 		
         );
