@@ -56,7 +56,6 @@ export function getEquipes() {
         dispatcher.dispatch({ type: "getEquipe", text: response.data  });     
     });  
 }
-
 //Va rechercher toutes les niveaux
 export function getEquipesJoueur() {
      axios.default.get(serverURL + '/equipes')
@@ -64,9 +63,9 @@ export function getEquipesJoueur() {
         dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });     
     });  
 }
-
 //Ajout d'une saison
- export function PostSaison(stringContenu: string) {
+ export function postSaison(stringContenu: string) {
+        console.log("test");
         axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
             dispatcher.dispatch({ type: "postAction", text: stringContenu  });
         }).catch(function (error: string) {
@@ -74,7 +73,7 @@ export function getEquipesJoueur() {
         });
 }
 //Ajout d'une équipe
-export function PostTeam(stringContenu: string) {
+export function postTeam(stringContenu: string) {
         axios.default.post(serverURL + '/equipes', stringContenu).then(function (r: any) {
             dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
         }).catch(function (error: string) {

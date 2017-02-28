@@ -102,7 +102,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 		+'"SportID" : '+optSport.value + ','
 		+'"CategoryID" : '+niveau.value + ''
 		+'}'
-	manageActions.postTeam(text)
+	manageActions.postTeam(text);
 }
 render() {	 
 	return (
