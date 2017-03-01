@@ -2,9 +2,11 @@
 # yarn lockfile v1
 
 
-"@types/axios@^0.9.35":
-  version "0.9.35"
-  resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.9.35.tgz#3e500a1b2cff94f47cf235447c4d5b4faf85c7fb"
+"@types/axios@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
+  dependencies:
+    axios "*"
 
 "@types/fbemitter@*":
   version "2.0.32"
@@ -325,7 +327,7 @@ aws4@^1.2.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.5.0.tgz#0a29ffb79c31c9e712eeb087e8e7a64b4a56d755"
 
-axios@^0.15.3:
+axios@*, axios@^0.15.3:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.15.3.tgz#2c9d638b2e191a08ea1d6cc988eadd6ba5bdc053"
   dependencies:
@@ -4669,10 +4671,6 @@ react-dropzone@^3.9.0:
   resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-3.9.0.tgz#1cd68ac2e81e512722fa908da1b838452f33fa9c"
   dependencies:
     attr-accept "^1.0.3"
-
-react-fontawesome@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-fontawesome/-/react-fontawesome-1.5.0.tgz#879d1b2aa5c48bba551e9237f84993217b5645c4"
 
 react-html5video@^1.4.0:
   version "1.4.0"

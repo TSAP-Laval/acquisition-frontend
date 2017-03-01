@@ -18,12 +18,10 @@ export interface ILayoutState {}
 
 export default class Manage extends React.Component<ILayoutProps, ILayoutState> {
   
-    
     render() {
         return (
             <div className="container">
                 <Tabs>
-
                     <TabList> 
                         <Tab>Saison</Tab>
                         <Tab>Équipe</Tab>
@@ -31,28 +29,21 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                         <Tab>Joueurs</Tab>
                         <Tab>Actions</Tab>
                     </TabList>
-
-
                     <TabPanel> 
                         <Seasons/>
                     </TabPanel>
-
                     <TabPanel> 
                         <Teams/>
                     </TabPanel>
-
                     <TabPanel> 
                         <Coachs/>
                     </TabPanel>
-
                     <TabPanel> 
                         <Players/>
                     </TabPanel>
-
                     <TabPanel> 
                         <Actions/>
                     </TabPanel>
-
                 </Tabs>
             </div>
 
