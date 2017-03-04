@@ -1,6 +1,5 @@
 import * as React   from "react";
-
-import * as Actions from "./Actions"
+import * as Actions from "../../actions/UploadActions"
 import Store        from "./UploaderStore"
 
 export interface ILayoutProps {}
