@@ -3,8 +3,8 @@ import * as $ from "jquery";
 
 import {Button, Alert, Modal} from "react-bootstrap";
 
-import CoachStore from "./Stores/CoachStore";
-import * as RequestHandler from "./RequestHandler";
+import CoachStore from "../stores/CoachStore";
+import * as RequestHandler from "../components/Manage/RequestHandler";
 
 const  BootstrapTable = require('react-bootstrap-table');
 const  TableHeaderColumn  = require('react-bootstrap-table');
@@ -69,7 +69,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
     componentWillMount(){
-        RequestHandler.GetCoachs();
+        RequestHandler.getCoachs();
 
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
@@ -122,7 +122,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                 //+'"Equipes" : ' + jsonTeams + ','
                 +'}';
 
-       RequestHandler.PostCoach(text);
+       RequestHandler.postCoach(text);
     }
 
 

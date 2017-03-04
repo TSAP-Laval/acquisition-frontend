@@ -1,6 +1,6 @@
 import { EventEmitter } from "events"
-import { IAction } from "../components/interfaces"
-import dispatcher from "../components/dispatcher";
+import { IAction } from "../interfaces/interfaces"
+import dispatcher from "../dispatcher/dispatcher";
 import * as axios from 'axios';
 
 class EditStore extends EventEmitter {

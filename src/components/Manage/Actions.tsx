@@ -2,7 +2,7 @@ import * as React          from "react";
 import { Button, Alert }   from "react-bootstrap";
 import * as $              from "jquery";
 import * as requesthandler from './RequestHandler';
-import actionStore         from './Stores/ActionsStore';
+import actionStore         from '../../stores/ActionsStore';
 
 const  BootstrapTable = require('react-bootstrap-table');
 const  TableHeaderColumn  = require('react-bootstrap-table');
@@ -52,7 +52,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
        
        alert("Ajout Réussi");
 
-       requesthandler.PostNewActionType(text);
+       requesthandler.postNewActionType(text);
     }
 
     AddNew(data:any)
@@ -101,7 +101,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
             console.log(text);
 
-            requesthandler.PostNewActionType(text);
+            requesthandler.postNewActionType(text);
         
 
             AddRow(String($('#action_name').val()), String($('#action_desc').val()),String($('#control_type option:selected').text()), String($('#mov_type option:selected').text()) );

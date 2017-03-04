@@ -1,7 +1,7 @@
 import { EventEmitter} from "events";
 
-import Dispatcher from '../../dispatcher';
-import { IAction } from "../../interfaces"
+import Dispatcher from '../dispatcher/dispatcher';
+import { IAction } from "../interfaces/interfaces"
 
 
 class ActionStore extends EventEmitter{

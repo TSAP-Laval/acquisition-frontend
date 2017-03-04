@@ -1,6 +1,6 @@
 import * as React from "react";
-import store from "./seasonStore";
-import * as manageActions from "./manageActions";
+import store from "../../stores/SeasonStore";
+import * as manageActions from "../../actions/ManageActions";
 
 import { Button } from "react-bootstrap";
 
@@ -11,11 +11,11 @@ export interface ILayoutState {}
 export default class Seasons extends React.Component<ILayoutProps, ILayoutState> {
 componentWillMount(){
 		manageActions.getSaison();
-	 	store.on("change",() =>{
+		store.on("change",() =>{
 			 this.RemplirSaison();
-		
-     })
+     	})
 }
+
 RemplirSaison(){
 	this.ClearDomElement("tbody")
 	var allSaison=store.GetAllSeasons();
@@ -36,6 +36,7 @@ RemplirSaison(){
 	}
 	 	
 }
+
 sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 	e.preventDefault()
 	//Va rechercher le formulaire
@@ -49,13 +50,15 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 		+'"Years" :'+'"'+annee+'"'
 		+'}'
 	manageActions.postSaison(text);
-}  
+}
+
 ClearDomElement(nom:string){
 	var doc = document.getElementById(nom);
-    while (doc.hasChildNodes()) {
-    	doc.removeChild(doc.lastChild);
+	while (doc.hasChildNodes()) {
+		doc.removeChild(doc.lastChild);
 	}
- }
+}
+
 deleteChild(){
 	var list = document.getElementById("wow");
 	for (var i=0;i<list.childNodes.length;i++)
@@ -64,6 +67,7 @@ deleteChild(){
 	}
 
 }
+
 render() {
 	return (	
 		<div className="container">

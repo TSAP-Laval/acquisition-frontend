@@ -1,8 +1,8 @@
 import * as React                from "react";
 import * as ReactDOM             from "react-dom";
 import { Button, ButtonToolbar } from "react-bootstrap";
-import * as manageActions        from "./manageActions";
-import store                     from "./playersStore";
+import * as manageActions        from "../../actions/ManageActions";
+import store                     from "../../stores/PlayersStore";
 
 
 export interface ILayoutProps {}
