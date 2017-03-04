@@ -6,9 +6,6 @@ import {Button, Alert, Modal} from "react-bootstrap";
 import CoachStore from "./Stores/CoachStore";
 import * as RequestHandler from "./RequestHandler";
 
-const  BootstrapTable = require('react-bootstrap-table');
-const  TableHeaderColumn  = require('react-bootstrap-table');
-
 export interface ILayoutProps {}
 export interface ILayoutState {}
 

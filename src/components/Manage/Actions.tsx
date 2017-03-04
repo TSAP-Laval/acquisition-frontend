@@ -6,9 +6,6 @@ import * as $ from "jquery";
 import * as requesthandler from './RequestHandler';
 import actionStore from './Stores/ActionsStore';
 
-const  BootstrapTable = require('react-bootstrap-table');
-const  TableHeaderColumn  = require('react-bootstrap-table');
-
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
@@ -24,7 +21,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         actionStore.on("change",() =>{
         this.ListAllActions();
         });
-    }
+     }
     ListAllActions(){
 
         var table = document.getElementById('table_action');

@@ -4,7 +4,7 @@ import * as axios from 'axios';
 
 export function getActionTypes(){
 
-    axios.get("http://localhost:3000/api/GetActionType")
+    axios.default.get("http://localhost:3000/api/GetActionType")
         .then(function(response){
             dispatcher.dispatch({type: "GET_ACTIONTYPE",
                 text: response.data});
@@ -13,7 +13,7 @@ export function getActionTypes(){
 
 
 export function PostNewActionType(actionTypeData:string){
-    axios.post("http://localhost:3000/api/PostActionType", actionTypeData)
+    axios.default.post("http://localhost:3000/api/PostActionType", actionTypeData)
         .then(function(response){
             console.log(response.data);
 
@@ -27,7 +27,7 @@ export function PostNewActionType(actionTypeData:string){
 
 export function GetCoachs(){
 
-    axios.get("http://localhost:3000/api/coachs/getAllCoachs")
+    axios.default.get("http://localhost:3000/api/coachs/getAllCoachs")
         .then(function(response){
             dispatcher.dispatch({type: "GET_COACH",
                 text: response.data});    
@@ -38,7 +38,7 @@ export function GetCoachs(){
 
 
 export function PostCoach(coachData:string){
-    axios.post("http://localhost:3000/api/coachs/postCoach", coachData)
+    axios.default.post("http://localhost:3000/api/coachs/postCoach", coachData)
         .then(function(response){
             console.log(response.data);
                 dispatcher.dispatch({type: "POST_COACH", text: coachData});
