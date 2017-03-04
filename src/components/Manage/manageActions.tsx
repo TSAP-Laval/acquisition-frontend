@@ -60,34 +60,34 @@ export function getEquipes() {
 //Va rechercher toutes les niveaux
 export function getEquipesJoueur() {
      axios.default.get(serverURL + '/equipes')
-    .then(function(response: any){
+     .then(function(response: any){
         dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });     
     });  
 }
 
 //Ajout d'une saison
- export function PostSaison(stringContenu: string) {
-        axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
-            dispatcher.dispatch({ type: "postAction", text: stringContenu  });
-        }).catch(function (error: string) {
-            dispatcher.dispatch({ type: "postAction", text: "error"  });
-        });
+ export function postSaison(stringContenu: string) {
+    axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
+        dispatcher.dispatch({ type: "postAction", text: stringContenu  });
+    }).catch(function (error: string) {
+        dispatcher.dispatch({ type: "postAction", text: "error"  });
+    });
 }
 //Ajout d'une équipe
-export function PostTeam(stringContenu: string) {
-        axios.default.post(serverURL + '/equipes', stringContenu).then(function (r: any) {
-            dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
-        }).catch(function (error: string) {
-            dispatcher.dispatch({ type: "PostTeam", text: "error"  });
-        });
+export function postTeam(stringContenu: string) {
+    axios.default.post(serverURL + '/equipes', stringContenu).then(function (r: any) {
+        dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
+    }).catch(function (error: string) {
+        dispatcher.dispatch({ type: "PostTeam", text: "error"  });
+    });
 }
 
 //Ajout d'un joueur
-     export function PostJoueur(stringContenu: string) {
-        axios.default.post(serverURL + '/joueur', stringContenu).then(function (r: any) {
-            dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });
-        }).catch(function (error: string) {
-            dispatcher.dispatch({ type: "PostJoueur", text: "error"  });
-        });
-    }
+export function postJoueur(stringContenu: string) {
+    axios.default.post(serverURL + '/joueur', stringContenu).then(function (r: any) {
+        dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });
+    }).catch(function (error: string) {
+        dispatcher.dispatch({ type: "PostJoueur", text: "error"  });
+    });
+}
     

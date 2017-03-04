@@ -8,7 +8,7 @@ import Header from "../layouts/Header"
 import EditTest from "../layouts/Edit"
 import VideoPlayer from "../layouts/VideoPlayer"
 import SideBar from "../layouts/SideBar"
-
+import Footer from "../layouts/Footer"
 export interface ILayoutProps {}
 export interface ILayoutState {}
 

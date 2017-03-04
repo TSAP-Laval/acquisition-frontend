@@ -31,11 +31,12 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     _onChange(){
-        this.setState({actions: Store.getActions()});
+        this.state = {actions: Store.getActions(), teams: Store.getTeams()};
+   
     }
 
     _onTeamSearch() {
-        this.setState({teams: Store.getTeams()});
+       this.state = {actions: Store.getActions(), teams: Store.getTeams()};
         console.log("SEARCH : " + this.state.teams)
     }
 
