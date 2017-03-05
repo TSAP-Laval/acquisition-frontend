@@ -22,7 +22,7 @@ export function postNewActionType(actionTypeData:string){
 }
 
 export function getCoachs(){
-    axios.default.get(serverURL + "coachs/getAllCoachs")
+    axios.default.get(serverURL + "/coachs/getAllCoachs")
         .then(function(response){
             dispatcher.dispatch({type: "GET_COACH",
                 text: response.data});    

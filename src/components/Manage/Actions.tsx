@@ -1,11 +1,10 @@
-import * as React          from "react";
-import { Button, Alert }   from "react-bootstrap";
-import * as $              from "jquery";
-import * as requesthandler from './RequestHandler';
-import actionStore         from '../../stores/ActionsStore';
+import * as React from "react";
 
-const  BootstrapTable = require('react-bootstrap-table');
-const  TableHeaderColumn  = require('react-bootstrap-table');
+import {Button, Alert} from "react-bootstrap";
+import * as $ from "jquery";
+
+import * as requesthandler from './RequestHandler';
+import actionStore from '../../Stores/ActionsStore';
 
 
 export interface ILayoutProps {}
@@ -14,14 +13,17 @@ export interface ILayoutState {}
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
     
+
+
     componentWillMount(){
         requesthandler.getActionTypes();
-        actionStore.on("change",() =>{
-            this.ListAllActions();
-        });
-    }
 
+        actionStore.on("change",() =>{
+        this.ListAllActions();
+        });
+     }
     ListAllActions(){
+
         var table = document.getElementById('table_action');
         
         if(table != undefined && table.children.length > 0){
@@ -43,11 +45,12 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     
 
     SubmitAction(){
+
         var text = '{'
-       +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
+       +'"Name" :' + '"' +$('#action_name').val() + '"'+','
        +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
-       +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
+       +'"ControlType" : '+ '"' +$('#control_type').val() + '"' + ','
+       +'"MovementType" : '+ '"' +$('#mov_type').val() + '"'
        +'}';
        
        alert("Ajout Réussi");
@@ -57,30 +60,30 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
     AddNew(data:any)
     {
-        var doc = document.getElementsByClassName("action_table");
-        var x = document.createElement("tr");
-
-        var tnom = document.createElement("td");
-        tnom.innerHTML=data['Nom'];
-        var tdesc =  document.createElement("td");
-        tdesc.innerHTML= data['Description']
-        var tc = document.createElement("td");
-        tc.innerHTML=data['TypeControl']
-        var tm =  document.createElement("td");
-        tm.innerHTML= data['TypeMouvement']
-        x.appendChild(tnom);
-        x.appendChild(tdesc);
-        x.appendChild(tc);
-        x.appendChild(tm);
-        console.log(x);
-        $('#action_table tbody').append(x);
+            var doc = document.getElementsByClassName("action_table");
+			  var x = document.createElement("tr");
+			  
+			  var tnom = document.createElement("td");
+			  tnom.innerHTML=data['Name'];
+              var tdesc =  document.createElement("td");
+			  tdesc.innerHTML= data['Description']
+              var tc = document.createElement("td");
+			  tc.innerHTML=data['ControlType']
+              var tm =  document.createElement("td");
+			  tm.innerHTML= data['MovementType']
+			  x.appendChild(tnom);
+              x.appendChild(tdesc);
+              x.appendChild(tc);
+              x.appendChild(tm);
+			  console.log(x);
+			  $('#action_table tbody').append(x);
     }
     
     
     OnKeyPress(event:any) {
-        if (event.which === 13 /* Enter */) {
-            event.preventDefault();
-        }
+    if (event.which === 13 /* Enter */) {
+      event.preventDefault();
+    }
     }
 
 
@@ -90,127 +93,119 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
             alert("Ajout réussi")
         }
 
-        function SubmitAction(){
-            
-            var text = '{'
-                +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
-                +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-                +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
-                +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
-            +'}';
+$(function(){
+    var $tbody = $('#action_table tbody');
+    var $rowCount = $('#action_table tr').length;
+    var warningTr =   "<tr id='noAction'><td>Aucune action n'a été trouvée</td></tr>"
+    var idWarning = $('#noAction');
 
-            console.log(text);
+    if($rowCount== 0){
 
-            requesthandler.postNewActionType(text);
+        $tbody.append(warningTr);
+    }else{
+        $tbody.remove('#noAction');
+    }
+});
+
+
+    function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
         
+        
+         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
+                        + String(actionDesc) + "</td><td>" 
+                        + String(controlType) + "</td><td>" 
+                        + String(movType) + "</td></tr>";
 
-            AddRow(String($('#action_name').val()), String($('#action_desc').val()),String($('#control_type option:selected').text()), String($('#mov_type option:selected').text()) );
-
-            $('#action_name').val('');
-            $('#action_desc').val('');
-
-            $(function(){
-                var $tbody = $('#action_table tbody');
-                var $rowCount = $('#action_table tr').length;
-                var warningTr =   "<tr id='noAction'><td>Aucune action n'a été trouvée</td></tr>"
-                var idWarning = $('#noAction');
-
-                if($rowCount== 0){
-
-                    $tbody.append(warningTr);
-                }else{
-                    $tbody.remove('#noAction');
-                }
-            });
-
-        }
-
-
-        function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
-            var trToAdd = "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
-                + String(actionDesc) + "</td><td>" 
-                + String(controlType) + "</td><td>" 
-                + String(movType) + "</td></tr>";
-
-                $('#action_table tbody').append(trToAdd)
-        }
+            $('#action_table tbody').append(trToAdd)
+    }
 
         return (
 
                 <div className="container action_page" >
-                    <div className="row col-lg-12">
-                        <div className="col-md-6 col-sm-6 col-xs-12">
-                            <h1>Action types :</h1>
+                        <div className="row col-lg-12">
+                            <div className="col-md-6 col-sm-6 col-xs-12">
 
-                            <table className="table table-bordered table-hover striped bordered condensed hover" id="action_table">
-                                <thead>
-                                    <tr >
-                                        <th className="text-center">
-                                            Nom
-                                        </th>
-                                        <th className="text-center">
-                                            Description
-                                        </th>
-                                        <th className="text-center">
-                                            Type de contrôle
-                                        </th>
-                                        <th className="text-center">
-                                            Type de mouvement
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table_action">
+                                <h1>Action types :</h1>
+
+                                <table className="table table-bordered table-hover striped bordered condensed hover" id="action_table">
+                                    <thead>
+                                        <tr >
+                                            <th className="text-center">
+                                                Nom
+                                            </th>
+                                            <th className="text-center">
+                                                Description
+                                            </th>
+                                            <th className="text-center">
+                                                Type de contrôle
+                                            </th>
+                                            <th className="text-center">
+                                                Type de mouvement
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_action">
                                         
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
 
-                            <form method="post" title="Actions :" id="actionForm">
-                                <div className="form-group ">
-                                    <label className="control-label requiredField" htmlFor="action_name">
-                                        Nom de l'action : <span className="asteriskField">  *</span>
-                                    </label>
-                                    <input className="form-control requiredField" id="action_name" name="Nom" type="text" required/>
-                                </div>
-                                <div className="form-group ">
-                                    <label className="control-label " htmlFor="action_desc">
-                                        Description :
-                                    </label>
-                                    <textarea className="form-control" cols={40} id="action_desc" name="Description" rows={10}></textarea>
-                                </div>
-                                    <div className="form-group">
-                                    
-                                    <label className="control-label requiredField" htmlFor="mov_type">
-                                        Type de contrôle : <span className="asteriskField">   *</span>
-                                    </label>
-                                    <select className="select form-control" id="control_type" name="control_type">
-                                        <option value="Acquisition">Acquisition</option>
-                                        <option value="Separation">Séparation</option>
-                                    </select>
 
-                                </div>
-
-                                <div className="form-group ">
-                                    <label className="control-label requiredField" htmlFor="mov_type">
-                                        Type de mouvement : <span className="asteriskField">   *</span>
-                                    </label>
-                                    <select className="select form-control" id="mov_type" name="mov_type">
-                                        <option value="Positive">Positive</option>
-                                        <option value="Negative">Negative</option>
-                                        <option value="Neutre">Neutre</option>
-                                    </select>
-                                </div>
-
-                                <div className="form-group">
-                                    <div>
-                                        <Button bsStyle="primary" onClick={this.SubmitAction}>
-                                            Submit
-                                        </Button>
+                                <form method="post" title="Actions :" id="actionForm">
+                                    <div className="form-group ">
+                                        <label className="control-label requiredField" htmlFor="action_name">
+                                        Nom de l'action :
+                                        <span className="asteriskField">
+                                            *
+                                        </span>
+                                        </label>
+                                        <input className="form-control requiredField" id="action_name" name="Nom" type="text" required/>
                                     </div>
-                                </div>
-                            </form>
+                                    <div className="form-group ">
+                                        <label className="control-label " htmlFor="action_desc">
+                                        Description :
+                                        </label>
+                                        <textarea className="form-control" cols={40} id="action_desc" name="Description" rows={10}></textarea>
+                                    </div>
+                                        <div className="form-group">
+                                        
+                                        <label className="control-label requiredField" htmlFor="mov_type">
+                                        Type de contrôle :
+                                        <span className="asteriskField">
+                                            *
+                                        </span>
+                                        </label>
+                                        <select className="select form-control" id="control_type" name="control_type">
+                                            <option value="Acquisition">Acquisition</option>
+                                            <option value="Separation">Séparation</option>
+                                        </select>
+
+                                        </div>
+
+
+                                        <div className="form-group ">
+                                        <label className="control-label requiredField" htmlFor="mov_type">
+                                        Type de mouvement :
+                                        <span className="asteriskField">
+                                            *
+                                        </span>
+                                        </label>
+                                        <select className="select form-control" id="mov_type" name="mov_type">
+                                            <option value="Positive">Positive</option>
+                                            <option value="Negative">Negative</option>
+                                            <option value="Neutre">Neutre</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <div>
+                                        <Button bsStyle="primary" onClick={this.SubmitAction}>
+                                            Ajouter
+                                        </Button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
         );
     }
 }
