@@ -1,13 +1,11 @@
 import * as React from "react";
 
-import {Button, Alert}     from "react-bootstrap";
-import * as $              from "jquery";
-import * as requesthandler from '../components/Manage/RequestHandler';
-import actionStore         from '../stores/ActionsStore';
-import { serverURL }       from 'config'
+import {Button, Alert} from "react-bootstrap";
+import * as $ from "jquery";
 
-const  BootstrapTable     = require('react-bootstrap-table');
-const  TableHeaderColumn  = require('react-bootstrap-table');
+import * as requesthandler from './RequestHandler';
+import actionStore from './Stores/ActionsStore';
+
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
@@ -15,15 +13,16 @@ export interface ILayoutState {}
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
     
-    componentWillMount() {
+
+
+    componentWillMount(){
         requesthandler.getActionTypes();
 
         actionStore.on("change",() =>{
         this.ListAllActions();
         });
-    }
-
-    ListAllActions() {
+     }
+    ListAllActions(){
 
         var table = document.getElementById('table_action');
         
@@ -44,31 +43,34 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         }
     }
     
-    SubmitAction() {
+
+    SubmitAction(){
+
         var text = '{'
-       +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
+       +'"Name" :' + '"' +$('#action_name').val() + '"'+','
        +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
-       +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
+       +'"ControlType" : '+ '"' +$('#control_type').val() + '"' + ','
+       +'"MovementType" : '+ '"' +$('#mov_type').val() + '"'
        +'}';
        
        alert("Ajout Réussi");
 
-       requesthandler.postNewActionType(text);
+       requesthandler.PostNewActionType(text);
     }
 
-    AddNew(data:any) {
+    AddNew(data:any)
+    {
             var doc = document.getElementsByClassName("action_table");
 			  var x = document.createElement("tr");
 			  
 			  var tnom = document.createElement("td");
-			  tnom.innerHTML=data['Nom'];
+			  tnom.innerHTML=data['Name'];
               var tdesc =  document.createElement("td");
 			  tdesc.innerHTML= data['Description']
               var tc = document.createElement("td");
-			  tc.innerHTML=data['TypeControl']
+			  tc.innerHTML=data['ControlType']
               var tm =  document.createElement("td");
-			  tm.innerHTML= data['TypeMouvement']
+			  tm.innerHTML= data['MovementType']
 			  x.appendChild(tnom);
               x.appendChild(tdesc);
               x.appendChild(tc);
@@ -79,10 +81,11 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     
     
     OnKeyPress(event:any) {
-        if (event.which === 13 /* Enter */) {
-        event.preventDefault();
-        }
+    if (event.which === 13 /* Enter */) {
+      event.preventDefault();
     }
+    }
+
 
     render() {
         
@@ -90,72 +93,31 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
             alert("Ajout réussi")
         }
 
+$(function(){
+    var $tbody = $('#action_table tbody');
+    var $rowCount = $('#action_table tr').length;
+    var warningTr =   "<tr id='noAction'><td>Aucune action n'a été trouvée</td></tr>"
+    var idWarning = $('#noAction');
 
-        function SubmitAction() {
-            var http = new XMLHttpRequest();
-            var url = serverURL + "/PostActionType";
+    if($rowCount== 0){
 
-         
-            var text = '{'
-                +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
-                +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-                +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
-                +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
-                +'}';
-
-            var stringg = JSON.stringify(text);
-
-            http.open('POST', url, true);
-
-            http.setRequestHeader("Content-type", "application/json");
-
-            http.onreadystatechange = function() {//Call a function when the state changes.
-                if(http.readyState == 4) {
-                    console.log("test");
-                
-                    
-                    console.log("response text : " +http.responseText);
-                    console.log("response" + http.getResponseHeader);
-                    console.log("response :" + http.response);
-                    console.log("response :" + http.responseURL);
-                }else{
-                    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                }
-            }
-            
-            http.send(stringg);
-
-            requesthandler.postNewActionType(text);
-            
-            AddRow(String($('#action_name').val()), String($('#action_desc').val()),String($('#control_type option:selected').text()), String($('#mov_type option:selected').text()) );
-
-            $('#action_name').val('');
-            $('#action_desc').val('');
-        }
-
-        $(function() {
-            var $tbody = $('#action_table tbody');
-            var $rowCount = $('#action_table tr').length;
-            var warningTr =   "<tr id='noAction'><td>Aucune action n'a été trouvée</td></tr>"
-            var idWarning = $('#noAction');
-
-            if($rowCount== 0) {
-
-                $tbody.append(warningTr);
-            }else {
-                $tbody.remove('#noAction');
-            }
-        });
+        $tbody.append(warningTr);
+    }else{
+        $tbody.remove('#noAction');
+    }
+});
 
 
-        function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
-            var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
+    function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
+        
+        
+         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
                         + String(actionDesc) + "</td><td>" 
                         + String(controlType) + "</td><td>" 
                         + String(movType) + "</td></tr>";
 
             $('#action_table tbody').append(trToAdd)
-        }
+    }
 
         return (
 
@@ -236,7 +198,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
                                     <div className="form-group">
                                         <div>
                                         <Button bsStyle="primary" onClick={this.SubmitAction}>
-                                            Submit
+                                            Ajouter
                                         </Button>
                                         </div>
                                     </div>
