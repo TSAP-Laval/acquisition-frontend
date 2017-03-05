@@ -45,11 +45,12 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     
 
     SubmitAction(){
+
         var text = '{'
-       +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
+       +'"Name" :' + '"' +$('#action_name').val() + '"'+','
        +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-       +'"TypeControl" : '+ '"' +$('#control_type').val() + '"' + ','
-       +'"TypeMouvement" : '+ '"' +$('#mov_type').val() + '"'
+       +'"ControlType" : '+ '"' +$('#control_type').val() + '"' + ','
+       +'"MovementType" : '+ '"' +$('#mov_type').val() + '"'
        +'}';
        
        alert("Ajout Réussi");
@@ -63,13 +64,13 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 			  var x = document.createElement("tr");
 			  
 			  var tnom = document.createElement("td");
-			  tnom.innerHTML=data['Nom'];
+			  tnom.innerHTML=data['Name'];
               var tdesc =  document.createElement("td");
 			  tdesc.innerHTML= data['Description']
               var tc = document.createElement("td");
-			  tc.innerHTML=data['TypeControl']
+			  tc.innerHTML=data['ControlType']
               var tm =  document.createElement("td");
-			  tm.innerHTML= data['TypeMouvement']
+			  tm.innerHTML= data['MovementType']
 			  x.appendChild(tnom);
               x.appendChild(tdesc);
               x.appendChild(tc);
@@ -197,7 +198,7 @@ $(function(){
                                     <div className="form-group">
                                         <div>
                                         <Button bsStyle="primary" onClick={this.SubmitAction}>
-                                            Submit
+                                            Ajouter
                                         </Button>
                                         </div>
                                     </div>

@@ -95,7 +95,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
-            this.AddNew(data['Nom'],data['Prenom'],data['Email'], data['Equipes'], data['Actif'], i);
+            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['Teams'], data['Actif'], i);
 
         }   
         
@@ -112,11 +112,11 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
             var jsonTeams = JSON.stringify(teams);
 
         var text = '{'
-                +'"Prenom" :' + '"' +$('#coach_prenom').val() + '"'+','
-                +'"Nom" : '+ '"' +$('#coach_name').val() + '"' + ','
+                +'"Fname" :' + '"' +$('#coach_prenom').val() + '"' + ','
+                +'"Lname" : '+ '"' +$('#coach_name').val() + '"' + ',' 
                 +'"Actif" : '+ '"' + "true" + '"' + ','
-                +'"Email" : '+ '"' +$('#coach_mail').val() + '"' 
-                //+'"Equipes" : ' + jsonTeams + ','
+                +'"Email" : '+ '"' +$('#coach_mail').val() + '"'
+                //+'"Teams" : ' + jsonTeams+ '",'
                 +'}';
 
        RequestHandler.PostCoach(text);
