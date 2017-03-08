@@ -27,7 +27,7 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                         <Tab>Équipe</Tab>
                         <Tab>Entraîneurs</Tab>
                         <Tab>Joueurs</Tab>
-                        <Tab>Actions</Tab>
+                        <Tab>Actions</Tab> 
                     </TabList>
                     <TabPanel> 
                         <Seasons/>

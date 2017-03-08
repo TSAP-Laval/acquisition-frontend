@@ -1,6 +1,6 @@
 import { EventEmitter } from "events"
-import { IAction } from "../interfaces"
-import dispatcher from "../dispatcher";
+import { IAction } from "../interfaces/interfaces"
+import dispatcher from "../dispatcher/dispatcher";
 import * as axios from 'axios';
 
 class playersStore extends EventEmitter {

@@ -1,6 +1,8 @@
-import dispatcher from "../components/dispatcher";
-import {serverURL} from "config"
-import * as axios from 'axios';
+
+import dispatcher    from "../dispatcher/dispatcher";
+import * as axios    from 'axios';
+import { serverURL } from "config"
+
 
 export function getJoueur() {
     axios.default.get(serverURL+'/api/joueur')
@@ -21,4 +23,6 @@ export function postAction(stringContenu: string) {
     }).catch(function (error: string) {   
         dispatcher.dispatch({ type: "postActionEdit", text: "error"  });
     })    
+
 }
+

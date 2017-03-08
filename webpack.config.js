@@ -1,7 +1,9 @@
 var debug = !(process.env.ENV === 'production');
 console.log("DEBUG: " + debug.valueOf());
+
 var webpack = require('webpack');
 var path = require('path');
+
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin');

@@ -1,8 +1,7 @@
 import { EventEmitter } from "events"
 import * as axios       from 'axios';
-
-import { IAction }      from "../interfaces"
-import dispatcher       from "../dispatcher";
+import { IAction }      from "../interfaces/interfaces"
+import dispatcher       from "../dispatcher/dispatcher";
 import { serverURL }    from "config"
 
 class UploadStore extends EventEmitter {
