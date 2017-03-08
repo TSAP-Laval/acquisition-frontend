@@ -42,10 +42,15 @@ LstJoueurs(){
             tdNumero.innerHTML=data.Number;
             var tdEmail = document.createElement("td");
             tdEmail.innerHTML=data.Email;
+            var btnModifier = document.createElement("button") as HTMLButtonElement;
+            btnModifier.innerHTML="modifier";
+            //btnModifier.onclick=this.RightClick.bind(this);
+            btnModifier.value=data.ID;
             x.appendChild(tdNom);
             x.appendChild(tdPrenom);
             x.appendChild(tdNumero);
             x.appendChild(tdEmail);
+            x.appendChild(btnModifier);
             doc.appendChild(x);
         }
 }
@@ -123,6 +128,9 @@ render() {
                                     </th>
                                     <th className="text-center">
                                         Email
+                                    </th> 
+                                     <th className="text-center">
+                                        Action
                                     </th>                                                                               
                                     </tr>
                             </thead>
