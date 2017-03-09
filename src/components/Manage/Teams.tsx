@@ -6,7 +6,6 @@ export interface ILayoutProps {}
 export interface ILayoutState {}
 
 export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
-
 componentWillMount(){
 	manageActions.getSport();
 	manageActions.getNiveau();
@@ -78,7 +77,6 @@ RemplirNiveau(){
 		for(var i = 0; i < tabJson.length; i++) {	
 			var data =tabJson[i];
 			var doc = document.getElementById("Niveau");
-
 			var x = document.createElement("OPTION") as HTMLInputElement;
 			x.innerHTML=data.Name;
 			x.value=data.ID;
@@ -157,4 +155,3 @@ render() {
         );
     }
 }
-
