@@ -37,25 +37,24 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         Store.removeListener("team_searched", this._onTeamSearch);
     }
 
+    shouldComponentUpdate(nextState: ILayoutState) {
+        this.setState(nextState);
+        return true;
+    }
+
     _onOpenConfirmForm(){
-        this.setState({
-            teams: this.state.teams,
-            open_confirm_form: true
-        });
+        this.state.open_confirm_form = true;
+        this.shouldComponentUpdate(this.state);
     }
 
     _onCloseConfirmForm(){
-        this.setState({
-            teams: this.state.teams,
-            open_confirm_form: false
-        });
+        this.state.open_confirm_form = false;
+        this.shouldComponentUpdate(this.state);
     }
 
     _onTeamSearch() {
-       this.setState({
-            teams: Store.getTeams(),
-            open_confirm_form: this.state.open_confirm_form
-        });
+       this.state.teams = Store.getTeams();
+        this.shouldComponentUpdate(this.state);
     }
 
     closeForm() {
