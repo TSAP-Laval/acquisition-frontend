@@ -6,8 +6,8 @@ import ConfForm     from "./Confirmation"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: string[];
     teams: Object
+    open_confirm_form: boolean
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -15,58 +15,64 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     constructor() {
         super();
         // Bind listeners
-        this._onChange = this._onChange.bind(this);
+        this._onOpenConfirmForm = this._onOpenConfirmForm.bind(this);
+        this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
+
         this._onTeamSearch = this._onTeamSearch.bind(this);
-        this.state = {actions: Store.getActions(), teams: Store.getTeams()};
+
+        this.state = {teams: Store.getTeams(), open_confirm_form: false};
     }
 
     componentWillMount(){
-        Store.on("CHANGE", this._onChange);
-        Store.on("TEAM_SEARCHED", this._onTeamSearch);
+        Store.on("open_confirm_form", this._onOpenConfirmForm);
+        Store.on("close_confirm_form", this._onCloseConfirmForm);
+
+        Store.on("team_searched", this._onTeamSearch);
     }
 
     componentWillUnmount() {
-        Store.removeListener("CHANGE", this._onChange);
-        Store.removeListener("TEAM_SEARCHED", this._onTeamSearch);
+        Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
+        Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
+
+        Store.removeListener("team_searched", this._onTeamSearch);
     }
 
-    _onChange(){
-        this.state = {actions: Store.getActions(), teams: Store.getTeams()};
-   
+    _onOpenConfirmForm(){
+        this.setState({
+            teams: this.state.teams,
+            open_confirm_form: true
+        });
+    }
+
+    _onCloseConfirmForm(){
+        this.setState({
+            teams: this.state.teams,
+            open_confirm_form: false
+        });
     }
 
     _onTeamSearch() {
-       this.state = {actions: Store.getActions(), teams: Store.getTeams()};
-        console.log("SEARCH : " + this.state.teams)
+       this.setState({
+            teams: Store.getTeams(),
+            open_confirm_form: this.state.open_confirm_form
+        });
     }
 
     closeForm() {
-        if (Store.getProgress()[0] === "100")
-            Actions.Add('CLOSE_FORM')
-        else
-            Actions.Add('OPEN_CONFIRM_FORM');
+        Actions.closeForm()
     }
 
     onSave() {
-        Actions.Add('SAVE');
+        Actions.save();
     }
 
     onTeamSearch(event: any) : void {
-        Actions.Add("SEARCH_TEAM", null, event.target.value);
+        Actions.searchTeam(event.target.value);
     }  
 
     render() {
 
-        var confForm = null;
-
-        this.state.actions.forEach(function(element: any) {
-            switch (element) {
-                case "OPEN_CONFIRM_FORM":
-                    confForm = <ConfForm/>
-                default:
-                    break;
-            }
-        });
+        var confForm = this.state.open_confirm_form ? <ConfForm/> : null;
 
         return (
             <div>

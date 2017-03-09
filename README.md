@@ -72,6 +72,6 @@
 * webpack (npm install -g webpack ou yarn add webpack)
 
 ##### Pour tester exécuter :
-~```$ karma start tests/karma.conf.js```~
+```~$ karma start tests/karma.conf.js~```
 
 ```$ npm test```

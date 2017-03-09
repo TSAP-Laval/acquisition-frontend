@@ -3,30 +3,19 @@ import * as axios       from 'axios';
 import { IAction }      from "../interfaces/interfaces"
 import dispatcher       from "../dispatcher/dispatcher";
 import { serverURL }    from "config"
+import { IMessages }    from "../interfaces/interfaces"
 
 class UploadStore extends EventEmitter {
 
-    actions: string[] = [];
     progress: string[] = [];
     teams: Object = null;
-    source: axios.CancelTokenSource
+    message: IMessages;
+    source: axios.CancelTokenSource;
 
     constructor() {
         super();
-        // Cancellation
+        // Cancellation token
         this.source = axios.default.CancelToken.source();
-    }
-
-    addAction(action: string) {
-        var index = this.actions.indexOf(action);
-        if (index === -1)
-            this.actions.push(action);
-    }
-
-    removeAction(action: string) {
-        var index = this.actions.indexOf(action);
-        if (index !== -1)
-            this.actions.splice(index, 1);
     }
 
     addProgress(text: string) {
@@ -38,8 +27,8 @@ class UploadStore extends EventEmitter {
         this.teams = t
     }
 
-    getActions() {
-        return this.actions;
+    getMessage() {
+        return this.message;
     }
 
     getProgress() {
@@ -56,12 +45,10 @@ class UploadStore extends EventEmitter {
         this.addProgress(percentCompleted.toString());
         
         if (percentCompleted == 100) {
-            this.addAction('MESSAGE');
-            this.addAction('UPLOAD_SUCCESS');
-            this.removeAction('DROP');
+            this.addMessage(false, 'UPLOAD_SUCCESS')
+            this.emit("upload_ended");
         }
-        
-        this.emit("CHANGE");
+        this.emit("uploading");
     }
 
     sendVideo(file: File) {
@@ -100,66 +87,63 @@ class UploadStore extends EventEmitter {
     }
 
     searchTeamSuccess() {
-        
+        // TODO
+    }
+
+    save() {
+        // TODO
+    }
+
+    addMessage(isError: boolean = false, message: string = "") {
+        this.message = {isError, message};
     }
 
     cancelUpload() {
         // We re-initialize the progress counter to 0 to
-        // avoid problem in further execution
+        // avoid problem in further executions
         this.addProgress("0");
         this.source.cancel('Operation has been canceled.');
-        this.addAction('MESSAGE');
-        this.addAction('CANCEL');
-        this.removeAction('DROP');
         this.source = axios.default.CancelToken.source();
     }
 
-    handleActions(action: IAction){
+    handleActions(action: any){
         switch(action.type) {
-            case "DROP":
-                this.addAction(action.type);
-                this.addAction('OPEN_FORM');
-                this.removeAction('ERROR');
-                this.removeAction('CANCEL');
-                this.removeAction('MESSAGE');
-                this.sendVideo(action.video);
-                this.emit("CHANGE");
+            case "UPLOAD.SHOW_MESSAGE":
+                this.addMessage(action.isError, action.text)
+                this.emit("message");
                 break;
-            case "CANCEL":
-                this.cancelUpload()
-                this.emit("CANCEL");
+            case "UPLOAD.UPLOAD":
+                this.addMessage();
+                this.emit("uploading");
+                this.sendVideo(action.file);
+                this.emit("open_form");
                 break;
-            case "SAVE":
-                this.removeAction('OPEN_FORM');
-                this.removeAction('OPEN_CONFIRM_FORM');
-                this.addAction('MESSAGE');
-                this.addAction("SAVE")
-                this.emit("CHANGE");
+            case "UPLOAD.CLOSE_FORM":
+                // If video is uploaded
+                if (this.progress === ["100"])
+                    this.emit("close_form");
+                else
+                    this.emit("open_confirm_form");
                 break;
-            case "CLOSE_FORM":
-                this.removeAction('OPEN_FORM');
-                this.removeAction('DROP');
-                this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('MESSAGE');
-                this.emit("CHANGE");
+            case "UPLOAD.CLOSE_CONFIRM_FORM":
+                this.emit("close_confirm_form");
                 break;
-            case "OPEN_CONFIRM_FORM":
-                this.addAction('OPEN_CONFIRM_FORM');
-                this.emit("CHANGE");
+            case "UPLOAD.CANCEL_UPLOAD":
+                if (this.progress !== ["100"]) {
+                    this.cancelUpload()
+                    this.emit("close_form");
+                    this.addMessage(false, 'CANCEL');
+                }
+                this.emit("upload_ended");
                 break;
-            case "CLOSE_CONFIRM_FORM":
-                this.removeAction('OPEN_CONFIRM_FORM');
-                this.removeAction('MESSAGE');
-                this.emit("CHANGE");
+            case "UPLOAD.SAVE":
+                this.save();
+                this.addMessage(false, 'SAVE');
+                this.emit("close_form");
                 break;
-            case "OPEN_ERROR":
-                this.addAction('MESSAGE');
-                this.addAction(action.text)
-                this.emit("CHANGE");
-                break;
-            case "SEARCH_TEAM":
+            case "UPLOAD.SEARCH_TEAM":
                 this.searchTeam(action.text);
-                this.emit("TEAM_SEARCHED");
+                this.emit("team_searched");
                 break;
         }
     }
