@@ -4,4 +4,7 @@ export interface IAction {
     text: string
 }
 
-export default IAction;
+export interface IMessages {
+    message: string
+    isError: boolean
+}

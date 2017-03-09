@@ -5,10 +5,10 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['mocha', 'chai', 'sinon'],
     files: [
-      './test/index.js'
+      './specs/*.spec.js'
     ],
     preprocessors: {
-      './test/index.js': ['webpack', 'sourcemap']
+      './tests.webpack.js': ['webpack', 'sourcemap']
     },
     webpack: {
       resolve: {

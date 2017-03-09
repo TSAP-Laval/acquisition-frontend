@@ -44,10 +44,8 @@
                     
   Template pris pour ce projet :
   
-                   - react-create component <nom_component> --jsx --css
+                   ```- react-create component <nom_component> --jsx --css```
 
-  
-                    ```
                     
   Template pris pour ce projet :
   
@@ -74,4 +72,6 @@
 * webpack (npm install -g webpack ou yarn add webpack)
 
 ##### Pour tester exécuter :
-```$ karma start karma.conf.js```
+```~$ karma start tests/karma.conf.js~```
+
+```$ npm test```
