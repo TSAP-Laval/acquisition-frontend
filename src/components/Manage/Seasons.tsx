@@ -1,6 +1,8 @@
 import * as React from "react";
-import * as manageActions  from "../../actions/ManageActions";
-import store   	  from "../../stores/SeasonStore";
+import * as manageActions        from "../../actions/ManageActions";
+import store                     from "../../stores/SeasonStore";
+
+
 import { Button } from "react-bootstrap";
 
 export interface ILayoutProps {}
@@ -15,7 +17,6 @@ componentWillMount(){
 		
      })
 }
-
 RemplirSaison(){
 	this.ClearDomElement("tbody")
 	var allSaison=store.GetAllSeasons();
@@ -36,7 +37,6 @@ RemplirSaison(){
 	}
 	 	
 }
-
 sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 	e.preventDefault()
 	//Va rechercher le formulaire
@@ -50,7 +50,6 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 		+'"Years" :'+'"'+annee+'"'
 		+'}'
 	manageActions.postSaison(text);
-
 }  
 ClearDomElement(nom:string){
 	var doc = document.getElementById(nom);

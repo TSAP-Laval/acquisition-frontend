@@ -11,7 +11,7 @@ export function getSaison() {
 }
 //Modif joueur
 export function putJoueur() {
-     axios.default.get(serverURL + '/joueur')
+     axios.default.put(serverURL + '/joueur')
     .then(function(response: any){
         dispatcher.dispatch({ type: "putJoueur", text: response.data  });     
     });  

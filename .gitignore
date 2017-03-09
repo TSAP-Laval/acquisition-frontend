@@ -21,13 +21,7 @@ dist
 .vscode
 
 # Yarn
-<<<<<<< HEAD
 yarn.lock
 yarn-error.log
-
-=======
-yarn-error.log
->>>>>>> 460a054b1b54678c2a4cc1ba8960ee87a8b27ab5
-
 #Typings
 typings/*
