@@ -108,7 +108,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
         +'}'
 
-        manageActions.PostJoueur(text);
+        manageActions.postJoueur(text);
 
 }
 render() {
