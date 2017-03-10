@@ -12,6 +12,7 @@ class UploadStore extends EventEmitter {
     message: IMessages;
     source: axios.CancelTokenSource;
     uploading: boolean = false;
+    response: Object = null
 
     constructor() {
         super();
@@ -41,7 +42,7 @@ class UploadStore extends EventEmitter {
     }
 
     onProgress(progressEvent: any) {
-        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+        let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
         
         this.addProgress(percentCompleted.toString());
         
@@ -60,29 +61,37 @@ class UploadStore extends EventEmitter {
     sendVideo(file: File) {
         this.uploading = true;
 
-        var boundary = Math.random().toString().substr(2);
+        let boundary = Math.random().toString().substr(2);
 
-        var config = {
+        let config = {
             onUploadProgress: this.onProgress.bind(this),
             headers: {'Content-Type': "multipart/form-data; filename=" + 
             file.name + "; boundary=------------------------" + boundary},
             cancelToken: this.source.token
         };
 
-        var form = new FormData()
+        let form = new FormData()
         form.append('file', file, file.name);
 
         axios.default.post(serverURL + '/upload', form, config).then(function (r: any) {
-            console.log("RESULT (XHR): \n" + r.data + "\nSTATUS: " + r.status);
+            console.log("RESULT (XHR): \n" + r.data[0] + "\nSTATUS: " + r.status);
             if (r.data === 'Exist')
-                this.addAction('EXIST');
+                this.addMessage(true, "EXIST");
         }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
-        });
+            // Only if it's not the cancel actions that cause the error
+            // toString() to make sure it's really converted to a string.
+            // Cause an error if removed...
+            if (error.toString().indexOf("Cancel") === -1) {
+                this.addMessage(true, "UNKNOWN");
+                this.emit("close_form");
+                this.emit("upload_ended");
+            }
+        }.bind(this));
     }
 
     searchTeam(text: string) {
-        var config = {
+        let config = {
             headers: {'Content-Type': "application/json;"}
         };
 
@@ -91,11 +100,10 @@ class UploadStore extends EventEmitter {
             this.addTeams(r.data[0]);
         }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
-        });
-    }
-
-    searchTeamSuccess() {
-        // TODO
+            this.addMessage(true, "UNKNOWN");
+            this.emit("close_form");
+            this.emit("upload_ended");
+        }.bind(this));
     }
 
     save() {
@@ -128,7 +136,7 @@ class UploadStore extends EventEmitter {
                 break;
             case "UPLOAD.CLOSE_FORM":
                 // If video is uploaded
-                if (this.progress === ["100"])
+                if (this.progress[0] === "100")
                     this.emit("close_form");
                 else
                     this.emit("open_confirm_form");
@@ -138,7 +146,7 @@ class UploadStore extends EventEmitter {
                 break;
             case "UPLOAD.CANCEL_UPLOAD":
                     this.uploading = false;
-                    if (this.progress !== ["100"]) {
+                    if (this.progress[0] === "100") {
                         this.cancelUpload()
                         this.emit("upload_ended");
                         this.addMessage(false, 'CANCEL');

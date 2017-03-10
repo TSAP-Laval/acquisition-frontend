@@ -16,8 +16,8 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
     }
 
     render() {
-        var msg = null;
-        var style = "invisible";
+        let msg = null;
+        let style = "invisible";
         
         switch (this.props.message.message) {
             case "FORMAT":
@@ -40,6 +40,9 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 break;
             case "SAVE":
                 msg = "Les informations sur la partie en cours ont bel et bien été sauvegardées";
+                break;
+            case "UNKNOWN":
+                msg = "Une erreur inconnue est survenue ! Veuillez contacter l'administrateur pour plus de soutient";
                 break;
         }
 

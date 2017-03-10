@@ -41,7 +41,7 @@ export function save() {
 
 export function searchTeam(team: string) {
     dispatcher.dispatch({
-        type: "UPLOAD.SAVE",
+        type: "UPLOAD.SEARCH_TEAM",
         text: team,
     });
 }

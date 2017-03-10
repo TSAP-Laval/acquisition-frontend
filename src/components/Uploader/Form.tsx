@@ -8,6 +8,7 @@ export interface ILayoutProps {}
 export interface ILayoutState {
     teams: Object
     open_confirm_form: boolean
+    checkboxChecked: boolean
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -20,7 +21,13 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
         this._onTeamSearch = this._onTeamSearch.bind(this);
 
-        this.state = {teams: Store.getTeams(), open_confirm_form: false};
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+
+        this.state = {
+            teams: Store.getTeams(), 
+            open_confirm_form: false, 
+            checkboxChecked: true
+        };
     }
 
     componentWillMount(){
@@ -53,7 +60,8 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     _onTeamSearch() {
-       this.state.teams = Store.getTeams();
+        this.state.teams = Store.getTeams();
+        console.log("TEAMS : " + this.state.teams);
         this.shouldComponentUpdate(this.state);
     }
 
@@ -66,12 +74,18 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     onTeamSearch(event: any) : void {
+        console.log("SEARCHED TERMS : " + event.target.value);
         Actions.searchTeam(event.target.value);
     }  
 
+    handleCheckboxChange() {
+        this.state.checkboxChecked = !this.state.checkboxChecked;
+        this.shouldComponentUpdate(this.state);
+    }
+
     render() {
 
-        var confForm = this.state.open_confirm_form ? <ConfForm/> : null;
+        let confForm = this.state.open_confirm_form ? <ConfForm/> : null;
 
         return (
             <div>
@@ -83,24 +97,32 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                 <span className="sr-only">Close</span>
                             </button>
                             <h4 className="modal-title" id="myModalLabel">
-                                Informations de la vidéo à analyser
+                                Informations sur la vidéo à analyser
                             </h4>
                         </div>
                         
                         <div className="modal-body">
                             <form className="form-horizontal" role="form">
                                 <div className="form-group">
-                                    <label  className="col-sm-2 control-label">Équipe locale</label>
-                                    <div className="col-sm-10">
+                                    <label  className="col-sm-2 control-label">Équipe</label>
+                                    <div className="col-sm-8">
                                         <input type="text" className="form-control" onInput={ e => this.onTeamSearch(e) }
-                                        placeholder="Équipe locale"/>
+                                        placeholder="Équipe"/>
+                                    </div>
+                                    <div className="onoffswitch col-sm-2">
+                                        <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" 
+                                                onChange={ this.handleCheckboxChange } checked={ this.state.checkboxChecked } />
+                                        <label className="onoffswitch-label" htmlFor="myonoffswitch">
+                                            <span className="onoffswitch-inner"></span>
+                                            <span className="onoffswitch-switch"></span>
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label  className="col-sm-2 control-label">Équipe visiteure</label>
+                                    <label  className="col-sm-2 control-label">Équipe adverse</label>
                                     <div className="col-sm-10">
                                         <input type="text" className="form-control" 
-                                        placeholder="Équipe visiteure"/>
+                                        placeholder="Équipe adverse"/>
                                     </div>
                                 </div>
                                 <div className="form-group">

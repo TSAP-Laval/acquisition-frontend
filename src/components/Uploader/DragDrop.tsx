@@ -65,7 +65,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     _onMessage() {
         this.state.message = Store.getMessage();
         this.shouldComponentUpdate(this.state);
-        console.log('MESSAGE : ' + this.state.message.message);
     }
 
     _onUploading() {
@@ -80,7 +79,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         this.state.uploading = false;
 
         this.shouldComponentUpdate(this.state);
-        console.log('END OF UPLOAD : ' + this.state.uploading);
     }
 
     _onOpenForm() {
@@ -107,10 +105,10 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
     
     render() {
-        var form     =  null;
-        var message  =  null;
-        var progress =  this.state.progress == null ? 0 : this.state.progress;
-        var dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
+        let form     =  null;
+        let message  =  null;
+        let progress =  this.state.progress == null ? 0 : this.state.progress;
+        let dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                             onDrop={ this.onDrop}>
                             <div id="drop-zone">
                                 Déposer le fichier ici
@@ -121,9 +119,8 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
             form = <Form />
         } 
 
-        console.log('STATE OF UPLOAD : ' + this.state.uploading);
         if (this.state.uploading) {
-            var style = {width: progress + "%"};
+            let style = {width: progress + "%"};
             dropzone =  <div className="progress">
                             <div className="progress-bar progress-bar-striped active" 
                                 role="progressbar" aria-valuenow="45" aria-valuemin="0" 
