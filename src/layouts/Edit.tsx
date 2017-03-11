@@ -5,9 +5,6 @@ import store from "./EditStore";
 import * as editActions from "./EditAction";
 import Header from "./Header"
 
-
-
-
 require('../sass/Layout.scss');
 
 
@@ -143,9 +140,8 @@ render() {
             <input type="submit" value="Submit"  />    
         </div>  
       </form>             
-      <div id="LesJoueurs">
-        <img src="../img/terrain-soccer.jpg" alt="Smiley face"></img>
-        <ul id="lstJoueur"></ul>
+      <div id="LesJoueurs">      
+      <ul id="lstJoueur"></ul>
       </div>
       </div>
         );

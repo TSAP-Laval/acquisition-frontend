@@ -94,7 +94,6 @@ class playersStore extends EventEmitter {
             for(var i=0;i<action.text.length;i++)
             {
                 
-                
                 this.lesJoueurs.push(action.text[i]);
                
             }
