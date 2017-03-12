@@ -7,7 +7,6 @@ require('../../sass/react-datetime.scss')
 import * as Actions from "../../actions/UploadActions"
 import Store        from "../../stores/UploaderStore"
 import ConfForm     from "./Confirmation"
-import { ITeams }   from "../../interfaces/interfaces"
 
 export interface ILayoutProps {}
 export interface ILayoutState {

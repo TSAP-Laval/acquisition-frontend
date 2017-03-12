@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
 import { Home } from "./pages/Home"
 import { Upload } from "./pages/upload"
-import { Edit }   from "./pages/edit"
+import { Edit }   from "./pages/Edit"
 
 ReactDOM.render(
     <Router history={hashHistory}>
