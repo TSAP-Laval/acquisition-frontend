@@ -3,7 +3,7 @@ import * as axios               from 'axios';
 import { IAction }              from "../interfaces/interfaces"
 import dispatcher               from "../dispatcher/dispatcher";
 import { serverURL }            from "config"
-import { IMessages, ITeams }    from "../interfaces/interfaces"
+import { IMessages }    from "../interfaces/interfaces"
 
 class UploadStore extends EventEmitter {
 
