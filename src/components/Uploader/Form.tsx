@@ -26,6 +26,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         // Bind listeners
         this._onOpenConfirmForm = this._onOpenConfirmForm.bind(this);
         this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
+
         this._onTeamSearch = this._onTeamSearch.bind(this);
         this._onFieldSearch = this._onFieldSearch.bind(this);
         
@@ -48,6 +49,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     componentWillMount(){
         Store.on("open_confirm_form", this._onOpenConfirmForm);
         Store.on("close_confirm_form", this._onCloseConfirmForm);
+
         Store.on("team_searched", this._onTeamSearch);
         Store.on("field_searched", this._onFieldSearch);
     }
@@ -55,6 +57,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     componentWillUnmount() {
         Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
         Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
+
         Store.removeListener("team_searched", this._onTeamSearch);
         Store.removeListener("field_searched", this._onFieldSearch);
     }
