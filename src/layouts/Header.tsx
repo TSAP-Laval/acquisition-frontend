@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import Navbar from "./Navbar";
-
 export interface ILayoutProps {
     title: string
 }

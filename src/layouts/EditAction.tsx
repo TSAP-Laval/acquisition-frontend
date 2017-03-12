@@ -1,4 +1,4 @@
-import dispatcher from "../components/dispatcher";
+import dispatcher from "../dispatcher/dispatcher";
 import {serverURL} from "config"
 import * as axios from 'axios';
 

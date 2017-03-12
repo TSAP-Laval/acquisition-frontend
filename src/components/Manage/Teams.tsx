@@ -1,6 +1,7 @@
 import * as React from "react";
-import store from "./teamStore";
-import * as manageActions from "./manageActions";
+import * as manageActions        from "../../actions/ManageActions";
+import store                     from "../../stores/TeamStore";
+
 export interface ILayoutProps {}
 export interface ILayoutState {}
 

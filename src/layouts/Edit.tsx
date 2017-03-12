@@ -144,7 +144,7 @@ render() {
         </div>  
       </form>             
       <div id="LesJoueurs">
-        <img src="terrain-soccer.jpg" alt="Smiley face"></img>
+        <img src="../img/terrain-soccer.jpg" alt="Smiley face"></img>
         <ul id="lstJoueur"></ul>
       </div>
       </div>

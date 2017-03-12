@@ -1,6 +1,7 @@
 import * as React from "react";
-import store from "./seasonStore";
-import * as manageActions from "./manageActions";
+import * as manageActions        from "../../actions/ManageActions";
+import store                     from "../../stores/SeasonStore";
+
 
 import { Button } from "react-bootstrap";
 

@@ -6,6 +6,11 @@ dependencies:
   pre:
     - pip install ansible
     - pip install --upgrade setuptools
+    - npm install npm@latest -g
+
+test:
+  override:
+    - npm test
 
 general:
   artifacts:

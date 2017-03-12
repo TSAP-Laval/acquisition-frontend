@@ -1,16 +1,18 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import store from "./playersStore";
-import * as manageActions from "./manageActions";
+import * as React                from "react";
+import * as ReactDOM             from "react-dom";
+import { Button, ButtonToolbar } from "react-bootstrap";
+import * as manageActions        from "../../actions/ManageActions";
+import store                     from "../../stores/PlayersStore";
 
-import {Button, ButtonToolbar} from "react-bootstrap";
 
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
+
 var numJoueur ="";
 var TableauJoueurs:any=[];
 var TableauJoueursId:any=[];
+
 
 
 export default class Players extends React.Component<ILayoutProps, ILayoutState> {
@@ -42,10 +44,15 @@ LstJoueurs(){
             tdNumero.innerHTML=data.Number;
             var tdEmail = document.createElement("td");
             tdEmail.innerHTML=data.Email;
+            var btnModifier = document.createElement("button") as HTMLButtonElement;
+            btnModifier.innerHTML="modifier";
+            //btnModifier.onclick=this.RightClick.bind(this);
+            btnModifier.value=data.ID;
             x.appendChild(tdNom);
             x.appendChild(tdPrenom);
             x.appendChild(tdNumero);
             x.appendChild(tdEmail);
+            x.appendChild(btnModifier);
             doc.appendChild(x);
         }
 }
@@ -100,7 +107,9 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"TokenConnexion" : "test",'
         +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
         +'}'
-        manageActions.PostJoueur(text);
+
+        manageActions.postJoueur(text);
+
 }
 render() {
     return (
@@ -123,6 +132,9 @@ render() {
                                     </th>
                                     <th className="text-center">
                                         Email
+                                    </th> 
+                                     <th className="text-center">
+                                        Action
                                     </th>                                                                               
                                     </tr>
                             </thead>
