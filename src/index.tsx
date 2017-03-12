@@ -2,7 +2,7 @@ import * as React    from "react";
 import * as ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
 import { Home } from "./pages/Home"
-import { Upload } from "./pages/upload"
+import { Upload } from "./pages/Upload"
 import { Edit }   from "./pages/Edit"
 
 ReactDOM.render(
