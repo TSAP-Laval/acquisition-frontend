@@ -1,6 +1,4 @@
 /* Default template */
-
-
 /*=================================*/
 
 #root {
@@ -30,8 +28,6 @@ footer {
 
 
 /* Upload page */
-
-
 /*=================================*/
 
 
@@ -226,8 +222,6 @@ footer {
 
 
 /* Side bar */
-
-
 /*==============================*/
 
 .wide {
@@ -276,8 +270,6 @@ footer {
 
 
 /* Off canvas sidebar */
-
-
 /*==============================*/
 
 @media screen and (max-width: 1768px) {
@@ -290,7 +282,7 @@ footer {
 }
 
 /* Switch */
-
+/*==============================*/
 .onoffswitch {
     position: relative;
     width: 90px;
@@ -300,6 +292,7 @@ footer {
 
 .onoffswitch-checkbox {
     display: none;
+
 }
 
 .onoffswitch-label {
@@ -373,8 +366,6 @@ footer {
 
 
 /* Other */
-
-
 /*==============================*/
 
 .invisible {

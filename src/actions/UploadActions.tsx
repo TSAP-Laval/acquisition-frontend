@@ -45,3 +45,10 @@ export function searchTeam(team: string) {
         text: team,
     });
 }
+
+export function searchField(field: string) {
+    dispatcher.dispatch({
+        type: "UPLOAD.SEARCH_FIELD",
+        text: field,
+    });
+}
