@@ -44,10 +44,8 @@
                     
   Template pris pour ce projet :
   
-                   - react-create component <nom_component> --jsx --css
+                   ```- react-create component <nom_component> --jsx --css```
 
-  
-                    ```
                     
   Template pris pour ce projet :
   
@@ -65,3 +63,15 @@
 ```$ python -m SimpleHTTPServer (dans le dossier /dist du projet)```
 
 ```$ webpack --watch (dans un autre terminal)```
+
+## Tests avec Karma
+
+### Prérequis
+* Karma (npm install -g karma)
+* Yarn (npm install -g yarn)
+* webpack (npm install -g webpack ou yarn add webpack)
+
+##### Pour tester exécuter :
+```~$ karma start tests/karma.conf.js~```
+
+```$ npm test```

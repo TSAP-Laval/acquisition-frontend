@@ -1,7 +1,9 @@
 var debug = !(process.env.ENV === 'production');
 console.log("DEBUG: " + debug.valueOf());
+
 var webpack = require('webpack');
 var path = require('path');
+
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -24,7 +26,7 @@ module.exports = {
     devtool: debug ? "eval-cheap-source-map" : "source-map",
 
     plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.DedupePlugin(),
         new webpack.DefinePlugin({
             'process.env': {
