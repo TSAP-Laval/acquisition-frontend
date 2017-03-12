@@ -1,4 +1,4 @@
-var debug = !(process.env.ENV === 'production');
+var debug = !(process.env.NODE_ENV === 'production');
 console.log("DEBUG: " + debug.valueOf());
 
 var webpack = require('webpack');
