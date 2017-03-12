@@ -1,18 +1,19 @@
-import { EventEmitter } from "events"
-import * as axios       from 'axios';
-import { IAction }      from "../interfaces/interfaces"
-import dispatcher       from "../dispatcher/dispatcher";
-import { serverURL }    from "config"
-import { IMessages }    from "../interfaces/interfaces"
+import { EventEmitter }         from "events"
+import * as axios               from 'axios';
+import { IAction }              from "../interfaces/interfaces"
+import dispatcher               from "../dispatcher/dispatcher";
+import { serverURL }            from "config"
+import { IMessages, ITeams }    from "../interfaces/interfaces"
 
 class UploadStore extends EventEmitter {
 
     progress: string[] = [];
-    teams: Object = null;
+    teams: any[] = [];
+    fields: any[] = [];
     message: IMessages;
     source: axios.CancelTokenSource;
     uploading: boolean = false;
-    response: Object = null
+    response: Object = null;
 
     constructor() {
         super();
@@ -25,8 +26,12 @@ class UploadStore extends EventEmitter {
         this.progress.push(text);
     }
 
-    addTeams(t: Object) {
-        this.teams = t
+    addTeams(teams: any[]) {
+        this.teams = teams;
+    }
+
+    addFields(fields: any[]) {
+        this.fields = fields;
     }
 
     getMessage() {
@@ -39,6 +44,10 @@ class UploadStore extends EventEmitter {
 
     getTeams() {
         return this.teams;
+    }
+
+    getFields() {
+        return this.fields;
     }
 
     onProgress(progressEvent: any) {
@@ -73,8 +82,8 @@ class UploadStore extends EventEmitter {
         let form = new FormData()
         form.append('file', file, file.name);
 
-        axios.default.post(serverURL + '/upload', form, config).then(function (r: any) {
-            console.log("RESULT (XHR): \n" + r.data[0] + "\nSTATUS: " + r.status);
+        axios.default.post(serverURL + '/upload', form, config).then(function (r: axios.AxiosResponse) {
+            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             if (r.data === 'Exist')
                 this.addMessage(true, "EXIST");
         }.bind(this)).catch(function (error: string) {
@@ -94,10 +103,28 @@ class UploadStore extends EventEmitter {
         let config = {
             headers: {'Content-Type': "application/json;"}
         };
+        let url = text === "" ? serverURL + '/equipes' : serverURL + '/equipes/' + text;
 
-        axios.default.get(serverURL + '/equipes/' + text, config).then(function (r: any) {
-            console.log("RESULT (XHR): \n" + r.data[0] + "\nSTATUS: " + r.status);
-            this.addTeams(r.data[0]);
+        axios.default.get(url, config).then(function (r: axios.AxiosResponse) {
+            //console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            this.addTeams(r.data);
+        }.bind(this)).catch(function (error: string) {
+            console.log("ERROR (XHR): \n" + error);
+            this.addMessage(true, "UNKNOWN");
+            this.emit("close_form");
+            this.emit("upload_ended");
+        }.bind(this));
+    }
+
+    searchFields(text: string) {
+        let config = {
+            headers: {'Content-Type': "application/json;"}
+        };
+        let url = text === "" ? serverURL + '/terrains' : serverURL + '/terrains/' + text;
+
+        axios.default.get(url, config).then(function (r: axios.AxiosResponse) {
+            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            this.addFields(r.data);
         }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
             this.addMessage(true, "UNKNOWN");
@@ -161,6 +188,10 @@ class UploadStore extends EventEmitter {
             case "UPLOAD.SEARCH_TEAM":
                 this.searchTeam(action.text);
                 this.emit("team_searched");
+                break;
+            case "UPLOAD.SEARCH_FIELD":
+                this.searchFields(action.text);
+                this.emit("field_searched");
                 break;
         }
     }

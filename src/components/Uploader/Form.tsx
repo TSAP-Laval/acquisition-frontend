@@ -1,47 +1,62 @@
 import * as React   from "react";
+import * as Select  from "react-select";
+require('../../sass/react-select.scss');
+import * as DateTime from "react-datetime";
+require('../../sass/react-datetime.scss')
 
 import * as Actions from "../../actions/UploadActions"
 import Store        from "../../stores/UploaderStore"
 import ConfForm     from "./Confirmation"
+import { ITeams }   from "../../interfaces/interfaces"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    teams: Object
+    teams: any[]
+    fields: any[]
     open_confirm_form: boolean
     checkboxChecked: boolean
+    teamSelected: string
+    fieldSelected: string
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
-    
+
     constructor() {
         super();
         // Bind listeners
         this._onOpenConfirmForm = this._onOpenConfirmForm.bind(this);
         this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
-
         this._onTeamSearch = this._onTeamSearch.bind(this);
-
+        this._onFieldSearch = this._onFieldSearch.bind(this);
+        
         this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+        this.onTeamSearch = this.onTeamSearch.bind(this);
+        this.teamSelected = this.teamSelected.bind(this);
+        this.onFieldSearch = this.onFieldSearch.bind(this);
+        this.fieldSelected = this.fieldSelected.bind(this);
 
         this.state = {
             teams: Store.getTeams(), 
+            fields: Store.getFields(),
             open_confirm_form: false, 
-            checkboxChecked: true
+            checkboxChecked: true,
+            teamSelected: "",
+            fieldSelected: "",
         };
     }
 
     componentWillMount(){
         Store.on("open_confirm_form", this._onOpenConfirmForm);
         Store.on("close_confirm_form", this._onCloseConfirmForm);
-
         Store.on("team_searched", this._onTeamSearch);
+        Store.on("field_searched", this._onFieldSearch);
     }
 
     componentWillUnmount() {
         Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
         Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
-
         Store.removeListener("team_searched", this._onTeamSearch);
+        Store.removeListener("field_searched", this._onFieldSearch);
     }
 
     shouldComponentUpdate(nextState: ILayoutState) {
@@ -61,7 +76,11 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
     _onTeamSearch() {
         this.state.teams = Store.getTeams();
-        console.log("TEAMS : " + this.state.teams);
+        this.shouldComponentUpdate(this.state);
+    }
+
+    _onFieldSearch() {
+        this.state.fields = Store.getFields();
         this.shouldComponentUpdate(this.state);
     }
 
@@ -69,22 +88,53 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         Actions.closeForm()
     }
 
-    onSave() {
-        Actions.save();
-    }
-
-    onTeamSearch(event: any) : void {
-        console.log("SEARCHED TERMS : " + event.target.value);
-        Actions.searchTeam(event.target.value);
-    }  
-
     handleCheckboxChange() {
         this.state.checkboxChecked = !this.state.checkboxChecked;
         this.shouldComponentUpdate(this.state);
     }
 
+    onSave() {
+        Actions.save();
+    }
+
+    onTeamSearch(value: any, callback: Function) {
+        if (!value) {
+			return Promise.resolve({ options: [] });
+		}
+
+        Actions.searchTeam(value);
+        callback(null, {
+            options: this.state.teams,
+            complete: false
+        });
+    }  
+
+    onFieldSearch(value: any, callback: Function) {
+        if (!value) {
+			return Promise.resolve({ options: [] });
+		}
+
+        Actions.searchField(value);
+        callback(null, {
+            options: this.state.fields,
+            complete: false
+        });
+    }  
+
+    teamSelected(value: any) {
+        this.state.teamSelected = value;
+        this.shouldComponentUpdate(this.state);
+    }
+
+    fieldSelected(value: any) {
+        this.state.fieldSelected = value;
+        this.shouldComponentUpdate(this.state);
+    }
+
     render() {
 
+        const AsyncComponent = Select.Async;
+        let multi = false;
         let confForm = this.state.open_confirm_form ? <ConfForm/> : null;
 
         return (
@@ -105,9 +155,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                             <form className="form-horizontal" role="form">
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Équipe</label>
-                                    <div className="col-sm-8">
-                                        <input type="text" className="form-control" onInput={ e => this.onTeamSearch(e) }
-                                        placeholder="Équipe"/>
+                                    <div className="col-sm-8 section">
+                                        <AsyncComponent multi={multi} autoload={false} value={this.state.teamSelected} 
+                                            onChange={this.teamSelected} valueKey="id" labelKey="Name"
+                                            loadOptions={this.onTeamSearch} backspaceRemoves={true} />
                                     </div>
                                     <div className="onoffswitch col-sm-2">
                                         <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" 
@@ -127,15 +178,16 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                 </div>
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Terrain</label>
-                                    <div className="col-sm-10">
-                                        <input type="text" className="form-control" 
-                                        placeholder="Terrain"/>
+                                    <div className="col-sm-10 section">
+                                        <AsyncComponent multi={multi} autoload={false} value={this.state.fieldSelected} 
+                                            onChange={this.fieldSelected} valueKey="id" labelKey="Name"
+                                            loadOptions={this.onFieldSearch} backspaceRemoves={true} />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Date</label>
-                                    <div className="col-sm-10">
-                                        <input type="date" className="form-control" />
+                                    <div className="col-sm-8">
+                                        <DateTime locale="fr-ca"/>
                                     </div>
                                 </div>
                             </form>
