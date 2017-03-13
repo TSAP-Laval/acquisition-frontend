@@ -2,10 +2,19 @@ machine:
   python:
     version: 2.7.10
 
+  # Add some environment variables
+  environment:
+    NODE_ENV: "production"
+
 dependencies:  
   pre:
     - pip install ansible
     - pip install --upgrade setuptools
+    - npm install npm@latest -g
+
+test:
+  override:
+    - npm test
 
 general:
   artifacts:

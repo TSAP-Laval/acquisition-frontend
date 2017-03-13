@@ -2,10 +2,10 @@ import * as React from "react";
 
 require('../sass/Layout.scss');
 
-import Header from "../layouts/Header"
-import Footer from "../layouts/Footer"
+import Header   from "../layouts/Header"
+import Footer   from "../layouts/Footer"
 import Uploader from "../layouts/Uploader"
-import SideBar from "../layouts/SideBar"
+import SideBar  from "../layouts/SideBar"
 
 export interface ILayoutProps {
     hasVideo: boolean
@@ -13,11 +13,6 @@ export interface ILayoutProps {
 export interface ILayoutState {}
 
 export class Upload extends React.Component<ILayoutProps, ILayoutState> {
-
-    //      <div className="video-container">
-    //         <VideoPlayer />
-    //      </div>
-
     render() {
         return (
             <div className="wrapper absolute">
