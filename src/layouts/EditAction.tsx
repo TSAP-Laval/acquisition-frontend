@@ -4,23 +4,39 @@ import * as axios from 'axios';
 
 
 export function getJoueur() {
-    console.log("okay wtf");
     axios.default.get(serverURL+'/joueur')
-    .then(function(response:any){  
-        dispatcher.dispatch({ type: "getJoueurEdit", text: response.data  });     
+    .then(function(response:any) {  
+        dispatcher.dispatch({ type: "MATCH_EDIT.GETJOUEURS", text: response.data });     
     });  
 }
 export function getActionsEdit() {   
      axios.default.get(serverURL +'/actions')
     .then(function(response:any){
-        dispatcher.dispatch({ type: "GetActionsEdit", text: response.data  });     
+        dispatcher.dispatch({ type: "GetActionsEdit", text: response.data });     
     });  
 }
 export function postAction(stringContenu: string) {
     axios.default.post(serverURL +'/actions', stringContenu)
     .then(function (r: any) {
-        dispatcher.dispatch({ type: "postActionEdit", text: stringContenu  });
+        dispatcher.dispatch({ type: "postActionEdit", text: stringContenu });
     }).catch(function (error: string) {   
-        dispatcher.dispatch({ type: "postActionEdit", text: "error"  });
+        dispatcher.dispatch({ type: "postActionEdit", text: "error" });
     })    
+}
+
+export function requestActionForm(e: React.MouseEvent<HTMLInputElement>, button: HTMLButtonElement, form: HTMLDivElement) {
+    // Récupérer le joueur?
+    dispatcher.dispatch({
+        type: "MATCH_EDIT.REQUEST_ACTION_FORM",
+        e: e,
+        joueur: button,
+        form: form,
+    });
+}
+
+export function closeActionForm(form: HTMLDivElement) {
+    dispatcher.dispatch({
+        type: "MATCH_EDIT.CLOSE_ACTION_FORM",
+        form: form,
+    })
 }

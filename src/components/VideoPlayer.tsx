@@ -4,7 +4,6 @@ import Store from "../stores/VideoPlayerStore";
 
 export interface ILayoutProps {
     url: string,
-    step: number,
 }
 export interface ILayoutState {
     playing: boolean,
@@ -25,7 +24,6 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     componentDidMount = () => {
-        this.props.step = Store.step;
         let slider = document.getElementById("my-slider") as HTMLInputElement;
         let stepperSlider = document.getElementById("stepRange") as HTMLInputElement;
         slider.value = "0";

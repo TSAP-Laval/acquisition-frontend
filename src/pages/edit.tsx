@@ -22,8 +22,7 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
                 </div>
                 <div className="container">
                     <div className="row">
-                        <div className="wrapper col-xs-12">   
-                            <h2>Les joueurs de l'équipe</h2>
+                        <div className="wrapper col-xs-12">
                             <span id="rep"></span> 
                             <EditTest />
                             <Footer />

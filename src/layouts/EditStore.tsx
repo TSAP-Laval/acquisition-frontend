@@ -4,28 +4,57 @@ import dispatcher from "../dispatcher/dispatcher";
 import * as axios from 'axios';
 
 class EditStore extends EventEmitter {
- 
-    joueurs: string[] = [];
-    actions: string[] = []; 
+    joueurs: string[];
+    actions: string[];
+
     constructor() {
         super();
+        this.joueurs = [];
+        this.actions = [];
     }
-    GetAllJoueurs() {
+    
+    GetAllJoueurs = () => {
         return this.joueurs;  
     }
-    GetAllActions() {
+
+    GetAllActions = () => {
         return this.actions;
     }
-    handleActions(action: IAction){ 
+
+    sendActionForm = (e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
+        $(form)
+            .css({
+                /**
+                 * Si le bouton dépasse le 2/3 de l'écran, le form apparaîtra à la gauche de celui-ci.
+                 */
+                "left": (e.pageX <= ($(window).width() / 3) * 2 ? (e.pageX - 100) + "px" : (e.pageX - 600) + "px"),
+                "top": (e.pageY - $(".video-container").height() - $("#Enr").height()) + "px"
+            })
+            .toggleClass("form-open");
+    }
+
+    closeActionForm = (form: HTMLDivElement) => {
+        $(form).toggleClass("form-open");
+    }
+
+    handleActions(action: any){ 
         switch(action.type) {
-            case "getJoueurEdit" :
-                this.joueurs=[];
-                for(var i=0;i<action.text.length;i++)
+            case "MATCH_EDIT.GETJOUEURS": {
+                for(var i = 0; i < action.text.length; i++)
                 {
                     this.joueurs.push(action.text[i]);  
                 }
                 this.emit("change");
-            break;
+                break;
+            }
+            case "MATCH_EDIT.REQUEST_ACTION_FORM": {
+                this.sendActionForm(action.e, action.joueur, action.form);
+                break;
+            }
+            case "MATCH_EDIT.CLOSE_ACTION_FORM": {
+                this.closeActionForm(action.form);
+                break;
+            }
             case "GetActionsEdit" :
                 this.actions=[];
                 for(var i=0;i<action.text.length;i++)
