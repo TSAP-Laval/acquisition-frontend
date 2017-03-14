@@ -3,10 +3,13 @@ import dispatcher from "../dispatcher/dispatcher";
 
 class VideoPlayerStore extends EventEmitter {
     currentTime: number;
+    step: number;
+    forwadingStep: number;
 
     constructor() {
         super();
         this.currentTime = 0;
+        this.step = 5;
     }
 
     play = (state: boolean, video: HTMLVideoElement) => {
@@ -46,11 +49,11 @@ class VideoPlayerStore extends EventEmitter {
     }
 
     back = (video: HTMLVideoElement) => {
-        video.currentTime -= 5;
+        video.currentTime -= this.step;
     }
 
     forward = (video: HTMLVideoElement) => {
-        video.currentTime += 5;
+        video.currentTime += this.step;
     }
 
     restart = (video: HTMLVideoElement) => {
@@ -76,6 +79,11 @@ class VideoPlayerStore extends EventEmitter {
 
     setCurrentTime = (time: number) => {
         this.currentTime = time;
+    }
+
+    setStep = (stepInfo: HTMLSpanElement, slider: HTMLInputElement) => {
+        this.step = parseFloat(slider.value) / 20;
+        stepInfo.innerText = this.step + " sec.";
     }
 
     handlerActions = (action: any) => {
@@ -123,6 +131,11 @@ class VideoPlayerStore extends EventEmitter {
             }
             case "VIDEO_PLAYER.SET_CURRENT_TIME": {
                 this.setCurrentTime(action.time);
+                break;
+            }
+            case "VIDEO_PLAYER.SET_STEP_VALUE" : {
+                this.setStep(action.stepInfo, action.slider);
+                this.emit("stepChanged");
                 break;
             }
             default:
