@@ -135,6 +135,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"TokenConnexion" : "test",'
         +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
         +'}'
+        console.log(text);
          manageActions.putJoueur(text,IdJoueur);
     }
     else

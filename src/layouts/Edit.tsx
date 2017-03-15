@@ -4,7 +4,6 @@ import * as $ from "jquery";
 import store from "./EditStore";
 import * as editActions from "./EditAction";
 import Header from "./Header"
-
 require('../sass/Layout.scss');
 
 
@@ -142,6 +141,13 @@ render() {
       </form>             
       <div id="LesJoueurs">      
       <ul id="lstJoueur"></ul>
+       <form onSubmit={this.sendFormData.bind(this)}>  
+            <h3>Pointage</h3><br></br>               
+            <label htmlFor="ScoreDom">Domicile</label>
+            <input type="text" name="ScoreDom" id="ScoreDom"value="0" />            
+            <label htmlFor="ScoreAway">Extérieur</label>
+            <input type="text" name="ScoreAway" id="ScoreAway" value="0"/>
+      </form>     
       </div>
       </div>
         );
