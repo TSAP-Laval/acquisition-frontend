@@ -30,9 +30,9 @@ body {
     top: 0px;
     left: 500px;
 }
-#enr {
+#Enr {
     position: absolute;
-    z-index: 99;
+    z-index: 9999;
     top: 0;
     right: 0;
     padding: 20px;
@@ -44,7 +44,7 @@ body {
 h3{
     display: inline-block;
 }
-#enr.form-open {
+#Enr.form-open {
     display: block;
     background-color: white;
 }

@@ -4,7 +4,7 @@ import {Button, Alert} from "react-bootstrap";
 import * as $ from "jquery";
 
 import * as requesthandler from './RequestHandler';
-import actionStore from '../../Stores/ActionsStore';
+import actionStore from '../../stores/ActionsStore';
 
 
 export interface ILayoutProps {}
@@ -13,8 +13,6 @@ export interface ILayoutState {}
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
     
-
-
     componentWillMount(){
         requesthandler.getActionTypes();
 
@@ -22,6 +20,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         this.ListAllActions();
         });
      }
+     
     ListAllActions(){
 
         var table = document.getElementById('table_action');

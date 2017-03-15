@@ -41,7 +41,14 @@ export function save() {
 
 export function searchTeam(team: string) {
     dispatcher.dispatch({
-        type: "UPLOAD.SAVE",
+        type: "UPLOAD.SEARCH_TEAM",
         text: team,
+    });
+}
+
+export function searchField(field: string) {
+    dispatcher.dispatch({
+        type: "UPLOAD.SEARCH_FIELD",
+        text: field,
     });
 }
