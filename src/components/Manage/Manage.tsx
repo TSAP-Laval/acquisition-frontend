@@ -8,8 +8,6 @@ import Teams from "./Teams";
 import Actions from "./Actions";
 import Players from "./Players";
 require('../../sass/Layout.scss');
-
-
 require('../../sass/manage_style.scss');
 
 export interface ILayoutProps {}

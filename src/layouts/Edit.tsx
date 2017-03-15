@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as $ from "jquery";
-import Store from "./EditStore";
+import Store from "../stores/EditStore";
 import VideoStore from "../stores/VideoPlayerStore";
-import * as Actions from "./EditAction";
+import * as Actions from "../actions/EditAction";
 import Header from "./Header"
 
 //require('../sass/Layout.scss');
