@@ -13,7 +13,7 @@ export function getSaison() {
 
 export function putJoueur(stringContenu: string,id:any) {
     
-    axios.default.post(serverURL + '/joueur/'+id, stringContenu).then(function (r: any) {
+    axios.default.put(serverURL + '/joueur/'+id, stringContenu).then(function (r: any) {
         r.AppendHeader("Access-Control-Allow-Origin", "*");
                     getJoueur();
         }).catch(function (error: string) {

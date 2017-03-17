@@ -88,6 +88,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let _resultat = document.getElementsByName("resultat")[0] as HTMLInputElement;
     let _video = document.getElementById("my-player") as HTMLVideoElement;
     let tempsAction = _video.currentTime;
+    let _scoreDom = document.getElementById("ScoreDom") as HTMLInputElement;
+    let scoreDom = _scoreDom.value;
+    let _scoreAway = document.getElementById("ScoreAway") as HTMLInputElement;
+    let scoreAway = _scoreAway.value;    
     var TypeAction = 0;
     TypeAction = parseInt(_typeSelect.value)
     var resultatAction = _resultat.value
@@ -103,8 +107,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         +'"X2" : 1 ,'
         +'"Y2" : 0 ,'
         +'"Time" : 30 ,'
-        +'"HomeScore" : 30 ,'
-        +'"GuestScore" : 30 ,'
+        +'"HomeScore" : '+scoreDom+','
+        +'"GuestScore" : '+scoreAway+','
         +'"PlayerID" :'+numJoueur
         +'}'
       Actions.postAction(text);
@@ -175,10 +179,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               <span aria-hidden="true">&times;</span>
             </button>
             <h3>enregistrer une action</h3><br></br>               
-            <label htmlFor="Type">Type de l'action</label>
-            <input type="radio" name="Type" value="Defensive" /> Défensive
-            <input type="radio" name="Type" value="Offensive"/> Offensive
-            <input type="radio" name="Type" value="Central"/> Central<br></br>
             <label htmlFor="Nom">Nom de l'action</label>                  
             <select id="NomActivite" name="NomActivite"></select><br></br>
             <label htmlFor="resultat">Résultat de l'action</label>
@@ -191,9 +191,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         <form onSubmit={this.sendFormData.bind(this)}>  
             <h3>Pointage</h3><br></br>               
             <label htmlFor="ScoreDom">Domicile</label>
-            <input type="text" name="ScoreDom" id="ScoreDom"value="0" />            
+            <input type="text" name="ScoreDom" id="ScoreDom" />            
             <label htmlFor="ScoreAway">Extérieur</label>
-            <input type="text" name="ScoreAway" id="ScoreAway" value="0"/>
+            <input type="text" name="ScoreAway" id="ScoreAway"/>
       </form>              
         <div id="LesJoueurs">      
           <ul id="lstJoueur"></ul>
