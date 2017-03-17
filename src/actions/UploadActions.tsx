@@ -8,10 +8,10 @@ export function showMessage(text: string, isError: boolean) {
     });
 }
 
-export function upload(file: File) {
+export function upload(files: File[]) {
     dispatcher.dispatch({
         type: "UPLOAD.UPLOAD",
-        file: file,
+        files: files,
     });
 }
 

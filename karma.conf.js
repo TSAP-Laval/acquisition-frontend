@@ -15,7 +15,7 @@ module.exports = function (config) {
       'tests/tests.webpack.js'
     ],
     preprocessors: {
-      'tests/tests.webpack.js': [ 'webpack', 'sourcemap', 'coverage' ]
+      'tests/tests.webpack.js': [ 'webpack', 'sourcemap' ]
     },
     webpack: {
       devtool: 'inline-source-map',
@@ -67,7 +67,7 @@ module.exports = function (config) {
       file : 'coverage.txt'
     },
     frameworks: ['mocha', 'chai', 'sinon'],
-    reporters: ['progress', 'coverage'],
+    reporters: ['mocha'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
@@ -76,13 +76,7 @@ module.exports = function (config) {
     singleRun: true,
     concurrency: Infinity,
     plugins: [
-            require('karma-chrome-launcher'),
-            require('karma-sourcemap-loader'),
-            require('karma-webpack'),
-            require('karma-chai'),
-            require('karma-mocha'),
-            require('karma-sinon'),
-            require('karma-coverage'),
+            "karma-*"
         ]
   })
 }

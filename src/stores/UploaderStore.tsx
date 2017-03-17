@@ -67,7 +67,7 @@ class UploadStore extends EventEmitter {
         }
     }
 
-    sendVideo(file: File) {
+    sendVideo(files: File[]) {
         this.uploading = true;
 
         let boundary = Math.random().toString().substr(2);
@@ -75,12 +75,14 @@ class UploadStore extends EventEmitter {
         let config = {
             onUploadProgress: this.onProgress.bind(this),
             headers: {'Content-Type': "multipart/form-data; filename=" + 
-            file.name + "; boundary=------------------------" + boundary},
+            files[0].name + "; boundary=------------------------" + boundary},
             cancelToken: this.source.token
         };
 
         let form = new FormData()
-        form.append('file', file, file.name);
+        files.forEach(file => {
+            form.append('file', file, file.name);
+        })
 
         axios.default.post(serverURL + '/upload', form, config).then(function (r: axios.AxiosResponse) {
             console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
@@ -158,7 +160,7 @@ class UploadStore extends EventEmitter {
             case "UPLOAD.UPLOAD":
                 this.addMessage();
                 this.emit("uploading");
-                this.sendVideo(action.file);
+                this.sendVideo(action.files);
                 this.emit("open_form");
                 break;
             case "UPLOAD.CLOSE_FORM":
