@@ -2,7 +2,6 @@ import * as React from "react";
 
 import Header from "./Header"
 import Footer from "./Footer"
-import Navbar from "./Navbar"
 import Manage from "../components/Manage/Manage"
 
 require('../../sass/Layout.scss');

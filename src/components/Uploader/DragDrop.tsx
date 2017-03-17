@@ -1,15 +1,18 @@
 import * as React     from "react";
 import * as Dropzone  from "react-dropzone";
-import * as Actions   from "./Actions"
+import * as Actions   from "../../actions/UploadActions"
 
-import Store          from "./UploaderStore"
+import Store          from "../../stores/UploaderStore"
 import Form           from "./Form";
 import Message        from "./Message";
+import { IMessages }  from "../../interfaces/interfaces"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    actions: string[]
     progress: string[]
+    message: IMessages
+    uploading: boolean
+    open_form: boolean
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
@@ -17,71 +20,120 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     constructor (props: any) {
         super(props);
         // Bind listeners
-        this._onChange = this._onChange.bind(this);
-        // Get current actions and set progress at 0%
-        this.state = { actions: Store.getActions(), progress: ["0"] };
+        this._onMessage = this._onMessage.bind(this);
+
+        this._onUploading = this._onUploading.bind(this);
+        this._onUploadEnd = this._onUploadEnd.bind(this);
+
+        this._onOpenForm = this._onOpenForm.bind(this);
+        this._onCloseForm = this._onCloseForm.bind(this);
+
+        // Get current actions, message and set progress at 0% and uploading at false
+        this.state = { 
+            progress: ["0"], 
+            message: Store.getMessage(), 
+            uploading: false, 
+            open_form: false, 
+        };
     }
 
     componentWillMount(){
-        Store.addListener("CHANGE", this._onChange);
+        Store.on("message", this._onMessage);
+
+        Store.on("uploading", this._onUploading);
+        Store.on("upload_ended", this._onUploadEnd);
+
+        Store.on("open_form", this._onOpenForm);
+        Store.on("close_form", this._onCloseForm);
     }
 
     componentWillUnmount() {
-        Store.removeListener("CHANGE", this._onChange);
+        Store.removeListener("message", this._onMessage);
+
+        Store.removeListener("uploading", this._onUploading);
+        Store.removeListener("upload_ended", this._onUploadEnd);
+
+        Store.removeListener("open_form", this._onOpenForm);
+        Store.removeListener("close_form", this._onCloseForm);
     }
 
-    _onChange() {
-        this.setState({ actions: Store.getActions(), progress: Store.getProgress() });
+    shouldComponentUpdate(nextState: ILayoutState) {
+        this.setState(nextState);
+        return true;
+    }
+
+    _onMessage() {
+        this.state.message = Store.getMessage();
+        this.shouldComponentUpdate(this.state);
+    }
+
+    _onUploading() {
+        this.state.uploading = true;
+        this.state.progress = Store.getProgress();
+
+        this.shouldComponentUpdate(this.state);
+    }
+
+    _onUploadEnd() {
+        this.state.progress = Store.getProgress();
+        this.state.uploading = false;
+
+        this.shouldComponentUpdate(this.state);
+    }
+
+    _onOpenForm() {
+        this.state.open_form = true;
+        this.shouldComponentUpdate(this.state);
+    }
+
+    _onCloseForm() {
+        this.state.open_form = false;
+        this.shouldComponentUpdate(this.state);
     }
 
     onDrop(acceptedFiles: Array<File>){
         // For the moment we only accept MP4 files
         // TODO : Decide witch formats should be used
         if (acceptedFiles[0].type !== "video/mp4")
-            Actions.Add('OPEN_ERROR', null, "FORMAT");
+            Actions.showMessage("FORMAT", true);
         else if (acceptedFiles.length > 1) 
-            Actions.Add('OPEN_ERROR', null, "TOO_MANY");
+            Actions.showMessage("TOO_MANY", true);
         else if (acceptedFiles.length < 1) 
-            Actions.Add('OPEN_ERROR', null, "NO_FILE");
+            Actions.showMessage("NO_FILE", true);
         else
-            Actions.Add('DROP', acceptedFiles[0]);
+            Actions.upload(acceptedFiles[0]);
     }
     
     render() {
-        var form =      null;
-        var message =   null;
-        var progress =  this.state.progress == null ? 0 : this.state.progress;
-        var dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
+        let form     =  null;
+        let message  =  null;
+        let progress =  this.state.progress == null ? 0 : this.state.progress;
+        let dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                             onDrop={ this.onDrop}>
                             <div id="drop-zone">
                                 Déposer le fichier ici
                             </div>
                         </Dropzone>
 
-        this.state.actions.forEach(function(element: any) {
-            switch (element) {
-                case "DROP":
-                    var style = {width: progress + "%"};
-                    dropzone =  <div className="progress">
-                                    <div className="progress-bar progress-bar-striped active" 
-                                        role="progressbar" aria-valuenow="45" aria-valuemin="0" 
-                                        aria-valuemax="100" style={style}>
-                                        <span className="sr-only">{progress}% Complete</span>
-                                    </div>
-                                    <p> {progress}% Complété</p>
-                                </div>;
-                    break;
-                case "OPEN_FORM":
-                    form = <Form />
-                    break;
-                case "MESSAGE":
-                    message = <Message />
-                    break;
-                default:
-                    break;
-            }
-        });
+        if (this.state.open_form) {
+            form = <Form />
+        } 
+
+        if (this.state.uploading) {
+            let style = {width: progress + "%"};
+            dropzone =  <div className="progress">
+                            <div className="progress-bar progress-bar-striped active" 
+                                role="progressbar" aria-valuenow="45" aria-valuemin="0" 
+                                aria-valuemax="100" style={style}>
+                                <span className="sr-only">{progress}% Complete</span>
+                            </div>
+                            <p> {progress}% Complété</p>
+                        </div>;
+        }
         
+        if (this.state.message != null)
+            message = <Message message={this.state.message} />;
+
         return (
             <div className="absolute wide">
                 {message}

@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import dispatcher from "../components/dispatcher";
+import dispatcher from "../dispatcher/dispatcher";
 
 class VideoPlayerStore extends EventEmitter {
     currentTime: number;

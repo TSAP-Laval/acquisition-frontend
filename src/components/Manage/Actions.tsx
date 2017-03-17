@@ -1,88 +1,133 @@
 import * as React from "react";
 
-import { serverURL }    from "config"
-
 import {Button, Alert} from "react-bootstrap";
-import * as $ from "jquery"
+import * as $ from "jquery";
 
-//require("bootstrap-sass/assets/stylesheets/_bootstrap.scss");
+import * as requesthandler from './RequestHandler';
+import actionStore from '../../stores/ActionsStore';
+
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
 
 
 export default class Actions extends React.Component<ILayoutProps, ILayoutState> {
+    
+
+
+    componentWillMount(){
+        requesthandler.getActionTypes();
+
+        actionStore.on("change",() =>{
+        this.ListAllActions();
+        });
+     }
+    ListAllActions(){
+
+        var table = document.getElementById('table_action');
+        
+        if(table != undefined && table.children.length > 0){
+            while(table.hasChildNodes()){
+                table.removeChild(table.firstChild);
+            }
+        }
+
+        var lstActionType = actionStore.getAllActions();
+        var dataString = JSON.stringify(lstActionType);
+        var jsonTab = JSON.parse(dataString);
+        
+        for(var i= 0; i < jsonTab.length; i++)
+        {
+            var data = jsonTab[i];
+            this.AddNew(data);
+        }
+    }
+    
+
+    SubmitAction(){
+
+        var text = '{'
+       +'"Name" :' + '"' +$('#action_name').val() + '"'+','
+       +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
+       +'"ControlType" : '+ '"' +$('#control_type').val() + '"' + ','
+       +'"MovementType" : '+ '"' +$('#mov_type').val() + '"'
+       +'}';
+       
+       alert("Ajout Réussi");
+
+       requesthandler.postNewActionType(text);
+    }
+
+    AddNew(data:any)
+    {
+            var doc = document.getElementsByClassName("action_table");
+			  var x = document.createElement("tr");
+			  
+			  var tnom = document.createElement("td");
+			  tnom.innerHTML=data['Name'];
+              var tdesc =  document.createElement("td");
+			  tdesc.innerHTML= data['Description']
+              var tc = document.createElement("td");
+			  tc.innerHTML=data['ControlType']
+              var tm =  document.createElement("td");
+			  tm.innerHTML= data['MovementType']
+			  x.appendChild(tnom);
+              x.appendChild(tdesc);
+              x.appendChild(tc);
+              x.appendChild(tm);
+			  console.log(x);
+			  $('#action_table tbody').append(x);
+    }
+    
+    
+    OnKeyPress(event:any) {
+    if (event.which === 13 /* Enter */) {
+      event.preventDefault();
+    }
+    }
+
+
     render() {
         
         function Reussi() {
             alert("Ajout réussi")
         }
 
-        $(function() {
-            var table = $('#action_table');
-            var http = new XMLHttpRequest();
-            var url = serverURL + "/GetActionType";
-            http.open("GET", url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.send(null);
-            http.onreadystatechange = function() {
-                if (http.readyState === 4) {
-                var data = JSON.parse(http.responseText);
-                        console.log(data);
-                    for(var i = 0; i < data.length; i++){
-                        var objAction = data[i];
+$(function(){
+    var $tbody = $('#action_table tbody');
+    var $rowCount = $('#action_table tr').length;
+    var warningTr =   "<tr id='noAction'><td>Aucune action n'a été trouvée</td></tr>"
+    var idWarning = $('#noAction');
 
-                    AddNewRow(String(objAction.Nom), String(objAction.Description));
-                    }
-                }
-            }
-        });
+    if($rowCount== 0){
 
-      function SubmitAction(){
-       
-         
-        var text = '{'
-       +'"Nom" :' + '"' +$('#action_name').val() + '"'+','
-       +'"Description" : '+ '"' +$('#action_desc').val() + '"'
-       +'}';
-var xmlhttp = new XMLHttpRequest();
-     
-  xmlhttp.open('POST', serverURL + '/PostActionType', true);
-  xmlhttp.setRequestHeader('Content-type', 'application/json');
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState === 4) {
-       var response = xmlhttp.responseText;
-       console.log(response)
+        $tbody.append(warningTr);
+    }else{
+        $tbody.remove('#noAction');
     }
-   
-  };
-  xmlhttp.send(text);
-    AddNewRow(String($('#action_name').val()), String($('#action_desc').val()));
+});
 
-    $('#action_name').val('');
-    $('#action_desc').val('');
-}
-        
-    function AddNewRow(actionName:string, actionDesc:string){
-        
-        
-         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td>" + String(actionDesc) + 
-         "</td><td><button className=\"btn btn-default btn-warning\">Modifier</button>"
-         + "<Button className=\"btn btn-danger btn-default\">Supprimer</button></td></tr>"
 
+    function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
+        
+        
+         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
+                        + String(actionDesc) + "</td><td>" 
+                        + String(controlType) + "</td><td>" 
+                        + String(movType) + "</td></tr>";
 
             $('#action_table tbody').append(trToAdd)
     }
-        return (
-                    
 
-                    <div className="container">
-                        <div className="row">
+        return (
+
+                <div className="container action_page" >
+                        <div className="row col-lg-12">
                             <div className="col-md-6 col-sm-6 col-xs-12">
 
                                 <h1>Action types :</h1>
 
-                                <table className="table table-bordered table-hover" id="action_table">
+                                <table className="table table-bordered table-hover striped bordered condensed hover" id="action_table">
                                     <thead>
                                         <tr >
                                             <th className="text-center">
@@ -92,24 +137,15 @@ var xmlhttp = new XMLHttpRequest();
                                                 Description
                                             </th>
                                             <th className="text-center">
-                                                Actions
+                                                Type de contrôle
+                                            </th>
+                                            <th className="text-center">
+                                                Type de mouvement
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr id='action1'>
-                                            <td>
-                                                Passe
-                                            </td>
-                                            <td>
-                                                Une belle passe
-                                            </td>
-                                            <td>
-                                            <button className="btn btn-default btn-warning">Modifier</button>
-                                            <button className="btn btn-danger btn-default">Supprimer</button>
-                                            </td>
-                                        </tr>
-                                        <tr id='addr1'></tr>
+                                    <tbody id="table_action">
+                                        
                                     </tbody>
                                 </table>
 
@@ -122,7 +158,7 @@ var xmlhttp = new XMLHttpRequest();
                                             *
                                         </span>
                                         </label>
-                                        <input className="form-control" id="action_name" name="Nom" type="text"/>
+                                        <input className="form-control requiredField" id="action_name" name="Nom" type="text" required/>
                                     </div>
                                     <div className="form-group ">
                                         <label className="control-label " htmlFor="action_desc">
@@ -130,6 +166,22 @@ var xmlhttp = new XMLHttpRequest();
                                         </label>
                                         <textarea className="form-control" cols={40} id="action_desc" name="Description" rows={10}></textarea>
                                     </div>
+                                        <div className="form-group">
+                                        
+                                        <label className="control-label requiredField" htmlFor="mov_type">
+                                        Type de contrôle :
+                                        <span className="asteriskField">
+                                            *
+                                        </span>
+                                        </label>
+                                        <select className="select form-control" id="control_type" name="control_type">
+                                            <option value="Acquisition">Acquisition</option>
+                                            <option value="Separation">Séparation</option>
+                                        </select>
+
+                                        </div>
+
+
                                         <div className="form-group ">
                                         <label className="control-label requiredField" htmlFor="mov_type">
                                         Type de mouvement :
@@ -138,15 +190,15 @@ var xmlhttp = new XMLHttpRequest();
                                         </span>
                                         </label>
                                         <select className="select form-control" id="mov_type" name="mov_type">
-                                            <option value="Defensive">Defensive</option>
-                                            <option value="Offensive">Offensive</option>
+                                            <option value="Positive">Positive</option>
+                                            <option value="Negative">Negative</option>
                                             <option value="Neutre">Neutre</option>
                                         </select>
                                     </div>
                                     <div className="form-group">
                                         <div>
-                                        <Button bsStyle="primary" onClick={SubmitAction}>
-                                            Submit
+                                        <Button bsStyle="primary" onClick={this.SubmitAction}>
+                                            Ajouter
                                         </Button>
                                         </div>
                                     </div>
