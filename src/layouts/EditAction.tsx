@@ -2,9 +2,7 @@ import dispatcher from "../dispatcher/dispatcher";
 import {serverURL} from "config"
 import * as axios from 'axios';
 
-
 export function getJoueur() {
-    console.log("okay wtf");
     axios.default.get(serverURL+'/joueur')
     .then(function(response:any){  
         dispatcher.dispatch({ type: "getJoueurEdit", text: response.data  });     
@@ -24,3 +22,4 @@ export function postAction(stringContenu: string) {
         dispatcher.dispatch({ type: "postActionEdit", text: "error"  });
     })    
 }
+

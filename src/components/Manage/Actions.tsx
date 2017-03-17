@@ -4,7 +4,11 @@ import {Button, Alert} from "react-bootstrap";
 import * as $ from "jquery";
 
 import * as requesthandler from './RequestHandler';
+<<<<<<< HEAD
 import actionStore from '../../Stores/ActionsStore';
+=======
+import actionStore from '../../stores/ActionsStore';
+>>>>>>> dev
 
 
 export interface ILayoutProps {}

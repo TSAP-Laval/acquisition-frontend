@@ -16,29 +16,33 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
     }
 
     render() {
-        var msg = null;
-        var style = "";
+        let msg = null;
+        let style = "invisible";
         
         switch (this.props.message.message) {
             case "FORMAT":
-                msg = "Le fichier choisi n'est pas dans un format vidéo reconnu"
+                msg = "Le fichier choisi n'est pas dans un format vidéo reconnu";
                 break;
             case "TOO_MANY":
-                msg = "Veuillez ne sélectionner qu'un seul fichier"
+                msg = "Veuillez ne sélectionner qu'un seul fichier";
                 break;
             case "NO_FILE":
-                msg = "Veuillez sélectionner un fichier à ajouter"
+                msg = "Veuillez sélectionner un fichier à ajouter";
+                break;
             case "EXIST":
-                msg = "Un fichier de même nom existe déjà dans notre base de donnée.\n Veuillez choisir un fichier de nom différent"
+                msg = "Un fichier de même nom existe déjà dans notre base de donnée.\n Veuillez choisir un fichier de nom différent";
                 break;
             case "UPLOAD_SUCCESS":
-                msg = "Le fichier a bel et bien été envoyé sur le serveur"
+                msg = "Le fichier a bel et bien été envoyé sur le serveur";
                 break;
             case "CANCEL":
-                msg = "Importation annulée avec succès!"
+                msg = "Importation annulée avec succès!";
                 break;
             case "SAVE":
-                msg = "Les informations sur la partie en cours ont bel et bien été sauvegardées"
+                msg = "Les informations sur la partie en cours ont bel et bien été sauvegardées";
+                break;
+            case "UNKNOWN":
+                msg = "Une erreur inconnue est survenue ! Veuillez contacter l'administrateur pour plus de soutient";
                 break;
         }
 

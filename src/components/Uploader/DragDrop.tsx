@@ -33,7 +33,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
             progress: ["0"], 
             message: Store.getMessage(), 
             uploading: false, 
-            open_form: false 
+            open_form: false, 
         };
     }
 
@@ -56,50 +56,38 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         Store.removeListener("open_form", this._onOpenForm);
         Store.removeListener("close_form", this._onCloseForm);
     }
+    shouldComponentUpdate(nextState: ILayoutState) {
+        this.setState(nextState);
+        return true;
+    }
 
     _onMessage() {
-        this.setState({
-            progress: this.state.progress, 
-            message: Store.getMessage(),
-            uploading: this.state.uploading,
-            open_form: this.state.open_form,
-        });
+        this.state.message = Store.getMessage();
+        this.shouldComponentUpdate(this.state);
     }
 
     _onUploading() {
-        this.setState({
-            progress: Store.getProgress(), 
-            message: this.state.message,
-            uploading: true,
-            open_form: this.state.open_form,
-        });
+        this.state.uploading = true;
+        this.state.progress = Store.getProgress();
+
+        this.shouldComponentUpdate(this.state);
     }
 
     _onUploadEnd() {
-        this.setState({
-            progress: Store.getProgress(), 
-            message: this.state.message,
-            uploading: false,
-            open_form: this.state.open_form,
-        });
+        this.state.progress = Store.getProgress();
+        this.state.uploading = false;
+
+        this.shouldComponentUpdate(this.state);
     }
 
     _onOpenForm() {
-        this.setState({
-            progress: this.state.progress, 
-            message: this.state.message,
-            uploading: this.state.uploading,
-            open_form: true,
-        });
+        this.state.open_form = true;
+        this.shouldComponentUpdate(this.state);
     }
 
     _onCloseForm() {
-        this.setState({
-            progress: this.state.progress, 
-            message: this.state.message,
-            uploading: this.state.uploading,
-            open_form: false,
-        });
+        this.state.open_form = false;
+        this.shouldComponentUpdate(this.state);
     }
 
     onDrop(acceptedFiles: Array<File>){
@@ -116,10 +104,10 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
     
     render() {
-        var form     =  null;
-        var message  =  null;
-        var progress =  this.state.progress == null ? 0 : this.state.progress;
-        var dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
+        let form     =  null;
+        let message  =  null;
+        let progress =  this.state.progress == null ? 0 : this.state.progress;
+        let dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                             onDrop={ this.onDrop}>
                             <div id="drop-zone">
                                 Déposer le fichier ici
@@ -131,7 +119,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         } 
 
         if (this.state.uploading) {
-            var style = {width: progress + "%"};
+            let style = {width: progress + "%"};
             dropzone =  <div className="progress">
                             <div className="progress-bar progress-bar-striped active" 
                                 role="progressbar" aria-valuenow="45" aria-valuemin="0" 

@@ -3,7 +3,11 @@ import * as $ from "jquery";
 
 import {Button, Alert, Modal} from "react-bootstrap";
 
+<<<<<<< HEAD
 import CoachStore from "../../Stores/CoachStore";
+=======
+import CoachStore from "../../stores/CoachStore";
+>>>>>>> dev
 import * as RequestHandler from "./RequestHandler";
 
 export interface ILayoutProps {}

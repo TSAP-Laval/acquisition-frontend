@@ -140,8 +140,9 @@ render() {
             <input type="submit" value="Submit"  />    
         </div>  
       </form>             
-      <div id="LesJoueurs">      
-      <ul id="lstJoueur"></ul>
+      <div id="LesJoueurs">
+        <img src="../img/terrain-soccer.jpg" alt="Smiley face"></img>
+        <ul id="lstJoueur"></ul>
       </div>
       </div>
         );

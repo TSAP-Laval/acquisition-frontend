@@ -1,4 +1,4 @@
-var debug = !(process.env.ENV === 'production');
+var debug = !(process.env.NODE_ENV === 'production');
 console.log("DEBUG: " + debug.valueOf());
 
 var webpack = require('webpack');
@@ -62,7 +62,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".scss"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".scss" , ".css"]
     },
 
     module: {

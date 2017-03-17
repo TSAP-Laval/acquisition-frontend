@@ -152,8 +152,6 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'}'
         manageActions.postJoueur(text);
     }
-  
-      
 
 }
 render() {
