@@ -33,9 +33,16 @@ export function cancelUpload() {
     });
 }
 
-export function save() {
+export function save(teamID: number, opposingTeam: string, status: string, 
+                     locationID: number, fieldCondition: string, date: string) {
     dispatcher.dispatch({
         type: "UPLOAD.SAVE",
+        teamID: teamID,
+        opposingTeam: opposingTeam,
+        status: status,
+        locationID: locationID,
+        fieldCondition: fieldCondition,
+        date: date,
     });
 }
 

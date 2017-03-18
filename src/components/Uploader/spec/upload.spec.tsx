@@ -46,7 +46,7 @@ describe("Upload page", function() {
 
         expect(renderedDOM().children.length).to.equal(1);
         expect(renderedDivs.length).to.equal(3);
-        expect(renderedDivs[2].textContent).to.equal("Déposer le fichier ici");
+        expect(renderedDivs[2].textContent).to.equal("Déposer le(s) fichier(s) ici");
     });
 
     it('should call `open` method', () => {

@@ -14,6 +14,7 @@ class UploadStore extends EventEmitter {
     source: axios.CancelTokenSource;
     uploading: boolean = false;
     response: Object = null;
+    gameID: number;
 
     constructor() {
         super();
@@ -44,6 +45,10 @@ class UploadStore extends EventEmitter {
 
     getTeams() {
         return this.teams;
+    }
+
+    getGameID() {
+        return this.gameID;
     }
 
     getFields() {
@@ -86,8 +91,12 @@ class UploadStore extends EventEmitter {
 
         axios.default.post(serverURL + '/upload', form, config).then(function (r: axios.AxiosResponse) {
             console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
-            if (r.data === 'Exist')
+            if (r.data['exist'] === 'true') {
                 this.addMessage(true, "EXIST");
+                this.emit("close_form");
+                this.emit("upload_ended");
+            } else
+                this.gameID = r.data['game_id'];
         }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
             // Only if it's not the cancel actions that cause the error
@@ -125,7 +134,7 @@ class UploadStore extends EventEmitter {
         let url = text === "" ? serverURL + '/terrains' : serverURL + '/terrains/' + text;
 
         axios.default.get(url, config).then(function (r: axios.AxiosResponse) {
-            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            //console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.addFields(r.data);
         }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
@@ -135,8 +144,33 @@ class UploadStore extends EventEmitter {
         }.bind(this));
     }
 
-    save() {
-        // TODO
+    save(teamID: number, opposingTeam: string, status: string, 
+         locationID: number, fieldCondition: string, date: string) {
+        let gameInfos = {
+            "TeamID": teamID,
+            "Status": status,
+            "SeasonID": 1,
+            "OpposingTeam": opposingTeam,
+            "LocationID": locationID,
+            "FieldCondition": fieldCondition,
+            "Date": date
+        }
+
+        let config = {
+            headers: {'Content-Type': "application/json;"}
+        };
+        let url = serverURL + '/parties/' + this.gameID;
+
+        axios.default.put(url, gameInfos,config).then(function (r: axios.AxiosResponse) {
+            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            //this.addFields(r.data);
+        }.bind(this)).catch(function (error: string) {
+            console.log("ERROR (XHR): \n" + error);
+            this.addMessage(true, "UNKNOWN");
+            this.emit("close_form");
+            this.emit("upload_ended");
+        }.bind(this));
+
     }
 
     addMessage(isError: boolean = false, message: string = null) {
@@ -183,7 +217,8 @@ class UploadStore extends EventEmitter {
                     this.emit("close_form");
                 break;
             case "UPLOAD.SAVE":
-                this.save();
+                this.save(action.teamID, action.opposingTeam, action.status, 
+                          action.locationID, action.fieldCondition, action.date);
                 this.addMessage(false, 'SAVE');
                 this.emit("close_form");
                 break;

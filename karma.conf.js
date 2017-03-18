@@ -33,7 +33,7 @@ module.exports = function (config) {
             //Configuration required by enzyme
             {
                 test: /\.json$/,
-                loader: 'json'
+                loader: 'json-loader'
             }
           ]
       },
