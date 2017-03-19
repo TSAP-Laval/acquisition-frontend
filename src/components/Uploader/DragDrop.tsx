@@ -9,10 +9,10 @@ import { IMessages }  from "../../interfaces/interfaces"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    progress: string[]
-    message: IMessages
-    uploading: boolean
-    open_form: boolean
+    progress?: string[]
+    message?: IMessages
+    uploading?: boolean
+    open_form?: boolean
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
