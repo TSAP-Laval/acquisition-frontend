@@ -5,9 +5,6 @@ import store from "./EditStore";
 import * as editActions from "./EditAction";
 import Header from "./Header"
 
-
-
-
 require('../sass/Layout.scss');
 
 
