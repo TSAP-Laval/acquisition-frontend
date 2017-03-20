@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as $ from "jquery";
 import Store from "../stores/EditStore";
 import VideoStore from "../stores/VideoPlayerStore";
+import UploaderStore from "../stores/UploaderStore";
 import * as Actions from "../actions/EditAction";
 import Header from "./Header"
 
