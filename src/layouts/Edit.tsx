@@ -200,6 +200,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
           <ul id="lstJoueur"></ul>
         </div>
         <div id="terrain-container" className="container-fluid">
+          <div id="circle-centre"></div>
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
             <div id="def-gauche">
               <ul className="players-list" id="def-gauche-list">{rows[0][0]}</ul>
