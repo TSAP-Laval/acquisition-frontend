@@ -163,6 +163,7 @@ class UploadStore extends EventEmitter {
 
         axios.default.put(url, gameInfos,config).then(function (r: axios.AxiosResponse) {
             console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            this.saved = true;
         }.bind(this)).catch(function (error: string) {
             console.log("ERROR (XHR): \n" + error);
             this.addMessage(true, "UNKNOWN");
@@ -185,6 +186,20 @@ class UploadStore extends EventEmitter {
         this.source = axios.default.CancelToken.source();
     }
 
+    sendCancel() {
+        let url = serverURL + '/upload/' + this.gameID;
+
+        axios.default.delete(url).then(function (r: axios.AxiosResponse) {
+            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            this.saved = true;
+        }.bind(this)).catch(function (error: string) {
+            console.log("ERROR (XHR): \n" + error);
+            this.addMessage(true, "UNKNOWN");
+            this.emit("close_form");
+            this.emit("upload_ended");
+        }.bind(this));
+    }
+
     handleActions(action: any){
         switch(action.type) {
             case "UPLOAD.SHOW_MESSAGE":
@@ -196,15 +211,12 @@ class UploadStore extends EventEmitter {
                 this.sendVideo(action.files);
                 this.emit("open_form");
                 break;
-            case "UPLOAD.CLOSE_FORM":
-                // If video is uploaded
-                if (this.progress[0] === "100")
-                    this.emit("close_form");
-                else
+            case "UPLOAD.OPEN_CONFIRM_FORM":
                     this.emit("open_confirm_form");
                 break;
             case "UPLOAD.CLOSE_CONFIRM_FORM":
                 this.emit("close_confirm_form");
+                this.addMessage(false, "");
                 break;
             case "UPLOAD.CANCEL_UPLOAD":
                     this.uploading = false;
@@ -212,7 +224,9 @@ class UploadStore extends EventEmitter {
                         this.cancelUpload()
                         this.emit("upload_ended");
                         this.addMessage(false, 'CANCEL');
-                    }
+                    } else
+                        this.addMessage(false, 'CANCEL_UPLOAD');
+                    this.sendCancel();
                     this.emit("close_form");
                 break;
             case "UPLOAD.SAVE":

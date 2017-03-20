@@ -57,38 +57,26 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         Store.removeListener("close_form", this._onCloseForm);
     }
 
-    shouldComponentUpdate(nextState: ILayoutState) {
-        this.setState(nextState);
-        return true;
-    }
-
     _onMessage() {
-        this.state.message = Store.getMessage();
-        this.shouldComponentUpdate(this.state);
+        this.setState({message: Store.getMessage()});
     }
 
     _onUploading() {
-        this.state.uploading = true;
-        this.state.progress = Store.getProgress();
-
-        this.shouldComponentUpdate(this.state);
+        this.setState({progress: Store.getProgress()});
+        this.setState({uploading: true});
     }
 
     _onUploadEnd() {
-        this.state.progress = Store.getProgress();
-        this.state.uploading = false;
-
-        this.shouldComponentUpdate(this.state);
+        this.setState({progress: Store.getProgress()});
+        this.setState({uploading: false});
     }
 
     _onOpenForm() {
-        this.state.open_form = true;
-        this.shouldComponentUpdate(this.state);
+        this.setState({open_form: true});
     }
 
     _onCloseForm() {
-        this.state.open_form = false;
-        this.shouldComponentUpdate(this.state);
+        this.setState({open_form: false});
     }
 
     onDrop(acceptedFiles: Array<File>){
