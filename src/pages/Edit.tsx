@@ -4,7 +4,7 @@ require('../sass/Layout.scss');
 
 import Header from "../layouts/Header"
 import EditTest from "../layouts/Edit"
-import VideoPlayer from "../layouts/VideoPlayer"
+import VideoPlayer from "../components/VideoPlayer"
 import SideBar from "../layouts/SideBar"
 import Footer from "../layouts/Footer"
 export interface ILayoutProps {}
@@ -16,12 +16,13 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
             <div>
                 <SideBar />
                 <div className="video-container">
-                    <VideoPlayer />
+                    <VideoPlayer
+                        url="//vjs.zencdn.net/v/oceans.mp4"
+                     />
                 </div>
                 <div className="container">
                     <div className="row">
-                        <div className="wrapper col-xs-12">   
-                            <h2>Les joueurs de l'équipe</h2>
+                        <div className="wrapper col-xs-12">
                             <span id="rep"></span> 
                             <EditTest />
                             <Footer />

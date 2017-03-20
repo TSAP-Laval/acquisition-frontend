@@ -19,7 +19,11 @@
 - [ ] Other
 
 
+<<<<<<< HEAD
+### If people needs to do some things, incude them with their tasks as shown bellow:
+=======
 ### If people needs to do some things, include them with their tasks as shown bellow:
+>>>>>>> dev
 1. The title and description of the task.
     - [X] Alex D
     - [ ] Alex H

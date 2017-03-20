@@ -93,9 +93,9 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 	let _VilleTeam = document.getElementById("Ville")as HTMLInputElement
 	var VilleTeam= _VilleTeam.value
 	let _sportSelect = document.getElementsByName("Sport")[0] as HTMLSelectElement
-	var optSport = _sportSelect.options[_sportSelect.selectedIndex];
+	var optSport = _sportSelect.options[_sportSelect.selectedIndex] as HTMLOptionElement;
 	let _niveauSelect = document.getElementsByName("Niveau")[0] as HTMLSelectElement
-	var niveau = _niveauSelect.options[_niveauSelect.selectedIndex];
+	var niveau = _niveauSelect.options[_niveauSelect.selectedIndex] as HTMLOptionElement;
 	//Preparation du json que l'on va envoyer au server
 	var text = '{'
 		+'"Name" :'+'"'+nomTeam+'",'
