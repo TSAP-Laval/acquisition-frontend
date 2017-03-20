@@ -93,24 +93,27 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     onDrop(acceptedFiles: Array<File>){
         // For the moment we only accept MP4 files
         // TODO : Decide witch formats should be used
-        if (acceptedFiles[0].type !== "video/mp4")
-            Actions.showMessage("FORMAT", true);
-        else if (acceptedFiles.length > 1) 
+        acceptedFiles.forEach(file => {
+            if (file.type !== "video/mp4")
+                Actions.showMessage("FORMAT", true);
+        });
+        
+        if (acceptedFiles.length > 5) 
             Actions.showMessage("TOO_MANY", true);
         else if (acceptedFiles.length < 1) 
             Actions.showMessage("NO_FILE", true);
         else
-            Actions.upload(acceptedFiles[0]);
+            Actions.upload(acceptedFiles);
     }
     
     render() {
         let form     =  null;
         let message  =  null;
         let progress =  this.state.progress == null ? 0 : this.state.progress;
-        let dropzone =  <Dropzone multiple={false} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
+        let dropzone =  <Dropzone multiple={true} className="upload-drop-zone" activeClassName="upload-drop-zone drop" 
                             onDrop={ this.onDrop}>
                             <div id="drop-zone">
-                                Déposer le fichier ici
+                                Déposer le(s) fichier(s) ici
                             </div>
                         </Dropzone>
 
