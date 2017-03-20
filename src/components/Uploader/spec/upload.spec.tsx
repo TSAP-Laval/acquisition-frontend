@@ -52,19 +52,6 @@ describe("Upload page", () => {
         expect(renderedDivs[2].textContent).to.equal("Déposer le(s) fichier(s) ici");
     });
 
-    it('should call `open` method', () => {
-        let eventStub: sinon.SinonStub = stub(dragDrop, 'simulate');
-        let clickStub: sinon.SinonStub = stub(dragDrop, 'click');
-        TestUtils.Simulate.click(TestUtils.scryRenderedDOMComponentsWithTag(dragDrop.instance(), 'input')[0]);
-        dragDrop.simulate('click');
-        assert.ok(MAIN_VIEW_PROPS.onDrop.calledOnce);
-        expect(eventStub.callCount).to.equal(1);
-        expect(clickStub.callCount).to.equal(1);
-
-        dragDrop.simulate('drop', { dataTransfer: { items: file } });
-        expect(eventStub.callCount).to.equal(2);
-    });
-
     after(() => {
         dragDrop.unmount();
     });
