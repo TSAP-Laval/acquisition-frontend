@@ -12,13 +12,13 @@ import { ILocations, ITeams, IGames } from "../../interfaces/interfaces"
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    teams: any[]
-    fields: any[]
-    open_confirm_form: boolean
-    checkboxChecked: boolean
-    game: IGames
-    errors: string[]
-    savedOnce: boolean
+    teams?: any[]
+    fields?: any[]
+    openConfirmForm?: boolean
+    checkboxChecked?: boolean
+    game?: IGames
+    errors?: string[]
+    savedOnce?: boolean
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -45,7 +45,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         this.state = {
             teams: Store.getTeams(), 
             fields: Store.getFields(),
-            open_confirm_form: false, 
+            openConfirmForm: false, 
             checkboxChecked: true,
             game: {
                 ID: 0,
@@ -86,23 +86,19 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     _onOpenConfirmForm(){
-        this.state.open_confirm_form = true;
-        this.shouldComponentUpdate(this.state);
+        this.setState({openConfirmForm: true});
     }
 
     _onCloseConfirmForm(){
-        this.state.open_confirm_form = false;
-        this.shouldComponentUpdate(this.state);
+        this.setState({openConfirmForm: false});
     }
 
     _onTeamSearch() {
-        this.state.teams = Store.getTeams();
-        this.shouldComponentUpdate(this.state);
+        this.setState({teams: Store.getTeams()});
     }
 
     _onFieldSearch() {
-        this.state.fields = Store.getFields();
-        this.shouldComponentUpdate(this.state);
+        this.setState({fields: Store.getFields()});
     }
 
     closeForm() {
@@ -110,9 +106,11 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     handleCheckboxChange() {
-        this.state.checkboxChecked = !this.state.checkboxChecked;
-        this.state.game.Status = this.state.checkboxChecked ? "local": "visiteur";
-        this.shouldComponentUpdate(this.state);
+        let game = this.state.game;
+        this.setState({checkboxChecked: !this.state.checkboxChecked});
+        game.Status = this.state.checkboxChecked ? "local": "visiteur";
+        this.setState({game: game});
+        
     }
 
     onSave() {
@@ -120,6 +118,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
             this.state.savedOnce = true;
             this.shouldComponentUpdate(this.state);
         }
+
         this.errorChecker();
 
         if (this.state.errors.length === 0) {
@@ -235,7 +234,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
         const AsyncComponent = Select.Async;
         let multi = false;
-        let confForm = this.state.open_confirm_form ? <ConfForm/> : null;
+        let confForm = this.state.openConfirmForm ? <ConfForm/> : null;
         const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>)
 
         return (

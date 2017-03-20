@@ -17,7 +17,7 @@ export function upload(files: File[]) {
 
 export function closeForm() {
     dispatcher.dispatch({
-        type: "UPLOAD.CLOSE_FORM",
+        type: "UPLOAD.OPEN_CONFIRM_FORM",
     });
 }
 
