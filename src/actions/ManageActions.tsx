@@ -11,9 +11,9 @@ export function getSaison() {
 }
 //Modif joueur
 export function putJoueur(stringContenu: string,id:any) {
-     axios.default.put(serverURL + '/joueur/'+id)
+     axios.default.put(serverURL + '/joueur/'+id,stringContenu)
     .then(function(response: any){
-        dispatcher.dispatch({ type: "putJoueur", text: response.data  });     
+        getJoueur()    
     });  
 }
 //Va rechercher toutes les sports
