@@ -57,7 +57,7 @@ LstJoueurs(){
 }
 ModifJoueur(i:any, id:any){
     var doc = document.getElementById("action_table") as HTMLTableElement;
-    var t = doc.rows[i+1];
+    var t = doc.rows[i+1] as HTMLTableRowElement;
     var nomjoueur= t.cells[0].innerHTML;
     var inputNom = document.getElementById("Nom") as HTMLInputElement;
     inputNom.value=nomjoueur;
@@ -112,7 +112,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     let _EmailJoueur = document.getElementById("Email")as HTMLInputElement
     var emailJoueur= _EmailJoueur.value
     let _EquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
-    var optEquipe = _EquipeSelect.options[_EquipeSelect.selectedIndex];
+    var optEquipe = _EquipeSelect.options[_EquipeSelect.selectedIndex] as HTMLOptionElement;
 
       //Preparation du json que l'on va envoyer au server
       
