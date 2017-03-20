@@ -52,8 +52,7 @@ export default class Players extends React.Component<ILayoutProps, ILayoutState>
             tdEmail.innerHTML=data.Email;
             var btnModifier = document.createElement("button") as HTMLButtonElement;
             btnModifier.innerHTML="modifier";
-            //btnModifier.onclick=this.RightClick.bind(this);
-            btnModifier.value=data.ID;
+            btnModifier.onclick=this.ModifJoueur.bind(this,i,data.ID);
             x.appendChild(tdNom);
             x.appendChild(tdPrenom);
             x.appendChild(tdNumero);
@@ -61,6 +60,32 @@ export default class Players extends React.Component<ILayoutProps, ILayoutState>
             x.appendChild(btnModifier);
             doc.appendChild(x);
         }
+}
+ModifJoueur(i:any, id:any){
+    var doc = document.getElementById("action_table") as HTMLTableElement;
+    var t = doc.rows[i+1];
+    var nomjoueur= t.cells[0].innerHTML;
+    var inputNom = document.getElementById("Nom") as HTMLInputElement;
+    inputNom.value=nomjoueur;
+    var prenomjoueur= t.cells[1].innerHTML;
+    var inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
+    inputPrenom.value=prenomjoueur;
+    var numeroJoueur= t.cells[2].innerHTML;
+    var inputNumero = document.getElementById("Numero") as HTMLInputElement;
+    inputNumero.value=numeroJoueur;
+    var emailJoueur= t.cells[3].innerHTML;
+    var inputEmail = document.getElementById("Email") as HTMLInputElement;
+    inputEmail.value=emailJoueur;
+    var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    btnSubmit.value="Modifier";
+    var inputID = document.getElementById("ID") as HTMLInputElement;
+    inputID.value=id;
+    
+}
+ClearDomElement(nom:string){
+    var doc = document.getElementById(nom);
+    while (doc.hasChildNodes()) {
+    doc.removeChild(doc.lastChild);
     }
 
     ModifJoueur(i:any, id:any) {
@@ -145,9 +170,22 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"TokenConnexion" : "test",'
         +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
         +'}'
-        console.log(text);
          manageActions.putJoueur(text,IdJoueur);
-
+    }
+    else
+    {
+        var text = '{'
+        +'"Lname" :'+ '"'+ nomjoueur+'",'
+        +'"Fname" :'+ '"'+prenomjoueur + '",'
+        +'"Number" : '+numerojoueur + ','
+        +'"Email" : '+ '"'+emailJoueur + '",'
+        +'"PassHash" : "test22" ,'
+        +'"TokenInvitation" : "test" ,'
+        +'"TokenReinitialisation" : "test ",'
+        +'"TokenConnexion" : "test",'
+        +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
+        +'}'
+        manageActions.postJoueur(text);
     }
 
 
@@ -179,28 +217,26 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
                                             Action
                                         </th>                                                                               
                                     </tr>
-                                </thead>
-                                <tbody id="tbody">
-                                </tbody>
-                            </table>
-                        </div>		
-                        <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
-                            <h3>Creer un nouveau joueur</h3>     
-                            <label htmlFor="Nom">Nom</label>
-                            <input type="text" id="Nom" name="Nom"/> 
-                            <label htmlFor="Prenom">Prenom</label>
-                            <input type="text"id="Prenom" name="Prenom"/>
-                            <label htmlFor="Numero">Numero</label>
-                            <input type="text"id="Numero" name="Numero"/> 
-                            <label htmlFor="Email">Email</label>
-                            <input type="text"id="Email" name="Email"/> 			
-                            <label htmlFor="equipe">Équipe</label>                  
-                            <select id="equipe" name="equipe"></select><br></br>   
-                            <input type="hidden" id="ID"/> 
-                            <input type="submit" value="Ajouter" id="btnSubmit" />                
-                        </form>
-                    </div>
-                </div> 
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                        </table>
+            </div>		
+            <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
+                <h3>Creer un nouveau joueur</h3>     
+                <label htmlFor="Nom">Nom</label>
+                <input type="text" id="Nom" name="Nom"/> 
+                <label htmlFor="Prenom">Prenom</label>
+                <input type="text"id="Prenom" name="Prenom"/>
+                <label htmlFor="Numero">Numero</label>
+                <input type="text"id="Numero" name="Numero"/> 
+                <label htmlFor="Email">Email</label>
+                <input type="text"id="Email" name="Email"/> 			
+                <label htmlFor="equipe">Équipe</label>                  
+                <select id="equipe" name="equipe"></select><br></br>   
+                <input type="hidden" id="ID"/> 
+                <input type="submit" value="Ajouter" id="btnSubmit"  />                
+            </form>
             </div>
         );
     }

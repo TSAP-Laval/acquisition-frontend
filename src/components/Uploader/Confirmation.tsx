@@ -24,7 +24,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
             <div>
                 <div id="confirm" className="modal fade in">
                     <div className="modal-body">
-                        Êtes-vous sûr de vouloir terminer l'importation ?
+                        Êtes-vous sûr de vouloir terminer l'analyse ?
                     </div>
                     <div className="modal-footer">
                         <button onClick={ this.closeConfirm } className="btn">Annuler</button>

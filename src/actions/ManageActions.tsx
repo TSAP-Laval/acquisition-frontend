@@ -10,35 +10,28 @@ export function getSaison() {
     });  
 }
 //Modif joueur
-
 export function putJoueur(stringContenu: string,id:any) {
-    
-    axios.default.put(serverURL + '/joueur/'+id, stringContenu).then(function (r: any) {
-        r.AppendHeader("Access-Control-Allow-Origin", "*");
-                    getJoueur();
-        }).catch(function (error: string) {
-            dispatcher.dispatch({ type: "putJoueur", text: "error"  });
-     });
-  ;  
-
+     axios.default.put(serverURL + '/joueur/'+id)
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "putJoueur", text: response.data  });     
+    });  
 }
-
 //Va rechercher toutes les sports
 export function getSport() {
      axios.default.get(serverURL + '/sports')
     .then(function(response: any){
         dispatcher.dispatch({ type: "getSports", text: response.data  });     
+
     });  
 }
-
 //Va rechercher toutes les sports pour les joueurs
 export function getSportJoueur() {
      axios.default.get(serverURL + '/sports')
-    .then(function(response: any){
-        dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });     
+    .then(function(response:any){
+
+    dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });     
     });  
 }
-
 //Va rechercher toutes les niveaux
 export function getNiveau() {
      axios.default.get(serverURL + '/niveau')
@@ -46,7 +39,6 @@ export function getNiveau() {
         dispatcher.dispatch({ type: "getNiveau", text: response.data  });     
     });  
 }
-
 //Va rechercher toutes les niveaux pour les joueurs
 export function getNiveauJoueur() {
      axios.default.get(serverURL + '/niveau')
@@ -54,7 +46,6 @@ export function getNiveauJoueur() {
         dispatcher.dispatch({ type: "getNiveauJoueur", text: response.data  });     
     });  
 }
-
 //Va rechercher toutes les joueurs
 export function getJoueur() {
      axios.default.get(serverURL + '/joueur')
@@ -78,11 +69,12 @@ export function getEquipesJoueur() {
 }
 //Ajout d'une saison
  export function postSaison(stringContenu: string) {
-        axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
-            dispatcher.dispatch({ type: "postAction", text: stringContenu  });
-        }).catch(function (error: string) {
-            dispatcher.dispatch({ type: "postAction", text: "error"  });
-        });
+     axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
+       dispatcher.dispatch({ type: "postAction", text: stringContenu  });
+    }).catch(function (error: string) {
+       dispatcher.dispatch({ type: "postAction", text: "error"  });
+   });
+        
 }
 //Ajout d'une équipe
 export function postTeam(stringContenu: string) {
@@ -91,6 +83,7 @@ export function postTeam(stringContenu: string) {
         }).catch(function (error: string) {
             dispatcher.dispatch({ type: "PostTeam", text: "error"  });
         });
+        
 }
 //Ajout d'un joueur
 export function postJoueur(stringContenu: string) {
@@ -100,4 +93,5 @@ export function postJoueur(stringContenu: string) {
             dispatcher.dispatch({ type: "PostJoueur", text: "error"  });
         });
 }
+
     
