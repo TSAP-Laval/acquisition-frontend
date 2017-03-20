@@ -56,6 +56,27 @@ LstJoueurs(){
             doc.appendChild(x);
         }
 }
+ModifJoueur(i:any, id:any){
+    var doc = document.getElementById("action_table") as HTMLTableElement;
+    var t = doc.rows[i+1] as HTMLTableRowElement;
+    var nomjoueur= t.cells[0].innerHTML;
+    var inputNom = document.getElementById("Nom") as HTMLInputElement;
+    inputNom.value=nomjoueur;
+    var prenomjoueur= t.cells[1].innerHTML;
+    var inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
+    inputPrenom.value=prenomjoueur;
+    var numeroJoueur= t.cells[2].innerHTML;
+    var inputNumero = document.getElementById("Numero") as HTMLInputElement;
+    inputNumero.value=numeroJoueur;
+    var emailJoueur= t.cells[3].innerHTML;
+    var inputEmail = document.getElementById("Email") as HTMLInputElement;
+    inputEmail.value=emailJoueur;
+    var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    btnSubmit.value="Modifier";
+    var inputID = document.getElementById("ID") as HTMLInputElement;
+    inputID.value=id;
+    
+}
 ClearDomElement(nom:string){
     var doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
