@@ -19,6 +19,7 @@
   dependencies:
     axios "*"
 
+
 "@types/chai@^3.4.35":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-3.4.35.tgz#e8d65f83492d2944f816fc620741821c28a8c900"
