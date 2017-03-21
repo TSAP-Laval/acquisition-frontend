@@ -102,7 +102,14 @@ body {
         -o-transition: all 0.3s ease-in-out;
         -moz-transition: all 0.3s ease-in-out;
 
-        div#slowFinder {
+        div#stepSetter {
+            label {
+                width: 100px;
+                line-height: 32px;
+            }
+        }
+
+        div#slowFinder, div#stepSetter {
             height: 32px;
             width: 275px;
             display: inline-flex;
@@ -110,7 +117,7 @@ body {
             vertical-align: bottom;
             position: relative;
 
-            div#slideTrack {
+            div.slideTrack {
                 height: 2px;
                 width: 200px;
                 top: 14px;
@@ -188,6 +195,7 @@ body {
             .time-jump {
                 font-weight: 100;
                 font-size: 10px;
+                width: 200px;
             }
         }
 
@@ -237,4 +245,78 @@ body {
         border-color: $brand-primary;
         color: $brand-primary;
     }
+}
+    
+ul.players-list {
+    list-style: none;
+}
+
+#terrain-container {
+    width: $t-width;
+    height: $t-height;
+    border: 4px solid $primary;
+    position: relative;
+    padding: 0px;
+
+    #circle-centre {
+        position: absolute;
+        width: $r-centre;
+        height: $r-centre;
+        border-radius: 100%;
+        border: 3px solid $primary;
+        left: 50%;
+        top: 50%;
+        margin-left: $r-centre-pad;
+        margin-top: $r-centre-pad;
+        z-index: 9;
+    }
+
+    .terrain-third {
+        height: 100%;
+
+        &:after {
+            text-align: center;
+            font-weight: 200;
+            text-transform: uppercase;
+            color: $default-color;
+            position: absolute;
+            width: $z-but-width;
+            height: $z-but-height;
+            border: 3px solid $primary;
+            top:50%;
+            margin-top: $z-top-pad;
+        }
+
+        &:nth-child(2) {
+            border-right: 1px dashed $default-color;
+
+            &:after {
+                content: 'Maison';
+                left: 0;
+                margin-left: -3px;
+            }
+        }
+
+        &:nth-child(3) {
+            border-right: 1px dashed $default-color;
+        }
+
+        &:nth-child(4) {
+
+            &:after {
+                content: 'Adversaire';
+                right: 0;
+                margin-right: -3px;
+            }
+        }
+    }
+}
+
+#terrain-container::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    background-color: $primary;
+    height: 100%;
+    left: 50%;
 }
