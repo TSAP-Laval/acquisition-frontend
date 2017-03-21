@@ -6,3 +6,13 @@ $default-color-hover: #777777;
 $primary: #000000;
 
 
+// Dimension du terrain
+$t-width:       900px;
+$t-height:      $t-width * 0.75;
+$z-but-width:   $t-width * 0.1375;
+$z-but-height:  $t-height * 0.4477777778;
+$z-top-pad:     ($z-but-height / 2) * -1;
+$but-width:     $t-width * 0.04583333333;
+$but-height:    $t-height * 0.2033333333;
+$r-centre:      $but-height;
+$r-centre-pad:  ($but-height / 2) * -1;
