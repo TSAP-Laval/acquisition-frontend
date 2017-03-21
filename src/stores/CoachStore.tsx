@@ -3,10 +3,21 @@ import { EventEmitter} from "events";
 import Dispatcher from "../dispatcher/dispatcher";
 import {IAction} from "../interfaces/interfaces";
 
+/*************************************
+   Auteur : Mehdi Laribi
+   Store  : Coachs  
+ *************************************/
+
 class CoachStore extends EventEmitter{
 
+
+/*************************************
+   Variables
+ *************************************/
 lstCoachs: any;
-    tempo:any;
+lstTeams:any;  
+
+tempo:any;  
 constructor(){
     super();
 
@@ -26,6 +37,15 @@ constructor(){
 }
 
 
+
+/*************************************
+   Public functions
+ *************************************/
+
+///
+/// Retourne la liste des coachs 
+///
+
     GetAllCoachs(){
         if(this.lstCoachs == null)
         {
@@ -36,7 +56,22 @@ constructor(){
         }
     }
 
+    
 
+///
+/// Retourne la liste des équipes disponibles
+///
+
+    GetAllTeams(){
+        if(this.lstTeams != null){
+            return this.lstTeams;
+        }
+    }    
+
+
+///
+/// Gestion des evenement  (Listener)
+///
     handleActions(action: IAction){
 
         switch (action.type) {
@@ -57,7 +92,13 @@ constructor(){
                 }
             this.emit("change");
                 break;
-
+                
+             case "GET_TEAMS":
+                this.lstTeams = [];
+                   for(var i=0;i<action.text.length;i++)
+                {     
+                    this.lstTeams.push(action.text[i]);  
+                }
             default:
                 break;
         }

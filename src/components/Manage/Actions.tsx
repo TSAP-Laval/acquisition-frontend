@@ -15,6 +15,8 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     
 
 
+
+    //On conponenent mounting 
     componentWillMount(){
         requesthandler.getActionTypes();
 
@@ -22,6 +24,8 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         this.ListAllActions();
         });
      }
+     
+    //Retourne la liste des actions déjà créées duh
     ListAllActions(){
 
         var table = document.getElementById('table_action');
@@ -43,7 +47,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         }
     }
     
-
+    //Post action 
     SubmitAction(){
 
         var text = '{'
@@ -58,6 +62,9 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
        requesthandler.postNewActionType(text);
     }
 
+
+    //Ajoute une nouvelle ligne contenant les actions ou l'action 
+    //nouvellement ajoutée.
     AddNew(data:any)
     {
             var doc = document.getElementsByClassName("action_table");
@@ -80,6 +87,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     }
     
     
+    //Previent le submit sur le bouton OK
     OnKeyPress(event:any) {
     if (event.which === 13 /* Enter */) {
       event.preventDefault();
@@ -89,10 +97,9 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
     render() {
         
-        function Reussi() {
-            alert("Ajout réussi")
-        }
 
+
+//Aucune row trouvée
 $(function(){
     var $tbody = $('#action_table tbody');
     var $rowCount = $('#action_table tr').length;
@@ -108,6 +115,7 @@ $(function(){
 });
 
 
+    //Ajout d'une nouvelle action
     function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
         
         
@@ -120,6 +128,7 @@ $(function(){
     }
 
         return (
+
 
                 <div className="container action_page" >
                         <div className="row col-lg-12">

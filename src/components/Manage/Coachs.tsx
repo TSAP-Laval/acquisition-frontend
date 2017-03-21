@@ -2,6 +2,7 @@ import * as React from "react";
 import * as $ from "jquery";
 
 import {Button, Alert, Modal} from "react-bootstrap";
+const Select =  require('react-select');
 
 import CoachStore from "../../stores/CoachStore";
 import * as RequestHandler from "./RequestHandler";
@@ -9,9 +10,13 @@ import * as RequestHandler from "./RequestHandler";
 export interface ILayoutProps {}
 export interface ILayoutState {}
 
+
+
+///Ajout d'une équipe modale
 const modalInstance = React.createClass({
     render() {
         return (
+
     <div className="static-modal">
         <Modal.Dialog>
         <Modal.Header>
@@ -65,8 +70,11 @@ const modalInstance = React.createClass({
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
 
 
+
+
     componentWillMount(){
         RequestHandler.getCoachs();
+        RequestHandler.getAllTeams();
 
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
@@ -91,13 +99,18 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         var listCoachs = CoachStore.GetAllCoachs();
         var dataString = JSON.stringify(listCoachs);
         var jsonTab = JSON.parse(dataString);
-        
+
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
             this.AddNew(data['Lname'],data['Fname'],data['Email'], data['Teams'], data['Actif'], i);
 
         }   
+        
+    }
+    ListAllTeams(){
+
+        var teamLstBox = document.getElementById('')
         
     }
 
@@ -157,8 +170,6 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               x.appendChild(tdTeam);
               x.appendChild(tdActif);
 
-              console.log(x);
-
               $('#coach_tbody').append(x);
     }
 
@@ -180,12 +191,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                         + String(coachMail) + "</td>"
                         + "<td></td><td>type='checkbox' className='coach_actif' value='true' checked></td></tr>";
 
-                    console.log(trToAdd);
             $('.coach_table tbody').append(trToAdd);
 
            
     }
-
+var options = [
+	{ value: 'one', label: 'One' },
+	{ value: 'two', label: 'Two' }
+];
 
         return (
 <div className="container action_page" >
@@ -277,6 +290,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                                     <option value="AAA">AAA</option>
                                                     <option value="recreatif">Récreatif</option>
                                                 </select>
+
+                                                <Select
+                                                name="form-field-name"
+                                                value="one"
+                                                multi={true}
+                                                searchable={true}
+                                                options={options}
+/>
                                         </div>
 
                                 </form>
