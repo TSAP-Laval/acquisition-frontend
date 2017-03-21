@@ -137,7 +137,7 @@ render() {
 						</tbody>
 					</table>
 					</div>
-				<form onSubmit={this.sendFormData.bind(this)} id="nouvSaison">  
+				<form onSubmit={this.sendFormData.bind(this)} id="nouvTeam">  
 				<h3>Creer une nouvelle équipe</h3>     
 				<label htmlFor="Nom">Nom</label>
 				<input type="text" id="Nom" name="Nom"/> <br></br>
