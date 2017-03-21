@@ -66,15 +66,12 @@ export interface ILayoutState {
 }
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
 
-
-
     Option: any[] =  [];
 
     constructor(){
         super();
         
         this.SelectedTeams = this.SelectedTeams.bind(this);
-
     this.state = {
         SelectedTeams:"",
         };
@@ -201,8 +198,6 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                 +'"Email" : '+ '"' +$('#coach_mail').val() + '",'
                 +'"Teams" : ' + jsonTeams
                 +'}';
-
-                
 
        RequestHandler.postCoach(text);
     }

@@ -81,8 +81,6 @@ constructor(){
         }
     }
 
-    
-
 ///
 /// Retourne la liste des équipes disponibles
 ///
@@ -106,8 +104,6 @@ constructor(){
             return this.lstSports;
         }else  {
             return this.sportTempo;
-        }
-    }    
 
 
 ///
@@ -134,6 +130,7 @@ constructor(){
         }
         return dataRetour;
     }
+
 
 ///
 /// Gestion des evenement  (Listener)
