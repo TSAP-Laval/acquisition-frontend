@@ -80,14 +80,17 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     onDrop(acceptedFiles: Array<File>){
+        var err: boolean = false;
         // For the moment we only accept MP4 files
         // TODO : Decide witch formats should be used
         acceptedFiles.forEach(file => {
             if (file.type !== "video/mp4")
-                Actions.showMessage("FORMAT", true);
+                err = true;
         });
-        
-        if (acceptedFiles.length > 5) 
+
+        if (err)
+            Actions.showMessage("FORMAT", true);
+        else if (acceptedFiles.length > 5) 
             Actions.showMessage("TOO_MANY", true);
         else if (acceptedFiles.length < 1) 
             Actions.showMessage("NO_FILE", true);
