@@ -77,3 +77,14 @@ export function getAllSports(){
             dispatcher.dispatch({type: "GET_SPORTS", text: "failed to retrieve your sports. nt gg wp"});
         });
 }
+
+export function GetTeamById(id:any) {
+     axios.default.put(serverURL + '/equipes/'+id)
+    .then(function(response: any){
+        dispatcher.dispatch({type:"GET_TEAMS_NAME",
+                text: response.data});
+        })
+        .catch(function(error:string){
+            dispatcher.dispatch({type: "GET_TEAMS_NAME", text: "failed to retrieve your teams. nt gg wp"});
+        });
+}
