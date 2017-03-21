@@ -4,40 +4,44 @@ import Dispatcher from '../dispatcher/dispatcher';
 import { IAction } from "../interfaces/interfaces"
 
 
+/*************************************
+   Auteur : Mehdi Laribi
+   Store  : Actions   
+ *************************************/
 class ActionStore extends EventEmitter{
 
+
+/*************************************
+   Variables
+ *************************************/
+
     actionsType: any[] = [];
-    todo: any[]=[];
+    mvmActions: any[]=[];
     constructor(){
         super()
-                
-        this.todo = [
-            {
-                Nom: "Tes",
-                Description: "descrit",
-                TypeControl: "Negative",
-                TypeMouvement : "Acquisition"
-            },
-            {
-                Nom: "Testt1111",
-                Description: "descru",
-                TypeControl: "Positive",
-                TypeMouvement : "Acquisition"
-            }
-        ]
     }
 
+
+
+
+/*************************************
+   Public functions
+ *************************************/
+
+///
+/// Retourne la liste des actions 
+///
+
     getAllActions(){
-        if(this.actionsType == null)
+        if(this.actionsType != null)
         {
-            return this.todo;
-        }
-        else {
             return this.actionsType;
-            }
+        }
         }
 
-
+///
+/// Gestion des evenement  (Listener)
+///
     handleActions(action: IAction){
 
         switch (action.type) {
@@ -46,7 +50,6 @@ class ActionStore extends EventEmitter{
          {
              var a =JSON.parse(action.text);
              this.actionsType.push(a);
-            this.emit("change");
          }
                this.emit("change");
                 break;
@@ -59,6 +62,17 @@ class ActionStore extends EventEmitter{
                 }
             this.emit("change");
                 break;
+            
+            case "GET_MVMTYPE":
+                this.mvmActions = [];
+                for(var i=0;i<action.text.length;i++)
+                {     
+                    this.mvmActions.push(action.text[i]);  
+                }
+            this.emit("change");
+                break;
+            
+
 
             default:
                 break;
