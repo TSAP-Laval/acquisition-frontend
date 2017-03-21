@@ -90,7 +90,7 @@ render() {
 				<form onSubmit={this.sendFormData.bind(this)} id="nouvSaison">   
 					<h3>Creer une nouvelle saison</h3>     
 					<label htmlFor="Annee">Année</label>
-					<input type="text" id="Annee" name="Annee"/>  		
+					<input type="text" id="Annee" name="Annee"required/>  		
 					<input type="submit" value="Ajouter"  />           
 				</form> 
 				</div>
