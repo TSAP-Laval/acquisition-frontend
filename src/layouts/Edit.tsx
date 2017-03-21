@@ -17,6 +17,38 @@ export interface ILayoutState {
 
 // Variable global pour avoir le numero du joueur
 var numJoueur = 0;
+ /**
+     * rows représente les joueurs sur le terrain.
+     * 
+     * Liste des index:
+     * 
+     *  rows[0] -> Ligne défensive
+     *    rows[0][0] -> Gauche
+     *    rows[0][1] -> Centre
+     *    rows[0][2] -> Droite
+     * 
+     *  rows[1] -> Ligne de centre
+     *    rows[1][0] -> Gauche
+     *    rows[1][1] -> Centre
+     *    rows[1][2] -> Droite
+     * 
+     *  rows[2] -> Ligne offensive
+     *    rows[2][0] -> Gauche
+     *    rows[0][2] -> Centre
+     *    rows[0][3] -> Droite
+     */
+    var rows: any = [
+                      [
+                        [], [], []
+                      ], 
+                      [
+                        [], [], []
+                      ], 
+                      [
+                        [], [], []
+                      ]
+                    ];
+
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   constructor (props: any) {
@@ -54,6 +86,37 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     }
   }
 
+  changeTwoLi =(nom1:string,nom2:string) =>{
+    var lisPremier = document.getElementById(nom1).getElementsByTagName("li");
+    var tempo: any = [];
+    for(let i=0;i<lisPremier.length;i++)
+    {
+      tempo.push(lisPremier[i]);
+    }
+    var lisDeuxieme = document.getElementById(nom2).getElementsByTagName("li");
+    for(let i=0;i<lisDeuxieme.length;i++)
+    {
+      var premier =document.getElementById(nom1)
+      premier.appendChild(lisDeuxieme[i]);
+
+    }
+    this.ClearDomElement(nom2)
+    for(let i=0;i<tempo.length;i++)
+    {
+      var deuxieme =document.getElementById(nom2)
+      deuxieme.appendChild(tempo[i]);
+
+    }
+  }
+  demi=() =>
+  {
+    this.changeTwoLi("def-gauche-list","off-droite-list");
+    this.changeTwoLi("def-droite-list","off-gauche-list");
+    this.changeTwoLi("def-centre-list","off-centre-list");
+    this.changeTwoLi("mid-gauche-list","mid-droite-list"); 
+  }
+
+
   ClearDomElement = (nom:string) => {
     var doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
@@ -74,7 +137,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   closeActionForm = () => {
     Actions.closeActionForm(document.getElementById("Enr") as HTMLDivElement);
   }
-
   //Envoie du formulaire à l'api 
   sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -120,48 +182,28 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   render() {
-    /**
-     * rows représente les joueurs sur le terrain.
-     * 
-     * Liste des index:
-     * 
-     *  rows[0] -> Ligne défensive
-     *    rows[0][0] -> Gauche
-     *    rows[0][1] -> Centre
-     *    rows[0][2] -> Droite
-     * 
-     *  rows[1] -> Ligne de centre
-     *    rows[1][0] -> Gauche
-     *    rows[1][1] -> Centre
-     *    rows[1][2] -> Droite
-     * 
-     *  rows[2] -> Ligne offensive
-     *    rows[2][0] -> Gauche
-     *    rows[0][2] -> Centre
-     *    rows[0][3] -> Droite
-     */
-    var rows: any = [
-                      [
-                        [], [], []
-                      ], 
-                      [
-                        [], [], []
-                      ], 
-                      [
-                        [], [], []
-                      ]
-                    ];
-    for (let i = 0; i < this.state._lesJoueurs.length; i++) {
+   
+    var nbTempo =0;
+    var nbTempo2=0;
+    for (let i = 0; i < this.state._lesJoueurs.length; i++) {  
+      if(nbTempo==3)
+      {
+        nbTempo2++;
+        nbTempo=0;
+      }    
+                                                             
       /**
        * Obtenir la dernière ligne jouée (défensive, centre ou offensive).
        */
-      let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
-
+      //let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
+      
+       let ligne = (nbTempo == 0 ? 0 :( nbTempo==2 ? 1 : 2));
       /**
        * Obtenir la dernière position jouée (gauche, centre ou droite).
        */
-      let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
-      rows[ligne][position].push(<li>
+      //let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
+      nbTempo++;
+      rows[ligne][nbTempo2].push(<li>
         <button 
           value={this.state._lesJoueurs[i]["Number"]} 
           onClick={this.openActionForm.bind(this)}>{this.state._lesJoueurs[i]["Number"]}
@@ -189,6 +231,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
           </div>  
         </form> 
+
+        <input type="button"onClick={this.demi.bind(rows)} value="mi-Temps"/>
         <form onSubmit={this.sendFormData.bind(this)}>  
             <h3>Pointage</h3><br></br>               
             <label htmlFor="ScoreDom">Domicile</label>
@@ -196,9 +240,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <label htmlFor="ScoreAway">Extérieur</label>
             <input type="text" name="ScoreAway" id="ScoreAway"/>
       </form>              
-        <div id="LesJoueurs">      
-          <ul id="lstJoueur"></ul>
-        </div>
         <div id="terrain-container" className="container-fluid">
           <div id="circle-centre"></div>
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
