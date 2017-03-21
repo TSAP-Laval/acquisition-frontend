@@ -14,10 +14,15 @@ class CoachStore extends EventEmitter{
 /*************************************
    Variables
  *************************************/
-lstCoachs: any;
-lstTeams:any;  
+lstCoachs: any[] = [];
+lstTeams:any[] = [];  
+lstSports:any[] = [];
 
-tempo:any;  
+TeamTempo:any[] = [];
+tempo:any[] = [];  
+sportTempo:any[] = [];
+
+
 constructor(){
     super();
 
@@ -34,6 +39,27 @@ constructor(){
     }
     
     ]
+
+    this.TeamTempo = [
+        {
+            ID: 1,
+            Name: "Test Lions",
+            City: "Quebec"
+        },
+
+        {
+            ID: 2,
+            Name: "Tempo Ligres",
+            City: "Trois-Rivières"
+        }
+    ]
+
+    this.sportTempo = [
+        {
+            ID: 1,
+            Name: "Soccer"
+        }
+    ]
 }
 
 
@@ -47,12 +73,11 @@ constructor(){
 ///
 
     GetAllCoachs(){
-        if(this.lstCoachs == null)
+        if(this.lstCoachs != null)
         {
+            return this.lstCoachs;
+        }else  {
             return this.tempo;
-        }
-        else {
-        return this.lstCoachs;
         }
     }
 
@@ -65,9 +90,24 @@ constructor(){
     GetAllTeams(){
         if(this.lstTeams != null){
             return this.lstTeams;
+        }else  {
+            return this.TeamTempo;
         }
     }    
 
+
+///
+/// Retourne la liste des sports disponibles
+///
+
+        GetAllSports(){
+        if(this.lstSports != null)
+        {
+            return this.lstSports;
+        }else  {
+            return this.sportTempo;
+        }
+    }    
 
 ///
 /// Gestion des evenement  (Listener)
@@ -99,6 +139,19 @@ constructor(){
                 {     
                     this.lstTeams.push(action.text[i]);  
                 }
+                this.emit("change");
+                break;
+
+
+            case "GET_SPORTS":
+                this.lstSports = [];
+                for(var i=0;i<action.text.length;i++)
+                {     
+                    this.lstSports.push(action.text[i]);  
+                }
+                this.emit("change");
+                break;
+
             default:
                 break;
         }

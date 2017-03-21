@@ -64,3 +64,16 @@ export function getAllTeams(){
             dispatcher.dispatch({type: "GET_TEAMS", text: "failed to retrieve your teams. nt gg wp"});
         });
 }
+
+
+
+export function getAllSports(){
+    axios.default.get(serverURL + "/sports")
+        .then(function(response){
+            dispatcher.dispatch({type:"GET_SPORTS",
+                text: response.data});
+        })
+        .catch(function(error:string){
+            dispatcher.dispatch({type: "GET_SPORTS", text: "failed to retrieve your sports. nt gg wp"});
+        });
+}
