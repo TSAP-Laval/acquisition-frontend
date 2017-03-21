@@ -110,7 +110,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         this.setState({checkboxChecked: !this.state.checkboxChecked});
         game.Status = this.state.checkboxChecked ? "local": "visiteur";
         this.setState({game: game});
-        
     }
 
     onSave() {
@@ -234,6 +233,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         let multi = false;
         let confForm = this.state.openConfirmForm ? <ConfForm/> : null;
         const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>)
+
         return (
             <div>
                 <div className="modal-dialog relative" id="modal">

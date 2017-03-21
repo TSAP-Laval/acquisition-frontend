@@ -49,6 +49,7 @@ var numJoueur = 0;
                       ]
                     ];
 
+
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   constructor (props: any) {
       super(props);
@@ -84,6 +85,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       doc.appendChild(x);
     }
   }
+
   changeTwoLi =(nom1:string,nom2:string) =>{
     var lisPremier = document.getElementById(nom1).getElementsByTagName("li");
     var tempo: any = [];
@@ -94,7 +96,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     var lisDeuxieme = document.getElementById(nom2).getElementsByTagName("li");
     for(let i=0;i<lisDeuxieme.length;i++)
     {
-      console.log(lisDeuxieme[i]);
       var premier =document.getElementById(nom1)
       premier.appendChild(lisDeuxieme[i]);
 
@@ -102,7 +103,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.ClearDomElement(nom2)
     for(let i=0;i<tempo.length;i++)
     {
-      console.log("okay");
       var deuxieme =document.getElementById(nom2)
       deuxieme.appendChild(tempo[i]);
 
@@ -115,6 +115,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.changeTwoLi("def-centre-list","off-centre-list");
     this.changeTwoLi("mid-gauche-list","mid-droite-list"); 
   }
+
 
   ClearDomElement = (nom:string) => {
     var doc = document.getElementById(nom);
@@ -136,8 +137,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   closeActionForm = () => {
     Actions.closeActionForm(document.getElementById("Enr") as HTMLDivElement);
   }
-
-
   //Envoie du formulaire à l'api 
   sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -181,7 +180,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.closeActionForm.bind(this);
     }
   }
-  
 
   render() {
    
@@ -204,11 +202,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
        * Obtenir la dernière position jouée (gauche, centre ou droite).
        */
       //let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
-      let position = (nbTempo2 == 0 ? 0 :( nbTempo2==2 ? 1 : 2));
-      
-      console.log(this.state._lesJoueurs[i]["Number"]);
-      console.log(ligne + " " +position);
-      
       nbTempo++;
       rows[ligne][nbTempo2].push(<li>
         <button 
@@ -238,6 +231,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
           </div>  
         </form> 
+
         <input type="button"onClick={this.demi.bind(rows)} value="mi-Temps"/>
         <form onSubmit={this.sendFormData.bind(this)}>  
             <h3>Pointage</h3><br></br>               
