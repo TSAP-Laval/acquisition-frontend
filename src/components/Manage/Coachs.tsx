@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as $ from "jquery";
 
-import {Button, Alert, Modal, Glyphicon} from "react-bootstrap";
+import {Button, Alert, Modal} from "react-bootstrap";
 import * as Select from 'react-select';
 import CoachStore from "../../stores/CoachStore";
 import * as RequestHandler from "./RequestHandler";
@@ -16,49 +16,56 @@ export interface ILayoutState {}
 
 ///Ajout d'une équipe modale
 const modalInstance = React.createClass({
-
-    getInitialState() {
-    return { showModal: false };
-  },
-
-  close() {
-    this.setState({ showModal: false });
-  },
-
-  open() {
-    this.setState({ showModal: true });
-  },
-
-
     render() {
         return (
 
     <div className="static-modal">
+        <Modal.Dialog>
+        <Modal.Header>
+            <Modal.Title>Assigner des équipes</Modal.Title>
+        </Modal.Header>
 
-       <Modal show={this.state.showModal} onHide={this.close}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <h4>Text in a modal</h4>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+        <Modal.Body>
+            <div className="form-group">
+                                            
+                <label className="control-label" htmlFor="sport_select">
+                    Sport :
+                    <span className="asteriskField">
+                        *
+                    </span>
+                </label>
+                    <select className="select form-control" id="sport_select" name="sport_select">
+                        <option value="Soccer">Soccer</option>
+                    </select>
+            </div>
 
-            <h4>Popover in a modal</h4>
-            
+            <div className="form-group">
+                                            
+                <label className="control-label" htmlFor="teams_multi">
+                    Équipes Disponibles :
+                    <span className="asteriskField">
+                        *
+                    </span>
+                </label>
+                    <select multiple className="select multiple form-control" id="teams_multi" name="teams_multi">
+                        <option value="A">A</option>
+                        <option value="AA">AA</option>
+                        <option value="AAA">AAA</option>
+                        <option value="recreatif">Récreatif</option>
+                    </select>
+            </div>
+        </Modal.Body>
 
-            <hr />
+        <Modal.Footer>
+            <Button onClick={this.props.onHide}>Close</Button>
+            <Button bsStyle="primary">Save changes</Button>
+        </Modal.Footer>
 
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.close}>Close</Button>
-          </Modal.Footer>
-        </Modal>
+        </Modal.Dialog>
         </div>
         );
     }
 });
-
-const EditButton = '<Button onClick={this.showModal.open} bsStyle="primary" bsSize="small">Assigner</Button>';
 
 export interface ILayoutProps {}
 export interface ILayoutState {
@@ -66,12 +73,14 @@ export interface ILayoutState {
 }
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
 
+
     Option: any[] =  [];
 
     constructor(){
         super();
         
         this.SelectedTeams = this.SelectedTeams.bind(this);
+
     this.state = {
         SelectedTeams:"",
         };
@@ -108,27 +117,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
             }
         }
 
-
-        
-
         var listCoachs = CoachStore.GetAllCoachs();
         var dataString = JSON.stringify(listCoachs);
         var jsonTab = JSON.parse(dataString);
 
         for(var i= 0; i < jsonTab.length; i++)
         {
-
-            //debugger;
             var data = jsonTab[i];
-            /*var dataIds = JSON.stringify(data['TEAMS']);
-            var TeamName = [];
-            for(var j= 0; j < data.length; j++)
-                {
-                     TeamName = CoachStore.GetTeamName(data['Teams'])
-
-                }*/
-                debugger;
-     this.AddNew(data['Lname'],data['Fname'],data['Email'], data['Teams'], data['Actif'], i);
+            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['Teams'], data['Actif'], i);
 
         }   
         
@@ -199,6 +195,8 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                 +'"Teams" : ' + jsonTeams
                 +'}';
 
+                debugger;
+
        RequestHandler.postCoach(text);
     }
 
@@ -220,10 +218,10 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 			  tdEmail.innerHTML= email;
 
               var tdTeam = document.createElement("td");
-              /*if(equipe != undefined && equipe.length > 0){
-                tdTeam.innerHTML = equipe.join(',');
-              }*/
-              tdTeam.innerHTML = EditButton;
+              if(equipe != undefined && equipe.length > 0){
+                tdEmail.innerHTML = equipe.join(',');
+              }
+
               var tdActif = document.createElement("td");
                 if(estActif == 'true'){
                 tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true' checked >";
@@ -239,6 +237,8 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
               $('#coach_tbody').append(x);
     }
+
+
 
     ShowModal(){
         return modalInstance; 
@@ -261,8 +261,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
          var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
                         + String(coachName) + "</td><td contenteditable='true'>" 
                         + String(coachMail) + "</td>"
-                        + "<td>" + <Button bsStyle="primary" onClick={this.state.show.open} bsSize="small">Assigner</Button> +  "</td>"
-                        + "<td>type='checkbox' className='coach_actif' value='true' checked></td></tr>";
+                        + "<td></td><td>type='checkbox' className='coach_actif' value='true' checked></td></tr>";
 
             $('.coach_table tbody').append(trToAdd);
 
