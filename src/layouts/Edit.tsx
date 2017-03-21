@@ -71,7 +71,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({ 
         _lesJoueurs: Store.GetAllJoueurs(),
         _formState: 0
-      })
+      });
+    });
+
+    Store.on("actionChange", () => {
       this.RemplirSelect();
     });
   }
@@ -115,8 +118,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
     }
   }
-  demi=() =>
-  {
+
+  demi = () => {
     this.changeTwoLi("def-gauche-list","off-droite-list");
     this.changeTwoLi("def-droite-list","off-gauche-list");
     this.changeTwoLi("def-centre-list","off-centre-list");
@@ -224,8 +227,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
 
-    console.log(fleche);
-
     let ajustement = 1.8;
 
     ctx.strokeStyle = "blue";
@@ -263,6 +264,18 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   render() {
+
+    rows = [
+        [
+          [], [], []
+        ], 
+        [
+          [], [], []
+        ], 
+        [
+          [], [], []
+        ]
+      ];
    
     var nbTempo =0;
     var nbTempo2=0;
