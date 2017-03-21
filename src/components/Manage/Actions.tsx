@@ -51,10 +51,9 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     SubmitAction(){
 
         var text = '{'
-       +'"Name" :' + '"' +$('#action_name').val() + '"'+','
        +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-       +'"ControlType" : '+ '"' +$('#control_type').val() + '"' + ','
-       +'"MovementType" : '+ '"' +$('#mov_type').val() + '"'
+       +'"Acquisition" : '+ '"' +$('#acquisition').val() + '"' + ','
+       +'"Separation" : '+ '"' +$('#separation').val() + '"'
        +'}';
        
        alert("Ajout Réussi");
@@ -62,6 +61,20 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
        requesthandler.postNewActionType(text);
     }
 
+    typeSepAcq(typeMvm:string)
+    {
+
+        var retVal = "";
+
+        if(typeMvm.includes("neg")){
+            retVal = "Négative";
+        }else if(typeMvm.includes("pos"))  {
+             retVal = "Positive";
+        }else   {
+             retVal = "Neutre";
+        }
+        return retVal;
+    }
 
     //Ajoute une nouvelle ligne contenant les actions ou l'action 
     //nouvellement ajoutée.
@@ -69,16 +82,19 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     {
             var doc = document.getElementsByClassName("action_table");
 			  var x = document.createElement("tr");
-			  
-			  var tnom = document.createElement("td");
-			  tnom.innerHTML=data['Name'];
+
               var tdesc =  document.createElement("td");
 			  tdesc.innerHTML= data['Description']
+
               var tc = document.createElement("td");
-			  tc.innerHTML=data['ControlType']
+              var typeAcqui = this.typeSepAcq(data['Acquisition']);
+			  tc.innerHTML= typeAcqui;
+
+
               var tm =  document.createElement("td");
-			  tm.innerHTML= data['MovementType']
-			  x.appendChild(tnom);
+              var typeSepa = this.typeSepAcq(data['Separation']);
+			  tm.innerHTML= typeSepa;
+
               x.appendChild(tdesc);
               x.appendChild(tc);
               x.appendChild(tm);
@@ -116,15 +132,16 @@ $(function(){
 
 
     //Ajout d'une nouvelle action
-    function AddRow(actionName:string, actionDesc:string, controlType:string, movType:string){
+    function AddRow( actionDesc:string, separation:string, acquisition:string){
         
         
-         var trToAdd =   "<tr id='action1'><td>" + String(actionName) + "</td><td contenteditable='true'>" 
-                        + String(actionDesc) + "</td><td>" 
-                        + String(controlType) + "</td><td>" 
-                        + String(movType) + "</td></tr>";
+         var trToAdd =   "<tr id='action1'><td>" + String(actionDesc) + "</td><td contenteditable='true'>" 
+                        + String(acquisition) + "</td><td>" 
+                        + String(separation) + "</td></tr>";
 
             $('#action_table tbody').append(trToAdd)
+
+            $('#action_desc').val("");
     }
 
         return (
@@ -140,16 +157,13 @@ $(function(){
                                     <thead>
                                         <tr >
                                             <th className="text-center">
-                                                Nom
+                                                Description de l'action 
                                             </th>
                                             <th className="text-center">
-                                                Description
+                                                Type de séparation
                                             </th>
                                             <th className="text-center">
-                                                Type de contrôle
-                                            </th>
-                                            <th className="text-center">
-                                                Type de mouvement
+                                                Type d'acquisition 
                                             </th>
                                         </tr>
                                     </thead>
@@ -161,15 +175,6 @@ $(function(){
 
                                 <form method="post" title="Actions :" id="actionForm">
                                     <div className="form-group ">
-                                        <label className="control-label requiredField" htmlFor="action_name">
-                                        Nom de l'action :
-                                        <span className="asteriskField">
-                                            *
-                                        </span>
-                                        </label>
-                                        <input className="form-control requiredField" id="action_name" name="Nom" type="text" required/>
-                                    </div>
-                                    <div className="form-group ">
                                         <label className="control-label " htmlFor="action_desc">
                                         Description :
                                         </label>
@@ -178,14 +183,15 @@ $(function(){
                                         <div className="form-group">
                                         
                                         <label className="control-label requiredField" htmlFor="mov_type">
-                                        Type de contrôle :
+                                        Acquisition :
                                         <span className="asteriskField">
                                             *
                                         </span>
                                         </label>
-                                        <select className="select form-control" id="control_type" name="control_type">
-                                            <option value="Acquisition">Acquisition</option>
-                                            <option value="Separation">Séparation</option>
+                                        <select className="select form-control" id="acquisition" name="control_type">
+                                            <option value="ac_pos">Positive</option>
+                                            <option value="ac_neg">Negative</option>
+                                            <option value="ac_neu">Neutre</option>
                                         </select>
 
                                         </div>
@@ -193,15 +199,15 @@ $(function(){
 
                                         <div className="form-group ">
                                         <label className="control-label requiredField" htmlFor="mov_type">
-                                        Type de mouvement :
+                                        Séparation :
                                         <span className="asteriskField">
                                             *
                                         </span>
                                         </label>
-                                        <select className="select form-control" id="mov_type" name="mov_type">
-                                            <option value="Positive">Positive</option>
-                                            <option value="Negative">Negative</option>
-                                            <option value="Neutre">Neutre</option>
+                                        <select className="select form-control" id="separation" name="mov_type">
+                                            <option value="se_pos">Positive</option>
+                                            <option value="se_neg">Negative</option>
+                                            <option value="se_neu">Neutre</option>
                                         </select>
                                     </div>
                                     <div className="form-group">
