@@ -171,10 +171,13 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 			return Promise.resolve({ options: [] });
 		}
         Actions.searchTeam(value);
-        callback(null, {
-            options: this.state.teams,
-            complete: false
-        });
+
+        setTimeout(function() {
+            callback(null, {
+                options: this.state.teams,
+                complete: false
+            });
+        }.bind(this), 1500);
     }  
     onFieldSearch(value: any, callback: Function) {
         if (!value) {
@@ -182,10 +185,13 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 		}
 
         Actions.searchField(value);
-        callback(null, {
-            options: this.state.fields,
-            complete: false
-        });
+
+        setTimeout(function() {
+            callback(null, {
+                options: this.state.fields,
+                complete: false
+            });
+        }.bind(this), 1500);
     } 
 
     onOpposingTeamInput(e: React.FormEvent<HTMLInputElement>) {
