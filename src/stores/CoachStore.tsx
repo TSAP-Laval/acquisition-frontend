@@ -109,6 +109,32 @@ constructor(){
         }
     }    
 
+
+///
+/// Retourne la liste des sports disponibles
+///
+    GetTeamName(id:any [])
+    {
+        var datastringify =JSON.stringify(this.lstTeams);
+		var tabJson = JSON.parse(datastringify);
+
+        var lstIds = JSON.stringify(id);
+
+        var dataRetour= [];
+        for(var i=0;i<tabJson.length;i++)
+        {
+            var data =tabJson[i];   
+            for(var j=0;j<lstIds.length;j++)
+            { 
+                if(data.ID==parseInt(lstIds[j]))
+                {
+                    dataRetour.push(data.Name);
+                }
+            }  
+        }
+        return dataRetour;
+    }
+
 ///
 /// Gestion des evenement  (Listener)
 ///
