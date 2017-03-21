@@ -277,7 +277,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
        */
       //let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
       
-
        let ligne = (nbTempo == 0 ? 0 :( nbTempo == 2 ? 1 : 2));
 
       /**
@@ -286,7 +285,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       //let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
       nbTempo++;
       rows[ligne][nbTempo2].push(<li>
-
         <button
           className="btn btn-primary"
           value={this.state._lesJoueurs[i]["Number"]} 
@@ -398,11 +396,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
           </div>  
         </form>;
     }
-
     return (
       <div>
         {formAction}
-        <input type="button" onClick={this.demi.bind(rows)} value="Demi"/>
+        <input type="button" onClick={this.demi.bind(rows)} value="mi-Temps"/>
 
         <form onSubmit={this.sendFormData.bind(this)}>  
             <h3>Pointage</h3><br></br>               
