@@ -162,6 +162,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let scoreDom = _scoreDom.value;
     let _scoreAway = document.getElementById("ScoreAway") as HTMLInputElement;
     let scoreAway = _scoreAway.value;    
+    let video = document.getElementById("my-player") as HTMLVideoElement;
     var TypeAction = 0;
     TypeAction = parseInt(_typeSelect.value)
     var resultatAction = _resultat.value
@@ -172,11 +173,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         +'"IsPositive" : '+resultatAction + ','
         +'"ZoneID" : 1 ,'
         +'"GameID" : 1 ,'
-        +'"X1" : 1 ,'
-        +'"Y1" : 1 ,'
-        +'"X2" : 1 ,'
-        +'"Y2" : 0 ,'
-        +'"Time" : 30 ,'
+        +'"X1" : ' + fleche[0][0] + ','
+        +'"Y1" : ' + fleche[0][1] + ','
+        +'"X2" : ' + fleche[1][0] + ','
+        +'"Y2" : ' + fleche[1][1] + ','
+        +'"Time" : ' + video.currentTime + ','
         +'"HomeScore" : '+scoreDom+','
         +'"GuestScore" : '+scoreAway+','
         +'"PlayerID" :'+numJoueur
