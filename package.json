@@ -66,7 +66,7 @@
     "react-motion": "^0.4.7",
     "react-router": "^3.0.1",
     "react-scripts": "^0.8.5",
-    "react-select": "^1.0.0-rc.2",
+    "react-select": "^1.0.0-rc.3",
     "react-simple-sidenav": "^0.1.1",
     "react-tabs": "^0.8.2",
     "sinon": "git+https://github.com/sinonjs/sinon.git",
