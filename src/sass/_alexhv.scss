@@ -320,3 +320,85 @@ ul.players-list {
     height: 100%;
     left: 50%;
 }
+
+#terrain-container-sm {
+    width: $t-width-sm;
+    height: $t-height-sm;
+    border: 4px solid $primary;
+    position: relative;
+    padding: 0px;
+
+    #circle-centre-sm {
+        position: absolute;
+        width: $r-centre-sm;
+        height: $r-centre-sm;
+        border-radius: 100%;
+        border: 3px solid $primary;
+        left: 50%;
+        top: 50%;
+        margin-left: $r-centre-pad-sm;
+        margin-top: $r-centre-pad-sm;
+        z-index: 9;
+    }
+
+    .terrain-third {
+        height: 100%;
+
+        &:after {
+            text-align: center;
+            font-weight: 200;
+            text-transform: uppercase;
+            color: $default-color;
+            position: absolute;
+            width: $z-but-width-sm;
+            height: $z-but-height-sm;
+            border: 3px solid $primary;
+            top:50%;
+            margin-top: $z-top-pad-sm;
+        }
+
+        &:nth-child(2) {
+            border-right: 1px dashed $default-color;
+
+            &:after {
+                content: '';
+                left: 0;
+                margin-left: -3px;
+            }
+        }
+
+        &:nth-child(3) {
+            border-right: 1px dashed $default-color;
+        }
+
+        &:nth-child(4) {
+
+            &:after {
+                content: '';
+                right: 0;
+                margin-right: -3px;
+            }
+        }
+    }
+}
+
+#terrain-container-sm::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    background-color: $primary;
+    height: 100%;
+    left: 50%;
+}
+
+.no-l-padd {
+    padding-left: 0px;
+}
+
+#canvasArrow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}

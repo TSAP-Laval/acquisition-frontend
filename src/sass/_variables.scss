@@ -18,3 +18,14 @@ $but-width:     $t-width * 0.04583333333;
 $but-height:    $t-height * 0.2033333333;
 $r-centre:      $but-height;
 $r-centre-pad:  ($but-height / 2) * -1;
+
+// Dimension du terrain (small)
+$t-width-sm:       350px;
+$t-height-sm:      $t-width-sm * 0.75;
+$z-but-width-sm:   $t-width-sm * 0.1375;
+$z-but-height-sm:  $t-height-sm * 0.4477777778;
+$z-top-pad-sm:     ($z-but-height-sm / 2) * -1;
+$but-width-sm:     $t-width-sm * 0.04583333333;
+$but-height-sm:    $t-height-sm * 0.2033333333;
+$r-centre-sm:      $but-height-sm;
+$r-centre-pad-sm:  ($but-height-sm / 2) * -1;
