@@ -8,16 +8,16 @@ export function showMessage(text: string, isError: boolean) {
     });
 }
 
-export function upload(file: File) {
+export function upload(files: File[]) {
     dispatcher.dispatch({
         type: "UPLOAD.UPLOAD",
-        file: file,
+        files: files,
     });
 }
 
 export function closeForm() {
     dispatcher.dispatch({
-        type: "UPLOAD.CLOSE_FORM",
+        type: "UPLOAD.OPEN_CONFIRM_FORM",
     });
 }
 
@@ -33,9 +33,16 @@ export function cancelUpload() {
     });
 }
 
-export function save() {
+export function save(teamID: number, opposingTeam: string, status: string, 
+                     locationID: number, fieldCondition: string, date: string) {
     dispatcher.dispatch({
         type: "UPLOAD.SAVE",
+        teamID: teamID,
+        opposingTeam: opposingTeam,
+        status: status,
+        locationID: locationID,
+        fieldCondition: fieldCondition,
+        date: date,
     });
 }
 

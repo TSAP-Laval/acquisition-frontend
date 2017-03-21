@@ -35,8 +35,11 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
             case "UPLOAD_SUCCESS":
                 msg = "Le fichier a bel et bien été envoyé sur le serveur";
                 break;
-            case "CANCEL":
+            case "CANCEL_UPLOAD":
                 msg = "Importation annulée avec succès!";
+                break;
+            case "CANCEL":
+                msg = "Analyse annulée avec succès!";
                 break;
             case "SAVE":
                 msg = "Les informations sur la partie en cours ont bel et bien été sauvegardées";
@@ -46,7 +49,7 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 break;
         }
 
-        if (this.props.message.message != null)
+        if (this.props.message.message != "")
             style = this.props.message.isError ? "error" : "success";
 
         return (

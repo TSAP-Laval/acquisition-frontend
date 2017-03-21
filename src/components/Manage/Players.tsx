@@ -1,9 +1,8 @@
 import * as React                from "react";
 import * as ReactDOM             from "react-dom";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import { Button, Alert, Modal } from "react-bootstrap";
 import * as manageActions        from "../../actions/ManageActions";
 import store                     from "../../stores/PlayersStore";
-
 
 
 export interface ILayoutProps {}
@@ -46,8 +45,7 @@ LstJoueurs(){
             tdEmail.innerHTML=data.Email;
             var btnModifier = document.createElement("button") as HTMLButtonElement;
             btnModifier.innerHTML="modifier";
-            //btnModifier.onclick=this.RightClick.bind(this);
-            btnModifier.value=data.ID;
+            btnModifier.onclick=this.ModifJoueur.bind(this,i,data.ID);
             x.appendChild(tdNom);
             x.appendChild(tdPrenom);
             x.appendChild(tdNumero);
@@ -55,6 +53,27 @@ LstJoueurs(){
             x.appendChild(btnModifier);
             doc.appendChild(x);
         }
+}
+ModifJoueur(i:any, id:any){
+    var doc = document.getElementById("action_table") as HTMLTableElement;
+    var t = doc.rows[i+1];
+    var nomjoueur= t.cells[0].innerHTML;
+    var inputNom = document.getElementById("Nom") as HTMLInputElement;
+    inputNom.value=nomjoueur;
+    var prenomjoueur= t.cells[1].innerHTML;
+    var inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
+    inputPrenom.value=prenomjoueur;
+    var numeroJoueur= t.cells[2].innerHTML;
+    var inputNumero = document.getElementById("Numero") as HTMLInputElement;
+    inputNumero.value=numeroJoueur;
+    var emailJoueur= t.cells[3].innerHTML;
+    var inputEmail = document.getElementById("Email") as HTMLInputElement;
+    inputEmail.value=emailJoueur;
+    var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    btnSubmit.value="Modifier";
+    var inputID = document.getElementById("ID") as HTMLInputElement;
+    inputID.value=id;
+    
 }
 ClearDomElement(nom:string){
     var doc = document.getElementById(nom);
@@ -96,7 +115,14 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 
       //Preparation du json que l'on va envoyer au server
       
-    var text = '{'
+  
+    var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    if( btnSubmit.value=="Modifier")
+    {
+         var inputID = document.getElementById("ID") as HTMLInputElement;
+        var IdJoueur= inputID.value;
+        var text = '{'
+        +'"ID" :'+ '"'+ IdJoueur+'",'
         +'"Lname" :'+ '"'+ nomjoueur+'",'
         +'"Fname" :'+ '"'+prenomjoueur + '",'
         +'"Number" : '+numerojoueur + ','
@@ -107,8 +133,23 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"TokenConnexion" : "test",'
         +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
         +'}'
-
+         manageActions.putJoueur(text,IdJoueur);
+    }
+    else
+    {
+        var text = '{'
+        +'"Lname" :'+ '"'+ nomjoueur+'",'
+        +'"Fname" :'+ '"'+prenomjoueur + '",'
+        +'"Number" : '+numerojoueur + ','
+        +'"Email" : '+ '"'+emailJoueur + '",'
+        +'"PassHash" : "test22" ,'
+        +'"TokenInvitation" : "test" ,'
+        +'"TokenReinitialisation" : "test ",'
+        +'"TokenConnexion" : "test",'
+        +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
+        +'}'
         manageActions.postJoueur(text);
+    }
 
 }
 render() {
@@ -144,17 +185,18 @@ render() {
             </div>		
             <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
                 <h3>Creer un nouveau joueur</h3>     
-                <label htmlFor="Nom">Nom</label>
-                <input type="text" id="Nom" name="Nom"/> 
-                <label htmlFor="Prenom">Prenom</label>
+                <label className="control-label" htmlFor="Nom">Nom</label>
+                <input  type="text" id="Nom" name="Nom"/> 
+                <label className="control-label" htmlFor="Prenom">Prenom</label>
                 <input type="text"id="Prenom" name="Prenom"/>
-                <label htmlFor="Numero">Numero</label>
-                <input type="text"id="Numero" name="Numero"/> 
-                <label htmlFor="Email">Email</label>
+                <label className="control-label" htmlFor="Numero" >Numero</label>
+                <input type="text"id="Numero" name="Numero" required/> 
+                <label className="control-label" htmlFor="Email">Email</label>
                 <input type="text"id="Email" name="Email"/> 			
-                <label htmlFor="equipe">Équipe</label>                  
-                <select id="equipe" name="equipe"></select><br></br>    
-                <input type="submit" value="Submit"  />                
+                <label className="control-label" htmlFor="equipe">Équipe</label>                  
+                <select id="equipe" name="equipe"></select><br></br>   
+                <input type="hidden" id="ID"/> 
+                <input type="submit" value="Ajouter" id="btnSubmit"  />                
             </form>
             </div>
         </div> 
