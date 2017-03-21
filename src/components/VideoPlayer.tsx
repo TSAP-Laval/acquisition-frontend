@@ -3,7 +3,7 @@ import * as Actions from "../actions/VideoPlayerActions";
 import Store from "../stores/VideoPlayerStore";
 
 export interface ILayoutProps {
-    url: string
+    url: string,
 }
 export interface ILayoutState {
     playing: boolean,
@@ -19,16 +19,23 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     componentWillMount = () => {
         Store.on("stateChanged", this.changeState);
+        Store.on("stepChanged", this.changeStep)
         Store.on("pausing", this.pauseVideo);
     }
 
     componentDidMount = () => {
         let slider = document.getElementById("my-slider") as HTMLInputElement;
+        let stepperSlider = document.getElementById("stepRange") as HTMLInputElement;
         slider.value = "0";
+        stepperSlider.value = "100";
     }
 
     changeState = () => {
         this.setState({ playing: !this.state.playing});
+    }
+
+    changeStep = () => {
+        console.log(Store.step);
     }
 
     pauseVideo = () => {
@@ -93,6 +100,12 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         Actions.setCurrentTime(video.currentTime);
     }
 
+    onStepSliderSlide = () => {
+        let stepInfo = document.getElementsByClassName("time-jump")[0] as HTMLSpanElement;
+        let stepSlider = document.getElementById("stepRange") as HTMLInputElement;
+        Actions.setStepValues(stepInfo, stepSlider);
+    }
+
     render() {
         return (
             <div>
@@ -124,11 +137,22 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     </p>      
                 </video>
                 <div className="video-controls-container">
+                    <div id="stepSetter">
+                        <div className="slideTrack"></div>
+                        <label htmlFor="stepRange">Pas: <span className="time-jump">{Store.step} sec.</span></label>
+                        <input 
+                            id="stepRange" 
+                            onChange={this.onStepSliderSlide.bind(this)} 
+                            type="range" 
+                            min="1" 
+                            step="1"
+                            max="200" />
+                    </div>
                     <button className="video-controls" onClick={this.onRestart.bind(this)}>
                         <i className="glyphicon glyphicon-fast-backward"></i>
                     </button>
                     <button className="video-controls" onClick={this.onBackFive.bind(this)}>
-                        <i className="glyphicon glyphicon-step-backward"></i> <span className="time-jump">(5 secondes)</span>
+                        <i className="glyphicon glyphicon-step-backward"></i> 
                     </button>
                     <button className="video-controls" onClick={this.onStop.bind(this)}>
                         <i className="glyphicon glyphicon-stop"></i>
@@ -137,10 +161,10 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         <i id="play-button" className="glyphicon glyphicon-play"></i>
                     </button>
                     <button className="video-controls" onClick={this.onForwardFive.bind(this)}>
-                        <i className="glyphicon glyphicon-step-forward"></i> <span className="time-jump">(5 secondes)</span>
+                        <i className="glyphicon glyphicon-step-forward"></i>
                     </button>
                     <div id="slowFinder">
-                        <div id="slideTrack"></div>
+                        <div className="slideTrack"></div>
                         <label htmlFor="slowRange">Recherche précise:</label>
                         <input 
                             id="slowRange" 
