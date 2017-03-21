@@ -226,7 +226,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     // Dessiner la flèche
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
-
+    
     let ajustement = 1.8;
 
     ctx.strokeStyle = "blue";
