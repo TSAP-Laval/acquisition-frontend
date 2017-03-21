@@ -61,7 +61,7 @@ class EditStore extends EventEmitter {
                 {
                     this.actions.push(action.text[i]);
                 }
-                this.emit("change");
+                this.emit("actionChange");
             break;
             case "PostAction" :
                 if(action.text !="error")
@@ -69,7 +69,7 @@ class EditStore extends EventEmitter {
                     var laction =JSON.parse(action.text);
                     this.actions.push(laction); 
                 }
-                this.emit("change");
+                this.emit("actionChange");
             break;         
         }
     }
