@@ -87,7 +87,7 @@ module.exports = function(config) {
         singleRun: true,
         concurrency: Infinity,
         plugins: [
-            "karma-*"
+            "karma-*",
         ]
     })
 }
