@@ -78,7 +78,7 @@ module.exports = function(config) {
             ]
         },
         frameworks: ['mocha', 'chai', 'sinon'],
-        reporters: ['mocha', 'coverage'],
+        reporters: ['mocha'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
