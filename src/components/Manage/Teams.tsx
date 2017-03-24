@@ -100,8 +100,8 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 	var text = '{'
 		+'"Name" :'+'"'+nomTeam+'",'
 		+'"City" : '+'"'+VilleTeam + '",'
-		+'"SportID" : '+optSport.value + ','
-		+'"CategoryID" : '+niveau.value + ''
+		+'"SportID" : '+optSport + ','
+		+'"CategoryID" : '+niveau + ''
 		+'}'
 	manageActions.postTeam(text);
 }

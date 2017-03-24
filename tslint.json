@@ -14,7 +14,13 @@
      */
     "curly": true,
     // enable tslint-react rules here
-    "jsx-no-lambda": true
+    "jsx-no-lambda": false,
+    "jsx-alignment": true,
+    "jsx-curly-spacing": "always",
+    "one-line": [false],
+    "ordered-imports": [false],
+    "member-ordering": [false],
+    "only-arrow-functions": [false]
   },
   "jsRules": {
     /*
