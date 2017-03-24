@@ -11,7 +11,7 @@ dependencies:
     - pip install ansible
     - pip install --upgrade setuptools
     - npm install npm@latest -g
-    - sudo npm install karma karma-coverage - g
+    - npm install karma karma-coverage -g
 
 test:
   override:
