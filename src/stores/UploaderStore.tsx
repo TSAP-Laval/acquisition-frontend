@@ -15,7 +15,8 @@ class UploadStore extends EventEmitter {
     private message: IMessages;
     private source: axios.CancelTokenSource;
     private uploading: boolean = false;
-    private response: object = null;
+    // tslint:disable-next-line:ban-types
+    private response: Object = null;
     private gameID: number;
 
     constructor() {
