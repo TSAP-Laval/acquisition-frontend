@@ -15,7 +15,7 @@ module.exports = function(config) {
             'tests/tests.webpack.js'
         ],
         preprocessors: {
-            'tests/tests.webpack.js': ['webpack', 'sourcemap', 'coverage']
+            'tests/tests.webpack.js': ['webpack', 'sourcemap']
         },
         webpack: {
             devtool: 'inline-source-map',
