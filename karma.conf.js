@@ -78,7 +78,7 @@ module.exports = function(config) {
             ]
         },
         frameworks: ['mocha', 'chai', 'sinon'],
-        reporters: ['mocha'],
+        reporters: ['mocha', 'coverage'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
@@ -88,6 +88,7 @@ module.exports = function(config) {
         concurrency: Infinity,
         plugins: [
             "karma-*",
+            "karma-coverage",
         ]
     })
 }
