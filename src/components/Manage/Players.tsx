@@ -1,9 +1,8 @@
 import * as React                from "react";
 import * as ReactDOM             from "react-dom";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import { Button, Alert, Modal } from "react-bootstrap";
 import * as manageActions        from "../../actions/ManageActions";
 import store                     from "../../stores/PlayersStore";
-
 
 
 export interface ILayoutProps {}
@@ -118,7 +117,6 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
       
   
     var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
-   
     if( btnSubmit.value=="Modifier")
     {
          var inputID = document.getElementById("ID") as HTMLInputElement;
@@ -187,15 +185,15 @@ render() {
             </div>		
             <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
                 <h3>Creer un nouveau joueur</h3>     
-                <label htmlFor="Nom">Nom</label>
-                <input type="text" id="Nom" name="Nom"/> 
-                <label htmlFor="Prenom">Prenom</label>
+                <label className="control-label" htmlFor="Nom">Nom</label>
+                <input  type="text" id="Nom" name="Nom"/> 
+                <label className="control-label" htmlFor="Prenom">Prenom</label>
                 <input type="text"id="Prenom" name="Prenom"/>
-                <label htmlFor="Numero">Numero</label>
-                <input type="text"id="Numero" name="Numero"/> 
-                <label htmlFor="Email">Email</label>
+                <label className="control-label" htmlFor="Numero" >Numero</label>
+                <input type="text"id="Numero" name="Numero" required/> 
+                <label className="control-label" htmlFor="Email">Email</label>
                 <input type="text"id="Email" name="Email"/> 			
-                <label htmlFor="equipe">Équipe</label>                  
+                <label className="control-label" htmlFor="equipe">Équipe</label>                  
                 <select id="equipe" name="equipe"></select><br></br>   
                 <input type="hidden" id="ID"/> 
                 <input type="submit" value="Ajouter" id="btnSubmit"  />                
