@@ -15,7 +15,7 @@ module.exports = function(config) {
             'tests/tests.webpack.js'
         ],
         preprocessors: {
-            'tests/tests.webpack.js': ['webpack', 'sourcemap']
+            'tests/tests.webpack.js': ['webpack', 'sourcemap', 'coverage']
         },
         webpack: {
             devtool: 'inline-source-map',
@@ -63,10 +63,22 @@ module.exports = function(config) {
         coverageReporter: {
             type: 'text',
             dir: 'coverage/',
-            file: 'coverage.txt'
+            file: 'coverage.txt',
+            reporters: [
+                // reporters not supporting the `file` property
+                { type: 'html', subdir: 'html' },
+                { type: 'lcov' },
+                // reporters supporting the `file` property, use `subdir` to directly
+                // output them in the `dir` directory
+                { type: 'cobertura', subdir: '.', file: 'cobertura.txt' },
+                { type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' },
+                { type: 'teamcity', subdir: '.', file: 'teamcity.txt' },
+                { type: 'text', subdir: '.', file: 'text.txt' },
+                { type: 'text-summary', subdir: '.', file: 'text-summary.txt' },
+            ]
         },
         frameworks: ['mocha', 'chai', 'sinon'],
-        reporters: ['mocha'],
+        reporters: ['mocha', 'coverage'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

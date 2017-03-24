@@ -213,7 +213,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-    fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
+    //fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
 
     // Effacer le canvas
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
@@ -221,7 +221,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-    fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+    //fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
 
     // Dessiner la flèche
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
