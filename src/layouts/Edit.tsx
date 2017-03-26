@@ -52,7 +52,6 @@ var fleche: [any, any] = [[], []];
                     ]
                   ];
 
-
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   constructor (props: any) {
       super(props);
@@ -292,6 +291,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       //let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
       
        let ligne = (nbTempo == 0 ? 0 :( nbTempo == 2 ? 1 : 2));
+
       /**
        * Obtenir la dernière position jouée (gauche, centre ou droite).
        */
@@ -409,11 +409,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
           </div>  
         </form>;
     }
-
     return (
       <div>
         {formAction}
         <input type="button" onClick={this.demi.bind(rows)} value="mi-Temps"/>
+
         <form onSubmit={this.sendFormData.bind(this)}>  
             <h3>Pointage</h3><br></br>               
             <label htmlFor="ScoreDom">Domicile</label>
