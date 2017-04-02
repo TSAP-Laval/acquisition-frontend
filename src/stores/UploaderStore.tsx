@@ -1,3 +1,4 @@
+
 // tslint:disable:import-spacing
 import { EventEmitter }     from "events";
 import * as axios           from "axios";
@@ -65,11 +66,13 @@ class UploadStore extends EventEmitter {
 
         if (percentCompleted === 100) {
             this.addMessage(false, "UPLOAD_SUCCESS");
+
             this.emit("upload_ended");
         }
         else {
             // Only if it is still uploading. If the Operation
             // is canceled, it wont update...
+
             if (this.uploading) {
                 this.emit("uploading");
             }
@@ -105,6 +108,7 @@ class UploadStore extends EventEmitter {
             }
         }.bind(this)).catch(function(error: string) {
             // console.log("ERROR (XHR): \n" + error);
+
             // Only if it's not the cancel actions that cause the error
             // toString() to make sure it's really converted to a string.
             // Cause an error if removed...
@@ -115,6 +119,7 @@ class UploadStore extends EventEmitter {
             }
         }.bind(this));
     }
+
     // tslint:enable:no-string-literal
 
     private searchTeam(text: string) {
@@ -128,12 +133,12 @@ class UploadStore extends EventEmitter {
             this.addTeams(r.data);
         }.bind(this)).catch(function(error: string) {
             // console.log("ERROR (XHR): \n" + error);
+
             this.addMessage(true, "UNKNOWN");
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
     }
-
     private searchFields(text: string) {
         const config = {
             headers: {"Content-Type": "application/json;"},
@@ -206,11 +211,11 @@ class UploadStore extends EventEmitter {
             this.emit("upload_ended");
         }.bind(this));
     }
-
     public handleActions(action: any){
         switch (action.type) {
             case "UPLOAD.SHOW_MESSAGE":
                 this.addMessage(action.isError, action.text);
+
                 break;
             case "UPLOAD.UPLOAD":
                 this.addMessage();
@@ -253,10 +258,10 @@ class UploadStore extends EventEmitter {
                 break;
             default:
                 break;
+
         }
     }
 }
-
 const store = new UploadStore();
 export default store;
 dispatcher.register(store.handleActions.bind(store));

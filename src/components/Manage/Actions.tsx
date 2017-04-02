@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import {Button, Alert} from "react-bootstrap";
-import * as $ from "jquery";
 
 import * as requesthandler from './RequestHandler';
 import actionStore from '../../stores/ActionsStore';

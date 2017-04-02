@@ -104,7 +104,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public _onFieldSearch() {
         this.setState({fields: Store.getFields()});
     }
-
     public closeForm() {
         Actions.closeForm();
     }
@@ -255,7 +254,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         const multi = false;
         const confForm = this.state.openConfirmForm ? <ConfForm/> : null;
         const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>);
-
         return (
             <div>
                 <div className="modal-dialog relative" id="modal">
