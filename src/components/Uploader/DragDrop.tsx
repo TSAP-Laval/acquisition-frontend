@@ -57,7 +57,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         Store.removeListener("open_form", this._onOpenForm);
         Store.removeListener("close_form", this._onCloseForm);
     }
-
     private _onMessage() {
         this.setState({message: Store.getMessage()});
     }

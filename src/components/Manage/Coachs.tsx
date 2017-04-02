@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as $ from "jquery";
+
 
 import {Button, Alert, Modal} from "react-bootstrap";
 import * as Select from 'react-select';

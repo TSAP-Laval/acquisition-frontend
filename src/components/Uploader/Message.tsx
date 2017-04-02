@@ -18,7 +18,6 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
         super(props);
         this.state = { message: this.props.message };
     }
-
     public render() {
         let msg = null;
         let style = "invisible";
@@ -55,7 +54,6 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
             default:
                 break;
         }
-
         if (this.props.message.message !== "") {
             style = this.props.message.isError ? "error" : "success";
         }

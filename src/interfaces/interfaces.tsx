@@ -1,3 +1,4 @@
+
 // tslint:disable:typedef-whitespace
 // tslint:disable:indent
 export interface IAction {
@@ -102,6 +103,7 @@ export interface IGames  {
 
 // Temperatures la température durant la partie
 export interface ITemperatures  {
+
     ID:              number;
 	TemperatureType: string; // Rain, wind, sun, etc
 	Degree:          string; // The temperature un degree celcius
@@ -144,7 +146,6 @@ export interface IActions  {
     ID:           number;
 	ActionType:   IActionsType;
 	ActionTypeID: number;
-	IsPositive:   boolean;
 	Zone:         IZones;
 	ZoneID:       number;
 	Game:         IGames;
@@ -176,9 +177,11 @@ export interface ICoaches  {
 
 // Metrics les métriques
 export interface IMetrics  {
+
     ID:       number;
 	Name:     string;
 	Equation: string;
 	Team:     ITeams;
 	TeamID:   number;
 }
+
