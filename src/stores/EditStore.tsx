@@ -57,11 +57,14 @@ class EditStore extends EventEmitter {
             }
             case "GetActionsEdit" :
                 this.actions=[];
+                console.log("test");
                 for(var i=0;i<action.text.length;i++)
                 {
+                    console.log(action.text[i]);
+                    console.log("wow");
                     this.actions.push(action.text[i]);
                 }
-                this.emit("change");
+                this.emit("actionChange");
             break;
             case "PostAction" :
                 if(action.text !="error")
@@ -69,7 +72,7 @@ class EditStore extends EventEmitter {
                     var laction =JSON.parse(action.text);
                     this.actions.push(laction); 
                 }
-                this.emit("change");
+                this.emit("actionChange");
             break;         
         }
     }

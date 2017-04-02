@@ -19,6 +19,7 @@ export interface ILayoutState {
 
 // Variable global pour avoir le numero du joueur
 var numJoueur = 0;
+var idActionType =0;
 var fleche: [any, any] = [[], []];
  /**
    * rows représente les joueurs sur le terrain.
@@ -70,7 +71,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({ 
         _lesJoueurs: Store.GetAllJoueurs(),
         _formState: 0
-      })
+      });
+    });
+
+    Store.on("actionChange", () => {
       this.RemplirSelect();
     });
   }
@@ -86,7 +90,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       var data =tabJson[i];
       var doc = document.getElementById("NomActivite");
       var x = document.createElement("OPTION") as HTMLInputElement;
-      x.innerHTML=data.Name;
+      x.innerHTML=data.Description;
       x.value=data.ID;
       doc.appendChild(x);
     }
@@ -114,8 +118,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
     }
   }
-  demi=() =>
-  {
+
+  demi = () => {
     this.changeTwoLi("def-gauche-list","off-droite-list");
     this.changeTwoLi("def-droite-list","off-gauche-list");
     this.changeTwoLi("def-centre-list","off-centre-list");
@@ -151,10 +155,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     var form = e.target as HTMLFormElement;
 
     //Va chercher le type de l'active
-    let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
+    //let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
 
     //Va chercher le resutltat de l'action
-    let _resultat = document.getElementsByName("resultat")[0] as HTMLInputElement;
     let _video = document.getElementById("my-player") as HTMLVideoElement;
     let tempsAction = _video.currentTime;
     let _scoreDom = document.getElementById("ScoreDom") as HTMLInputElement;
@@ -162,14 +165,12 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let _scoreAway = document.getElementById("ScoreAway") as HTMLInputElement;
     let scoreAway = _scoreAway.value;    
     let video = document.getElementById("my-player") as HTMLVideoElement;
-    var TypeAction = 0;
-    TypeAction = parseInt(_typeSelect.value)
-    var resultatAction = _resultat.value
-    if(TypeAction != 0 && resultatAction != "") {
+    var TypeAction = 5;
+    //TypeAction = parseInt(_typeSelect.value)
+    if(TypeAction != 0) {
       //Preparation du json que l'on va envoyer au server
       var text = '{'
-        +'"ActionTypeID" :'+TypeAction+','
-        +'"IsPositive" : '+resultatAction + ','
+        +'"ActionTypeID" :'+idActionType+','
         +'"ZoneID" : 1 ,'
         +'"GameID" : 1 ,'
         +'"X1" : ' + fleche[0][0] + ','
@@ -201,6 +202,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   setActionFromInfo = () => {
+     let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
+     idActionType=parseInt(_typeSelect.value)
     // Affiche le terrain.
     this.setState({
       _formState: 1,
@@ -222,9 +225,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     // Dessiner la flèche
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
-
-    console.log(fleche);
-
+    
     let ajustement = 1.8;
 
     ctx.strokeStyle = "blue";
@@ -262,6 +263,18 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   render() {
+
+    rows = [
+        [
+          [], [], []
+        ], 
+        [
+          [], [], []
+        ], 
+        [
+          [], [], []
+        ]
+      ];
    
     var nbTempo =0;
     var nbTempo2=0;
@@ -312,19 +325,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               <label htmlFor="Nom">Nom de l'action</label>                  
               <select id="NomActivite" className="form-control" name="NomActivite"></select><br></br>
             </div>
-            <div className="form-group">
-              <label htmlFor="resultat">Résultat de l'action </label> 
-              <div className="radio">   
-                <label>
-                  <input type="radio" id="actionReussi" name="resultat" value="true" /> Reussi
-                </label>
-              </div>
-              <div className="radio">  
-                <label>
-                  <input type="radio" id="actionManque" name="resultat" value="false"/> Manqué<br></br>
-                </label>
-              </div>
-            </div>
             <hr />
             <div className="form-group col-xs-4 col-xs-push-8">
               <input type="submit" className="btn btn-default" value="Trajectoire" />
@@ -373,20 +373,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <h3>Action finale</h3><hr />
             <div className="form-group">          
               <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActivite" className="form-control" name="NomActivite"></select><br></br>
-            </div>
-            <div className="form-group">
-              <label htmlFor="resultat">Résultat de l'action </label> 
-              <div className="radio">   
-                <label>
-                  <input type="radio" id="actionReussi" name="resultat" value="true" /> Reussi
-                </label>
-              </div>
-              <div className="radio">  
-                <label>
-                  <input type="radio" id="actionManque" name="resultat" value="false"/> Manqué<br></br>
-                </label>
-              </div>
+              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest"></select><br></br>
             </div>
             <hr />
             <div className="col-xs-2 no-l-padd">
