@@ -296,7 +296,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
           className="btn btn-primary"
           value={this.state._lesJoueurs[i]["Number"]} 
           onClick={this.openActionForm.bind(this)}>{this.state._lesJoueurs[i]["Number"]}
-      </button></li>));
+      /></li>));
     } 
 
     // Définit le form
@@ -337,12 +337,15 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
           </button>
           <h3>Définir la trajectoire</h3><hr />
 
-          <div id="terrain-container-sm" onMouseDown={this.setFromArrow.bind(this)} onMouseUp={this.setToArrow.bind(this)}> 
-            <div id="circle-centre"></div>
-            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third"></div>
-            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third"></div>
-            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third"></div>
-            <canvas id="canvasArrow"></canvas>
+          <div
+           id="terrain-container-sm"
+           onMouseDown={this.setFromArrow.bind(this)} 
+           onMouseUp={this.setToArrow.bind(this)}> 
+            <div id="circle-centre" />
+            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
+            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
+            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
+            <canvas id="canvasArrow" />
           </div>
           <hr />
           <div className="col-xs-2 no-l-padd">
@@ -368,7 +371,8 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
             <h3>Action finale</h3><hr />
             <div className="form-group">          
               <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest"></select><br></br>
+              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest"/>
+              <br />
             </div>
             <hr />
             <div className="col-xs-2 no-l-padd">
@@ -394,7 +398,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
             <input type="text" name="ScoreAway" id="ScoreAway"/>
       </form>              
         <div id="terrain-container" className="container-fluid">
-          <div id="circle-centre"></div>
+          <div id="circle-centre" />
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
             <div id="def-gauche">
               <ul className="players-list" id="def-gauche-list">{rows[0][0]}</ul>
