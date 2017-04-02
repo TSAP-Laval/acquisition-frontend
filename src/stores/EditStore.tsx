@@ -57,11 +57,8 @@ class EditStore extends EventEmitter {
             }
             case "GetActionsEdit" :
                 this.actions=[];
-                console.log("test");
                 for(var i=0;i<action.text.length;i++)
                 {
-                    console.log(action.text[i]);
-                    console.log("wow");
                     this.actions.push(action.text[i]);
                 }
                 this.emit("actionChange");
