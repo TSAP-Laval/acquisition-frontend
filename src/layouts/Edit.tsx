@@ -62,7 +62,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       }
   }
 
-  componentWillMount = () => {
+ private componentWillMount = () => {
     Actions.getJoueur(); // Charge les joueurs dans le store.
     Actions.getActionsEdit();
     
@@ -79,7 +79,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     });
   }
 
-  RemplirSelect = () => {
+  private RemplirSelect = () => {
     this.ClearDomElement("NomActivite");
     var allActions = Store.GetAllActions();
     var datastringify = JSON.stringify(allActions);
@@ -96,9 +96,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     }
   }
 
-  changeTwoLi =(nom1:string,nom2:string) =>{
+ private changeTwoLi =(nom1:string,nom2:string) =>{
     var lisPremier = document.getElementById(nom1).getElementsByTagName("li");
     var tempo: any = [];
+    // tslint:disable:prefer-for-of
     for(let i=0;i<lisPremier.length;i++)
     {
       tempo.push(lisPremier[i]);
@@ -119,7 +120,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     }
   }
 
-  demi = () => {
+ private demi = () => {
     this.changeTwoLi("def-gauche-list","off-droite-list");
     this.changeTwoLi("def-droite-list","off-gauche-list");
     this.changeTwoLi("def-centre-list","off-centre-list");
@@ -127,7 +128,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
 
-  ClearDomElement = (nom:string) => {
+private  ClearDomElement = (nom:string) => {
     var doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
       doc.removeChild(doc.lastChild);
@@ -137,18 +138,18 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   /**
    * Ouvre le form d'ajout d'action
    */
-  openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
+private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
     Actions.requestActionForm(e, sender, document.getElementsByClassName("Enr")[0] as HTMLDivElement);
   }
 
   /**
    * Ferme le form d'ajout d'action
    */
-  closeActionForm = () => {
+private closeActionForm = () => {
     Actions.closeActionForm(document.getElementsByClassName("Enr")[0] as HTMLDivElement);
   }
   //Envoie du formulaire à l'api 
-  sendFormData(e: React.MouseEvent<HTMLInputElement>) {
+private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
 
     //Va rechercher le formulaire
@@ -157,7 +158,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     //Va chercher le type de l'active
     //let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
 
-    //Va chercher le resutltat de l'action
+    // Va chercher le resutltat de l'action
     let _video = document.getElementById("my-player") as HTMLVideoElement;
     let tempsAction = _video.currentTime;
     let _scoreDom = document.getElementById("ScoreDom") as HTMLInputElement;
@@ -166,9 +167,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let scoreAway = _scoreAway.value;    
     let video = document.getElementById("my-player") as HTMLVideoElement;
     var TypeAction = 5;
-    //TypeAction = parseInt(_typeSelect.value)
+    // TypeAction = parseInt(_typeSelect.value)
     if(TypeAction != 0) {
-      //Preparation du json que l'on va envoyer au server
+      // Preparation du json que l'on va envoyer au server
       var text = '{'
         +'"ActionTypeID" :'+idActionType+','
         +'"ZoneID" : 1 ,'
@@ -184,16 +185,16 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         +'}'
       Actions.postAction(text);
 
-      //Fermer le fenetre
+      // Fermer le fenetre
       this.closeActionForm.bind(this);
     }
   }
 
-  setTerrainFromInfo = () => {
+private setTerrainFromInfo = () => {
     // Définir la position initiale du joueur.
   }
 
-  setTerrainToInfo = () => {
+private setTerrainToInfo = () => {
     // Définir l'action finale du joueur.
     this.setState({
       _formState: 2,
@@ -201,8 +202,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     });
   }
 
-  setActionFromInfo = () => {
+private setActionFromInfo = () => {
      let _typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
+     // tslint:disable-next-line:radix
      idActionType=parseInt(_typeSelect.value)
     // Affiche le terrain.
     this.setState({
@@ -210,17 +212,15 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       _lesJoueurs: this.state._lesJoueurs
     });
   }
-
-  setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-    fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
-
+private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
+ // fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
     // Effacer le canvas
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
     canvas.width = canvas.width;
   }
 
-  setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-    fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
+   // fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
 
     // Dessiner la flèche
     var canvas = document.getElementById('canvasArrow') as HTMLCanvasElement;
@@ -242,7 +242,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
   }
 
-  drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
+  private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
       ctx.save();
       ctx.beginPath();
       ctx.translate(x,y);
@@ -255,14 +255,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       ctx.fill();
   }
 
-  returnFirstStateForm = () => {
+ private returnFirstStateForm = () => {
     this.setState({
       _formState: 0,
       _lesJoueurs: this.state._lesJoueurs
     })
   }
 
-  render() {
+ public render() {
 
     rows = [
         [
@@ -298,6 +298,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
        */
       //let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
       nbTempo++;
+      // tslint:disable-next-line:jsx-wrap-multiline
       rows[ligne][nbTempo2].push(<li>
 
         <button
@@ -310,6 +311,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     // Définit le form
     var formAction: any;
     if (this.state._formState == 0) {
+      // tslint:disable:jsx-wrap-multiline
       formAction = <form onSubmit={this.setActionFromInfo.bind(this)}>  
           <div className="Enr">
             <button 
@@ -323,15 +325,16 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <h3>Première action</h3><hr />
             <div className="form-group">          
               <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActivite" className="form-control" name="NomActivite"></select><br></br>
+              <select id="NomActivite" className="form-control" name="NomActivite"/><br />
             </div>
             <hr />
             <div className="form-group col-xs-4 col-xs-push-8">
               <input type="submit" className="btn btn-default" value="Trajectoire" />
             </div>
           </div>  
-        </form>;
+          </form>;
     } else if (this.state._formState == 1) {
+      // tslint:disable-next-line:jsx-wrap-multiline
       formAction = <form onSubmit={this.setTerrainFromInfo.bind(this)}>
         <div className="Enr">
           <button 
@@ -343,7 +346,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               <span aria-hidden="true">&times;</span>
           </button>
           <h3>Définir la trajectoire</h3><hr />
+          {/* tslint:disable-next-line:max-line-length */}
           <div id="terrain-container-sm" onMouseDown={this.setFromArrow.bind(this)} onMouseUp={this.setToArrow.bind(this)}> 
+            {/* tslint:disable:jsx-self-close */}
             <div id="circle-centre"></div>
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third"></div>
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third"></div>
@@ -360,6 +365,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         </div>
       </form>
     } else {
+       // tslint:disable-next-line:jsx-wrap-multiline
       formAction = <form onSubmit={this.setActionFromInfo.bind(this)}>  
           <div className="Enr">
             <button 
