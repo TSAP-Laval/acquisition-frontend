@@ -1,3 +1,3 @@
-declare module 'config' {
-     export var serverURL: string;
+declare module "config" {
+     export const serverURL: string;
  }

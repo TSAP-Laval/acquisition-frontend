@@ -55,7 +55,7 @@ LstJoueurs(){
         }
 }
 ModifJoueur(i:any, id:any){
-    var doc = document.getElementById("action_table") as HTMLTableElement;
+    /*var doc = document.getElementById("action_table") as HTMLTableElement;
     var t = doc.rows[i+1];
     var nomjoueur= t.cells[0].innerHTML;
     var inputNom = document.getElementById("Nom") as HTMLInputElement;
@@ -72,7 +72,7 @@ ModifJoueur(i:any, id:any){
     var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
     btnSubmit.value="Modifier";
     var inputID = document.getElementById("ID") as HTMLInputElement;
-    inputID.value=id;
+    inputID.value=id;*/
     
 }
 ClearDomElement(nom:string){
@@ -131,7 +131,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"TokenInvitation" : "test" ,'
         +'"TokenReinitialisation" : "test ",'
         +'"TokenConnexion" : "test",'
-        +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
+        +'"EquipeID" : '+ '"'+ optEquipe + '"'
         +'}'
          manageActions.putJoueur(text,IdJoueur);
     }
@@ -146,7 +146,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         +'"TokenInvitation" : "test" ,'
         +'"TokenReinitialisation" : "test ",'
         +'"TokenConnexion" : "test",'
-        +'"EquipeID" : '+ '"'+ optEquipe.value + '"'
+        +'"EquipeID" : '+ '"'+ optEquipe + '"'
         +'}'
         manageActions.postJoueur(text);
     }
