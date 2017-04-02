@@ -289,10 +289,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
        * Obtenir la dernière ligne jouée (défensive, centre ou offensive).
        */
       //let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
-      
-
        let ligne = (nbTempo == 0 ? 0 :( nbTempo == 2 ? 1 : 2));
-
       /**
        * Obtenir la dernière position jouée (gauche, centre ou droite).
        */
