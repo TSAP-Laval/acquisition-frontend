@@ -272,14 +272,18 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
        */
       //let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
       nbTempo++;
-  
-      rows[ligne][nbTempo2].push((<li>
 
-        <button
-          className="btn btn-primary"
-          value={this.state._lesJoueurs[i]["Number"]} 
-          onClick={this.openActionForm.bind(this)}>{this.state._lesJoueurs[i]["Number"]}
-      /></li>));
+      rows[ligne][nbTempo2].push(
+        <li>
+          <button
+            className="btn btn-primary"
+            value={this.state._lesJoueurs[i]["Number"]}
+            onClick={this.openActionForm.bind(this)}
+          >
+              {this.state._lesJoueurs[i]["Number"]}
+          </button>
+        </li>,
+        );
     } 
 
     // Définit le form
