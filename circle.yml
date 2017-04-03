@@ -11,10 +11,12 @@ dependencies:
     - pip install ansible
     - pip install --upgrade setuptools
     - npm install npm@latest -g
+    - npm install coveralls
 
 test:
   override:
     - npm test
+    - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
   post:
     - mkdir $CIRCLE_ARTIFACTS/coveralls
     - mv coverage/html/*.* $CIRCLE_ARTIFACTS/coveralls
