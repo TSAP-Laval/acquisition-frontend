@@ -1,4 +1,3 @@
-
 // tslint:disable:import-spacing
 import { EventEmitter }     from "events";
 import * as axios           from "axios";
@@ -98,7 +97,7 @@ class UploadStore extends EventEmitter {
         });
 
         axios.default.post(serverURL + "/upload", form, config).then(function(r: axios.AxiosResponse) {
-            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             if (r.data["exist"] === "true") {
                 this.addMessage(true, "EXIST");
                 this.emit("close_form");

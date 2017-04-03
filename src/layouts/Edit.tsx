@@ -1,76 +1,58 @@
-import * as React from "react";
-import * as ReactDOM from 'react-dom';
-import * as $ from "jquery";
-import Store from "../stores/EditStore";
-import VideoStore from "../stores/VideoPlayerStore";
-import UploaderStore from "../stores/UploaderStore";
-import * as Actions from "../actions/EditAction";
-import Header from "./Header"
-import * as Motion from 'react-motion';
+// tslint:disable:import-spacing
+import * as React     from "react";
+import * as ReactDOM  from "react-dom";
+import Store          from "../stores/EditStore";
+import VideoStore     from "../stores/VideoPlayerStore";
+import UploaderStore  from "../stores/UploaderStore";
+import * as Actions   from "../actions/EditAction";
+import Header         from "./Header";
+import * as Motion    from "react-motion";
+// tslint:enable:import-spacing
 
-require('../sass/Layout.scss');
+import "../sass/Layout.scss";
 
 
+// tslint:disable-next-line:no-empty-interface
 export interface ILayoutProps {}
 export interface ILayoutState {
-  _lesJoueurs: any,
-  _formState: any
+  _lesJoueurs: any;
+  _formState: any;
 }
 
 // Variable global pour avoir le numero du joueur
-var numJoueur = 0;
-var idActionType =0;
-var fleche: [any, any] = [[], []];
- /**
-   * rows représente les joueurs sur le terrain.
-   * 
-   * Liste des index:
-   * 
-   *  rows[0] -> Ligne défensive
-   *    rows[0][0] -> Gauche
-   *    rows[0][1] -> Centre
-   *    rows[0][2] -> Droite
-   * 
-   *  rows[1] -> Ligne de centre
-   *    rows[1][0] -> Gauche
-   *    rows[1][1] -> Centre
-   *    rows[1][2] -> Droite
-   * 
-   *  rows[2] -> Ligne offensive
-   *    rows[2][0] -> Gauche
-   *    rows[0][2] -> Centre
-   *    rows[0][3] -> Droite
-   */
-  var rows: any = [
-                    [
-                      [], [], []
-                    ], 
-                    [
-                      [], [], []
-                    ], 
-                    [
-                      [], [], []
-                    ]
-                  ];
+const numJoueur = 0;
+let idActionType = 0;
+const fleche: [any, any] = [[], []];
+let rows: any = [
+                  [
+                    [], [], [],
+                  ],
+                  [
+                    [], [], [],
+                  ],
+                  [
+                    [], [], [],
+                  ],
+                ];
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
-  constructor (props: any) {
+  constructor(props: any) {
       super(props);
       this.state = {
+        _formState: 0,
         _lesJoueurs: [],
-        _formState: 0
-      }
+      };
   }
 
  private componentWillMount = () => {
     Actions.getJoueur(); // Charge les joueurs dans le store.
     Actions.getActionsEdit();
-    
+
     // Lorsque les joueurs sont chargés.
     Store.on("change", () => {
-      this.setState({ 
+      this.setState({
+        _formState: 0,
         _lesJoueurs: Store.GetAllJoueurs(),
-        _formState: 0
       });
     });
 
@@ -81,17 +63,18 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
   private RemplirSelect = () => {
     this.ClearDomElement("NomActivite");
-    var allActions = Store.GetAllActions();
-    var datastringify = JSON.stringify(allActions);
-    var tabJson = JSON.parse(datastringify);	
+    const allActions = Store.GetAllActions();
+    const datastringify = JSON.stringify(allActions);
+    const tabJson = JSON.parse(datastringify);
 
-    //Rentre le id et le nom de l'action dans le tableau correspondant
-    for (var i = 0; i < tabJson.length; i++) {
-      var data =tabJson[i];
-      var doc = document.getElementById("NomActivite");
-      var x = document.createElement("OPTION") as HTMLInputElement;
-      x.innerHTML=data.Description;
-      x.value=data.ID;
+    // Rentre le id et le nom de l'action dans le tableau correspondant
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < tabJson.length; i++) {
+      const data = tabJson[i];
+      const doc = document.getElementById("NomActivite");
+      const x = document.createElement("OPTION") as HTMLInputElement;
+      x.innerHTML = data.Description;
+      x.value = data.ID;
       doc.appendChild(x);
     }
   }
