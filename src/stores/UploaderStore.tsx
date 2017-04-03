@@ -71,7 +71,6 @@ class UploadStore extends EventEmitter {
         else {
             // Only if it is still uploading. If the Operation
             // is canceled, it wont update...
-
             if (this.uploading) {
                 this.emit("uploading");
             }
@@ -97,7 +96,7 @@ class UploadStore extends EventEmitter {
         });
 
         axios.default.post(serverURL + "/upload", form, config).then(function(r: axios.AxiosResponse) {
-            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             if (r.data["exist"] === "true") {
                 this.addMessage(true, "EXIST");
                 this.emit("close_form");
@@ -120,7 +119,6 @@ class UploadStore extends EventEmitter {
     }
 
     // tslint:enable:no-string-literal
-
     private searchTeam(text: string) {
         const config = {
             headers: {"Content-Type": "application/json;"},
@@ -231,12 +229,12 @@ class UploadStore extends EventEmitter {
                 break;
             case "UPLOAD.CANCEL_UPLOAD":
                     this.uploading = false;
-                    if (this.progress[0] === "100") {
+                    if (this.progress[0] !== "100") {
                         this.cancelUpload();
                         this.emit("upload_ended");
-                        this.addMessage(false, "CANCEL");
-                    } else {
                         this.addMessage(false, "CANCEL_UPLOAD");
+                    } else {
+                        this.addMessage(false, "CANCEL");
                     }
                     this.sendCancel();
                     this.emit("close_form");
