@@ -19,7 +19,7 @@ private componentWillMount(){
 			
     })
 }
-private ClearDomElement(nom:string){
+private ClearDomElement(nom: string){
     var doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
         doc.removeChild(doc.lastChild);
@@ -98,9 +98,9 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     let letVilleTeam = document.getElementById("Ville")as HTMLInputElement
     var VilleTeam= letVilleTeam.value
     let letsportSelect = document.getElementsByName("Sport")[0] as HTMLSelectElement
-    var optSport = letsportSelect.options[_sportSelect.selectedIndex];
+    var optSport = letsportSelect.options[letsportSelect.selectedIndex];
     let letniveauSelect = document.getElementsByName("Niveau")[0] as HTMLSelectElement
-    var niveau = letniveauSelect.options[_niveauSelect.selectedIndex];
+    var niveau = letniveauSelect.options[letniveauSelect.selectedIndex];
 	// Preparation du json que l'on va envoyer au server
     var text = '{'
         +'"Name" :'+'"'+nomTeam+'",'
@@ -157,4 +157,5 @@ public render() {
         </div>
         );
     }
+// tslint:disable-next-line:eofline
 }
