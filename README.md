@@ -72,6 +72,19 @@ $ python -m SimpleHTTPServer (dans le dossier /dist du projet)
 $ webpack --watch (dans un autre terminal)
 ```
 
+
+## Linting avec TSLint
+
+### Prérequis
+
+* TSLint (npm install -g tslint)
+* TSLint (dans VSCode, installer le plugin TSLint)
+
+#### Linting
+ 
+Simplement linter le code avant chacun des push, sans quoi les PR seront rejetées...
+
+
 ## Tests avec Karma
 
 ### Prérequis
