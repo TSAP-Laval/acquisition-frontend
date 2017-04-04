@@ -99,12 +99,14 @@ class UploadStore extends EventEmitter {
 
         axios.default.post(serverURL + "/upload", form, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
-            if (r.data["exist"] === "true") {
-                this.addMessage(true, "EXIST");
-                this.emit("close_form");
-                this.emit("upload_ended");
-            } else {
-                this.gameID = r.data["game_id"];
+            if (r.data != null) {
+                if (r.data["exist"] === "true") {
+                    this.addMessage(true, "EXIST");
+                    this.emit("close_form");
+                    this.emit("upload_ended");
+                } else {
+                    this.gameID = r.data["game_id"];
+                }
             }
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): %o", error.response.data);
@@ -113,7 +115,8 @@ class UploadStore extends EventEmitter {
             // toString() to make sure it's really converted to a string.
             // Cause an error if removed...
             if (error.toString().toLowerCase().indexOf("cancel") === -1) {
-                this.addMessage(true, error.response.data["error"]);
+                error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data["error"];
+                this.addMessage(true, error);
                 this.emit("close_form");
                 this.emit("upload_ended");
             }
@@ -132,7 +135,8 @@ class UploadStore extends EventEmitter {
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
-            this.addMessage(true, error.response.data["error"]);
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data["error"];
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -149,7 +153,8 @@ class UploadStore extends EventEmitter {
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
-            this.addMessage(true, error.response.data["error"]);
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data["error"];
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -177,8 +182,8 @@ class UploadStore extends EventEmitter {
             this.saved = true;
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-
-            this.addMessage(true, error.response.data["error"]);
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data["error"];
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -207,7 +212,8 @@ class UploadStore extends EventEmitter {
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
-            this.addMessage(true, error.response.data["error"]);
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data["error"];
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
