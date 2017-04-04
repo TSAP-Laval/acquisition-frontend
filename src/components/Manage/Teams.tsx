@@ -12,106 +12,107 @@ private componentWillMount(){
     manageActions.getSport();
     manageActions.getNiveau();
     manageActions.getEquipes();
-    store.on("change",() =>{
+    store.on("change", () => {
         this.RemplirSelect();
         this.RemplirNiveau();
         this.LstEquipe();
-			
-    })
+
+    });
 }
 private ClearDomElement(nom: string){
-    var doc = document.getElementById(nom);
+    // tslint:disable:prefer-const
+    let doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
         doc.removeChild(doc.lastChild);
     }
 }
 private RemplirSelect(){
-    this.ClearDomElement("Sport")
-    var allSport= store.GetAllSports();
-    var datastringify =JSON.stringify(allSport);
-    var tabJson = JSON.parse(datastringify);	
+    this.ClearDomElement("Sport");
+    let allSport = store.GetAllSports();
+    let datastringify = JSON.stringify(allSport);
+    let tabJson = JSON.parse(datastringify);
 	    // Rentre le id et le nom de l'action dans le tableau correspondant
         // tslint:disable-next-line:prefer-for-of
-        for(var i = 0; i < tabJson.length; i++) {	
-        var data =tabJson[i];
-        var doc = document.getElementById("Sport");
-        var x = document.createElement("OPTION") as HTMLInputElement;
-        x.innerHTML=data.Name;
-        x.value=data.ID;
+    for (let i = 0; i < tabJson.length; i++) {
+        let data = tabJson[i];
+        let doc = document.getElementById("Sport");
+        let x = document.createElement("OPTION") as HTMLInputElement;
+        x.innerHTML = data.Name;
+        x.value = data.ID;
         doc.appendChild(x);
-        }	
-}	
+        }
+}
 private LstEquipe()	{
-    this.ClearDomElement("tbody")
-    var Allequipe= store.GetAllequipe();
-    var datastringify =JSON.stringify(Allequipe);
-    var tabJson = JSON.parse(datastringify);		
+    this.ClearDomElement("tbody");
+    let Allequipe = store.GetAllequipe();
+    let datastringify = JSON.stringify(Allequipe);
+    let tabJson = JSON.parse(datastringify);
 	// Rentre le id et le nom de l'action dans le tableau correspondant
     // tslint:disable-next-line:prefer-for-of
-    for(var i = 0; i < tabJson.length; i++) {
-        var data =tabJson[i];
-        var sportNom=store.getSportNom(data.SportID);
-        var NiveauNom=store.getNiveauNom(data.CategoryID);
-        var doc = document.getElementById("tbody");
-        var x = document.createElement("tr");
-        var tdBtn =  document.createElement("BUTTON");;
-        tdBtn.innerHTML= "Ajouter"
-        var tdNom = document.createElement("td");
-        tdNom.innerHTML=data.Name;
-        var tdVille = document.createElement("td");
-        tdVille.innerHTML=data.City;
-        var tdSportID= document.createElement("td");
-        tdSportID.innerHTML=sportNom;			 
-        var tdNiveauID = document.createElement("td");
-        tdNiveauID.innerHTML=NiveauNom;
+    for (let i = 0; i < tabJson.length; i++) {
+        let data = tabJson[i];
+        let sportNom = store.getSportNom(data.SportID);
+        let NiveauNom = store.getNiveauNom(data.CategoryID);
+        let doc = document.getElementById("tbody");
+        let x = document.createElement("tr");
+        let tdBtn =  document.createElement("BUTTON"); ;
+        tdBtn.innerHTML = "Ajouter";
+        let tdNom = document.createElement("td");
+        tdNom.innerHTML = data.Name;
+        let tdVille = document.createElement("td");
+        tdVille.innerHTML = data.City;
+        let tdSportID = document.createElement("td");
+        tdSportID.innerHTML = sportNom;
+        let tdNiveauID = document.createElement("td");
+        tdNiveauID.innerHTML = NiveauNom;
         x.appendChild(tdNom);
         x.appendChild(tdVille);
         x.appendChild(tdSportID);
         x.appendChild(tdNiveauID);
         x.appendChild(tdBtn);
-        doc.appendChild(x);		
-        }	
+        doc.appendChild(x);
+        }
 }
 private RemplirNiveau(){
-    this.ClearDomElement("Niveau")
-    var allSport= store.GetAllNiveau();
-    var datastringify =JSON.stringify(allSport);
-    var tabJson = JSON.parse(datastringify);	
+    this.ClearDomElement("Niveau");
+    let allSport = store.GetAllNiveau();
+    let datastringify = JSON.stringify(allSport);
+    let tabJson = JSON.parse(datastringify);
 		// Rentre le id et le nom de l'action dans le tableau correspondant
     // tslint:disable-next-line:prefer-for-of
-    for(var i = 0; i < tabJson.length; i++) {	
-        var data =tabJson[i];
-        var doc = document.getElementById("Niveau");
-        var x = document.createElement("OPTION") as HTMLInputElement;
-        x.innerHTML=data.Name;
-        x.value=data.ID;
+    for (let i = 0; i < tabJson.length; i++) {
+        let data = tabJson[i];
+        let doc = document.getElementById("Niveau");
+        let x = document.createElement("OPTION") as HTMLInputElement;
+        x.innerHTML = data.Name;
+        x.value = data.ID;
         doc.appendChild(x);
-    }	
+    }
 }
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
-    e.preventDefault()
+    e.preventDefault();
 	// Va rechercher le formulaire
-    var form = e.target as HTMLFormElement
+    let form = e.target as HTMLFormElement;
 	// Va chercher le type de l'active
-    let letNomTeam = document.getElementById("Nom")as HTMLInputElement
-    var nomTeam= letNomTeam.value
-    let letVilleTeam = document.getElementById("Ville")as HTMLInputElement
-    var VilleTeam= letVilleTeam.value
-    let letsportSelect = document.getElementsByName("Sport")[0] as HTMLSelectElement
-    var optSport = letsportSelect.options[letsportSelect.selectedIndex];
-    let letniveauSelect = document.getElementsByName("Niveau")[0] as HTMLSelectElement
-    var niveau = letniveauSelect.options[letniveauSelect.selectedIndex];
+    let letNomTeam = document.getElementById("Nom")as HTMLInputElement;
+    let nomTeam = letNomTeam.value;
+    let letVilleTeam = document.getElementById("Ville")as HTMLInputElement;
+    let VilleTeam = letVilleTeam.value;
+    let letsportSelect = document.getElementsByName("Sport")[0] as HTMLSelectElement;
+    let optSport = letsportSelect.options[letsportSelect.selectedIndex];
+    let letniveauSelect = document.getElementsByName("Niveau")[0] as HTMLSelectElement;
+    let niveau = letniveauSelect.options[letniveauSelect.selectedIndex];
 	// Preparation du json que l'on va envoyer au server
-    var text = '{'
-        +'"Name" :'+'"'+nomTeam+'",'
-        +'"City" : '+'"'+VilleTeam + '",'
-        +'"SportID" : '+optSport + ','
-        +'"CategoryID" : '+niveau + ''
-        +'}'
+    let text = "{"
+        + '"Name" :' + '"' + nomTeam + '",'
+        + '"City" : ' + '"' + VilleTeam + '",'
+        + '"SportID" : ' + optSport + ","
+        + '"CategoryID" : ' + niveau + ""
+        + "}";
     manageActions.postTeam(text);
 }
-public render() {	 
-    return (	
+public render() {
+    return (
         <div className="container">
              <div className="row">
                 <div className="col-md-6 col-sm-6 col-xs-12">

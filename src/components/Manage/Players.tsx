@@ -3,18 +3,10 @@ import * as ReactDOM from "react-dom";
 import { Button, Alert, Modal } from "react-bootstrap";
 import * as manageActions from "../../actions/ManageActions";
 import store from "../../stores/PlayersStore";
-
-
 // tslint:disable-next-line:no-empty-interface
 export interface ILayoutProps {}
 // tslint:disable-next-line:no-empty-interface
 export interface ILayoutState {}
-
-var numJoueur ="";
-var TableauJoueurs: any=[];
-var TableauJoueursId: any=[];
-
-
 
 export default class Players extends React.Component<ILayoutProps, ILayoutState> {
 private componentWillMount(){
@@ -22,32 +14,33 @@ private componentWillMount(){
     manageActions.getJoueur();
     manageActions.getNiveauJoueur();
     manageActions.getEquipesJoueur();
-    store.on("change",() =>{
+    store.on("change", () => {
         this.LstJoueurs();
         this.RemplirSelect();
-    })  
+    });
 }
 private LstJoueurs(){
     this.ClearDomElement("tbody");
-    var AllJoueurs= store.GetAllJoueurs();
-    var datastringify =JSON.stringify(AllJoueurs);
-    var tabJson = JSON.parse(datastringify);		
+    // tslint:disable:prefer-const
+    let AllJoueurs = store.GetAllJoueurs();
+    let datastringify = JSON.stringify(AllJoueurs);
+    let tabJson = JSON.parse(datastringify);
         // Rentre le id et le nom de l'action dans le tableau correspondant
-        for(var i = 0; i < tabJson.length; i++) {	
-            var data =tabJson[i];        	 
-            var doc = document.getElementById("tbody");
-            var x = document.createElement("tr");
-            var tdNom = document.createElement("td");
-            tdNom.innerHTML=data.Lname;
-            var tdPrenom = document.createElement("td");
-            tdPrenom.innerHTML=data.Fname;
-            var tdNumero = document.createElement("td");
-            tdNumero.innerHTML=data.Number;
-            var tdEmail = document.createElement("td");
-            tdEmail.innerHTML=data.Email;
-            var btnModifier = document.createElement("button") as HTMLButtonElement;
-            btnModifier.innerHTML="modifier";
-            btnModifier.onclick=this.ModifJoueur.bind(this,i,data.ID);
+    for ( let i = 0; i < tabJson.length; i++) {
+            let data = tabJson[i];
+            let doc = document.getElementById("tbody");
+            let x = document.createElement("tr");
+            let tdNom = document.createElement("td");
+            tdNom.innerHTML = data.Lname;
+            let tdPrenom = document.createElement("td");
+            tdPrenom.innerHTML = data.Fname;
+            let tdNumero = document.createElement("td");
+            tdNumero.innerHTML = data.Number;
+            let tdEmail = document.createElement("td");
+            tdEmail.innerHTML = data.Email;
+            let btnModifier = document.createElement("button") as HTMLButtonElement;
+            btnModifier.innerHTML = "modifier";
+            btnModifier.onclick = this.ModifJoueur.bind(this, i, data.ID);
             x.appendChild(tdNom);
             x.appendChild(tdPrenom);
             x.appendChild(tdNumero);
@@ -57,98 +50,100 @@ private LstJoueurs(){
         }
 }
 private ModifJoueur(i: any, id: any){
-    /*var doc = document.getElementById("action_table") as HTMLTableElement;
-    var t = doc.rows[i+1];
-    var nomjoueur= t.cells[0].innerHTML;
-    var inputNom = document.getElementById("Nom") as HTMLInputElement;
+    /*let doc = document.getElementById("action_table") as HTMLTableElement;
+    let t = doc.rows[i+1];
+    let nomjoueur= t.cells[0].innerHTML;
+    let inputNom = document.getElementById("Nom") as HTMLInputElement;
     inputNom.value=nomjoueur;
-    var prenomjoueur= t.cells[1].innerHTML;
-    var inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
+    let prenomjoueur= t.cells[1].innerHTML;
+    let inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
     inputPrenom.value=prenomjoueur;
-    var numeroJoueur= t.cells[2].innerHTML;
-    var inputNumero = document.getElementById("Numero") as HTMLInputElement;
+    let numeroJoueur= t.cells[2].innerHTML;
+    let inputNumero = document.getElementById("Numero") as HTMLInputElement;
     inputNumero.value=numeroJoueur;
-    var emailJoueur= t.cells[3].innerHTML;
-    var inputEmail = document.getElementById("Email") as HTMLInputElement;
+    let emailJoueur= t.cells[3].innerHTML;
+    let inputEmail = document.getElementById("Email") as HTMLInputElement;
     inputEmail.value=emailJoueur;
-    var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    let btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
     btnSubmit.value="Modifier";
-    var inputID = document.getElementById("ID") as HTMLInputElement;
+    let inputID = document.getElementById("ID") as HTMLInputElement;
     inputID.value=id;*/
-    
+
 }
 private ClearDomElement(nom: string){
-    var doc = document.getElementById(nom);
+    let doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
     doc.removeChild(doc.lastChild);
     }
 }
 private RemplirSelect(){
     this.ClearDomElement("equipe");
-    var allSport= store.GetAllequipeJoueur();
-    var datastringify =JSON.stringify(allSport);
-    var tabJson = JSON.parse(datastringify);		
+    let allSport = store.GetAllequipeJoueur();
+    let datastringify = JSON.stringify(allSport);
+    let tabJson = JSON.parse(datastringify);
         // Rentre le id et le nom de l'action dans le tableau correspondant
         // tslint:disable-next-line:prefer-for-of
-        for(var i = 0; i < tabJson.length; i++) {
-        var data =tabJson[i];
-        var leNiv= store.getNiveauNom(data.CategoryID)
-        var doc = document.getElementById("equipe");
-        var x = document.createElement("OPTION") as HTMLInputElement;
-        x.innerHTML=data.Name + "  "+ leNiv;
-        x.value=data.ID;
+    for (let i = 0; i < tabJson.length; i++) {
+        let data = tabJson[i];
+        let leNiv = store.getNiveauNom(data.CategoryID);
+        let doc = document.getElementById("equipe");
+        let x = document.createElement("OPTION") as HTMLInputElement;
+        x.innerHTML = data.Name + "  " + leNiv;
+        x.value = data.ID;
         doc.appendChild(x);
         }
 }
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
-    e.preventDefault()
+    e.preventDefault();
     // Va rechercher le formulaire
-    var form = e.target as HTMLFormElement
+    let form = e.target as HTMLFormElement;
     // Va chercher le type de l'active
-    let letNomJoueur = document.getElementById("Nom")as HTMLInputElement
-    var nomjoueur= letNomJoueur.value
-    let letPrenomJoueur = document.getElementById("Prenom")as HTMLInputElement
-    var prenomjoueur= letPrenomJoueur.value
-    let letNumeroJoueur = document.getElementById("Numero")as HTMLInputElement
-    var numerojoueur= letNumeroJoueur.value
-    let letEmailJoueur = document.getElementById("Email")as HTMLInputElement
-    var emailJoueur= letEmailJoueur.value
-    let letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
-    var optEquipe = letEquipeSelect.options[letEquipeSelect.selectedIndex];
+    let letNomJoueur = document.getElementById("Nom")as HTMLInputElement;
+    let nomjoueur = letNomJoueur.value;
+    let letPrenomJoueur = document.getElementById("Prenom")as HTMLInputElement;
+    let prenomjoueur = letPrenomJoueur.value;
+    let letNumeroJoueur = document.getElementById("Numero")as HTMLInputElement;
+    let numerojoueur = letNumeroJoueur.value;
+    let letEmailJoueur = document.getElementById("Email")as HTMLInputElement;
+    let emailJoueur = letEmailJoueur.value;
+    let letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement;
+    let optEquipe = letEquipeSelect.options[letEquipeSelect.selectedIndex];
     // Preparation du json que l'on va envoyer au server
-    var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
-    if( btnSubmit.value==="Modifier")
+    let btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    if ( btnSubmit.value === "Modifier")
     {
-         var inputID = document.getElementById("ID") as HTMLInputElement;
-        var IdJoueur= inputID.value;
-        var text = '{'
-        +'"ID" :'+ '"'+ IdJoueur+'",'
-        +'"Lname" :'+ '"'+ nomjoueur+'",'
+         let inputID = document.getElementById("ID") as HTMLInputElement;
+         let IdJoueur = inputID.value;
+         // tslint:disable:quotemark
+         let text = '{'
+        // tslint:disable:whitespace
+        +'"ID" :'+ '"'+ IdJoueur + '",'
+        +'"Lname" :'+ '"'+ nomjoueur + '",'
         +'"Fname" :'+ '"'+prenomjoueur + '",'
         +'"Number" : '+numerojoueur + ','
-        +'"Email" : '+ '"'+emailJoueur + '",'
+        + '"Email" : '+ '"' + emailJoueur + '",'
         +'"PassHash" : "test22" ,'
         +'"TokenInvitation" : "test" ,'
         +'"TokenReinitialisation" : "test ",'
         +'"TokenConnexion" : "test",'
-        +'"EquipeID" : '+ '"'+ optEquipe + '"'
-        +'}'
-         manageActions.putJoueur(text,IdJoueur);
+        +'"EquipeID" : ' + '"' + optEquipe + '"'
+        + '}';
+         manageActions.putJoueur(text, IdJoueur);
     }
     else
     {
-        // tslint:disable-next-line:no-shadowed-variable
-        var text = '{'
-        +'"Lname" :'+ '"'+ nomjoueur+'",'
+        // tslint:disable-next-line:no-shadowed-letiable
+        let text = '{'
+        +'"Lname" :'+ '"'+ nomjoueur + '",'
         +'"Fname" :'+ '"'+prenomjoueur + '",'
         +'"Number" : '+numerojoueur + ','
-        +'"Email" : '+ '"'+emailJoueur + '",'
+        +'"Email" : '+ '"' + emailJoueur + '",'
         +'"PassHash" : "test22" ,'
         +'"TokenInvitation" : "test" ,'
         +'"TokenReinitialisation" : "test ",'
         +'"TokenConnexion" : "test",'
-        +'"EquipeID" : '+ '"'+ optEquipe + '"'
-        +'}'
+        +'"EquipeID" : ' + '"' + optEquipe + '"'
+        + '}';
         manageActions.postJoueur(text);
     }
 
@@ -202,8 +197,8 @@ public render() {
             </div>
         </div> 
         </div>
-            
+
         );
     }
+// tslint:disable-next-line:eofline
 }
-
