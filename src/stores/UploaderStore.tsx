@@ -121,7 +121,6 @@ class UploadStore extends EventEmitter {
     }
 
     // tslint:enable:no-string-literal
-
     private searchTeam(text: string) {
         const config = {
             headers: {"Content-Type": "application/json;"},
@@ -232,12 +231,12 @@ class UploadStore extends EventEmitter {
                 break;
             case "UPLOAD.CANCEL_UPLOAD":
                     this.uploading = false;
-                    if (this.progress[0] === "100") {
+                    if (this.progress[0] !== "100") {
                         this.cancelUpload();
                         this.emit("upload_ended");
-                        this.addMessage(false, "CANCEL");
-                    } else {
                         this.addMessage(false, "CANCEL_UPLOAD");
+                    } else {
+                        this.addMessage(false, "CANCEL");
                     }
                     this.sendCancel();
                     this.emit("close_form");

@@ -15,7 +15,7 @@ module.exports = function(config) {
             'tests/tests.webpack.js'
         ],
         preprocessors: {
-            'tests/tests.webpack.js': ['webpack', 'sourcemap']
+            'tests/tests.webpack.js': ['webpack', 'sourcemap', 'coverage']
         },
         webpack: {
             devtool: 'inline-source-map',
@@ -67,7 +67,7 @@ module.exports = function(config) {
             reporters: [
                 // reporters not supporting the `file` property
                 { type: 'html', subdir: 'html' },
-                { type: 'lcov' },
+                { type: 'lcov', subdir: '.', file: 'lcov.info'},
                 // reporters supporting the `file` property, use `subdir` to directly
                 // output them in the `dir` directory
                 { type: 'cobertura', subdir: '.', file: 'cobertura.txt' },
