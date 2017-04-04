@@ -1,3 +1,4 @@
+
 // tslint:disable:import-spacing
 import { EventEmitter }     from "events";
 import * as axios           from "axios";
@@ -71,6 +72,7 @@ class UploadStore extends EventEmitter {
         else {
             // Only if it is still uploading. If the Operation
             // is canceled, it wont update...
+
             if (this.uploading) {
                 this.emit("uploading");
             }

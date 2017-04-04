@@ -5,13 +5,13 @@ import * as axios from 'axios';
 
 export function getJoueur() {
     axios.default.get(serverURL+'/joueur')
-    .then(function(response:any) {  
+    .then(function(response: any) {  
         dispatcher.dispatch({ type: "MATCH_EDIT.GETJOUEURS", text: response.data });     
     });  
 }
 export function getActionsEdit() {   
      axios.default.get(serverURL +'/actions')
-    .then(function(response:any){
+    .then(function(response: any){
         dispatcher.dispatch({ type: "GetActionsEdit", text: response.data });     
     });  
 }
@@ -24,7 +24,8 @@ export function postAction(stringContenu: string) {
     })    
 }
 
-export function requestActionForm(e: React.MouseEvent<HTMLInputElement>, button: HTMLButtonElement, form: HTMLDivElement) {
+export function requestActionForm(e: React.MouseEvent<HTMLInputElement>,
+button: HTMLButtonElement, form: HTMLDivElement) {
     // Récupérer le joueur?
     dispatcher.dispatch({
         type: "MATCH_EDIT.REQUEST_ACTION_FORM",
@@ -37,6 +38,8 @@ export function requestActionForm(e: React.MouseEvent<HTMLInputElement>, button:
 export function closeActionForm(form: HTMLDivElement) {
     dispatcher.dispatch({
         type: "MATCH_EDIT.CLOSE_ACTION_FORM",
+        // tslint:disable-next-line:object-literal-sort-keys
         form: form,
     })
+// tslint:disable-next-line:eofline
 }

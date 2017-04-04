@@ -1,21 +1,23 @@
-import * as React                from "react";
-import * as ReactDOM             from "react-dom";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { Button, Alert, Modal } from "react-bootstrap";
-import * as manageActions        from "../../actions/ManageActions";
-import store                     from "../../stores/PlayersStore";
+import * as manageActions from "../../actions/ManageActions";
+import store from "../../stores/PlayersStore";
 
 
+// tslint:disable-next-line:no-empty-interface
 export interface ILayoutProps {}
+// tslint:disable-next-line:no-empty-interface
 export interface ILayoutState {}
 
 var numJoueur ="";
-var TableauJoueurs:any=[];
-var TableauJoueursId:any=[];
+var TableauJoueurs: any=[];
+var TableauJoueursId: any=[];
 
 
 
 export default class Players extends React.Component<ILayoutProps, ILayoutState> {
-componentWillMount(){
+private componentWillMount(){
     manageActions.getSportJoueur();
     manageActions.getJoueur();
     manageActions.getNiveauJoueur();
@@ -25,12 +27,12 @@ componentWillMount(){
         this.RemplirSelect();
     })  
 }
-LstJoueurs(){
+private LstJoueurs(){
     this.ClearDomElement("tbody");
     var AllJoueurs= store.GetAllJoueurs();
     var datastringify =JSON.stringify(AllJoueurs);
     var tabJson = JSON.parse(datastringify);		
-        //Rentre le id et le nom de l'action dans le tableau correspondant
+        // Rentre le id et le nom de l'action dans le tableau correspondant
         for(var i = 0; i < tabJson.length; i++) {	
             var data =tabJson[i];        	 
             var doc = document.getElementById("tbody");
@@ -54,7 +56,7 @@ LstJoueurs(){
             doc.appendChild(x);
         }
 }
-ModifJoueur(i:any, id:any){
+private ModifJoueur(i: any, id: any){
     /*var doc = document.getElementById("action_table") as HTMLTableElement;
     var t = doc.rows[i+1];
     var nomjoueur= t.cells[0].innerHTML;
@@ -75,18 +77,19 @@ ModifJoueur(i:any, id:any){
     inputID.value=id;*/
     
 }
-ClearDomElement(nom:string){
+private ClearDomElement(nom:string){
     var doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
     doc.removeChild(doc.lastChild);
     }
 }
-RemplirSelect(){
+private RemplirSelect(){
     this.ClearDomElement("equipe");
     var allSport= store.GetAllequipeJoueur();
     var datastringify =JSON.stringify(allSport);
     var tabJson = JSON.parse(datastringify);		
-        //Rentre le id et le nom de l'action dans le tableau correspondant
+        // Rentre le id et le nom de l'action dans le tableau correspondant
+        // tslint:disable-next-line:prefer-for-of
         for(var i = 0; i < tabJson.length; i++) {
         var data =tabJson[i];
         var leNiv= store.getNiveauNom(data.CategoryID)
@@ -97,27 +100,24 @@ RemplirSelect(){
         doc.appendChild(x);
         }
 }
-sendFormData(e: React.MouseEvent<HTMLInputElement>) {
+private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault()
-    //Va rechercher le formulaire
+    // Va rechercher le formulaire
     var form = e.target as HTMLFormElement
-    //Va chercher le type de l'active
-    let _NomJoueur = document.getElementById("Nom")as HTMLInputElement
-    var nomjoueur= _NomJoueur.value
-    let _PrenomJoueur = document.getElementById("Prenom")as HTMLInputElement
-    var prenomjoueur= _PrenomJoueur.value
-    let _NumeroJoueur = document.getElementById("Numero")as HTMLInputElement
-    var numerojoueur= _NumeroJoueur.value
-    let _EmailJoueur = document.getElementById("Email")as HTMLInputElement
-    var emailJoueur= _EmailJoueur.value
-    let _EquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
-    var optEquipe = _EquipeSelect.options[_EquipeSelect.selectedIndex];
-
-      //Preparation du json que l'on va envoyer au server
-      
-  
+    // Va chercher le type de l'active
+    let letNomJoueur = document.getElementById("Nom")as HTMLInputElement
+    var nomjoueur= letNomJoueur.value
+    let letPrenomJoueur = document.getElementById("Prenom")as HTMLInputElement
+    var prenomjoueur= letPrenomJoueur.value
+    let letNumeroJoueur = document.getElementById("Numero")as HTMLInputElement
+    var numerojoueur= letNumeroJoueur.value
+    let letEmailJoueur = document.getElementById("Email")as HTMLInputElement
+    var emailJoueur= letEmailJoueur.value
+    let letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
+    var optEquipe = letEquipeSelect.options[_EquipeSelect.selectedIndex];
+    // Preparation du json que l'on va envoyer au server
     var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
-    if( btnSubmit.value=="Modifier")
+    if( btnSubmit.value==="Modifier")
     {
          var inputID = document.getElementById("ID") as HTMLInputElement;
         var IdJoueur= inputID.value;
@@ -137,6 +137,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     }
     else
     {
+        // tslint:disable-next-line:no-shadowed-variable
         var text = '{'
         +'"Lname" :'+ '"'+ nomjoueur+'",'
         +'"Fname" :'+ '"'+prenomjoueur + '",'
@@ -152,7 +153,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     }
 
 }
-render() {
+public render() {
     return (
         <div className="container">
             <div className="row">
@@ -179,8 +180,7 @@ render() {
                                     </th>                                                                               
                                     </tr>
                             </thead>
-                            <tbody id="tbody">
-                            </tbody>
+                            <tbody id="tbody"  />
                         </table>
             </div>		
             <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
@@ -190,11 +190,12 @@ render() {
                 <label className="control-label" htmlFor="Prenom">Prenom</label>
                 <input type="text"id="Prenom" name="Prenom"/>
                 <label className="control-label" htmlFor="Numero" >Numero</label>
+                {/*tslint:disable-next-line:jsx-boolean-value*/}
                 <input type="text"id="Numero" name="Numero" required/> 
                 <label className="control-label" htmlFor="Email">Email</label>
                 <input type="text"id="Email" name="Email"/> 			
                 <label className="control-label" htmlFor="equipe">Équipe</label>                  
-                <select id="equipe" name="equipe"></select><br></br>   
+                <select id="equipe" name="equipe"/><br />   
                 <input type="hidden" id="ID"/> 
                 <input type="submit" value="Ajouter" id="btnSubmit"  />                
             </form>
