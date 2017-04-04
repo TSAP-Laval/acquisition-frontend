@@ -77,7 +77,7 @@ private ModifJoueur(i: any, id: any){
     inputID.value=id;*/
     
 }
-private ClearDomElement(nom:string){
+private ClearDomElement(nom: string){
     var doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
     doc.removeChild(doc.lastChild);
@@ -114,7 +114,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     let letEmailJoueur = document.getElementById("Email")as HTMLInputElement
     var emailJoueur= letEmailJoueur.value
     let letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement
-    var optEquipe = letEquipeSelect.options[_EquipeSelect.selectedIndex];
+    var optEquipe = letEquipeSelect.options[letEquipeSelect.selectedIndex];
     // Preparation du json que l'on va envoyer au server
     var btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
     if( btnSubmit.value==="Modifier")
