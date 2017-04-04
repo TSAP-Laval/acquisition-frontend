@@ -104,21 +104,20 @@ class UploadStore extends EventEmitter {
             } else {
                 this.gameID = r.data["game_id"];
             }
-        }.bind(this)).catch(function(error: string) {
-            // console.log("ERROR (XHR): \n" + error);
+        }.bind(this)).catch(function(error: axios.AxiosError) {
+            // console.log("ERROR (XHR): %o", error.response.data);
 
             // Only if it's not the cancel actions that cause the error
             // toString() to make sure it's really converted to a string.
             // Cause an error if removed...
-            if (error.toString().indexOf("Cancel") === -1) {
-                this.addMessage(true, "UNKNOWN");
+            if (error.toString().toLowerCase().indexOf("cancel") === -1) {
+                this.addMessage(true, error.response.data["error"]);
                 this.emit("close_form");
                 this.emit("upload_ended");
             }
         }.bind(this));
     }
 
-    // tslint:enable:no-string-literal
     private searchTeam(text: string) {
         const config = {
             headers: {"Content-Type": "application/json;"},
@@ -128,10 +127,10 @@ class UploadStore extends EventEmitter {
         axios.default.get(url, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.addTeams(r.data);
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
-            this.addMessage(true, "UNKNOWN");
+            this.addMessage(true, error.response.data["error"]);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -145,9 +144,10 @@ class UploadStore extends EventEmitter {
         axios.default.get(url, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.addFields(r.data);
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-            this.addMessage(true, "UNKNOWN");
+
+            this.addMessage(true, error.response.data["error"]);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -173,9 +173,10 @@ class UploadStore extends EventEmitter {
         axios.default.put(url, gameInfos, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.saved = true;
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-            this.addMessage(true, "UNKNOWN");
+
+            this.addMessage(true, error.response.data["error"]);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -201,13 +202,16 @@ class UploadStore extends EventEmitter {
         axios.default.delete(url).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.saved = true;
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-            this.addMessage(true, "UNKNOWN");
+
+            this.addMessage(true, error.response.data["error"]);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
     }
+    // tslint:enable:no-string-literal
+
     public handleActions(action: any){
         switch (action.type) {
             case "UPLOAD.SHOW_MESSAGE":
