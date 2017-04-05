@@ -1,96 +1,104 @@
-import { EventEmitter } from "events"
-import { IAction } from "../interfaces/interfaces"
+import { EventEmitter } from "events";
+import { IAction } from "../interfaces/interfaces";
 import dispatcher from "../dispatcher/dispatcher";
+// tslint:disable-next-line:quotemark
 import * as axios from 'axios';
 
 class teamStore extends EventEmitter {
 
-    niveau: string[] = [];
-    equipe: string[] = []; 
-    sports: string[]=[];
+    private niveau: string[] = [];
+    private equipe: string[] = [];
+    private sports: string[]= [];
 
     constructor() {
         super();
     }
-    GetAllequipe() {
+    public GetAllequipe() {
         return this.equipe;
-        
     }
-     GetAllSports() {
-        return this.sports;    
+     public GetAllSports() {
+        return this.sports;
     }
-    GetAllNiveau() {
-        return this.niveau;    
+    public GetAllNiveau() {
+        return this.niveau;
     }
-    getSportNom(id:string)
+    public getSportNom(id: string)
     {
-        var datastringify =JSON.stringify(this.sports);
-		var tabJson = JSON.parse(datastringify);
-        var dataRetour="";
-        for(var i=0;i<tabJson.length;i++)
+        const datastringify = JSON.stringify(this.sports);
+        const tabJson = JSON.parse(datastringify);
+        let dataRetour = "";
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < tabJson.length; i++)
         {
-            var data =tabJson[i];     
-            if(data.ID==parseInt(id))
+            const data = tabJson[i];
+            // tslint:disable-next-line:radix
+            if (data.ID === parseInt(id))
             {
-                dataRetour= data.Name;
-            }  
+                dataRetour = data.Name;
+            }
         }
         return dataRetour;
     }
-    getNiveauNom(id:string)
+    public getNiveauNom(id: string)
     {
-        var datastringify =JSON.stringify(this.niveau);
-		var tabJson = JSON.parse(datastringify);
-        var dataRetour="";
-        for(var i=0;i<tabJson.length;i++)
+        const datastringify = JSON.stringify(this.niveau);
+        const tabJson = JSON.parse(datastringify);
+        let dataRetour = "";
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < tabJson.length; i++)
         {
-            var data =tabJson[i];
-            if(data.ID==parseInt(id))
-            {      
-                dataRetour= data.Name;
-            }     
+            const data = tabJson[i];
+            if (data.ID === parseInt(id))
+            {
+                dataRetour = data.Name;
+            }
         }
         return dataRetour;
     }
-    handleActions(action: IAction){ 
-        switch(action.type) {
+    public handleActions(action: IAction){
+        switch (action.type) {
             case "getSports" :
-                this.sports=[];
-                for(var i=0;i<action.text.length;i++)
+                this.sports = [];
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
                 {
                     this.sports.push(action.text[i]);
-               
+
                 }
             this.emit("change");
             break;
             case "getNiveau" :
-                this.niveau=[];
-                    for(var i=0;i<action.text.length;i++)
-                    {    
-                        this.niveau.push(action.text[i]); 
+                this.niveau = [];
+                    // tslint:disable-next-line:prefer-for-of
+                    for (let i = 0; i < action.text.length; i++)
+                    {
+                        this.niveau.push(action.text[i]);
                     }
                 this.emit("change");
             break;
             case "getEquipe" :
-                this.equipe=[];
-            
-                for(var i=0;i<action.text.length;i++)
+                this.equipe = [];
+
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
                 {
-                    this.equipe.push(action.text[i]); 
+                    this.equipe.push(action.text[i]);
                 }
                 this.emit("change");
             break;
             case "PostTeam" :
-                if(action.text !="error")
+                if (action.text !== "error")
                 {
-                    var laTeam =JSON.parse(action.text);
+                    const laTeam = JSON.parse(action.text);
                     this.equipe.push(laTeam);
                 }
                 this.emit("change");
             break;
+            default:
+            break;
         }
     }
 }
-const store = new teamStore;
+const store = new teamStore();
 export default store;
 dispatcher.register(store.handleActions.bind(store));
