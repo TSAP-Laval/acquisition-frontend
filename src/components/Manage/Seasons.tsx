@@ -17,19 +17,18 @@ private componentWillMount(){
 }
 private RemplirSaison(){
     this.ClearDomElement("tbody");
-    // tslint:disable:prefer-const
-    let allSaison = store.GetAllSeasons();
-    let datastringify = JSON.stringify(allSaison);
-    let tabJson = JSON.parse(datastringify);
+    const allSaison = store.GetAllSeasons();
+    const datastringify = JSON.stringify(allSaison);
+    const tabJson = JSON.parse(datastringify);
 	// Rentre le id et le nom de l'action dans le tableau correspondant
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < tabJson.length; i++) {
-       let data = tabJson[i];
-       let doc = document.getElementById("tbody");
-       let x = document.createElement("tr");
-       let tdAnnnee = document.createElement("td");
+       const data = tabJson[i];
+       const doc = document.getElementById("tbody");
+       const x = document.createElement("tr");
+       const tdAnnnee = document.createElement("td");
        tdAnnnee.innerHTML = data.Years;
-       let td =  document.createElement("BUTTON");
+       const td =  document.createElement("BUTTON");
        td.innerHTML = "Modifier";
        x.appendChild(tdAnnnee);
        x.appendChild(td);
@@ -40,25 +39,25 @@ private RemplirSaison(){
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
 	// Va rechercher le formulaire
-    let form = e.target as HTMLFormElement;
+    const form = e.target as HTMLFormElement;
 	// Va chercher le type de l'active
-    let letAnnee = document.getElementById("Annee")as HTMLInputElement;
-    let annee = letAnnee.value;
+    const letAnnee = document.getElementById("Annee")as HTMLInputElement;
+    const annee = letAnnee.value;
 	// Preparation du json que l'on va envoyer au server
     // tslint:disable-next-line:quotemark
-    let text = '{'
+    const text = '{'
         + '"Years" :' + '"' + annee + '"'
         + "}";
     manageActions.postSaison(text);
 }
 private ClearDomElement(nom: string){
-    let doc = document.getElementById(nom);
+    const doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
         doc.removeChild(doc.lastChild);
     }
  }
 private deleteChild(){
-    let list = document.getElementById("wow");
+    const list = document.getElementById("wow");
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < list.childNodes.length; i++)
     {

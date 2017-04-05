@@ -21,24 +21,23 @@ private componentWillMount(){
 }
 private LstJoueurs(){
     this.ClearDomElement("tbody");
-    // tslint:disable:prefer-const
-    let AllJoueurs = store.GetAllJoueurs();
-    let datastringify = JSON.stringify(AllJoueurs);
-    let tabJson = JSON.parse(datastringify);
+    const AllJoueurs = store.GetAllJoueurs();
+    const datastringify = JSON.stringify(AllJoueurs);
+    const tabJson = JSON.parse(datastringify);
         // Rentre le id et le nom de l'action dans le tableau correspondant
     for ( let i = 0; i < tabJson.length; i++) {
-            let data = tabJson[i];
-            let doc = document.getElementById("tbody");
-            let x = document.createElement("tr");
-            let tdNom = document.createElement("td");
+            const data = tabJson[i];
+            const doc = document.getElementById("tbody");
+            const x = document.createElement("tr");
+            const tdNom = document.createElement("td");
             tdNom.innerHTML = data.Lname;
-            let tdPrenom = document.createElement("td");
+            const tdPrenom = document.createElement("td");
             tdPrenom.innerHTML = data.Fname;
-            let tdNumero = document.createElement("td");
+            const tdNumero = document.createElement("td");
             tdNumero.innerHTML = data.Number;
-            let tdEmail = document.createElement("td");
+            const tdEmail = document.createElement("td");
             tdEmail.innerHTML = data.Email;
-            let btnModifier = document.createElement("button") as HTMLButtonElement;
+            const btnModifier = document.createElement("button") as HTMLButtonElement;
             btnModifier.innerHTML = "modifier";
             btnModifier.onclick = this.ModifJoueur.bind(this, i, data.ID);
             x.appendChild(tdNom);
@@ -71,23 +70,23 @@ private ModifJoueur(i: any, id: any){
 
 }
 private ClearDomElement(nom: string){
-    let doc = document.getElementById(nom);
+    const doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
     doc.removeChild(doc.lastChild);
     }
 }
 private RemplirSelect(){
     this.ClearDomElement("equipe");
-    let allSport = store.GetAllequipeJoueur();
-    let datastringify = JSON.stringify(allSport);
-    let tabJson = JSON.parse(datastringify);
+    const allSport = store.GetAllequipeJoueur();
+    const datastringify = JSON.stringify(allSport);
+    const tabJson = JSON.parse(datastringify);
         // Rentre le id et le nom de l'action dans le tableau correspondant
         // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < tabJson.length; i++) {
-        let data = tabJson[i];
-        let leNiv = store.getNiveauNom(data.CategoryID);
-        let doc = document.getElementById("equipe");
-        let x = document.createElement("OPTION") as HTMLInputElement;
+        const data = tabJson[i];
+        const leNiv = store.getNiveauNom(data.CategoryID);
+        const doc = document.getElementById("equipe");
+        const x = document.createElement("OPTION") as HTMLInputElement;
         x.innerHTML = data.Name + "  " + leNiv;
         x.value = data.ID;
         doc.appendChild(x);
@@ -96,26 +95,26 @@ private RemplirSelect(){
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
     // Va rechercher le formulaire
-    let form = e.target as HTMLFormElement;
+    const form = e.target as HTMLFormElement;
     // Va chercher le type de l'active
-    let letNomJoueur = document.getElementById("Nom")as HTMLInputElement;
-    let nomjoueur = letNomJoueur.value;
-    let letPrenomJoueur = document.getElementById("Prenom")as HTMLInputElement;
-    let prenomjoueur = letPrenomJoueur.value;
-    let letNumeroJoueur = document.getElementById("Numero")as HTMLInputElement;
-    let numerojoueur = letNumeroJoueur.value;
-    let letEmailJoueur = document.getElementById("Email")as HTMLInputElement;
-    let emailJoueur = letEmailJoueur.value;
-    let letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement;
-    let optEquipe = letEquipeSelect.options[letEquipeSelect.selectedIndex];
+    const letNomJoueur = document.getElementById("Nom")as HTMLInputElement;
+    const nomjoueur = letNomJoueur.value;
+    const letPrenomJoueur = document.getElementById("Prenom")as HTMLInputElement;
+    const prenomjoueur = letPrenomJoueur.value;
+    const letNumeroJoueur = document.getElementById("Numero")as HTMLInputElement;
+    const numerojoueur = letNumeroJoueur.value;
+    const letEmailJoueur = document.getElementById("Email")as HTMLInputElement;
+    const emailJoueur = letEmailJoueur.value;
+    const letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement;
+    const optEquipe = letEquipeSelect.options[letEquipeSelect.selectedIndex];
     // Preparation du json que l'on va envoyer au server
-    let btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    const btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
     if ( btnSubmit.value === "Modifier")
     {
-         let inputID = document.getElementById("ID") as HTMLInputElement;
-         let IdJoueur = inputID.value;
+         const inputID = document.getElementById("ID") as HTMLInputElement;
+         const IdJoueur = inputID.value;
          // tslint:disable:quotemark
-         let text = '{'
+         const text = '{'
         // tslint:disable:whitespace
         +'"ID" :'+ '"'+ IdJoueur + '",'
         +'"Lname" :'+ '"'+ nomjoueur + '",'
@@ -133,7 +132,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     else
     {
         // tslint:disable-next-line:no-shadowed-letiable
-        let text = '{'
+        const text = '{'
         +'"Lname" :'+ '"'+ nomjoueur + '",'
         +'"Fname" :'+ '"'+prenomjoueur + '",'
         +'"Number" : '+numerojoueur + ','
