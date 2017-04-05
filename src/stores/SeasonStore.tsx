@@ -1,46 +1,45 @@
-import { EventEmitter } from "events"
-import { IAction } from "../interfaces/interfaces"
+import { EventEmitter } from "events";
+import { IAction } from "../interfaces/interfaces";
 import dispatcher from "../dispatcher/dispatcher";
+// tslint:disable-next-line:quotemark
 import * as axios from 'axios';
 
 class SeasonStore extends EventEmitter {
 
-    seasons: string[]=[];
-
-
+    private seasons: string[]= [];
     constructor() {
         super();
     }
-
-
-    GetAllSeasons() {
+    public GetAllSeasons() {
         return this.seasons;
-        
     }
-    handleActions(action: IAction){
-        switch(action.type) {
+    public handleActions(action: IAction){
+        switch ( action.type) {
             case "getActions":
-                this.seasons=[];
-                for(var i=0;i<action.text.length;i++)
+                this.seasons = [];
+                // tslint:disable-next-line:prefer-for-of
+                for ( let i = 0; i < action.text.length; i++)
                 {
                     this.seasons.push(action.text[i]);
                 }
-                this.emit("change"); 
+                this.emit("change");
             break;
             case "postAction" :
-                if(action.text !="error")
+                if (action.text !== "error")
                 {
-                    var laction =JSON.parse(action.text);
+                    const laction = JSON.parse(action.text);
                     this.seasons.push(laction);
                     this.emit("change");
                 }
-            break;       
+            break;
+            default:
+            break;
         }
-        
+
     }
 
-
 }
-const store = new SeasonStore;
+const store = new SeasonStore();
 export default store;
+// tslint:disable-next-line:eofline
 dispatcher.register(store.handleActions.bind(store));

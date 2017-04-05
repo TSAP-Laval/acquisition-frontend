@@ -4,6 +4,7 @@ import dispatcher from "../dispatcher/dispatcher";
 // tslint:disable-next-line:quotemark
 import * as axios from 'axios';
 
+// tslint:disable-next-line:class-name
 class teamStore extends EventEmitter {
 
     private niveau: string[] = [];
@@ -48,6 +49,7 @@ class teamStore extends EventEmitter {
         for (let i = 0; i < tabJson.length; i++)
         {
             const data = tabJson[i];
+            // tslint:disable-next-line:radix
             if (data.ID === parseInt(id))
             {
                 dataRetour = data.Name;
@@ -101,4 +103,5 @@ class teamStore extends EventEmitter {
 }
 const store = new teamStore();
 export default store;
+// tslint:disable-next-line:eofline
 dispatcher.register(store.handleActions.bind(store));
