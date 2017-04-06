@@ -2,6 +2,7 @@
 
 ![CircleCI](https://circleci.com/gh/TSAP-Laval/acquisition-frontend.svg?style=svg)
 ![Coverage Status](https://coveralls.io/repos/github/TSAP-Laval/acquisition-frontend/badge.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend/badge)](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend)
 
 ## Création de la structure du projet
 
