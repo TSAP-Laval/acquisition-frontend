@@ -115,34 +115,35 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
          const IdJoueur = inputID.value;
          // tslint:disable:quotemark
          const text = '{'
-        // tslint:disable:whitespace
-        +'"ID" :'+ '"'+ IdJoueur + '",'
-        +'"Lname" :'+ '"'+ nomjoueur + '",'
-        +'"Fname" :'+ '"'+prenomjoueur + '",'
-        +'"Number" : '+numerojoueur + ','
-        + '"Email" : '+ '"' + emailJoueur + '",'
-        +'"PassHash" : "test22" ,'
-        +'"TokenInvitation" : "test" ,'
-        +'"TokenReinitialisation" : "test ",'
-        +'"TokenConnexion" : "test",'
-        +'"EquipeID" : ' + '"' + optEquipe + '"'
+        + '"ID" :' + '"' + IdJoueur + '",'
+        + '"Lname" :' + '"' + nomjoueur + '",'
+        + '"Fname" :' + '"' + prenomjoueur + '",'
+        + '"Number" : ' + numerojoueur + ','
+        + '"Email" : ' + '"' + emailJoueur + '",'
+        + '"PassHash" : "test22" ,'
+        + '"TokenInvitation" : "test" ,'
+        + '"TokenReinitialisation" : "test ",'
+        + '"TokenConnexion" : "test",'
+        + '"EquipeID" : ' + '"' + optEquipe + '"'
         + '}';
+          // tslint:enable:quotemark
          manageActions.putJoueur(text, IdJoueur);
     }
     else
     {
-        // tslint:disable-next-line:no-shadowed-letiable
+        // tslint:disable:quotemark
         const text = '{'
-        +'"Lname" :'+ '"'+ nomjoueur + '",'
-        +'"Fname" :'+ '"'+prenomjoueur + '",'
-        +'"Number" : '+numerojoueur + ','
-        +'"Email" : '+ '"' + emailJoueur + '",'
-        +'"PassHash" : "test22" ,'
-        +'"TokenInvitation" : "test" ,'
-        +'"TokenReinitialisation" : "test ",'
-        +'"TokenConnexion" : "test",'
-        +'"EquipeID" : ' + '"' + optEquipe + '"'
+        + '"Lname" :' + '"' + nomjoueur + '",'
+        + '"Fname" :' + '"' + prenomjoueur + '",'
+        + '"Number" : ' + numerojoueur + ','
+        + '"Email" : ' + '"' + emailJoueur + '",'
+        + '"PassHash" : "test22" ,'
+        + '"TokenInvitation" : "test" ,'
+        + '"TokenReinitialisation" : "test ",'
+        + '"TokenConnexion" : "test",'
+        + '"EquipeID" : ' + '"' + optEquipe + '"'
         + '}';
+         // tslint:enable:quotemark
         manageActions.postJoueur(text);
     }
 
@@ -184,7 +185,7 @@ public render() {
                 <label className="control-label" htmlFor="Prenom">Prenom</label>
                 <input type="text"id="Prenom" name="Prenom"/>
                 <label className="control-label" htmlFor="Numero" >Numero</label>
-                {/*tslint:disable-next-line:jsx-boolean-value*/}
+                {/*tslint:disable-next-line:jsx-boolean-value */}
                 <input type="text"id="Numero" name="Numero" required/> 
                 <label className="control-label" htmlFor="Email">Email</label>
                 <input type="text"id="Email" name="Email"/> 			
@@ -199,5 +200,4 @@ public render() {
 
         );
     }
-// tslint:disable-next-line:eofline
 }

@@ -103,5 +103,4 @@ class teamStore extends EventEmitter {
 }
 const store = new teamStore();
 export default store;
-// tslint:disable-next-line:eofline
 dispatcher.register(store.handleActions.bind(store));
