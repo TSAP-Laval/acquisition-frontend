@@ -99,5 +99,4 @@ public render() {
 
         );
     }
-// tslint:disable-next-line:eofline
 }

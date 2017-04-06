@@ -40,5 +40,4 @@ export function closeActionForm(form: HTMLDivElement) {
         // tslint:disable-next-line:object-literal-sort-keys
         form,
     });
-// tslint:disable-next-line:eofline
 }
