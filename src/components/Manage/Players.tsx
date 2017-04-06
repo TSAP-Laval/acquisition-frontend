@@ -113,38 +113,28 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     {
          const inputID = document.getElementById("ID") as HTMLInputElement;
          const IdJoueur = inputID.value;
-         // tslint:disable:quotemark
-         const text = '{'
-        + '"ID" :' + '"' + IdJoueur + '",'
-        + '"Lname" :' + '"' + nomjoueur + '",'
-        + '"Fname" :' + '"' + prenomjoueur + '",'
-        + '"Number" : ' + numerojoueur + ','
-        + '"Email" : ' + '"' + emailJoueur + '",'
-        + '"PassHash" : "test22" ,'
-        + '"TokenInvitation" : "test" ,'
-        + '"TokenReinitialisation" : "test ",'
-        + '"TokenConnexion" : "test",'
-        + '"EquipeID" : ' + '"' + optEquipe + '"'
-        + '}';
-          // tslint:enable:quotemark
+         const text = {
+            ID : IdJoueur,
+            Lname: nomjoueur,
+            // tslint:disable-next-line:object-literal-sort-keys
+            Fname: prenomjoueur,
+            Number: numerojoueur,
+            Email: emailJoueur,
+            EquipeID: optEquipe,
+        };
          manageActions.putJoueur(text, IdJoueur);
     }
     else
     {
-        // tslint:disable:quotemark
-        const text = '{'
-        + '"Lname" :' + '"' + nomjoueur + '",'
-        + '"Fname" :' + '"' + prenomjoueur + '",'
-        + '"Number" : ' + numerojoueur + ','
-        + '"Email" : ' + '"' + emailJoueur + '",'
-        + '"PassHash" : "test22" ,'
-        + '"TokenInvitation" : "test" ,'
-        + '"TokenReinitialisation" : "test ",'
-        + '"TokenConnexion" : "test",'
-        + '"EquipeID" : ' + '"' + optEquipe + '"'
-        + '}';
-         // tslint:enable:quotemark
-        manageActions.postJoueur(text);
+         const text = {
+            Lname: nomjoueur,
+            // tslint:disable-next-line:object-literal-sort-keys
+            Fname: prenomjoueur,
+            Number: numerojoueur,
+            Email: emailJoueur,
+            EquipeID: optEquipe,
+        };
+         manageActions.postJoueur(text);
     }
 
 }

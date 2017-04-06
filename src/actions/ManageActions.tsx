@@ -10,7 +10,7 @@ export function getSaison() {
     });
 }
 // Modif joueur
-export function putJoueur(stringContenu: string, id: any) {
+export function putJoueur(stringContenu: any, id: any) {
      axios.default.put(serverURL + "/joueur/" + id, stringContenu)
     .then(function(response: any){
         getJoueur();
@@ -68,7 +68,7 @@ export function getEquipesJoueur() {
     });
 }
 // Ajout d'une saison
- export function postSaison(stringContenu: string) {
+ export function postSaison(stringContenu: any) {
      axios.default.post(serverURL + "/saison", stringContenu).then(function(r: any) {
        dispatcher.dispatch({ type: "postAction", text: stringContenu  });
     }).catch(function(error: string) {
@@ -86,7 +86,7 @@ export function postTeam(stringContenu: string) {
 
 }
 // Ajout d'un joueur
-export function postJoueur(stringContenu: string) {
+export function postJoueur(stringContenu: any) {
         axios.default.post(serverURL + "/joueur", stringContenu).then(function(r: any) {
             dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });
         }).catch(function(error: string) {

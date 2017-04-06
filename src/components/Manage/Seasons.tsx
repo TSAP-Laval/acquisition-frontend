@@ -44,10 +44,9 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     const letAnnee = document.getElementById("Annee")as HTMLInputElement;
     const annee = letAnnee.value;
 	// Preparation du json que l'on va envoyer au server
-    // tslint:disable-next-line:quotemark
-    const text = '{'
-        + '"Years" :' + '"' + annee + '"'
-        + "}";
+    const text = {
+            Years : annee,
+        };
     manageActions.postSaison(text);
 }
 private ClearDomElement(nom: string){

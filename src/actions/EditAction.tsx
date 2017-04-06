@@ -13,7 +13,7 @@ export function getActionsEdit() {
         dispatcher.dispatch({ type: "GetActionsEdit", text: response.data });
     });
 }
-export function postAction(stringContenu: string) {
+export function postAction(stringContenu: any) {
     axios.default.post(serverURL + "/actions", stringContenu)
     .then(function(r: any) {
         dispatcher.dispatch({ type: "postActionEdit", text: stringContenu });
