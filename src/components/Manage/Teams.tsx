@@ -158,5 +158,4 @@ public render() {
         </div>
         );
     }
-// tslint:disable-next-line:eofline
 }

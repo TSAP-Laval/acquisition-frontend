@@ -41,5 +41,4 @@ class SeasonStore extends EventEmitter {
 }
 const store = new SeasonStore();
 export default store;
-// tslint:disable-next-line:eofline
 dispatcher.register(store.handleActions.bind(store));

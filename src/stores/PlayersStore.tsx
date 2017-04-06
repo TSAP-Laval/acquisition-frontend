@@ -135,5 +135,4 @@ class playersStore extends EventEmitter {
 
 const store = new playersStore();
 export default store;
-// tslint:disable-next-line:eofline
 dispatcher.register(store.handleActions.bind(store));

@@ -13,7 +13,7 @@ export function getActionsEdit() {
         dispatcher.dispatch({ type: "GetActionsEdit", text: response.data });
     });
 }
-export function postAction(stringContenu: string) {
+export function postAction(stringContenu: any) {
     axios.default.post(serverURL + "/actions", stringContenu)
     .then(function(r: any) {
         dispatcher.dispatch({ type: "postActionEdit", text: stringContenu });
@@ -40,5 +40,4 @@ export function closeActionForm(form: HTMLDivElement) {
         // tslint:disable-next-line:object-literal-sort-keys
         form,
     });
-// tslint:disable-next-line:eofline
 }

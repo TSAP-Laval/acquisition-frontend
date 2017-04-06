@@ -4,9 +4,9 @@ import dispatcher from "../dispatcher/dispatcher";
 import * as axios from "axios";
 
 class EditStore extends EventEmitter {
-    // tslint:disable:member-access
-    joueurs: string[];
-    actions: string[];
+
+    private joueurs: string[];
+    private actions: string[];
 
     constructor() {
         super();
@@ -14,15 +14,16 @@ class EditStore extends EventEmitter {
         this.actions = [];
     }
 
-    GetAllJoueurs = () => {
+    public GetAllJoueurs = () => {
         return this.joueurs;
     }
 
-    GetAllActions = () => {
+    public GetAllActions = () => {
         return this.actions;
     }
 
-    sendActionForm = (e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
+    // tslint:disable-next-line:max-line-length
+    public sendActionForm = ( e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
         $(form)
             .css({
                 /**
@@ -36,11 +37,11 @@ class EditStore extends EventEmitter {
             .toggleClass("form-open");
     }
 
-    closeActionForm = (form: HTMLDivElement) => {
+    public closeActionForm = (form: HTMLDivElement) => {
         $(form).toggleClass("form-open");
     }
 
-    handleActions(action: any){
+    public handleActions(action: any){
         switch (action.type) {
             case "MATCH_EDIT.GETJOUEURS": {
                 // tslint:disable:prefer-for-of
@@ -83,5 +84,4 @@ class EditStore extends EventEmitter {
 
 const store = new EditStore();
 export default store;
-// tslint:disable-next-line:eofline
 dispatcher.register(store.handleActions.bind(store));
