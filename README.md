@@ -3,6 +3,8 @@
 ![CircleCI](https://circleci.com/gh/TSAP-Laval/acquisition-frontend.svg?style=svg)
 ![Coverage Status](https://coveralls.io/repos/github/TSAP-Laval/acquisition-frontend/badge.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend/badge)](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend)
+[![Code Climate](https://codeclimate.com/repos/58e830530ea2e20296000fa4/badges/9561cadf74b1df060d0c/gpa.svg)](https://codeclimate.com/repos/58e830530ea2e20296000fa4/feed)
+[![Issue Count](https://codeclimate.com/repos/58e830530ea2e20296000fa4/badges/9561cadf74b1df060d0c/issue_count.svg)](https://codeclimate.com/repos/58e830530ea2e20296000fa4/feed)
 
 ## Création de la structure du projet
 
