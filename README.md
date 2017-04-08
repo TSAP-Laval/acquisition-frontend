@@ -5,6 +5,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend/badge)](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend)
 [![Code Climate](https://codeclimate.com/repos/58e830530ea2e20296000fa4/badges/9561cadf74b1df060d0c/gpa.svg)](https://codeclimate.com/repos/58e830530ea2e20296000fa4/feed)
 [![Issue Count](https://codeclimate.com/repos/58e830530ea2e20296000fa4/badges/9561cadf74b1df060d0c/issue_count.svg)](https://codeclimate.com/repos/58e830530ea2e20296000fa4/feed)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/92eb77ccf6dc4682a4000c7a6ce2841f)](https://www.codacy.com/app/laurentlp/acquisition-frontend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TSAP-Laval/acquisition-frontend&amp;utm_campaign=Badge_Grade)
 
 ## Création de la structure du projet
 
