@@ -1,141 +1,138 @@
-import { EventEmitter } from "events"
-import { IAction } from "../interfaces/interfaces"
+import { EventEmitter } from "events";
+import { IAction } from "../interfaces/interfaces";
 import dispatcher from "../dispatcher/dispatcher";
+// tslint:disable-next-line:quotemark
 import * as axios from 'axios';
 
+// tslint:disable-next-line:class-name
 class playersStore extends EventEmitter {
-    niveau: string[] = [];
-    equipeJoueur: string[] = [];
-    lesJoueurs: string[] = [];
-    sports: string[]=[];
+    private niveau: string[] = [];
+    private equipeJoueur: string[] = [];
+    private lesJoueurs: string[] = [];
+    private sports: string[]= [];
 
     constructor() {
         super();
     }
-    GetAllJoueurs() {
+    public GetAllJoueurs() {
         return this.lesJoueurs;
-        
     }
-     GetAllequipeJoueur() {
+    public GetAllequipeJoueur() {
         return this.equipeJoueur;
-        
     }
-     GetAllSports() {
+    public GetAllSports() {
         return this.sports;
-        
     }
 
-     GetAllNiveau() {
+    public GetAllNiveau() {
         return this.niveau;
-        
+
     }
-     getNiveauNom(id:string)
+    public getNiveauNom(id: string)
     {
-         var datastringify =JSON.stringify(this.niveau);
-		var tabJson = JSON.parse(datastringify);
-        var dataRetour="";
-         for(var i=0;i<tabJson.length;i++)
+        const datastringify = JSON.stringify(this.niveau);
+        const tabJson = JSON.parse(datastringify);
+        let dataRetour = "";
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < tabJson.length; i++)
             {
-                var data =tabJson[i];
-                if(data.ID==parseInt(id))
+                const data = tabJson[i];
+                // tslint:disable-next-line:radix
+                if (data.ID === parseInt(id))
                 {
-                   
-                    dataRetour= data.Name;
+
+                    dataRetour = data.Name;
                 }
-                
-              
+
             }
-            return dataRetour;
+        return dataRetour;
     }
-   
-       getEquipeSelonID(id:string)
+
+    public getEquipeSelonID(id: string)
     {
-         var datastringify =JSON.stringify(this.equipeJoueur);
-		var tabJson = JSON.parse(datastringify);
-        var dataRetour="";
-         for(var i=0;i<tabJson.length;i++)
+        const datastringify = JSON.stringify(this.equipeJoueur);
+        const tabJson = JSON.parse(datastringify);
+        let dataRetour = "";
+         // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < tabJson.length; i++)
             {
-                var data =tabJson[i];
-                if(data.ID==parseInt(id))
+                const data = tabJson[i];
+                // tslint:disable-next-line:radix
+                if (data.ID === parseInt(id))
                 {
-                   
-                    dataRetour= data;
+
+                    dataRetour = data;
                 }
-                
-              
+
             }
-            return dataRetour;
-    }    
-    handleActions(action: IAction){
-        switch(action.type) {
+        return dataRetour;
+    }
+    public handleActions(action: IAction){
+        switch (action.type) {
          case "PostJoueur" :
-         if(action.text !="error")
+         if (action.text !== "error")
          {
-           
-             var leJoueur =JSON.parse(action.text);
+
+             const leJoueur = JSON.parse(action.text);
              this.lesJoueurs.push(leJoueur);
-            this.emit("change");
+             this.emit("change");
          }
-        
+
          break;
          case "getSportJoueur" :
-            this.sports=[];
-            for(var i=0;i<action.text.length;i++)
+            this.sports = [];
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < action.text.length; i++)
             {
-                
-                
+
                 this.sports.push(action.text[i]);
-               
+
             }
          this.emit("change");
          break;
           case "getJoueur" :
-          this.lesJoueurs=[];      
-            for(var i=0;i<action.text.length;i++)
+          this.lesJoueurs = [];
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < action.text.length; i++)
             {
-                
+
                 this.lesJoueurs.push(action.text[i]);
-               
+
             }
          this.emit("change");
          break;
           case "getNiveauJoueur" :
-          this.niveau=[];
-   
-            for(var i=0;i<action.text.length;i++)
+          this.niveau = [];
+
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < action.text.length; i++)
             {
-                
-                
+
                 this.niveau.push(action.text[i]);
-              ;
+                ;
             }
          this.emit("change");
          break;
           case "getEquipesJoueur" :
-          this.equipeJoueur=[];
-         
-            for(var i=0;i<action.text.length;i++)
+          this.equipeJoueur = [];
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < action.text.length; i++)
             {
-                
-            
+
                 this.equipeJoueur.push(action.text[i]);
-               
+
             }
          this.emit("change");
          break;
-         
-         
-        }
-        
-    }
+         default:
+         break;
 
+        }
+
+    }
 
 }
 
-
-
-
-
-const store = new playersStore;
+const store = new playersStore();
 export default store;
 dispatcher.register(store.handleActions.bind(store));

@@ -2,6 +2,10 @@
 
 ![CircleCI](https://circleci.com/gh/TSAP-Laval/acquisition-frontend.svg?style=svg)
 ![Coverage Status](https://coveralls.io/repos/github/TSAP-Laval/acquisition-frontend/badge.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend/badge)](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/92eb77ccf6dc4682a4000c7a6ce2841f)](https://www.codacy.com/app/laurentlp/acquisition-frontend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TSAP-Laval/acquisition-frontend&amp;utm_campaign=Badge_Grade)
+[![Code Climate](https://codeclimate.com/repos/58e830530ea2e20296000fa4/badges/9561cadf74b1df060d0c/gpa.svg)](https://codeclimate.com/repos/58e830530ea2e20296000fa4/feed)
+[![Issue Count](https://codeclimate.com/repos/58e830530ea2e20296000fa4/badges/9561cadf74b1df060d0c/issue_count.svg)](https://codeclimate.com/repos/58e830530ea2e20296000fa4/feed)
 
 ## Création de la structure du projet
 
@@ -71,6 +75,19 @@ $ python -m SimpleHTTPServer (dans le dossier /dist du projet)
 ```shell
 $ webpack --watch (dans un autre terminal)
 ```
+
+
+## Linting avec TSLint
+
+### Prérequis
+
+* TSLint (npm install -g tslint)
+* TSLint (dans VSCode, installer le plugin TSLint)
+
+#### Linting
+ 
+Simplement linter le code avant chacun des push, sans quoi les PR seront rejetées...
+
 
 ## Tests avec Karma
 
