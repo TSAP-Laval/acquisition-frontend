@@ -135,6 +135,7 @@ class UploadStore extends EventEmitter {
             this.emit("upload_ended");
         }.bind(this));
     }
+
     private searchFields(text: string) {
         const config = {
             headers: {"Content-Type": "application/json;"},
@@ -176,6 +177,7 @@ class UploadStore extends EventEmitter {
             this.saved = true;
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
+          
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
             this.addMessage(true, error);
             this.emit("close_form");
