@@ -2,12 +2,6 @@ var webpackConfig = require('./webpack.config');
 var path = require('path');
 const autoprefixer = require('autoprefixer')
 
-const sassLoaders = [
-    'css-loader',
-    'postcss-loader',
-    'sass-loader?includePaths[]=' + path.resolve(__dirname, 'node_modules')
-];
-
 module.exports = function(config) {
     config.set({
         basePath: path.resolve(__dirname, './'),
