@@ -125,7 +125,7 @@ private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLBut
 
   /**
    * Ferme le form d'ajout d'action
-   */
+  */
 private closeActionForm = () => {
     Actions.closeActionForm(document.getElementsByClassName("Enr")[0] as HTMLDivElement);
   }

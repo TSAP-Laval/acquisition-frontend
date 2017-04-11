@@ -2,12 +2,6 @@ var webpackConfig = require('./webpack.config');
 var path = require('path');
 const autoprefixer = require('autoprefixer')
 
-const sassLoaders = [
-    'css-loader',
-    'postcss-loader',
-    'sass-loader?includePaths[]=' + path.resolve(__dirname, 'node_modules')
-];
-
 module.exports = function(config) {
     config.set({
         basePath: path.resolve(__dirname, './'),
@@ -74,7 +68,7 @@ module.exports = function(config) {
                 { type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' },
                 { type: 'teamcity', subdir: '.', file: 'teamcity.txt' },
                 { type: 'text', subdir: '.', file: 'text.txt' },
-                { type: 'text-summary', subdir: '.', file: 'text-summary.txt' },
+                { type: 'text-summary', subdir: '.', file: 'text-summary.txt' }
             ]
         },
         frameworks: ['mocha', 'chai', 'sinon'],
@@ -88,7 +82,7 @@ module.exports = function(config) {
         concurrency: Infinity,
         plugins: [
             "karma-*",
-            "karma-coverage",
+            "karma-coverage"
         ]
     })
 }
