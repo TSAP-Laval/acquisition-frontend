@@ -32,7 +32,6 @@
         "@types/react-select": "^1.0.44",
         "@types/react-tabs": "^0.5.21",
         "@types/sinon": "^1.16.35",
-        "@types/videojs": "0.0.31",
         "axios": "^0.15.3",
         "bootstrap": "^3.3.7",
         "bootstrap-sass": "^3.3.7",
@@ -71,8 +70,7 @@
         "sinon": "git+https://github.com/sinonjs/sinon.git",
         "tslint": "^4.5.1",
         "tslint-react": "^2.5.0",
-        "tsutils": "^1.4.0",
-        "video.js": "^5.15.1"
+        "tsutils": "^1.4.0"
     },
     "devDependencies": {
         "autoprefixer": "^6.6.1",
