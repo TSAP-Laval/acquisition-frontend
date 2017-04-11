@@ -22,6 +22,7 @@ export function putJoueur(stringContenu: any, id: any) {
         getJoueur();
     });
 }
+
 // Va rechercher toutes les sports
 export function getSport() {
      axios.default.get(serverURL + "/sports")

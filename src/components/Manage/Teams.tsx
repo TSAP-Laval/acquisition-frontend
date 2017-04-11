@@ -142,6 +142,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         + "}";
     manageActions.postTeam(text);
 }
+
 public render() {
     return (
         <div className="container">
@@ -188,6 +189,7 @@ public render() {
                 <input type="radio" name="Sexe" value="M"/>Masculin
                 <input type="radio" name="Sexe" value="F"/>Féminin
                 <br/>
+
                 <input type="submit" value="Submit"  />            
                 </form> 
                 </div>

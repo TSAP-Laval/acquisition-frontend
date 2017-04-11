@@ -11,6 +11,7 @@ class teamStore extends EventEmitter {
     private equipe: string[] = [];
     private sports: string[]= [];
     private saison: string[]= [];
+
     constructor() {
         super();
     }
@@ -26,7 +27,6 @@ class teamStore extends EventEmitter {
     public GetAllNiveau() {
         return this.niveau;
     }
-
     public getSportNom(id: string)
     {
         const datastringify = JSON.stringify(this.sports);
