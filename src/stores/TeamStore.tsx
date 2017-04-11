@@ -10,12 +10,16 @@ class teamStore extends EventEmitter {
     private niveau: string[] = [];
     private equipe: string[] = [];
     private sports: string[]= [];
+    private saison: string[]= [];
 
     constructor() {
         super();
     }
     public GetAllequipe() {
         return this.equipe;
+    }
+     public GetAllSeason() {
+        return this.saison;
     }
      public GetAllSports() {
         return this.sports;
@@ -85,6 +89,16 @@ class teamStore extends EventEmitter {
                 for (let i = 0; i < action.text.length; i++)
                 {
                     this.equipe.push(action.text[i]);
+                }
+                this.emit("change");
+            break;
+            case "getSeasonTeam" :
+                this.saison = [];
+
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
+                {
+                    this.saison.push(action.text[i]);
                 }
                 this.emit("change");
             break;
