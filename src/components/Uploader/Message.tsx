@@ -34,7 +34,7 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 break;
             case "EXIST":
                 msg = "Un fichier de même nom existe déjà dans notre base de donnée.\n" +
-                      "Veuillez choisir un fichier de nom différent";
+                    "Veuillez choisir un fichier de nom différent";
                 break;
             case "UPLOAD_SUCCESS":
                 msg = "Le fichier a bel et bien été envoyé sur le serveur";
@@ -49,9 +49,11 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 msg = "Les informations sur la partie en cours ont bel et bien été sauvegardées";
                 break;
             case "UNKNOWN":
-                msg = "Une erreur inconnue est survenue ! Veuillez contacter l'administrateur pour plus de soutient";
+                msg = "Une erreur inconnue est survenue !" +
+                " Veuillez contacter l'administrateur pour plus de soutient";
                 break;
             default:
+                msg = this.props.message.message;
                 break;
         }
         if (this.props.message.message !== "") {

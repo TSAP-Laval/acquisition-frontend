@@ -79,7 +79,6 @@ class UploadStore extends EventEmitter {
         }
     }
 
-    // tslint:disable:no-string-literal
     private sendVideo(files: File[]) {
         this.uploading = true;
 
@@ -87,40 +86,36 @@ class UploadStore extends EventEmitter {
 
         const config = {
             cancelToken: this.source.token,
-            headers: {"Content-Type": "multipart/form-data; filename=" +
-            files[0].name + "; boundary=------------------------" + boundary},
+            headers: {"Content-Type": "multipart/form-data; boundary=------------------------" + boundary},
             onUploadProgress: this.onProgress.bind(this),
         };
 
         const form = new FormData();
         files.forEach((file) => {
-            form.append("file", file, file.name);
+            // We are going to send the last modified date as the form
+            // name so we will be able to get the file part this way
+            form.append(file.lastModifiedDate, file, file.name);
         });
 
         axios.default.post(serverURL + "/upload", form, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
-            if (r.data["exist"] === "true") {
-                this.addMessage(true, "EXIST");
-                this.emit("close_form");
-                this.emit("upload_ended");
-            } else {
-                this.gameID = r.data["game_id"];
+            if (r.data != null) {
+                this.gameID = r.data.game_id;
             }
-        }.bind(this)).catch(function(error: string) {
-            // console.log("ERROR (XHR): \n" + error);
+        }.bind(this)).catch(function(error: axios.AxiosError) {
+            // console.log("ERROR (XHR): %o", error.response.data);
 
             // Only if it's not the cancel actions that cause the error
             // toString() to make sure it's really converted to a string.
             // Cause an error if removed...
-            if (error.toString().indexOf("Cancel") === -1) {
-                this.addMessage(true, "UNKNOWN");
+            if (error.toString().toLowerCase().indexOf("cancel") === -1) {
+                error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
+                this.addMessage(true, error);
                 this.emit("close_form");
                 this.emit("upload_ended");
             }
         }.bind(this));
     }
-
-    // tslint:enable:no-string-literal
 
     private searchTeam(text: string) {
         const config = {
@@ -131,10 +126,11 @@ class UploadStore extends EventEmitter {
         axios.default.get(url, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.addTeams(r.data);
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
-            this.addMessage(true, "UNKNOWN");
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -148,9 +144,11 @@ class UploadStore extends EventEmitter {
         axios.default.get(url, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.addFields(r.data);
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-            this.addMessage(true, "UNKNOWN");
+
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -176,9 +174,11 @@ class UploadStore extends EventEmitter {
         axios.default.put(url, gameInfos, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.saved = true;
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-            this.addMessage(true, "UNKNOWN");
+          
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -204,9 +204,11 @@ class UploadStore extends EventEmitter {
         axios.default.delete(url).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.saved = true;
-        }.bind(this)).catch(function(error: string) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-            this.addMessage(true, "UNKNOWN");
+
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
+            this.addMessage(true, error);
             this.emit("close_form");
             this.emit("upload_ended");
         }.bind(this));
@@ -232,12 +234,12 @@ class UploadStore extends EventEmitter {
                 break;
             case "UPLOAD.CANCEL_UPLOAD":
                     this.uploading = false;
-                    if (this.progress[0] === "100") {
+                    if (this.progress[0] !== "100") {
                         this.cancelUpload();
                         this.emit("upload_ended");
-                        this.addMessage(false, "CANCEL");
-                    } else {
                         this.addMessage(false, "CANCEL_UPLOAD");
+                    } else {
+                        this.addMessage(false, "CANCEL");
                     }
                     this.sendCancel();
                     this.emit("close_form");
