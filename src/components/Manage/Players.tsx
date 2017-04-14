@@ -49,24 +49,24 @@ private LstJoueurs(){
         }
 }
 private ModifJoueur(i: any, id: any){
-    /*let doc = document.getElementById("action_table") as HTMLTableElement;
-    let t = doc.rows[i+1];
-    let nomjoueur= t.cells[0].innerHTML;
-    let inputNom = document.getElementById("Nom") as HTMLInputElement;
-    inputNom.value=nomjoueur;
-    let prenomjoueur= t.cells[1].innerHTML;
-    let inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
-    inputPrenom.value=prenomjoueur;
-    let numeroJoueur= t.cells[2].innerHTML;
-    let inputNumero = document.getElementById("Numero") as HTMLInputElement;
-    inputNumero.value=numeroJoueur;
-    let emailJoueur= t.cells[3].innerHTML;
-    let inputEmail = document.getElementById("Email") as HTMLInputElement;
-    inputEmail.value=emailJoueur;
-    let btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
-    btnSubmit.value="Modifier";
-    let inputID = document.getElementById("ID") as HTMLInputElement;
-    inputID.value=id;*/
+    const doc = document.getElementById("action_table") as HTMLTableElement;
+    const t = doc.rows[i + 1];
+    const nomjoueur = t.cells[0].innerHTML;
+    const inputNom = document.getElementById("Nom") as HTMLInputElement;
+    inputNom.value = nomjoueur;
+    const prenomjoueur = t.cells[1].innerHTML;
+    const inputPrenom = document.getElementById("Prenom") as HTMLInputElement;
+    inputPrenom.value = prenomjoueur;
+    const numeroJoueur = t.cells[2].innerHTML;
+    const inputNumero = document.getElementById("Numero") as HTMLInputElement;
+    inputNumero.value = numeroJoueur;
+    const emailJoueur = t.cells[3].innerHTML;
+    const inputEmail = document.getElementById("Email") as HTMLInputElement;
+    inputEmail.value = emailJoueur;
+    const btnSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    btnSubmit.value = "Modifier";
+    const inputID = document.getElementById("ID") as HTMLInputElement;
+    inputID.value = id;
 
 }
 private ClearDomElement(nom: string){

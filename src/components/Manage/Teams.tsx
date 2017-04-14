@@ -6,7 +6,6 @@ import store from "../../stores/TeamStore";
 export interface ILayoutProps {}
 // tslint:disable-next-line:no-empty-interface
 export interface ILayoutState {}
-
 export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 private componentWillMount(){
     manageActions.getSport();
@@ -18,7 +17,9 @@ private componentWillMount(){
         this.RemplirNiveau();
         this.RemplirSaison();
         this.LstEquipe();
-
+        if ( store.EnModification() === true){
+            this.remplirModif();
+        }
     });
 }
 private ClearDomElement(nom: string){
@@ -60,6 +61,62 @@ private RemplirSaison(){
         doc.appendChild(x);
         }
 }
+private ModifTeam(i: any, nom: any){
+    manageActions.getUneEquipe(nom);
+}
+private remplirModif(){
+    const lequipe = store.GetUneEquipe();
+    const datastringify = JSON.stringify(lequipe);
+    const tabJson = JSON.parse(datastringify);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < tabJson.length; i++) {
+        const data = tabJson[i];
+        const inputNom = document.getElementById("Nom") as HTMLInputElement;
+        inputNom.value = data.Name;
+        const inputCity = document.getElementById("Ville")as HTMLInputElement;
+        inputCity.value = data.City;
+        const letsportSelect = document.getElementById("Sport") as HTMLSelectElement;
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0 ; i < letsportSelect.options.length; i++)
+        {
+            if (letsportSelect.options[i].value === data.SportID){
+             letsportSelect.options[i].selected = true;
+            }
+        }
+        const letniveauSelect = document.getElementById("Niveau") as HTMLSelectElement;
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0 ; i < letniveauSelect.options.length; i++)
+        {
+            if (letniveauSelect.options[i].value === data.CategoryID){
+             letniveauSelect.options[i].selected = true;
+            }
+        }
+        const letSaison = document.getElementById("Saison") as HTMLSelectElement;
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0 ; i < letSaison.options.length; i++)
+        {
+            if (letSaison.options[i].value === data.SeasonID){
+             letSaison.options[i].selected = true;
+            }
+        }
+        const lstRadioSexe = document.getElementsByName("Sexe");
+        if ( data.Sexe === "M" )
+        {
+          const leRadio = lstRadioSexe[0] as HTMLInputElement;
+          leRadio.checked = true;
+        }
+        else
+        {
+          const leRadio = lstRadioSexe[1] as HTMLInputElement;
+          leRadio.checked = true;
+        }
+        const inputID = document.getElementById("ID") as HTMLInputElement;
+        inputID.value = data.ID;
+        const inputSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+        inputSubmit.value = "modifier";
+    }
+
+}
 private LstEquipe()	{
     this.ClearDomElement("tbody");
     const Allequipe = store.GetAllequipe();
@@ -74,7 +131,8 @@ private LstEquipe()	{
         const doc = document.getElementById("tbody");
         const x = document.createElement("tr");
         const tdBtn =  document.createElement("BUTTON"); ;
-        tdBtn.innerHTML = "Ajouter";
+        tdBtn.innerHTML = "Modifier";
+        tdBtn.onclick = this.ModifTeam.bind(this, i, data.Name);
         const tdNom = document.createElement("td");
         tdNom.innerHTML = data.Name;
         const tdVille = document.createElement("td");
@@ -131,6 +189,21 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         SexeValue = leRadio.value;
     }
     }
+    const inputSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
+    if (inputSubmit.value === "modifier"){
+        const inputID = document.getElementById("ID") as HTMLInputElement; ;
+        const text = "{"
+        + '"ID" :' +  + inputID.value + ","
+        + '"Name" :' + '"' + nomTeam + '",'
+        + '"City" : ' + '"' + VilleTeam + '",'
+        + '"SportID" : ' + optSport.value + ","
+        + '"CategoryID" : ' + niveau.value + ","
+        + '"SaisonID" : ' + saison.value + ","
+        + '"Sexe" : ' + '"' + SexeValue + '"'
+        + "}";
+        manageActions.putTeam(text, inputID.value);
+    }
+    else{
 	// Preparation du json que l'on va envoyer au server
     const text = "{"
         + '"Name" :' + '"' + nomTeam + '",'
@@ -141,6 +214,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         + '"Sexe" : ' + '"' + SexeValue + '"'
         + "}";
     manageActions.postTeam(text);
+    }
 }
 public render() {
     return (
@@ -188,7 +262,8 @@ public render() {
                 <input type="radio" name="Sexe" value="M"/>Masculin
                 <input type="radio" name="Sexe" value="F"/>Féminin
                 <br/>
-                <input type="submit" value="Submit"  />            
+                <input type="hidden" id="ID"/> 
+                <input type="submit" id="btnSubmit" value="Submit"  />            
                 </form> 
                 </div>
              </div>
