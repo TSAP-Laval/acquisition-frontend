@@ -6,6 +6,10 @@ import store from "../../stores/TeamStore";
 export interface ILayoutProps {}
 // tslint:disable-next-line:no-empty-interface
 export interface ILayoutState {}
+let Allequipe: any;
+let allSaison: any;
+let allSport: any;
+let allNiveau: any;
 export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 private componentWillMount(){
     manageActions.getSport();
@@ -31,7 +35,7 @@ private ClearDomElement(nom: string){
 }
 private RemplirSelect(){
     this.ClearDomElement("Sport");
-    const allSport = store.GetAllSports();
+    allSport = store.GetAllSports();
     const datastringify = JSON.stringify(allSport);
     const tabJson = JSON.parse(datastringify);
 	    // Rentre le id et le nom de l'action dans le tableau correspondant
@@ -47,7 +51,7 @@ private RemplirSelect(){
 }
 private RemplirSaison(){
     this.ClearDomElement("Saison");
-    const allSaison = store.GetAllSeason();
+    allSaison = store.GetAllSeason();
     const datastringify = JSON.stringify(allSaison);
     const tabJson = JSON.parse(datastringify);
 	    // Rentre le id et le nom de l'action dans le tableau correspondant
@@ -61,15 +65,15 @@ private RemplirSaison(){
         doc.appendChild(x);
         }
 }
-private ModifTeam(i: any, nom: any){
+private ModifTeam(nom: any){
     manageActions.getUneEquipe(nom);
 }
 private remplirModif(){
-    const lequipe = store.GetUneEquipe();
-    const datastringify = JSON.stringify(lequipe);
-    const tabJson = JSON.parse(datastringify);
+     const lequipe = store.GetUneEquipe();
+     const datastringify = JSON.stringify(lequipe);
+     const tabJson = JSON.parse(datastringify);
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < tabJson.length; i++) {
+     for (let i = 0; i < tabJson.length; i++) {
         const data = tabJson[i];
         const inputNom = document.getElementById("Nom") as HTMLInputElement;
         inputNom.value = data.Name;
@@ -79,24 +83,27 @@ private remplirModif(){
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0 ; i < letsportSelect.options.length; i++)
         {
-            if (letsportSelect.options[i].value === data.SportID){
-             letsportSelect.options[i].selected = true;
+            const optSel =letsportSelect.options[i] as HTMLOptionElement;
+            if (optSel.value  === data.SportID){
+             optSel.selected = true;
             }
         }
         const letniveauSelect = document.getElementById("Niveau") as HTMLSelectElement;
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0 ; i < letniveauSelect.options.length; i++)
         {
-            if (letniveauSelect.options[i].value === data.CategoryID){
-             letniveauSelect.options[i].selected = true;
+            const optNivSel = letniveauSelect.options[i] as HTMLOptionElement;
+            if (optNivSel.value === data.CategoryID){
+             optNivSel.selected = true;
             }
         }
         const letSaison = document.getElementById("Saison") as HTMLSelectElement;
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0 ; i < letSaison.options.length; i++)
         {
-            if (letSaison.options[i].value === data.SeasonID){
-             letSaison.options[i].selected = true;
+            const optSaisonSel = letSaison.options[i] as HTMLOptionElement;
+            if (optSaisonSel.value === data.SeasonID){
+             optSaisonSel.selected = true;
             }
         }
         const lstRadioSexe = document.getElementsByName("Sexe");
@@ -119,40 +126,139 @@ private remplirModif(){
 }
 private LstEquipe()	{
     this.ClearDomElement("tbody");
-    const Allequipe = store.GetAllequipe();
+    Allequipe = store.GetAllequipe();
     const datastringify = JSON.stringify(Allequipe);
     const tabJson = JSON.parse(datastringify);
 	// Rentre le id et le nom de l'action dans le tableau correspondant
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < tabJson.length; i++) {
         const data = tabJson[i];
-        const sportNom = store.getSportNom(data.SportID);
-        const NiveauNom = store.getNiveauNom(data.CategoryID);
-        const doc = document.getElementById("tbody");
-        const x = document.createElement("tr");
-        const tdBtn =  document.createElement("BUTTON"); ;
-        tdBtn.innerHTML = "Modifier";
-        tdBtn.onclick = this.ModifTeam.bind(this, i, data.Name);
-        const tdNom = document.createElement("td");
-        tdNom.innerHTML = data.Name;
-        const tdVille = document.createElement("td");
-        tdVille.innerHTML = data.City;
-        const tdSportID = document.createElement("td");
-        tdSportID.innerHTML = sportNom;
-        const tdNiveauID = document.createElement("td");
-        tdNiveauID.innerHTML = NiveauNom;
-        x.appendChild(tdNom);
-        x.appendChild(tdVille);
-        x.appendChild(tdSportID);
-        x.appendChild(tdNiveauID);
-        x.appendChild(tdBtn);
-        doc.appendChild(x);
+        this.creerUneLigne(data);
         }
+}
+private creerUneLigne(data: any){
+     const sportNom = store.getSportNom(data.SportID);
+     const NiveauNom = store.getNiveauNom(data.CategoryID);
+     const doc = document.getElementById("tbody");
+     const x = document.createElement("tr");
+     const tdBtn =  document.createElement("BUTTON"); ;
+     tdBtn.innerHTML = "Modifier";
+     tdBtn.onclick = this.ModifTeam.bind(this, data.Name);
+     const tdNom = document.createElement("td");
+     tdNom.innerHTML = data.Name;
+     const tdVille = document.createElement("td");
+     tdVille.innerHTML = data.City;
+     const tdSportID = document.createElement("td");
+     tdSportID.innerHTML = sportNom;
+     const tdNiveauID = document.createElement("td");
+     tdNiveauID.innerHTML = NiveauNom;
+     x.appendChild(tdNom);
+     x.appendChild(tdVille);
+     x.appendChild(tdSportID);
+     x.appendChild(tdNiveauID);
+     x.appendChild(tdBtn);
+     doc.appendChild(x);
+}
+private rech(){
+    const inputNom = document.getElementById("NomRech") as HTMLInputElement;
+    const txt = inputNom.value;
+    this.ClearDomElement("tbody");
+    const datastringify = JSON.stringify(Allequipe);
+    const tabJson = JSON.parse(datastringify);
+    const lstRadioChamps = document.getElementsByName("Champs");
+    let leChampsRech;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < lstRadioChamps.length; i++){
+    const leRadio = lstRadioChamps[i] as HTMLInputElement;
+    if (leRadio.checked){
+        leChampsRech = leRadio.value;
+    }
+    }
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < tabJson.length; i++) {
+        const data = tabJson[i];
+        if ( leChampsRech === "Sexe")
+        {
+            if (txt.toLowerCase() === "masculin" || txt.toLowerCase() === "m" )
+            {
+                if (data.Sexe === "M")
+                {
+                  this.creerUneLigne(data);
+                }
+            }
+            else if (txt.toLowerCase() === "féminin" || txt.toLowerCase() === "f")
+                {
+                     if (data.Sexe === "F")
+                {
+                  this.creerUneLigne(data);
+                }
+                }
+        }
+        else if (leChampsRech === "SportID")
+        {
+          const dataSport = JSON.stringify(allSport);
+          const tabJsonSport = JSON.parse(dataSport);
+          // tslint:disable-next-line:prefer-for-of
+          for (let l = 0; l < tabJsonSport.length; l++) {
+          const dataSport = tabJsonSport[l];
+          const nomSport = dataSport.Name as string;
+          if (nomSport.toLowerCase().includes(txt.toLowerCase()))
+          {
+            this.creerUneLigne(data);
+          }
+        }
+    }
+     else if (leChampsRech === "CategoryID")
+        {
+          const dataCategory = JSON.stringify(allNiveau);
+          const tabJsonCategorie = JSON.parse(dataCategory);
+          // tslint:disable-next-line:prefer-for-of
+          for (let l = 0; l < tabJsonCategorie.length; l++) {
+          const dataCat = tabJsonCategorie[l];
+          const nomCat = dataCat.Name as string;
+          if (nomCat.toLowerCase().includes(txt.toLowerCase()))
+          {
+            this.creerUneLigne(data);
+          }
+        }
+    }
+     else if (leChampsRech === "SeasonID")
+        {
+          const dataSaison = JSON.stringify(allSaison);
+          const tabJsonSaison = JSON.parse(dataSaison);
+          // tslint:disable-next-line:prefer-for-of
+          for (let l = 0; l < tabJsonSaison.length; l++) {
+          const dataCat = tabJsonSaison[l];
+          const nomCat = dataCat.Years as string;
+          if (nomCat.toLowerCase().includes(txt.toLowerCase()))
+          {
+            this.creerUneLigne(data);
+          }
+        }
+    }
+    else if (leChampsRech === "City")
+    {
+        const CityTeam = data.City as  string;
+        if (CityTeam.toLowerCase().includes(txt.toLowerCase()))
+        {
+         this.creerUneLigne(data);
+        }
+        }
+    else
+    {
+        const nomTeam = data.Name as  string;
+        if (nomTeam.toLowerCase().includes(txt.toLowerCase()))
+        {
+         this.creerUneLigne(data);
+        }
+        }
+    }
+
 }
 private RemplirNiveau(){
     this.ClearDomElement("Niveau");
-    const allSport = store.GetAllNiveau();
-    const datastringify = JSON.stringify(allSport);
+    allNiveau = store.GetAllNiveau();
+    const datastringify = JSON.stringify(allNiveau);
     const tabJson = JSON.parse(datastringify);
 		// Rentre le id et le nom de l'action dans le tableau correspondant
     // tslint:disable-next-line:prefer-for-of
@@ -222,6 +328,16 @@ public render() {
              <div className="row">
                 <div className="col-md-6 col-sm-6 col-xs-12">
                 <h3>Les équipes :</h3>
+                <form>
+                <h3>Rechercher une équipe</h3>     
+                <input type="text" id="NomRech" name="NomRech"onInput={this.rech.bind(this)}/> <br /> 
+                <input type="radio" name="Champs" value="Name"/>Nom
+                <input type="radio" name="Champs" value="City"/>Ville   
+                <input type="radio" name="Champs" value="Sexe"/>Sexe 
+                <input type="radio" name="Champs" value="SportID"/>Sport   
+                <input type="radio" name="Champs" value="CategoryID"/>Niveau       
+                <input type="radio" name="Champs" value="SeasonID"/>Saison    
+                </form>
                     <div id="TableSelect">
                         <table className="table table-bordered table-hover" id="">
                         <thead>
@@ -246,6 +362,7 @@ public render() {
                         <tbody id="tbody" />                                       
                     </table>
                     </div>
+                
                 <form onSubmit={this.sendFormData.bind(this)} id="nouvTeam">  
                 <h3>Creer une nouvelle équipe</h3>     
                 <label htmlFor="Nom">Nom</label>

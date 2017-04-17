@@ -28,6 +28,13 @@ export function putJoueur(stringContenu: any, id: any) {
         getJoueur();
     });
 }
+// Delete joueur
+export function deleteJoueur( id: any) {
+     axios.default.delete(serverURL + "/joueur/" + id)
+    .then(function(response: any){
+        getJoueur();
+    });
+}
 // Modif joueur
 export function putTeam(stringContenu: any, id: any) {
      axios.default.put(serverURL + "/equipes/" + id, stringContenu)
@@ -35,6 +42,7 @@ export function putTeam(stringContenu: any, id: any) {
         getEquipes();
     });
 }
+
 // Va rechercher toutes les sports
 export function getSport() {
      axios.default.get(serverURL + "/sports")

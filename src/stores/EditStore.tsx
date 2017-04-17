@@ -7,6 +7,7 @@ class EditStore extends EventEmitter {
 
     private joueurs: string[];
     private actions: string[];
+    private uneAction: string[];
 
     constructor() {
         super();
@@ -16,6 +17,9 @@ class EditStore extends EventEmitter {
 
     public GetAllJoueurs = () => {
         return this.joueurs;
+    }
+    public GetUneAction = () => {
+        return this.uneAction;
     }
 
     public GetAllActions = () => {
@@ -60,8 +64,15 @@ class EditStore extends EventEmitter {
                 this.closeActionForm(action.form);
                 break;
             }
+            case "GetUneAction":
+            this.uneAction = [];
+            for (let i = 0; i < action.text.length; i++)
+                {
+                    this.uneAction.push(action.text[i]);
+                }
+                this.emit("UnChange");
+            break;
             case "GetActionsEdit" :
-                this.actions = [];
                 for (let i = 0; i < action.text.length; i++)
                 {
                     this.actions.push(action.text[i]);

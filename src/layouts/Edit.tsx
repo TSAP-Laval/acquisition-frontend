@@ -19,6 +19,10 @@ export interface ILayoutState {
 
 // letiable global pour avoir le numero du joueur
 const numJoueur = 0;
+ let  FirstClick: boolean;
+ let x1 = 0;
+ let y1 = 0;
+ let typeAction = "";
 let idActionType = 0;
 const fleche: [any, any] = [[], []];
 let rows: any = [
@@ -42,6 +46,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
  private componentWillMount = () => {
+    FirstClick = true;
     Actions.getJoueur(); // Charge les joueurs dans le store.
     Actions.getActionsEdit();
 
@@ -52,12 +57,24 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         _lesJoueurs: Store.GetAllJoueurs(),
       });
     });
+    Store.on("UnChange", () => {
+      this.CheckUneAction();
+    });
 
     Store.on("actionChange", () => {
       this.RemplirSelect();
     });
   }
-
+  private CheckUneAction(){
+    const uneAction = Store.GetUneAction();
+    const datastringify = JSON.stringify(uneAction);
+    const tabJson = JSON.parse(datastringify);
+    if (tabJson.length > 0 )
+    {
+      const data = tabJson[0];
+      typeAction = data.TypeAction;
+    }
+  }
   private RemplirSelect = () => {
     this.ClearDomElement("NomActivite");
     const allActions = Store.GetAllActions();
@@ -125,10 +142,19 @@ private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLBut
 
   /**
    * Ferme le form d'ajout d'action
-  */
+   */
 private closeActionForm = () => {
     Actions.closeActionForm(document.getElementsByClassName("Enr")[0] as HTMLDivElement);
+    this.apearPlayeurs();
   }
+private disapearPlayeurs(){
+    const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
+    lesuls.style.display = "none";
+}
+private apearPlayeurs(){
+    const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
+    lesuls.style.display = "block";
+}
   // Envoie du formulaire à l'api
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -182,6 +208,7 @@ private setActionFromInfo = () => {
      let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
      // tslint:disable-next-line:radix
      idActionType = parseInt(typeSelect.value);
+     Actions.getActionId(idActionType);
     // Affiche le terrain.
      this.setState({
       _formState: 1,
@@ -197,8 +224,9 @@ private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
 
 private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
    // fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
-
     // Dessiner la flèche
+    if ( FirstClick === false && typeAction === "reception et action")
+    {
     let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx = canvas.getContext("2d");
 
@@ -216,8 +244,13 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
     let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
     endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
     this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+    }
   }
-
+  private setX1Y1( e: any){
+      x1 = e.nativeEvent.offsetX;
+      y1 = e.nativeEvent.offsetY;
+      FirstClick = false;
+  }
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
       ctx.save();
       ctx.beginPath();
@@ -335,6 +368,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
 
           <div
            id="terrain-container-sm"
+           onClick={this.setX1Y1.bind(this)}
            onMouseDown={this.setFromArrow.bind(this)}
            onMouseUp={this.setToArrow.bind(this)}
           > 
