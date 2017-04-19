@@ -1,17 +1,20 @@
 import dispatcher from "../dispatcher/dispatcher";
 
+// tslint:disable:object-literal-shorthand
+
+// Met le vidéo en mode lecture.
 export function playVideo(state: boolean, video: HTMLVideoElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.PLAY_VIDEO",
         state: state,
+        type: "VIDEO_PLAYER.PLAY_VIDEO",
         video: video,
     });
 }
 
 export function pauseVideo(state: boolean, video: HTMLVideoElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.PAUSE_VIDEO",
         state: state,
+        type: "VIDEO_PLAYER.PAUSE_VIDEO",
         video: video,
     });
 }
@@ -39,54 +42,54 @@ export function forwardFive(video: HTMLVideoElement) {
 
 export function stopVideo(state: boolean, video: HTMLVideoElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.STOP_VIDEO",
         state: state,
+        type: "VIDEO_PLAYER.STOP_VIDEO",
         video: video,
     });
 }
 
 export function slideTime(video: HTMLVideoElement, slider: HTMLInputElement) {
     dispatcher.dispatch({
+        slider: slider,
         type: "VIDEO_PLAYER.SLIDE_TIME",
         video: video,
-        slider: slider,
     });
 }
 
 export function videoPlaying(video: HTMLVideoElement, slider: HTMLInputElement) {
     dispatcher.dispatch({
+        slider: slider,
         type: "VIDEO_PLAYER.VIDEO_PLAYING",
         video: video,
-        slider: slider,
     });
 }
 
 export function restoreDefaultSlowSliderValue(slider: HTMLInputElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.RESTORE_SLOW_SLIDER",
         slider: slider,
+        type: "VIDEO_PLAYER.RESTORE_SLOW_SLIDER",
     });
 }
 
 export function slowSliderSlide(slider: HTMLInputElement, video: HTMLVideoElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.SLOW_SLIDER_SLIDE",
         slider: slider,
+        type: "VIDEO_PLAYER.SLOW_SLIDER_SLIDE",
         video: video,
     });
 }
 
 export function setCurrentTime(time: number) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.SET_CURRENT_TIME",
         time: time,
+        type: "VIDEO_PLAYER.SET_CURRENT_TIME",
     });
 }
 
 export function setStepValues(stepInfo: HTMLSpanElement, slider: HTMLInputElement) {
     dispatcher.dispatch({
-        type: "VIDEO_PLAYER.SET_STEP_VALUE",
-        stepInfo: stepInfo,
         slider: slider,
-    })
+        stepInfo: stepInfo,
+        type: "VIDEO_PLAYER.SET_STEP_VALUE",
+    });
 }
