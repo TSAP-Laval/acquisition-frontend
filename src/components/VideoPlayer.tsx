@@ -101,6 +101,16 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         Actions.setStepValues(stepInfo, stepSlider);
     }
 
+    private onVideoMouseOver = () => {
+        const slider = document.getElementById("my-slider") as HTMLInputElement;
+        Actions.setVideoMouseOverSliderPaddingBottom(slider, true);
+    }
+
+    private onVideoMouseLeave = () => {
+        const slider = document.getElementById("my-slider") as HTMLInputElement;
+        Actions.setVideoMouseOverSliderPaddingBottom(slider, false);
+    }
+
     public render() {
         return (
             <div>
@@ -108,12 +118,14 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     <input
                         type="range"
                         id="my-slider"
-                        className="time-range"
+                        className="time-range down"
                         step="1"
                         min="0"
                         max="300"
                         onMouseDown={this.onPause.bind(this)}
                         onChange={this.onSlide.bind(this)}
+                        onMouseOver={this.onVideoMouseOver.bind(this)}
+                        onMouseLeave={this.onVideoMouseLeave.bind(this)}
                     />
                 </div>
                 <video
@@ -122,6 +134,8 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     preload="auto"
                     poster="//vjs.zencdn.net/v/oceans.png"
                     onTimeUpdate={this.onVideoPlaying.bind(this)}
+                    onMouseOver={this.onVideoMouseOver.bind(this)}
+                    onMouseLeave={this.onVideoMouseLeave.bind(this)}
                     data-setup="{}"
                 >
                     <source
@@ -136,7 +150,11 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         </a>
                     </p>      
                 </video>
-                <div className="video-controls-container">
+                <div
+                    className="video-controls-container"
+                    onMouseOver={this.onVideoMouseOver.bind(this)}
+                    onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                >
                     <div id="stepSetter">
                         <div className="slideTrack"/>
                         <label
