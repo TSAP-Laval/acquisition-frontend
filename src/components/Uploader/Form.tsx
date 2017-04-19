@@ -117,8 +117,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
     public onSave() {
         if (!this.state.savedOnce) {
-            this.state.savedOnce = true;
-            this.shouldComponentUpdate(this.state);
+            this.setState({savedOnce: true});
         }
 
         this.errorChecker();
@@ -138,7 +137,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public errorChecker(date?: Moment.Moment) {
         if (this.state.savedOnce) {
             // We clear the errors
-            this.state.errors = [];
+            this.setState({errors: []});
 
             if (this.state.game.TeamID === 0) {
                 this.state.errors.push("Veuillez choisir une équipe");
