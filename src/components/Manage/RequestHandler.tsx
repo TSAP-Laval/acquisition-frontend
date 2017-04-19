@@ -23,7 +23,7 @@ export function postNewActionType(actionTypeData:string){
 
 export function getCoachs(){
     
-    axios.default.get(serverURL + "/coachs/coachs")
+    axios.default.get(serverURL + "/coachs")
         .then(function(response){
             dispatcher.dispatch({type: "GET_COACH",
                 text: response.data});    
@@ -55,13 +55,13 @@ export function getMvmActions(){
 
 
 export function getAllTeams(){
-    axios.default.get(serverURL + "/equipes")
+    axios.default.get(serverURL + "/equipes" )
         .then(function(response){
             dispatcher.dispatch({type:"GET_TEAMS",
                 text: response.data});
         })
         .catch(function(error:string){
-            dispatcher.dispatch({type: "GET_TEAMS", text: "failed to retrieve your teams. nt gg wp"});
+            dispatcher.dispatch({type: "GET_TEAMS", text: "failed to retrieve your teams."});
         });
 }
 
@@ -74,6 +74,6 @@ export function getAllSports(){
                 text: response.data});
         })
         .catch(function(error:string){
-            dispatcher.dispatch({type: "GET_SPORTS", text: "failed to retrieve your sports. nt gg wp"});
+            dispatcher.dispatch({type: "GET_SPORTS", text: "failed to retrieve your sports."});
         });
 }

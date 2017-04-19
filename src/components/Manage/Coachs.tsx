@@ -5,14 +5,9 @@ import {Button, Alert, Modal} from "react-bootstrap";
 import * as Select from 'react-select';
 import CoachStore from "../../stores/CoachStore";
 import * as RequestHandler from "./RequestHandler";
-
-
-
-
-export interface ILayoutProps {}
-export interface ILayoutState {}
-
-
+import * as Actions from "../../actions/UploadActions";
+import {ITeams, ISports, ICoaches} from "../../interfaces/interfaces";
+require('../../sass/react-select.scss');
 
 ///Ajout d'une équipe modale
 const modalInstance = React.createClass({
@@ -69,32 +64,62 @@ const modalInstance = React.createClass({
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    SelectedTeams: string;
+    //SelectedTeams: string;
+    teams?: any[];
+    selectedValues? : any[];
+    errors?: string[];
+    coach?: ICoaches;
+    sport?: string;
+
+
 }
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
-
-
-    Option: any[] =  [];
-
     constructor(){
         super();
-        
-        this.SelectedTeams = this.SelectedTeams.bind(this);
 
     this.state = {
-        SelectedTeams:"",
-        };
+        teams: CoachStore.GetAllTeams(),
+        selectedValues: [],
+        errors: [],
+        //sport : "1",
+        coach: {
+            ID: 0,
+            Fname: "",
+            Lname: "",
+            Email: "",
+            Teams: null,
+            TeamsIDs: [],
+            Actif: true,
+            PassHash:     "",
+            TokenRequest: "",
+            TokenReset:   "",
+            TokenLogin:   ""
+        }
+    };
+            
+        this.SelectedTeams = this.SelectedTeams.bind(this);
+        this.onTeamSearch = this.onTeamSearch.bind(this);
+        this.SportChanged = this.SportChanged.bind(this);
+        this.formValidator = this.formValidator.bind(this);
+        this.SubmitAction = this.SubmitAction.bind(this);
+
+        this.OnFnameInput = this.OnFnameInput.bind(this);
+        this.OnLnameInput = this.OnLnameInput.bind(this);
+        this.OnMailInput = this.OnMailInput.bind(this);
+
     }
     
     componentWillMount(){
         RequestHandler.getCoachs();
-        RequestHandler.getAllTeams();
         RequestHandler.getAllSports();
-
+        RequestHandler.getAllTeams();
+        
+        
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
-            this.ListAllTeamsAndSports();
-        })   
+            this.ListAllSports();
+            this.ListTeams("-1");
+        })
     }
 
     shouldComponentUpdate(nextState: ILayoutState) {
@@ -102,12 +127,16 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         return true;
     }
 
-    OnCheckedChange(){
-         $(".coach_actif").change(function() {
-            if(this.checked) {
-                alert(this);
-            }
-        });
+    _onTeamSearch() {
+        this.setState({teams: CoachStore.GetAllTeams()});
+    }
+
+    //Selection de sport changée
+    SportChanged(event: any){
+
+        this.shouldComponentUpdate(this.state);
+        console.log(String(event.target.value));
+        this.ListTeams(String(event.target.value));
     }
     ListAllCoachs(){
         var table = document.getElementById('coach_tbody');
@@ -124,12 +153,12 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
-            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['Teams'], data['Actif'], i);
+            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['TeamsID'], data['Actif'], i);
 
         }   
         
     }
-    ListAllTeamsAndSports(){
+    ListAllSports(){
 
         var selectSport = document.getElementById('sport_select');
 
@@ -142,6 +171,9 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         var dataSports = JSON.stringify(allSport);
         var jsonS = JSON.parse(dataSports);
         
+        var emptOpt = document.createElement("option") as HTMLOptionElement;
+       selectSport.appendChild(emptOpt);
+
          for(var i= 0; i < jsonS.length; i++)
         {
             var dataS = jsonS[i];
@@ -152,54 +184,148 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
             selectSport.appendChild(option);
         }
 
-        var teams_control = document.getElementById('teams_multi');
-        if(teams_control != undefined && teams_control.children.length > 0){
-            while (teams_control.children.length  != 0){
-                teams_control.removeChild(teams_control.firstChild);
-            }
-        }
+        
+    }
+
+    //Affiche la liste des equipes pour un sport donné
+    ListTeams(sportId: string){
+       
         var listTeams = CoachStore.GetAllTeams();
         var dataTeam = JSON.stringify(listTeams);
         var jsonT = JSON.parse(dataTeam);
+        var teamGr : any[] = [];
+        if(sportId != "-1"){
+            for(var i=0; i < jsonT.length; i++ )
+            {
+                var dataT = jsonT[i];
+                if(dataT["SportID"] == sportId){
+                var option = document.createElement("option");
+                option.text = dataT['Name'];
+                option.value = dataT['ID'];
+                teamGr.push({label : dataT['Name'], value: dataT['ID'] });
+                }
+            }
+        }
+        this.setState({teams: teamGr});
+        
+    }
 
-         for(var i= 0; i < jsonT.length; i++)
-        {
-            var dataT = jsonT[i];
-            var option = document.createElement("option");
-            option.text = dataT['Name'];
-            option.value = dataT['ID'];
-            
-            teams_control.appendChild(option);
+    onTeamSearch(value: any, callback: Function) {
+        if (!value) {
+			return Promise.resolve({ options: [] });
+		}
+        Actions.searchTeam(value);
+        callback(null, {
+            options: this.state.teams,
+            complete: false
+        });
+    }
+
+
+    OnLnameInput(e: any){
+        this.state.coach.Lname = (e.target as HTMLInputElement).value.trim();
+        //this.shouldComponentUpdate(this.state);
+    }
+
+     OnFnameInput(e: any){
+        this.state.coach.Fname = (e.target as HTMLInputElement).value.trim();
+        //this.shouldComponentUpdate(this.state);
+    }
+
+     OnMailInput(e: any){
+        this.state.coach.Email = (e.target as HTMLInputElement).value.trim();
+        //this.shouldComponentUpdate(this.state);
+    }
+
+
+    validateEmail(email: string) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+    formValidator(){
+        this.state.errors =  [];
+        if(this.state.coach.Fname == null || this.state.coach.Fname == ""){
+            this.state.errors.push("Nom invalide : champs vide");
+        }
+        if(this.state.coach.Fname == null || this.state.coach.Lname == ""){
+            this.state.errors.push("Prénom invalide : champs vide");
+        }
+        if(this.state.coach.Fname == null || this.state.coach.Email == "" || !this.validateEmail(this.state.coach.Email)){
+            this.state.errors.push("Email invalide");
         }
         
+        console.log(this.state.errors);
+        var errorArea = document.getElementById("error_zone") as HTMLTextAreaElement;
+        errorArea.innerText = "Veuillez corriger les erreurs suivantes :";
         
+        for (var i = 0; i < this.state.errors.length; i++) {
+            var element = this.state.errors[i];
+            errorArea.innerText += "\n" + (i+1) + "- " + element;
+        }
+
+        errorArea.hidden = false;
+
+    }
+
+    ClearForm(){
+        var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
+        var nom = document.getElementById("coach_name") as HTMLInputElement;
+        var email = document.getElementById("coach_mail") as HTMLInputElement;
+        var selSport = document.getElementById("sport_select") as HTMLSelectElement;
+        
+        prenom.value = "";
+        nom.value = "";
+        email.value = "";
+        selSport.selectedIndex = 0;
+
     }
 
     SubmitAction(){
 
+        var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
+        var nom = document.getElementById("coach_name") as HTMLInputElement;
+        var email = document.getElementById("coach_mail") as HTMLInputElement;
+        var selSport = document.getElementById("sport_select") as HTMLSelectElement;
 
-         var teams : Number[] = []; 
-            $('#teams_multi :selected').each(function(i, selected){ 
-            teams[i] = Number($(selected).val()); 
-            });
+
+        this.formValidator();
+        if(this.state.errors.length == 0){
             
+            var stateTeam = this.state.selectedValues;
+            var joinedTeam = "";
+            var selectedTeamName = [];
             
-            
-            var jsonTeams = JSON.stringify(teams);
-            
+            for( var i = 0; i < stateTeam.length; i++)
+            {
+               
+                joinedTeam += stateTeam[i]["value"];
+                selectedTeamName[i] = stateTeam[i]["label"];
+                if(i != stateTeam.length-1){
+                joinedTeam += ",";
+                }
+            }           
         var text = '{'
-                +'"Fname" :' + '"' +$('#coach_prenom').val() + '"' + ','
-                +'"Lname" : '+ '"' +$('#coach_name').val() + '"' + ',' 
+                +'"Fname" :' + '"' + prenom.value + '"' + ','
+                +'"Lname" : '+ '"' + nom.value + '"' + ',' 
                 +'"Actif" : '+ '"' + "true" + '"' + ','
-                +'"Email" : '+ '"' +$('#coach_mail').val() + '",'
-                +'"Teams" : ' + jsonTeams
+                +'"Email" : '+ '"' + email.value + '"' + ',' 
+                +'"TeamsIDs" : ' + '"' + joinedTeam + '"'
                 +'}';
+        
+        RequestHandler.postCoach(text);
 
-                debugger;
+        var errorArea = document.getElementById("error_zone") as HTMLTextAreaElement;
 
-       RequestHandler.postCoach(text);
+        errorArea.hidden = true;
+
+        this.ClearForm();
+
+        CoachStore.emit("change");
+        }
     }
 
+    
 
      AddNew(nom:string, prenom:string, email:string, equipe:string[], estActif:string, id:number)
     {
@@ -219,8 +345,10 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
               var tdTeam = document.createElement("td");
               if(equipe != undefined && equipe.length > 0){
-                tdEmail.innerHTML = equipe.join(',');
+                tdTeam.innerHTML = equipe.join(',');
               }
+
+
 
               var tdActif = document.createElement("td");
                 if(estActif == 'true'){
@@ -236,44 +364,53 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               x.appendChild(tdActif);
 
               $('#coach_tbody').append(x);
+
+
     }
 
-
+    static propTypes = {
+    label: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.array,
+      React.PropTypes.object,
+    ])
+  }
 
     ShowModal(){
         return modalInstance; 
     }
 
 
-    SelectedTeams(val:any){
-
-            this.state.SelectedTeams = val;
-            this.shouldComponentUpdate(this.state);
+    SelectedTeams(val: any[]){
+            console.log("Selection : " + val);
+            this.setState({selectedValues: val});
     }
 
 
     render() {
 
-        function AddRow(coachName:string, coachPrenom:string, coachMail:string){
-        
+      /*  function AddRow(coachName:string, coachPrenom:string, coachMail:string){
         
         
          var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
                         + String(coachName) + "</td><td contenteditable='true'>" 
                         + String(coachMail) + "</td>"
                         + "<td></td><td>type='checkbox' className='coach_actif' value='true' checked></td></tr>";
-
-            $('.coach_table tbody').append(trToAdd);
-
-           
-    }
-
-
+            $('.coach_table tbody').append(trToAdd);           
+    }*/
         return (
 <div className="container action_page" >
                         <div className="row col-lg-12">
                             <div className="col-md-6 col-sm-6 col-xs-12">
                                     <h1>Coachs</h1>
+
+
+                                    <div hidden={true} id="error_zone">
+                                        
+                                        <textarea color="red" name="error_container" id="error_container" cols={30} rows={10} readOnly>
+                                        </textarea>
+                                    </div>
+
                                <table style={ {width:500}} className="table table-bordered table-hover striped bordered condensed hover coach_table" >
                                     <thead>
                                         <tr >
@@ -289,13 +426,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             <th className="text-center">
                                                 Equipes
                                             </th>
+                                            
                                             <th className="text-center">
                                                 Actif
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody id="coach_tbody">
-                                        
+
                                     </tbody>
                                 </table>
 
@@ -308,7 +446,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             *
                                         </span>
                                         </label>
-                                        <input className="form-control requiredField" id="coach_name" name="Nom" type="text" required/>
+                                        <input onInput={e => this.OnLnameInput(e) } className="form-control requiredField" id="coach_name" name="Nom" type="text" required/>
                                     </div>
 
                                     <div className="form-group ">
@@ -318,7 +456,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             *
                                         </span>
                                         </label>
-                                        <input className="form-control requiredField" id="coach_prenom" name="Prenom" type="text" required/>
+                                        <input onInput={e => this.OnFnameInput(e) } className="form-control requiredField" id="coach_prenom" name="Prenom" type="text" required/>
                                     </div>
 
                                     <div className="form-group ">
@@ -328,7 +466,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             *
                                         </span>
                                         </label>
-                                        <input className="form-control requiredField" id="coach_mail" name="Email" type="email" required/>
+                                        <input onInput={e => this.OnMailInput(e) } className="form-control requiredField" id="coach_mail" name="Email" type="email" required/>
                                     </div>
 
 
@@ -340,7 +478,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                                     *
                                                 </span>
                                             </label>
-                                                <select className="select form-control" id="sport_select" name="sport_select">
+                                                <select onChange={this.SportChanged} className="select form-control" name="sport_select" id="sport_select">
                                                 </select>
                                         </div>
 
@@ -353,23 +491,18 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                                 </span>
                                             </label>
 
-                                                <select multiple className="select multiple form-control" id="teams_multi" name="teams_multi" >
+{/*                                                <select multiple className="select multiple form-control" id="teams_multi" name="teams_multi" >
                                                     <option value="A">A</option>
                                                     <option value="AA">AA</option>
                                                     <option value="AAA">AAA</option>
                                                     <option value="recreatif">Récreatif</option>
-                                                </select>
+                                                </select>*/}
 
-                                       {/* <Select
-                                                name="form-field-name"
-                                                multi={true}
-                                                searchable={true}
-                                                options={this.Option}
-                                                onChange={this.SelectedTeams}
-                                                backspaceRemoves={false}
-/>*/}
+                                                <Select multi joinValues options={this.state.teams}
+                                                onChange={ this.SelectedTeams} value={this.state.selectedValues}
+                                                placeholder="Sélectionner les équipes"
+                                              />
                                         </div>
-
                                 </form>
 
                                 <Button bsStyle="primary" onClick={this.SubmitAction}>

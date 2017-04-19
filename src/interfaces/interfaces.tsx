@@ -169,7 +169,8 @@ export interface ICoaches  {
 	TokenReset:   string
 	TokenLogin:   string
 	Teams:        ITeams[]
-	Actif:        string
+	TeamsIDs: 	  string[]
+	Actif:        boolean
 }
 
 // Metrics les métriques
