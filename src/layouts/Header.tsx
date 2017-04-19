@@ -1,21 +1,20 @@
 import * as React from "react";
 
 export interface ILayoutProps {
-    title: string
+    title: string;
 }
 export interface ILayoutState {
-    title: string
+    title: string;
 }
 
 export default class Header extends React.Component<ILayoutProps, ILayoutState> {
-    
-    constructor (props: any) {
+
+    constructor(props: any) {
         super(props);
-        console.log(props);
         this.state = { title: this.props.title};
     }
 
-    render() {
+    public render() {
         return (
             <header className="page-header">
                 <h1>{this.props.title}</h1>

@@ -82,3 +82,11 @@ export function setCurrentTime(time: number) {
         time: time,
     });
 }
+
+export function setStepValues(stepInfo: HTMLSpanElement, slider: HTMLInputElement) {
+    dispatcher.dispatch({
+        type: "VIDEO_PLAYER.SET_STEP_VALUE",
+        stepInfo: stepInfo,
+        slider: slider,
+    })
+}
