@@ -49,10 +49,12 @@ class VideoPlayerStore extends EventEmitter {
     }
 
     back = (video: HTMLVideoElement) => {
+        this.pause(true, video);
         video.currentTime -= this.step;
     }
 
     forward = (video: HTMLVideoElement) => {
+        this.pause(true, video);
         video.currentTime += this.step;
     }
 
