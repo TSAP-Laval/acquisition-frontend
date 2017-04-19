@@ -93,6 +93,14 @@ class VideoPlayerStore extends EventEmitter {
         stepInfo.innerText = this.step + " sec.";
     }
 
+    private setSliderPaddingBottom = (state: boolean, slider: HTMLInputElement) => {
+        if (state) {
+            $(slider).removeClass("down");
+        } else {
+            $(slider).addClass("down");
+        }
+    }
+
     public handlerActions = (action: any) => {
         switch (action.type) {
             case "VIDEO_PLAYER.PLAY_VIDEO": {
@@ -143,6 +151,10 @@ class VideoPlayerStore extends EventEmitter {
             case "VIDEO_PLAYER.SET_STEP_VALUE" : {
                 this.setStep(action.stepInfo, action.slider);
                 this.emit("stepChanged");
+                break;
+            }
+            case "VIDEO_PLAYER.SET_RANGE_PADDING_BOTTOM" : {
+                this.setSliderPaddingBottom(action.state, action.slider);
                 break;
             }
             default:
