@@ -91,3 +91,11 @@ export function setStepValues(stepInfo: HTMLSpanElement, slider: HTMLInputElemen
         type: "VIDEO_PLAYER.SET_STEP_VALUE",
     });
 }
+
+export function setVideoMouseOverSliderPaddingBottom(slider: HTMLInputElement, state: boolean) {
+    dispatcher.dispatch({
+        slider,
+        state,
+        type: "VIDEO_PLAYER.SET_RANGE_PADDING_BOTTOM",
+    });
+}
