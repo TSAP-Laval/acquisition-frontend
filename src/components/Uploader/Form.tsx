@@ -110,10 +110,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public handleCheckboxChange() {
-        const game = this.state.game;
+        const g = this.state.game;
         this.setState({checkboxChecked: !this.state.checkboxChecked});
-        game.Status = this.state.checkboxChecked ? "local" : "visiteur";
-        this.setState("{game: game}");
+        g.Status = this.state.checkboxChecked ? "local" : "visiteur";
+        this.setState({game: g});
     }
 
     public onSave() {
