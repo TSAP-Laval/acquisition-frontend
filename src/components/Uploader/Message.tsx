@@ -56,7 +56,6 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 msg = this.props.message.message;
                 break;
         }
-
         if (this.props.message.message !== "") {
             style = this.props.message.isError ? "error" : "success";
         }

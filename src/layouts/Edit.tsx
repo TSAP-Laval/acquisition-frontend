@@ -32,6 +32,7 @@ let rows: any = [
                     [], [], [],
                   ],
                 ];
+
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   constructor(props: any) {
       super(props);
@@ -129,6 +130,7 @@ private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLBut
 private closeActionForm = () => {
     Actions.closeActionForm(document.getElementsByClassName("Enr")[0] as HTMLDivElement);
   }
+
   // Envoie du formulaire à l'api
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();

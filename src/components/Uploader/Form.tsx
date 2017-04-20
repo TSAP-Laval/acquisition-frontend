@@ -118,7 +118,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
     public onSave() {
         if (!this.state.savedOnce) {
-            this.setState({ savedOnce: true });
+            this.setState({savedOnce: true});
         }
 
         this.errorChecker();
