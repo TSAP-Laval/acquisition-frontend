@@ -22,9 +22,11 @@ const numJoueur = 0;
  let  FirstClick: boolean;
  let x1 = 0;
  let y1 = 0;
+ let x2 = 0;
+ let y2 = 0;
  let typeAction = "";
 let idActionType = 0;
-const fleche: [any, any] = [[], []];
+let fleche: [any, any] = [[], []];
 let rows: any = [
                   [
                     [], [], [],
@@ -157,8 +159,13 @@ private apearPlayeurs(){
 }
   // Envoie du formulaire à l'api
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
-    e.preventDefault();
 
+    this.setState({
+      _formState: 2,
+      _lesJoueurs: this.state._lesJoueurs,
+    });
+    e.preventDefault();
+    const doc = document.getElementById("NomActivite");
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
     // Va chercher le resutltat de l'action
@@ -171,20 +178,44 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     let video = document.getElementById("my-player") as HTMLVideoElement;
     let TypeAction = 5;
     if (TypeAction !== 0) {
+      let text ;
+      if ( FirstClick === false && typeAction === "reception et action")
+      {
       // Preparation du json que l'on va envoyer au server
-      let text = "{"
+      text = "{"
         + '"ActionTypeID" :' + idActionType + ","
         + '"ZoneID" : 1 ,'
         + '"GameID" : 1 ,'
-        + '"X1" : ' + fleche[0][0] + ","
-        + '"Y1" : ' + fleche[0][1] + ","
-        + '"X2" : ' + fleche[1][0] + ","
-        + '"Y2" : ' + fleche[1][1] + ","
+        + '"X1" : ' + x1 + ","
+        + '"Y1" : ' + y1 + ","
+        + '"X2" : ' + fleche[0][0] + ","
+        + '"Y2" : ' + fleche[0][1] + ","
+        + '"X3" : ' + fleche[1][0] + ","
+        + '"Y3" : ' + fleche[1][1] + ","
         + '"Time" : ' + video.currentTime + ","
         + '"HomeScore" : ' + scoreDom + ","
         + '"GuestScore" : ' + scoreAway + ","
         + '"PlayerID" :' + numJoueur
         + "}";
+      }
+      else
+      {
+        text = "{"
+        + '"ActionTypeID" :' + idActionType + ","
+        + '"ZoneID" : 1 ,'
+        + '"GameID" : 1 ,'
+        + '"X1" : ' + x1 + ","
+        + '"Y1" : ' + y1 + ","
+        + '"X2" : ' + x2 + ","
+        + '"Y2" : ' + y2 + ","
+        + '"X3" : ' + 0 + ","
+        + '"Y3" : ' + 0 + ","
+        + '"Time" : ' + video.currentTime + ","
+        + '"HomeScore" : ' + scoreDom + ","
+        + '"GuestScore" : ' + scoreAway + ","
+        + '"PlayerID" :' + numJoueur
+        + "}";
+      }
       Actions.postAction(text);
 
       // Fermer le fenetre
@@ -222,14 +253,34 @@ private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
     canvas.width = canvas.width;
   }
 
-private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-   // fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+private setToArrow = (e: any) => {
     // Dessiner la flèche
-    if ( FirstClick === false && typeAction === "reception et action")
+    if (FirstClick === true)
     {
+      x1 = e.nativeEvent.offsetX;
+      y1 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.lineTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y1 - x1) / (x1 - x1));
+      endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, x1 / (ajustement - 0.7), y1 / ajustement, endRadians);
+      FirstClick = false;
+    }
+    else if ( FirstClick === false && typeAction === "reception et action")
+    {
+    fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
     let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx = canvas.getContext("2d");
-
     let ajustement = 1.8;
 
     ctx.strokeStyle = "blue";
@@ -245,12 +296,29 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
     endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
     this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
     }
-  }
-  private setX1Y1( e: any){
-      x1 = e.nativeEvent.offsetX;
-      y1 = e.nativeEvent.offsetY;
+    else if ( FirstClick === false && typeAction === "balle perdu")
+    {
+      x2 = e.nativeEvent.offsetX;
+      y2 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "green";
+      ctx.fillStyle = "green";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x2 / (ajustement - 0.7), y2  / ajustement);
+      ctx.lineTo(x2 / (ajustement - 0.7), y2 / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y2 - x2) / (x2 - x2));
+      endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, x2 / (ajustement - 0.7), y2 / ajustement, endRadians);
       FirstClick = false;
+    }
   }
+
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
       ctx.save();
       ctx.beginPath();
@@ -368,7 +436,6 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
 
           <div
            id="terrain-container-sm"
-           onClick={this.setX1Y1.bind(this)}
            onMouseDown={this.setFromArrow.bind(this)}
            onMouseUp={this.setToArrow.bind(this)}
           > 
@@ -377,6 +444,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <canvas id="canvasArrow" />
+            <canvas id="canvasTest" />
           </div>
           <hr />
           <div className="col-xs-2 no-l-padd">
@@ -384,6 +452,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
           </div>
           <div className="col-xs-6 col-xs-push-4">
             <input onClick={this.setTerrainToInfo.bind(this)} className="btn btn-success" value="Action finale" />
+            
           </div>
         </div>
       </form>
