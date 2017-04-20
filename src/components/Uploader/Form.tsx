@@ -1,5 +1,6 @@
 // tslint:disable:import-spacing
 import * as React       from "react";
+
 import * as Select      from "react-select";
 import * as DateTime    from "react-datetime";
 import * as Moment      from "moment";
@@ -109,10 +110,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public handleCheckboxChange() {
-        const game = this.state.game;
+        const g = this.state.game;
         this.setState({checkboxChecked: !this.state.checkboxChecked});
-        game.Status = this.state.checkboxChecked ? "local" : "visiteur";
-        this.setState("{game: game}");
+        g.Status = this.state.checkboxChecked ? "local" : "visiteur";
+        this.setState({game: g});
     }
 
     public onSave() {
@@ -137,7 +138,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public errorChecker(date?: Moment.Moment) {
         if (this.state.savedOnce) {
             // We clear the errors
-            this.setState({errors: []});
+            this.state.errors.pop();
 
             if (this.state.game.TeamID === 0) {
                 this.state.errors.push("Veuillez choisir une équipe");
