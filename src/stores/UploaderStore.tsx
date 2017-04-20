@@ -134,6 +134,7 @@ class UploadStore extends EventEmitter {
             this.emit("upload_ended");
         }.bind(this));
     }
+
     private searchFields(text: string) {
         const config = {
             headers: {"Content-Type": "application/json;"},
@@ -209,7 +210,6 @@ class UploadStore extends EventEmitter {
             this.emit("upload_ended");
         }.bind(this));
     }
-    // tslint:enable:no-string-literal
 
     public handleActions(action: any){
         switch (action.type) {
