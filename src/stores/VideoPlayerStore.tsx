@@ -2,9 +2,9 @@ import { EventEmitter } from "events";
 import dispatcher from "../dispatcher/dispatcher";
 
 class VideoPlayerStore extends EventEmitter {
-    currentTime: number;
-    step: number;
-    forwadingStep: number;
+    protected currentTime: number;
+    protected step: number;
+    protected forwadingStep: number;
 
     constructor() {
         super();
@@ -12,7 +12,11 @@ class VideoPlayerStore extends EventEmitter {
         this.step = 5;
     }
 
-    play = (state: boolean, video: HTMLVideoElement) => {
+    public getStep = () => {
+        return this.step;
+    }
+
+    private play = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             $("#play-button")
                 .removeClass("glyphicon-pause")
@@ -26,10 +30,9 @@ class VideoPlayerStore extends EventEmitter {
         }
     }
 
-    pause = (state: boolean, video: HTMLVideoElement) => {
+    private pause = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             video.pause();
-            console.log(video.currentTime);
             $("#play-button")
                 .removeClass("glyphicon-pause")
                 .addClass("glyphicon-play");
@@ -37,57 +40,69 @@ class VideoPlayerStore extends EventEmitter {
         }
     }
 
-    stop = (state: boolean, video: HTMLVideoElement) => {
+    private stop = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             video.pause();
             $("#play-button")
                 .removeClass("glyphicon-pause")
                 .addClass("glyphicon-play");
-            video.currentTime = 0; 
+            video.currentTime = 0;
             this.emit("pausing");
         }
     }
 
-    back = (video: HTMLVideoElement) => {
+    private back = (video: HTMLVideoElement) => {
+        this.pause(true, video);
         video.currentTime -= this.step;
     }
 
-    forward = (video: HTMLVideoElement) => {
+    private forward = (video: HTMLVideoElement) => {
+        this.pause(true, video);
         video.currentTime += this.step;
     }
 
-    restart = (video: HTMLVideoElement) => {
+    private restart = (video: HTMLVideoElement) => {
         video.currentTime = 0;
     }
 
-    slide = (video: HTMLVideoElement, slider: HTMLInputElement) => {
-        video.currentTime = (parseInt(slider.value) / parseFloat(slider.max)) * video.duration;
+    private slide = (video: HTMLVideoElement, slider: HTMLInputElement) => {
+        video.currentTime = (parseInt(slider.value, 10) / parseFloat(slider.max)) * video.duration;
     }
 
-    videoPlaying = (video: HTMLVideoElement, slider: HTMLInputElement) => {
+    private videoPlaying = (video: HTMLVideoElement, slider: HTMLInputElement) => {
         slider.value = ((video.currentTime / video.duration) * parseFloat(slider.max)).toString();
     }
 
-    restoreDefaultSlowSlider = (slider: HTMLInputElement) => {
+    private restoreDefaultSlowSlider = (slider: HTMLInputElement) => {
         slider.value = (parseFloat(slider.max) / 2).toString();
     }
 
-    slowSliderSlide = (slider: HTMLInputElement, video: HTMLVideoElement) => {
-        let slidingValue = (parseFloat(slider.value) - (parseFloat(slider.max) / 2)) / (parseFloat(slider.max) * 0,75);
+    private slowSliderSlide = (slider: HTMLInputElement, video: HTMLVideoElement) => {
+        const slidingValue = (
+            parseFloat(slider.value) - (parseFloat(slider.max) / 2)
+            ) / (parseFloat(slider.max) * 0, 75);
         video.currentTime = this.currentTime + slidingValue;
     }
 
-    setCurrentTime = (time: number) => {
+    private setCurrentTime = (time: number) => {
         this.currentTime = time;
     }
 
-    setStep = (stepInfo: HTMLSpanElement, slider: HTMLInputElement) => {
+    private setStep = (stepInfo: HTMLSpanElement, slider: HTMLInputElement) => {
         this.step = parseFloat(slider.value) / 20;
         stepInfo.innerText = this.step + " sec.";
     }
 
-    handlerActions = (action: any) => {
-        switch(action.type) {
+    private setSliderPaddingBottom = (state: boolean, slider: HTMLInputElement) => {
+        if (state) {
+            $(slider).removeClass("down");
+        } else {
+            $(slider).addClass("down");
+        }
+    }
+
+    public handlerActions = (action: any) => {
+        switch (action.type) {
             case "VIDEO_PLAYER.PLAY_VIDEO": {
                 this.play(action.state, action.video);
                 this.emit("stateChanged");
@@ -136,6 +151,10 @@ class VideoPlayerStore extends EventEmitter {
             case "VIDEO_PLAYER.SET_STEP_VALUE" : {
                 this.setStep(action.stepInfo, action.slider);
                 this.emit("stepChanged");
+                break;
+            }
+            case "VIDEO_PLAYER.SET_RANGE_PADDING_BOTTOM" : {
+                this.setSliderPaddingBottom(action.state, action.slider);
                 break;
             }
             default:
