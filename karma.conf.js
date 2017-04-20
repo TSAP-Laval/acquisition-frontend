@@ -39,6 +39,7 @@ module.exports = function(config) {
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
                 'react/lib/ReactContext': 'window',
+                'text-encoding': 'window',
                 'config': JSON.stringify(webpackConfig.debug ? {
                     serverURL: "http://localhost:3000/api"
                 } : {

@@ -1,6 +1,6 @@
 # acquisition-frontend
 
-![CircleCI](https://circleci.com/gh/TSAP-Laval/acquisition-frontend.svg?style=svg)
+![CircleCI](https://circleci.com/gh/TSAP-Laval/acquisition-frontend.svg?style=shield)
 ![Coverage Status](https://coveralls.io/repos/github/TSAP-Laval/acquisition-frontend/badge.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend/badge)](https://www.codefactor.io/repository/github/tsap-laval/acquisition-frontend)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/92eb77ccf6dc4682a4000c7a6ce2841f)](https://www.codacy.com/app/laurentlp/acquisition-frontend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TSAP-Laval/acquisition-frontend&amp;utm_campaign=Badge_Grade)
@@ -85,7 +85,7 @@ $ webpack --watch (dans un autre terminal)
 * TSLint (dans VSCode, installer le plugin TSLint)
 
 #### Linting
- 
+
 Simplement linter le code avant chacun des push, sans quoi les PR seront rejetées...
 
 
