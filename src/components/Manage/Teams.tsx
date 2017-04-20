@@ -12,9 +12,11 @@ private componentWillMount(){
     manageActions.getSport();
     manageActions.getNiveau();
     manageActions.getEquipes();
+    manageActions.getSaisonTeam();
     store.on("change", () => {
         this.RemplirSelect();
         this.RemplirNiveau();
+        this.RemplirSaison();
         this.LstEquipe();
 
     });
@@ -38,6 +40,22 @@ private RemplirSelect(){
         const doc = document.getElementById("Sport");
         const x = document.createElement("OPTION") as HTMLInputElement;
         x.innerHTML = data.Name;
+        x.value = data.ID;
+        doc.appendChild(x);
+        }
+}
+private RemplirSaison(){
+    this.ClearDomElement("Saison");
+    const allSaison = store.GetAllSeason();
+    const datastringify = JSON.stringify(allSaison);
+    const tabJson = JSON.parse(datastringify);
+	    // Rentre le id et le nom de l'action dans le tableau correspondant
+        // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < tabJson.length; i++) {
+        const data = tabJson[i];
+        const doc = document.getElementById("Saison");
+        const x = document.createElement("OPTION") as HTMLInputElement;
+        x.innerHTML = data.Years;
         x.value = data.ID;
         doc.appendChild(x);
         }
@@ -99,18 +117,32 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     const letVilleTeam = document.getElementById("Ville")as HTMLInputElement;
     const VilleTeam = letVilleTeam.value;
     const letsportSelect = document.getElementsByName("Sport")[0] as HTMLSelectElement;
-    const optSport = letsportSelect.options[letsportSelect.selectedIndex];
+    const optSport = letsportSelect.options[letsportSelect.selectedIndex] as HTMLOptionElement;
     const letniveauSelect = document.getElementsByName("Niveau")[0] as HTMLSelectElement;
-    const niveau = letniveauSelect.options[letniveauSelect.selectedIndex];
+    const niveau = letniveauSelect.options[letniveauSelect.selectedIndex]as HTMLOptionElement;
+    const letSaison = document.getElementsByName("Saison")[0] as HTMLSelectElement;
+    const saison = letSaison.options[letSaison.selectedIndex]as HTMLOptionElement;
+    const lstRadioSexe = document.getElementsByName("Sexe");
+    let SexeValue;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < lstRadioSexe.length; i++){
+    const leRadio = lstRadioSexe[i] as HTMLInputElement;
+    if (leRadio.checked){
+        SexeValue = leRadio.value;
+    }
+    }
 	// Preparation du json que l'on va envoyer au server
     const text = "{"
         + '"Name" :' + '"' + nomTeam + '",'
         + '"City" : ' + '"' + VilleTeam + '",'
-        + '"SportID" : ' + optSport + ","
-        + '"CategoryID" : ' + niveau + ""
+        + '"SportID" : ' + optSport.value + ","
+        + '"CategoryID" : ' + niveau.value + ","
+        + '"SaisonID" : ' + saison.value + ","
+        + '"Sexe" : ' + '"' + SexeValue + '"'
         + "}";
     manageActions.postTeam(text);
 }
+
 public render() {
     return (
         <div className="container">
@@ -148,9 +180,16 @@ public render() {
                 <label htmlFor="Ville">Ville</label>
                 <input type="text"id="Ville" name="Ville"/><br />	
                 <label htmlFor="Sport">Sport</label>                  
-                <select id="Sport" name="Sport" /><br />
+                <select id="Sport" name="Sport"/><br />
                 <label htmlFor="Niveau">Niveau</label>                  
-                <select id="Niveau" name="Niveau"  /><br />
+                <select id="Niveau" name="Niveau"/><br />
+                <label htmlFor="Saison">Saison</label>
+                <select id="Saison" name="Saison"/><br />
+                <label htmlFor="Sexe">Sexe </label>
+                <input type="radio" name="Sexe" value="M"/>Masculin
+                <input type="radio" name="Sexe" value="F"/>Féminin
+                <br/>
+
                 <input type="submit" value="Submit"  />            
                 </form> 
                 </div>
