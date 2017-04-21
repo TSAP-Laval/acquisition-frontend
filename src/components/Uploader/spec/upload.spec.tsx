@@ -57,7 +57,7 @@ describe("Upload page", () => {
         const renderedDivs = renderedDOM().querySelectorAll("div");
 
         expect(renderedDOM().children.length).to.equal(1);
-        expect(renderedDivs.length).to.equal(3);
+        expect(renderedDivs.length).to.equal(4);
         expect(renderedDivs[2].textContent).to.equal("Déposer le(s) fichier(s) ici");
     });
 
@@ -94,14 +94,13 @@ describe("DragDrop part", () => {
     it("should renders a <div> with the good amount of class and children", () => {
         const rootElement = renderedDOM();
         expect(rootElement.tagName).to.equal("DIV");
-        expect(rootElement.classList.length).to.equal(2);
     });
 
     it("should renders a div which display drop file", () => {
         const renderedDivs = renderedDOM().querySelectorAll("div");
 
         expect(renderedDOM().children.length).to.equal(1);
-        expect(renderedDivs.length).to.equal(2);
+        expect(renderedDivs.length).to.equal(3);
         expect(renderedDivs[1].textContent).to.equal("Déposer le(s) fichier(s) ici");
     });
 
