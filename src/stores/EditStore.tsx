@@ -53,7 +53,8 @@ class EditStore extends EventEmitter {
                 {
                     this.joueurs.push(action.text[i]);
                 }
-                this.emit("change");
+                this.emit("playersLoaded");
+                //this.emit("change");
                 break;
             }
             case "MATCH_EDIT.REQUEST_ACTION_FORM": {
@@ -77,7 +78,7 @@ class EditStore extends EventEmitter {
                 {
                     this.actions.push(action.text[i]);
                 }
-                this.emit("actionChange");
+                this.emit("actionsLoaded");
             break;
             case "PostAction" :
                 if (action.text !== "error")

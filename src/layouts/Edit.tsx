@@ -15,19 +15,20 @@ export interface ILayoutProps {}
 export interface ILayoutState {
   _lesJoueurs: any;
   _formState: any;
+  _actions: any;
+  _actionChosen: any;
 }
 
 // letiable global pour avoir le numero du joueur
 const numJoueur = 0;
- let  FirstClick: boolean;
- let x1 = 0;
- let y1 = 0;
- let x2 = 0;
- let y2 = 0;
- let x3 = 0;
- let y3 = 0;
- let typeAction = "";
-let idActionType = 0;
+let  FirstClick: boolean;
+let x1 = 0;
+let y1 = 0;
+let x2 = 0;
+let y2 = 0;
+let x3 = 0;
+let y3 = 0;
+let typeAction = "";
 let fleche: [any, any] = [[], []];
 let rows: any = [
                   [
@@ -44,6 +45,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   constructor(props: any) {
       super(props);
       this.state = {
+        _actionChosen: "",
+        _actions: [],
         _formState: 0,
         _lesJoueurs: [],
       };
@@ -51,49 +54,41 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
  private componentWillMount = () => {
     FirstClick = true;
-    Actions.getJoueur(); // Charge les joueurs dans le store.
+
+    // Chargement des données dans le store.
+    Actions.getJoueur();
     Actions.getActionsEdit();
 
-    // Lorsque les joueurs sont chargés.
-    Store.on("change", () => {
+    Store.on("playersLoaded", () => {
       this.setState({
-        _formState: 0,
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _formState: this.state._formState,
         _lesJoueurs: Store.GetAllJoueurs(),
       });
     });
+
+    Store.on("actionsLoaded", () => {
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: Store.GetAllActions(),
+        _formState: this.state._formState,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    });
+
     Store.on("UnChange", () => {
       this.CheckUneAction();
     });
-
-    Store.on("actionChange", () => {
-      this.RemplirSelect();
-    });
   }
-  private CheckUneAction(){
+
+  private CheckUneAction = () => {
     const uneAction = Store.GetUneAction();
     const datastringify = JSON.stringify(uneAction);
     const tabJson = JSON.parse(datastringify);
-    if (tabJson.length > 0 )
-    {
+    if (tabJson.length > 0 ) {
       const data = tabJson[0];
       typeAction = data.TypeAction;
-    }
-  }
-  private RemplirSelect = () => {
-    this.ClearDomElement("NomActivite");
-    const allActions = Store.GetAllActions();
-    const datastringify = JSON.stringify(allActions);
-    const tabJson = JSON.parse(datastringify);
-
-    // Rentre le id et le nom de l'action dans le tableau correspondant
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < tabJson.length; i++) {
-      const data = tabJson[i];
-      const doc = document.getElementById("NomActivite");
-      const x = document.createElement("OPTION") as HTMLInputElement;
-      x.innerHTML = data.Description;
-      x.value = data.ID;
-      doc.appendChild(x);
     }
   }
 
@@ -124,13 +119,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     }
   }
 
- private demi = () => {
+  private demi = () => {
     this.changeTwoLi("def-gauche-list", "off-droite-list");
     this.changeTwoLi("def-droite-list", "off-gauche-list");
     this.changeTwoLi("def-centre-list", "off-centre-list");
     this.changeTwoLi("mid-gauche-list", "mid-droite-list");
   }
-private  ClearDomElement = (nom: string) => {
+
+  private  ClearDomElement = (nom: string) => {
     let doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
       doc.removeChild(doc.lastChild);
@@ -140,36 +136,48 @@ private  ClearDomElement = (nom: string) => {
   /**
    * Ouvre le form d'ajout d'action
    */
-private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
+  private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
     Actions.requestActionForm(e, sender, document.getElementsByClassName("Enr")[0] as HTMLDivElement);
   }
 
   /**
    * Ferme le form d'ajout d'action
    */
-private closeActionForm = () => {
+  private closeActionForm = () => {
     Actions.closeActionForm(document.getElementsByClassName("Enr")[0] as HTMLDivElement);
-    this.apearPlayeurs();
+    /* this.apearPlayeurs(); --> For what? */
   }
-private disapearPlayeurs(){
+
+  /**
+   * UNUSED \/
+   */
+  private disapearPlayeurs = () => {
     const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
     lesuls.style.display = "none";
-}
-private apearPlayeurs(){
+  }
+  /**
+   * UNUSED /\
+   */
+
+  private apearPlayeurs = () => {
     const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
     lesuls.style.display = "block";
-}
-  // Envoie du formulaire à l'api
-private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
+  }
 
+  // Envoie du formulaire à l'api
+  private sendFormData = (e: React.MouseEvent<HTMLInputElement>) => {
     this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
       _formState: 2,
       _lesJoueurs: this.state._lesJoueurs,
     });
     e.preventDefault();
     const doc = document.getElementById("NomActivite");
+
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
+
     // Va chercher le resutltat de l'action
     let letvideo = document.getElementById("my-player") as HTMLVideoElement;
     let tempsAction = letvideo.currentTime;
@@ -185,7 +193,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
       {
       // Preparation du json que l'on va envoyer au server
       text = "{"
-        + '"ActionTypeID" :' + idActionType + ","
+        + '"ActionTypeID" :' + this.state._actionChosen + ","
         + '"ZoneID" : 1 ,'
         + '"GameID" : 1 ,'
         + '"X1" : ' + x1 + ","
@@ -203,7 +211,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
       else
       {
         text = "{"
-        + '"ActionTypeID" :' + idActionType + ","
+        + '"ActionTypeID" :' + this.state._actionChosen + ","
         + '"ZoneID" : 1 ,'
         + '"GameID" : 1 ,'
         + '"X1" : ' + x1 + ","
@@ -225,40 +233,42 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     }
   }
 
-private setTerrainFromInfo = () => {
+  private setTerrainFromInfo = () => {
     // Définir la position initiale du joueur.
   }
 
-private setTerrainToInfo = () => {
+  private setTerrainToInfo = () => {
     // Définir l'action finale du joueur.
     this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
       _formState: 2,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
 
-private setActionFromInfo = () => {
+  private setActionFromInfo = () => {
      let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
-     // tslint:disable-next-line:radix
-     idActionType = parseInt(typeSelect.value);
-     Actions.getActionId(idActionType);
-    // Affiche le terrain.
+     const actionType = parseInt(typeSelect.value, 10);
+     Actions.getActionId(actionType);
      this.setState({
+      _actionChosen: actionType,
+      _actions: this.state._actions,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
-private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
- // fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
+
+  private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
+    // fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
     // Effacer le canvas
     let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
     canvas.width = canvas.width;
   }
 
-private setToArrow = (e: any) => {
+  private setToArrow = (e: any) => {
     // Dessiner la flèche
-    if (FirstClick === true)
-    {
+    if (FirstClick === true) {
       x1 = e.nativeEvent.offsetX;
       y1 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
@@ -277,31 +287,27 @@ private setToArrow = (e: any) => {
       endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
       this.drawArrowhead(ctx, x1 / (ajustement - 0.7), y1 / ajustement, endRadians);
       FirstClick = false;
-    }
-    else if ( FirstClick === false && typeAction === "reception et action")
-    {
-    fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
-    x3 = e.nativeEvent.offsetX;
-    y3 = e.nativeEvent.offsetY;
-    let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
-    let ctx = canvas.getContext("2d");
-    let ajustement = 1.8;
+    } else if ( FirstClick === false && typeAction === "reception et action") {
+      fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+      x3 = e.nativeEvent.offsetX;
+      y3 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
 
-    ctx.strokeStyle = "blue";
-    ctx.fillStyle = "blue";
-    ctx.lineWidth = 2;
+      ctx.strokeStyle = "blue";
+      ctx.fillStyle = "blue";
+      ctx.lineWidth = 2;
 
-    ctx.beginPath();
-    ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
-    ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
-    ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
+      ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
+      ctx.stroke();
 
-    let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
-    endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
-    this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
-    }
-    else if ( FirstClick === false && typeAction === "balle perdu")
-    {
+      let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
+      endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+    } else if ( FirstClick === false && typeAction === "balle perdu") {
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
@@ -322,7 +328,8 @@ private setToArrow = (e: any) => {
       FirstClick = false;
     }
   }
-  private clearCanvas(){
+
+  private clearCanvas = () => {
     let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -334,7 +341,6 @@ private setToArrow = (e: any) => {
     let canvasArrow = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx2 = canvasArrow.getContext("2d");
     ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
-
   }
 
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
@@ -352,13 +358,14 @@ private setToArrow = (e: any) => {
 
  private returnFirstStateForm = () => {
     this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
       _formState: 0,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
 
- public render() {
-
+  public render() {
     rows = [
         [
           [], [], [],
@@ -406,7 +413,18 @@ private setToArrow = (e: any) => {
           </button>
         </li>,
         );
+    }
 
+    // Actions
+    let actions: any = [];
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.state._actions.length; i++) {
+      const data = this.state._actions[i];
+      const selected = (data.ID === this.state._actionChosen ? true : false);
+      actions.push(
+        <option value={data.ID} selected={selected}>{data.Description}</option>,
+      );
     }
 
     // Définit le form
@@ -429,7 +447,10 @@ private setToArrow = (e: any) => {
             <h3>Première action</h3><hr />
             <div className="form-group">          
               <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActivite" className="form-control" name="NomActivite"/><br />
+              <select id="NomActivite" className="form-control" name="NomActivite">
+                {actions}
+              </select>
+              <br />
             </div>
             <hr />
             <div className="form-group col-xs-4 col-xs-push-8">
