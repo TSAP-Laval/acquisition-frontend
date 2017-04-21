@@ -17,11 +17,11 @@ export interface ILayoutState {
   _formState: any;
   _actions: any;
   _actionChosen: any;
+  _firstClick: any;
 }
 
 // letiable global pour avoir le numero du joueur
 const numJoueur = 0;
-let  FirstClick: boolean;
 let x1 = 0;
 let y1 = 0;
 let x2 = 0;
@@ -47,14 +47,13 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.state = {
         _actionChosen: "",
         _actions: [],
+        _firstClick: true,
         _formState: 0,
         _lesJoueurs: [],
       };
   }
 
  private componentWillMount = () => {
-    FirstClick = true;
-
     // Chargement des données dans le store.
     Actions.getJoueur();
     Actions.getActionsEdit();
@@ -63,6 +62,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
+        _firstClick: true,
         _formState: this.state._formState,
         _lesJoueurs: Store.GetAllJoueurs(),
       });
@@ -72,6 +72,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: Store.GetAllActions(),
+        _firstClick: this.state._firstClick,
         _formState: this.state._formState,
         _lesJoueurs: this.state._lesJoueurs,
       });
@@ -169,6 +170,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
+      _firstClick: this.state._firstClick,
       _formState: 2,
       _lesJoueurs: this.state._lesJoueurs,
     });
@@ -189,7 +191,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let TypeAction = 5;
     if (TypeAction !== 0) {
       let text ;
-      if ( FirstClick === false && typeAction === "reception et action")
+      if ( this.state._firstClick === false && typeAction === "reception et action")
       {
       // Preparation du json que l'on va envoyer au server
       text = "{"
@@ -242,18 +244,20 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
+      _firstClick: this.state._firstClick,
       _formState: 2,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
 
   private setActionFromInfo = () => {
-     let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
-     const actionType = parseInt(typeSelect.value, 10);
-     Actions.getActionId(actionType);
-     this.setState({
+    let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
+    const actionType = parseInt(typeSelect.value, 10);
+    Actions.getActionId(actionType);
+    this.setState({
       _actionChosen: actionType,
       _actions: this.state._actions,
+      _firstClick: this.state._firstClick,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
     });
@@ -268,7 +272,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
   private setToArrow = (e: any) => {
     // Dessiner la flèche
-    if (FirstClick === true) {
+    if (this.state._firstClick === true) {
       x1 = e.nativeEvent.offsetX;
       y1 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
@@ -277,7 +281,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
       ctx.strokeStyle = "red";
       ctx.fillStyle = "red";
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.5;
 
       ctx.beginPath();
       ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
@@ -285,9 +289,15 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       ctx.stroke();
       let endRadians = Math.atan((y1 - x1) / (x1 - x1));
       endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
-      this.drawArrowhead(ctx, x1 / (ajustement - 0.7), y1 / ajustement, endRadians);
-      FirstClick = false;
-    } else if ( FirstClick === false && typeAction === "reception et action") {
+      this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: false,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    } else if ( this.state._firstClick === false && typeAction === "reception et action") {
       fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
       x3 = e.nativeEvent.offsetX;
       y3 = e.nativeEvent.offsetY;
@@ -307,7 +317,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
       endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
       this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
-    } else if ( FirstClick === false && typeAction === "balle perdu") {
+    } else if ( this.state._firstClick === false && typeAction === "balle perdu") {
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
@@ -324,8 +334,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       ctx.stroke();
       let endRadians = Math.atan((y2 - x2) / (x2 - x2));
       endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
-      this.drawArrowhead(ctx, x2 / (ajustement - 0.7), y2 / ajustement, endRadians);
-      FirstClick = false;
+      this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: false,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
     }
   }
 
@@ -337,7 +353,13 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     y1 = 0;
     y2 = 0;
     x2 = 0;
-    FirstClick = true;
+    this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: true,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
     let canvasArrow = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx2 = canvasArrow.getContext("2d");
     ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
@@ -356,11 +378,33 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       ctx.fill();
   }
 
- private returnFirstStateForm = () => {
+  private drawX = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+    ctx.beginPath();
+
+    ctx.moveTo(x - 10, y - 10);
+    ctx.lineTo(x + 10, y + 10);
+
+    ctx.moveTo(x + 10, y - 10);
+    ctx.lineTo(x - 10, y + 10);
+    ctx.stroke();
+  }
+
+  private returnFirstStateForm = () => {
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
+      _firstClick: true,
       _formState: 0,
+      _lesJoueurs: this.state._lesJoueurs,
+    });
+  }
+
+  private returnSecondStateForm = () => {
+    this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
+      _firstClick: true,
+      _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
@@ -499,7 +543,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     } else {
 
       formAction = (
-        <form onSubmit={this.setActionFromInfo.bind(this)}>  
+        <form>  
           <div className="Enr">
             <button
               type="button"
@@ -513,12 +557,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <h3>Action finale</h3><hr />
             <div className="form-group">          
               <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest"/>
+              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest">
+                {actions}
+              </select>
               <br />
             </div>
             <hr />
             <div className="col-xs-2 no-l-padd">
-              <input onClick={this.setActionFromInfo.bind(this)} className="btn btn-default" value="Retour" />
+              <input onClick={this.returnSecondStateForm.bind(this)} className="btn btn-default" value="Retour" />
             </div>
             <div className="col-xs-6 col-xs-push-4">
               <input onClick={this.sendFormData.bind(this)} className="btn btn-success" value="Enregistrer" />
