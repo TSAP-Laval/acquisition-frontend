@@ -105,6 +105,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public _onFieldSearch() {
         this.setState({fields: Store.getFields()});
     }
+
     public closeForm() {
         Actions.closeForm();
     }
@@ -138,42 +139,42 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public errorChecker(date?: Moment.Moment) {
         if (this.state.savedOnce) {
             // We clear the errors
-            this.state.errors.pop();
+            const err: string[] = []
 
             if (this.state.game.TeamID === 0) {
-                this.state.errors.push("Veuillez choisir une équipe");
+                err.push("Veuillez choisir une équipe");
             }
 
             if (this.state.game.OpposingTeam === "") {
-                this.state.errors.push("Veuillez entrer une équipe adverse");
+                err.push("Veuillez entrer une équipe adverse");
             }
 
             if (this.state.game.LocationID === 0) {
-                this.state.errors.push("Veuillez choisir un terrain");
+                err.push("Veuillez choisir un terrain");
             }
 
             if (this.state.game.FieldCondition === "") {
-                this.state.errors.push("Veuillez entrer la condition du terrain lors de la partie");
+                err.push("Veuillez entrer la condition du terrain lors de la partie");
             }
 
             if (date != null) {
                 if (typeof date.date !== typeof undefined) {
                     if (Moment(date, "YYYY-MMM-DD HH:mm").isAfter(Moment.now())) {
-                        this.state.errors.push("La date entrée doit être avant la date actuelle !");
+                        err.push("La date entrée doit être avant la date actuelle !");
                     }
                     else if (!Moment(date, "YYYY-MMM-DD HH:mm", true).isValid()) {
-                        this.state.errors.push("La date entrée est invalide !");
+                        err.push("La date entrée est invalide !");
                     }
                 }
                 else {
-                    this.state.errors.push("Veuillez choisir une date valide");
+                    err.push("Veuillez choisir une date valide");
                 }
             }
             else if (this.state.game.Date === "") {
-                    this.state.errors.push("Veuillez choisir une date");
+                err.push("Veuillez choisir une date");
             }
 
-            this.shouldComponentUpdate(this.state);
+            this.setState({ errors: err})
         }
     }
 
