@@ -24,6 +24,8 @@ const numJoueur = 0;
  let y1 = 0;
  let x2 = 0;
  let y2 = 0;
+ let x3 = 0;
+ let y3 = 0;
  let typeAction = "";
 let idActionType = 0;
 let fleche: [any, any] = [[], []];
@@ -279,6 +281,8 @@ private setToArrow = (e: any) => {
     else if ( FirstClick === false && typeAction === "reception et action")
     {
     fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+    x3 = e.nativeEvent.offsetX;
+    y3 = e.nativeEvent.offsetY;
     let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx = canvas.getContext("2d");
     let ajustement = 1.8;
@@ -317,6 +321,20 @@ private setToArrow = (e: any) => {
       this.drawArrowhead(ctx, x2 / (ajustement - 0.7), y2 / ajustement, endRadians);
       FirstClick = false;
     }
+  }
+  private clearCanvas(){
+    let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    x1 = 0;
+    y1 = 0;
+    y2 = 0;
+    x2 = 0;
+    FirstClick = true;
+    let canvasArrow = document.getElementById("canvasArrow") as HTMLCanvasElement;
+    let ctx2 = canvasArrow.getContext("2d");
+    ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
+
   }
 
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
@@ -452,7 +470,7 @@ private setToArrow = (e: any) => {
           </div>
           <div className="col-xs-6 col-xs-push-4">
             <input onClick={this.setTerrainToInfo.bind(this)} className="btn btn-success" value="Action finale" />
-            
+             <input onClick={this.clearCanvas.bind(this)} className="btn reset" value="reset" />
           </div>
         </div>
       </form>
