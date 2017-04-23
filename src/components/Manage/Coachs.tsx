@@ -3,14 +3,20 @@ import * as $ from "jquery";
 
 import {Button, Alert, Modal} from "react-bootstrap";
 import * as Select from 'react-select';
+//Coach Store
 import CoachStore from "../../stores/CoachStore";
 import * as RequestHandler from "./RequestHandler";
+//Seasons Store
+import * as ManageActions  from "../../actions/ManageActions";
+import store from "../../stores/SeasonStore";
+
 import * as Actions from "../../actions/UploadActions";
-import {ITeams, ISports, ICoaches} from "../../interfaces/interfaces";
+import {ITeams, ISports, ICoaches, ISeasons} from "../../interfaces/interfaces";
 require('../../sass/react-select.scss');
 
 ///Ajout d'une équipe modale
 const modalInstance = React.createClass({
+
     render() {
         return (
 
@@ -70,8 +76,8 @@ export interface ILayoutState {
     errors?: string[];
     coach?: ICoaches;
     sport?: string;
-
-
+    seasons?: ISeasons[];
+    openEditForm?: boolean;
 }
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
     constructor(){
@@ -81,6 +87,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         teams: CoachStore.GetAllTeams(),
         selectedValues: [],
         errors: [],
+        seasons: [],
         //sport : "1",
         coach: {
             ID: 0,
@@ -93,32 +100,39 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
             PassHash:     "",
             TokenRequest: "",
             TokenReset:   "",
-            TokenLogin:   ""
-        }
+            TokenLogin:   "",
+            Season: null
+        },
+        openEditForm: false
     };
             
         this.SelectedTeams = this.SelectedTeams.bind(this);
-        this.onTeamSearch = this.onTeamSearch.bind(this);
         this.SportChanged = this.SportChanged.bind(this);
         this.formValidator = this.formValidator.bind(this);
         this.SubmitAction = this.SubmitAction.bind(this);
+        this.GetEquipeName = this.GetEquipeName.bind(this);
 
         this.OnFnameInput = this.OnFnameInput.bind(this);
         this.OnLnameInput = this.OnLnameInput.bind(this);
         this.OnMailInput = this.OnMailInput.bind(this);
 
+        this._onOpenForm = this._onOpenForm.bind(this);
+        this._onCloseForm = this._onCloseForm.bind(this);
+        
     }
     
     componentWillMount(){
-        RequestHandler.getCoachs();
+
         RequestHandler.getAllSports();
         RequestHandler.getAllTeams();
-        
+        RequestHandler.getCoachs();
+        ManageActions.getSaison();
         
         CoachStore.on("change", ()=> {
             this.ListAllCoachs();
             this.ListAllSports();
             this.ListTeams("-1");
+            this.ListSeasons();
         })
     }
 
@@ -127,9 +141,16 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         return true;
     }
 
-    _onTeamSearch() {
-        this.setState({teams: CoachStore.GetAllTeams()});
+
+    _onOpenForm() {
+        this.setState({openEditForm: true});
     }
+
+    _onCloseForm() {
+        this.setState({openEditForm: false});
+    }
+
+
 
     //Selection de sport changée
     SportChanged(event: any){
@@ -153,7 +174,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
-            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['TeamsID'], data['Actif'], i);
+            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['TeamsIDs'], data['Actif'], i, data["SeasonID"]);
 
         }   
         
@@ -180,7 +201,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
             var option = document.createElement("option");
             option.text = dataS['Name'];
             option.value = dataS['ID'];
-            
+
             selectSport.appendChild(option);
         }
 
@@ -210,17 +231,32 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         
     }
 
-    onTeamSearch(value: any, callback: Function) {
-        if (!value) {
-			return Promise.resolve({ options: [] });
-		}
-        Actions.searchTeam(value);
-        callback(null, {
-            options: this.state.teams,
-            complete: false
-        });
-    }
 
+    ListSeasons(){
+        var allSaison=store.GetAllSeasons();
+        var datastringify =JSON.stringify(allSaison);
+ 	    var tabJson = JSON.parse(datastringify);
+
+        var seasonControl = document.getElementById('season_select');
+         if(seasonControl != undefined && seasonControl.children.length > 0){
+            while (seasonControl.children.length > 0){
+                seasonControl.removeChild(seasonControl.firstChild);
+            }
+        }
+
+
+        for (var i = 0; i < tabJson.length; i++) {
+            var data = tabJson[i];
+            var option = document.createElement("option");
+            option.text = data['Years'];
+            option.value = data['ID'];
+
+            seasonControl.appendChild(option);
+
+            this.state.seasons.push({ID: data['ID'], Years: data['Years']});
+
+        }
+    }
 
     OnLnameInput(e: any){
         this.state.coach.Lname = (e.target as HTMLInputElement).value.trim();
@@ -237,11 +273,11 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         //this.shouldComponentUpdate(this.state);
     }
 
-
+    //Valide le format de l'entrée de l'adresse d'email
     validateEmail(email: string) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
-}
+    }
 
     formValidator(){
         this.state.errors =  [];
@@ -282,11 +318,12 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     }
 
     SubmitAction(){
-
+        debugger;
         var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
         var nom = document.getElementById("coach_name") as HTMLInputElement;
         var email = document.getElementById("coach_mail") as HTMLInputElement;
         var selSport = document.getElementById("sport_select") as HTMLSelectElement;
+        var selSeason = document.getElementById("season_select") as HTMLSelectElement;
 
 
         this.formValidator();
@@ -304,13 +341,15 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                 if(i != stateTeam.length-1){
                 joinedTeam += ",";
                 }
-            }           
+            }
+
         var text = '{'
                 +'"Fname" :' + '"' + prenom.value + '"' + ','
                 +'"Lname" : '+ '"' + nom.value + '"' + ',' 
                 +'"Actif" : '+ '"' + "true" + '"' + ','
                 +'"Email" : '+ '"' + email.value + '"' + ',' 
-                +'"TeamsIDs" : ' + '"' + joinedTeam + '"'
+                +'"TeamsIDs" : ' + '"' + joinedTeam + '"' + ',' 
+                +'"SeasonID" : ' + '"' + selSeason.id + '"'
                 +'}';
         
         RequestHandler.postCoach(text);
@@ -325,11 +364,37 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         }
     }
 
-    
+    GetEquipeName(teamsIds:string) {
+        
+        var equipeAff  = document.createElement("select");
+        var listTeams = CoachStore.GetAllTeams() as ITeams[];
+        var ids = teamsIds.split(',');
 
-     AddNew(nom:string, prenom:string, email:string, equipe:string[], estActif:string, id:number)
+        for (var i = 0; i < ids.length; i++) {
+            debugger;
+            var tid = ids[i];
+                for (var j = 0; j < listTeams.length; j++) {
+                    var teams = listTeams[j];
+                    if(parseInt(tid) == teams['ID']){
+                    var option = document.createElement("option");
+                    option.value = teams['ID'].toString();
+                    option.text = teams['Name'];
+                    equipeAff.appendChild(option);
+                }
+            }
+    }
+    if(ids.length == 0 || ids == undefined){
+        equipeAff.disabled = true
+    }else  {
+        equipeAff.disabled = false;
+    }
+        return equipeAff;
+    }
+
+
+
+     AddNew(nom:string, prenom:string, email:string, equipe:string, estActif:string, id:number, season:any)
     {
-
               var doc = document.getElementById("coach_tbody");
 			  var x = document.createElement("tr");
               x.id = String(id);
@@ -343,13 +408,10 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               var tdEmail = document.createElement("td");
 			  tdEmail.innerHTML= email;
 
-              var tdTeam = document.createElement("td");
-              if(equipe != undefined && equipe.length > 0){
-                tdTeam.innerHTML = equipe.join(',');
-              }
-
-
-
+              var tdTeam = document.createElement("td");    
+              var teamsSel = this.GetEquipeName(equipe) as HTMLSelectElement;
+              
+              tdTeam.appendChild(teamsSel);
               var tdActif = document.createElement("td");
                 if(estActif == 'true'){
                 tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true' checked >";
@@ -357,10 +419,22 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                     tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true'>";
                 }
 
+                var saisonAffichage = ""
+                this.state.seasons.forEach(s => {
+                    if(s.ID == season){
+                        saisonAffichage = s.Years;
+                    }
+                });
+
+
+              var tdSaison = document.createElement("td");
+              tdSaison.innerHTML = saisonAffichage;
+
               x.appendChild(tdNom);
               x.appendChild(tdPrenom);
               x.appendChild(tdEmail);
               x.appendChild(tdTeam);
+              x.appendChild(tdSaison)
               x.appendChild(tdActif);
 
               $('#coach_tbody').append(x);
@@ -411,7 +485,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                         </textarea>
                                     </div>
 
-                               <table style={ {width:500}} className="table table-bordered table-hover striped bordered condensed hover coach_table" >
+                               <table style={ {width:550}} className="table table-bordered table-hover striped bordered condensed hover coach_table" >
                                     <thead>
                                         <tr >
                                             <th className="text-center">
@@ -426,7 +500,9 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                             <th className="text-center">
                                                 Equipes
                                             </th>
-                                            
+                                            <th className="text-center">
+                                                Saison
+                                            </th>
                                             <th className="text-center">
                                                 Actif
                                             </th>
@@ -469,6 +545,17 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                         <input onInput={e => this.OnMailInput(e) } className="form-control requiredField" id="coach_mail" name="Email" type="email" required/>
                                     </div>
 
+                                    <div className="form-group">
+                                                                        
+                                            <label className="control-label" htmlFor="season_select">
+                                                Saison :
+                                                <span className="asteriskField">
+                                                    *
+                                                </span>
+                                            </label>
+                                                <select className="select form-control" name="season_select" id="season_select">
+                                                </select>
+                                        </div>
 
                                     <div className="form-group">
                                                                         
@@ -490,19 +577,12 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                                     *
                                                 </span>
                                             </label>
-
-{/*                                                <select multiple className="select multiple form-control" id="teams_multi" name="teams_multi" >
-                                                    <option value="A">A</option>
-                                                    <option value="AA">AA</option>
-                                                    <option value="AAA">AAA</option>
-                                                    <option value="recreatif">Récreatif</option>
-                                                </select>*/}
-
                                                 <Select multi joinValues options={this.state.teams}
                                                 onChange={ this.SelectedTeams} value={this.state.selectedValues}
                                                 placeholder="Sélectionner les équipes"
                                               />
                                         </div>
+
                                 </form>
 
                                 <Button bsStyle="primary" onClick={this.SubmitAction}>

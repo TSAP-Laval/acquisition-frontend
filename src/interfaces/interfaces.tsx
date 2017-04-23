@@ -171,6 +171,7 @@ export interface ICoaches  {
 	Teams:        ITeams[]
 	TeamsIDs: 	  string[]
 	Actif:        boolean
+	Season: 	  ISeasons
 }
 
 // Metrics les métriques
