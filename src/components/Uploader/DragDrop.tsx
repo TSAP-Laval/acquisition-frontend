@@ -9,7 +9,6 @@ import Message          from "./Message";
 import ConfForm         from "./Confirmation";
 import { IMessages }    from "../../interfaces/interfaces";
 import { ProgressBar }  from "react-bootstrap";
-
 // tslint:enable:import-spacing
 
 // tslint:disable-next-line:no-empty-interface
