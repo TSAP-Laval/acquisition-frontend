@@ -97,15 +97,15 @@ class UploadStore extends EventEmitter {
             form.append(file.lastModifiedDate, file, file.name);
         });
 
-        axios.default.post(serverURL + "/parties").then(function (r: axios.AxiosResponse) {
-            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+        axios.default.post(serverURL + "/parties").then(function(r: axios.AxiosResponse) {
+            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             if (r.data != null) {
                 this.gameID = r.data.game_id;
 
                 axios.default.post(serverURL + "/upload/" + this.gameID
-                , form, config).then(function (res: axios.AxiosResponse) {
+                , form, config).then(function(res: axios.AxiosResponse) {
                     // console.log("RESULT (XHR): \n %o\nSTATUS: %s", res.data, res.status);
-                }.bind(this)).catch(function (error: axios.AxiosError) {
+                }.bind(this)).catch(function(error: axios.AxiosError) {
                     // console.log("ERROR (XHR): %o", error.response.data);
 
                     // Only if it's not the cancel actions that cause the error
@@ -116,21 +116,21 @@ class UploadStore extends EventEmitter {
                         this.addMessage(true, error);
                         this.cancelUpload();
                         this.sendCancel();
-                        setTimeout(function () {
+                        setTimeout(function() {
                             this.emit("upload_ended");
                             this.emit("close_form");
                         }.bind(this), 500);
                     }
                 }.bind(this));
             }
-        }.bind(this)).catch(function (error: axios.AxiosError) {
+        }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
             this.addMessage(true, error);
             this.cancelUpload();
             this.sendCancel();
-            setTimeout(function () {
+            setTimeout(function() {
                 this.emit("upload_ended");
                 this.emit("close_form");
             }.bind(this), 500);
@@ -153,7 +153,7 @@ class UploadStore extends EventEmitter {
             this.addMessage(true, error);
             this.cancelUpload();
             this.sendCancel();
-            setTimeout(function () {
+            setTimeout(function() {
                 this.emit("upload_ended");
                 this.emit("close_form");
             }.bind(this), 500);
@@ -176,7 +176,7 @@ class UploadStore extends EventEmitter {
             this.addMessage(true, error);
             this.cancelUpload();
             this.sendCancel();
-            setTimeout(function () {
+            setTimeout(function() {
                 this.emit("upload_ended");
                 this.emit("close_form");
             }.bind(this), 500);
@@ -210,7 +210,7 @@ class UploadStore extends EventEmitter {
             this.addMessage(true, error);
             this.cancelUpload();
             this.sendCancel();
-            setTimeout(function () {
+            setTimeout(function() {
                 this.emit("upload_ended");
                 this.emit("close_form");
             }.bind(this), 500);
@@ -232,9 +232,7 @@ class UploadStore extends EventEmitter {
     }
 
     private sendCancel() {
-        console.log("SENDING CANCEL !!!");
         const url = serverURL + "/upload/" + this.gameID;
-        console.log("URL : " + url);
 
         axios.default.delete(url).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
@@ -260,24 +258,24 @@ class UploadStore extends EventEmitter {
                 this.emit("open_form");
                 break;
             case "UPLOAD.OPEN_CONFIRM_FORM":
-                    this.emit("open_confirm_form");
+                this.emit("open_confirm_form");
                 break;
             case "UPLOAD.CLOSE_CONFIRM_FORM":
                 this.emit("close_confirm_form");
                 this.addMessage(false, "");
                 break;
             case "UPLOAD.CANCEL_UPLOAD":
-                    this.uploading = false;
-                    if (this.progress[0] !== "100") {
-                        this.cancelUpload();
-                        this.emit("upload_ended");
-                        this.addMessage(false, "CANCEL_UPLOAD");
-                    } else {
-                        this.addMessage(false, "CANCEL");
-                    }
-                    this.sendCancel();
-                    this.emit("close_confirm_form");
-                    this.emit("close_form");
+                this.uploading = false;
+                if (this.progress[0] !== "100") {
+                    this.cancelUpload();
+                    this.emit("upload_ended");
+                    this.addMessage(false, "CANCEL_UPLOAD");
+                } else {
+                    this.addMessage(false, "CANCEL");
+                }
+                this.sendCancel();
+                this.emit("close_confirm_form");
+                this.emit("close_form");
                 break;
             case "UPLOAD.SAVE":
                 this.save(action.teamID, action.opposingTeam, action.status,

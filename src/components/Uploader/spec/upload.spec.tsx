@@ -1,3 +1,5 @@
+// Pour enlever les erreurs concernant Chai (expect.to....)
+// tslint:disable:no-unused-expression
 // tslint:disable:import-spacing
 import * as React           from "react";
 import * as ReactDOM        from "react-dom";
@@ -7,7 +9,7 @@ import * as mocha           from "mocha";
 import {
     mount,
     shallow,
-    ReactWrapper
+    ReactWrapper,
 }   from "enzyme";
 
 import * as path            from "path";

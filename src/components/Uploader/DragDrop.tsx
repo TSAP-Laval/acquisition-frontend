@@ -8,7 +8,7 @@ import Form             from "./Form";
 import Message          from "./Message";
 import ConfForm         from "./Confirmation";
 import { IMessages }    from "../../interfaces/interfaces";
-import { ProgressBar }  from "react-bootstrap"
+import { ProgressBar }  from "react-bootstrap";
 
 // tslint:enable:import-spacing
 
@@ -96,7 +96,6 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
     public _onOpenConfirmForm() {
         this.setState({ openConfirmForm: true });
-        console.log(Store.getGameID());
     }
 
     public _onCloseConfirmForm() {
@@ -134,7 +133,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     public render() {
         let form     =  null;
         let message  =  null;
-        const confForm = this.state.openConfirmForm ? !this.state.open_form ? <ConfForm /> : null: null;
+        const confForm = this.state.openConfirmForm ? !this.state.open_form ? <ConfForm /> : null : null;
         const progress: number = this.state.progress == null ? 0 : Math.floor(parseFloat(this.state.progress[0]));
         let dropzone = (
                         <Dropzone
@@ -162,7 +161,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            )
+            );
         }
 
         if (this.state.message != null) {
