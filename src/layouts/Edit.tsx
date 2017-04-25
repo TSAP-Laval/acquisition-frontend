@@ -54,17 +54,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
  private componentWillMount = () => {
     // Chargement des données dans le store.
-<<<<<<< HEAD
    Actions.getJoueur();
    Actions.getActionsEdit();
 
    Store.on("playersLoaded", () => {
-=======
-    Actions.getJoueur();
-    Actions.getActionsEdit();
 
-    Store.on("playersLoaded", () => {
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
@@ -73,12 +67,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         _lesJoueurs: Store.GetAllJoueurs(),
       });
     });
-
-<<<<<<< HEAD
    Store.on("actionsLoaded", () => {
-=======
-    Store.on("actionsLoaded", () => {
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
+
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: Store.GetAllActions(),
@@ -88,11 +78,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       });
     });
 
-<<<<<<< HEAD
    Store.on("UnChange", () => {
-=======
-    Store.on("UnChange", () => {
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       this.CheckUneAction();
     });
   }
@@ -190,12 +176,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     });
     e.preventDefault();
     const doc = document.getElementById("NomActivite");
-<<<<<<< HEAD
     this.returnFirstStateForm();
     this.closeActionForm();
-=======
-
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
 
@@ -341,11 +323,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
       this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
     } else if ( this.state._firstClick === false && typeAction === "balle perdu") {
-<<<<<<< HEAD
       x3 = 0;
       y3 = 0;
-=======
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
@@ -381,11 +360,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     y1 = 0;
     y2 = 0;
     x2 = 0;
-<<<<<<< HEAD
     y3 = 0;
     x3 = 0;
-=======
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
+
     this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
@@ -517,17 +494,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         </li>,
         );
     }
-<<<<<<< HEAD
 
     // Actions
     let actions: any = [];
-
-=======
-
-    // Actions
-    let actions: any = [];
-
->>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.state._actions.length; i++) {
       const data = this.state._actions[i];
@@ -542,7 +511,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     if (this.state._formState === 0) {
 
       formAction = (
-        <form onSubmit={this.setActionFromInfo.bind(this)}>  
+        <form onSubmit={this.setActionFromInfo.bind(this)}>
           <div className="Enr">
             <button
               type="button"
@@ -555,8 +524,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               >
             </button>
             <h3>Première action</h3><hr />
-            <div className="form-group">          
-              <label htmlFor="Nom">Nom de l'action</label>                  
+            <div className="form-group">
+              <label htmlFor="Nom">Nom de l'action</label>
               <select id="NomActivite" className="form-control" name="NomActivite">
                 {actions}
               </select>
@@ -566,7 +535,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <div className="form-group col-xs-4 col-xs-push-8">
               <input type="submit" className="btn btn-default" value="Trajectoire" />
             </div>
-          </div>  
+          </div>
       </form>);
     } else if (this.state._formState === 1) {
       formAction = (
@@ -587,7 +556,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
            id="terrain-container-sm"
            onMouseDown={this.setFromArrow.bind(this)}
            onMouseUp={this.setToArrow.bind(this)}
-          > 
+          >
             <div id="circle-centre" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
@@ -609,7 +578,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     } else {
 
       formAction = (
-        <form>  
+        <form>
           <div className="Enr">
             <button
               type="button"
@@ -621,8 +590,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               <span aria-hidden="true">&times;</span>
             </button>
             <h3>Action finale</h3><hr />
-            <div className="form-group">          
-              <label htmlFor="Nom">Nom de l'action</label>                  
+            <div className="form-group">
+              <label htmlFor="Nom">Nom de l'action</label>
               <select id="NomActiviteTest" className="form-control" name="NomActiviteTest">
                 {actions}
               </select>
@@ -635,7 +604,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <div className="col-xs-6 col-xs-push-4">
               <input onClick={this.sendFormData.bind(this)} className="btn btn-success" value="Enregistrer" />
             </div>
-          </div>  
+          </div>
       </form>
       );
     }
@@ -645,13 +614,13 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         {formAction}
         <input type="button" onClick={this.demi.bind(rows)} value="Demi"/>
 
-        <form onSubmit={this.sendFormData.bind(this)}>  
-            <h3>Pointage</h3><br />             
+        <form onSubmit={this.sendFormData.bind(this)}>
+            <h3>Pointage</h3><br />
             <label htmlFor="ScoreDom">Domicile</label>
-            <input type="text" name="ScoreDom" id="ScoreDom" />            
+            <input type="text" name="ScoreDom" id="ScoreDom" />
             <label htmlFor="ScoreAway">Extérieur</label>
             <input type="text" name="ScoreAway" id="ScoreAway"/>
-      </form>              
+      </form>
         <div id="terrain-container" className="container-fluid">
           <div id="circle-centre" />
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
