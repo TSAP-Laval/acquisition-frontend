@@ -127,6 +127,7 @@ private remplirModif(){
 private LstEquipe()	{
     this.ClearDomElement("tbody");
     Allequipe = store.GetAllequipe();
+
     const datastringify = JSON.stringify(Allequipe);
     const tabJson = JSON.parse(datastringify);
 	// Rentre le id et le nom de l'action dans le tableau correspondant
@@ -321,6 +322,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
         + "}";
     manageActions.postTeam(text);
     }
+
 }
 public render() {
     return (
@@ -362,7 +364,6 @@ public render() {
                         <tbody id="tbody" />                                       
                     </table>
                     </div>
-                
                 <form onSubmit={this.sendFormData.bind(this)} id="nouvTeam">  
                 <h3>Creer une nouvelle équipe</h3>     
                 <label htmlFor="Nom">Nom</label>

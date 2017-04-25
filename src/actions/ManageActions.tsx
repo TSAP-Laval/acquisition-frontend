@@ -42,7 +42,6 @@ export function putTeam(stringContenu: any, id: any) {
         getEquipes();
     });
 }
-
 // Va rechercher toutes les sports
 export function getSport() {
      axios.default.get(serverURL + "/sports")

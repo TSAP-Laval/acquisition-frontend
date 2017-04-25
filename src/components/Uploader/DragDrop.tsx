@@ -1,11 +1,13 @@
 import * as React from "react";
-import * as Dropzone from "react-dropzone";
 
-import * as Actions from "../../actions/UploadActions";
-import Store from "../../stores/UploaderStore";
-import Form from "./Form";
-import Message from "./Message";
-import { IMessages } from "../../interfaces/interfaces";
+// tslint:disable:import-spacing
+import * as Dropzone    from "react-dropzone";
+import * as Actions     from "../../actions/UploadActions";
+import Store            from "../../stores/UploaderStore";
+import Form             from "./Form";
+import Message          from "./Message";
+import { IMessages }    from "../../interfaces/interfaces";
+// tslint:enable:import-spacing
 
 // tslint:disable-next-line:no-empty-interface
 export interface ILayoutProps {}
@@ -113,6 +115,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                             className="upload-drop-zone"
                             activeClassName="upload-drop-zone drop"
                             onDrop={ this.onDrop}
+                            accept="video/*"
                         >
                             <div id="drop-zone">
                                 Déposer le(s) fichier(s) ici

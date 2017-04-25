@@ -52,8 +52,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         _lesJoueurs: [],
       };
   }
-
-
  private componentWillMount = () => {
     // Chargement des données dans le store.
    Actions.getJoueur();

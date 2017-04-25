@@ -54,7 +54,6 @@ class EditStore extends EventEmitter {
                     this.joueurs.push(action.text[i]);
                 }
                 this.emit("playersLoaded");
-                //this.emit("change");
                 break;
             }
             case "MATCH_EDIT.REQUEST_ACTION_FORM": {

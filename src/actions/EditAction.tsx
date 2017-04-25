@@ -19,6 +19,7 @@ export function getActionId(id: any) {
         dispatcher.dispatch({ type: "GetUneAction", text: response.data });
     });
 }
+
 export function postAction(stringContenu: any) {
     axios.default.post(serverURL + "/actions", stringContenu)
     .then(function(r: any) {

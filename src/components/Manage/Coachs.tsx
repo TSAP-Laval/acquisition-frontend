@@ -69,7 +69,7 @@ const modalInstance = React.createClass({
 
 export interface ILayoutProps {}
 export interface ILayoutState {
-    SelectedTeams: string;
+    SelectedTeams?: string;
 }
 export default class Coachs extends React.Component<ILayoutProps, ILayoutState> {
 
@@ -95,11 +95,6 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
             this.ListAllCoachs();
             this.ListAllTeamsAndSports();
         })   
-    }
-
-    shouldComponentUpdate(nextState: ILayoutState) {
-        this.setState(nextState);
-        return true;
     }
 
     OnCheckedChange(){
@@ -246,9 +241,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
     SelectedTeams(val:any){
-
-            this.state.SelectedTeams = val;
-            this.shouldComponentUpdate(this.state);
+        this.setState({ SelectedTeams: val});
     }
 
 
