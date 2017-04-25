@@ -199,8 +199,9 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
             Fname: prenomjoueur,
             Number: numerojoueur,
             Email: emailJoueur,
-            EquipeID: optEquipe,
+            EquipeID: optEquipe.value,
         };
+         console.log(text);
          manageActions.putJoueur(text, IdJoueur);
     }
     else
@@ -211,8 +212,9 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
             Fname: prenomjoueur,
             Number: numerojoueur,
             Email: emailJoueur,
-            EquipeID: optEquipe,
+            EquipeID: optEquipe.value,
         };
+    console.log(text);
     manageActions.postJoueur(text);
     }
 }

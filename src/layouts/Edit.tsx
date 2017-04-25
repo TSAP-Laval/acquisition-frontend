@@ -53,12 +53,13 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       };
   }
 
+
  private componentWillMount = () => {
     // Chargement des données dans le store.
-    Actions.getJoueur();
-    Actions.getActionsEdit();
+   Actions.getJoueur();
+   Actions.getActionsEdit();
 
-    Store.on("playersLoaded", () => {
+   Store.on("playersLoaded", () => {
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
@@ -68,7 +69,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       });
     });
 
-    Store.on("actionsLoaded", () => {
+   Store.on("actionsLoaded", () => {
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: Store.GetAllActions(),
@@ -78,7 +79,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       });
     });
 
-    Store.on("UnChange", () => {
+   Store.on("UnChange", () => {
       this.CheckUneAction();
     });
   }
@@ -176,7 +177,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     });
     e.preventDefault();
     const doc = document.getElementById("NomActivite");
-
+    this.returnFirstStateForm();
+    this.closeActionForm();
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
 
@@ -200,8 +202,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         + '"GameID" : 1 ,'
         + '"X1" : ' + x1 + ","
         + '"Y1" : ' + y1 + ","
-        + '"X2" : ' + fleche[0][0] + ","
-        + '"Y2" : ' + fleche[0][1] + ","
+        + '"X2" : ' + x2 + ","
+        + '"Y2" : ' + y2 + ","
         + '"X3" : ' + fleche[1][0] + ","
         + '"Y3" : ' + fleche[1][1] + ","
         + '"Time" : ' + video.currentTime + ","
@@ -237,6 +239,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
   private setTerrainFromInfo = () => {
     // Définir la position initiale du joueur.
+
   }
 
   private setTerrainToInfo = () => {
@@ -260,7 +263,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       _firstClick: this.state._firstClick,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
-    });
+    }, () => {
+      if ( x3 !== 0 && y3 !== 0){
+        this.receptionPasse();
+    }});
   }
 
   private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -318,6 +324,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
       this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
     } else if ( this.state._firstClick === false && typeAction === "balle perdu") {
+      x3 = 0;
+      y3 = 0;
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
@@ -353,6 +361,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     y1 = 0;
     y2 = 0;
     x2 = 0;
+    y3 = 0;
+    x3 = 0;
     this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
@@ -364,7 +374,33 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let ctx2 = canvasArrow.getContext("2d");
     ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
   }
+  private receptionPasse(){
+      let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+      x1 = x3;
+      y1 = y3;
+      x3 = 0;
+      y3 = 0;
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.lineWidth = 2.5;
 
+      ctx.beginPath();
+      ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.lineTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y1 - x1) / (x1 - x1));
+      endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: false,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+  }
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
       ctx.save();
       ctx.beginPath();
