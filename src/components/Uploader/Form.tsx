@@ -35,6 +35,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
         this._onTeamSearch = this._onTeamSearch.bind(this);
         this._onFieldSearch = this._onFieldSearch.bind(this);
+        this._sendInfos = this._sendInfos.bind(this);
 
         this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
         this.onTeamSearch = this.onTeamSearch.bind(this);
@@ -105,6 +106,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public _onFieldSearch() {
         this.setState({fields: Store.getFields()});
     }
+
     public closeForm() {
         Actions.closeForm();
     }
@@ -118,10 +120,16 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
     public onSave() {
         if (!this.state.savedOnce) {
-            this.setState({savedOnce: true});
+            this.setState({savedOnce: true}, () => {
+                this._sendInfos();
+            });
+        } else {
+            this._sendInfos();
         }
+    }
 
-        this.errorChecker();
+    public _sendInfos() {
+        this.errorChecker(null);
 
         if (this.state.errors.length === 0) {
             const teamID = this.state.game.TeamID;
@@ -130,7 +138,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
             const locationID = this.state.game.LocationID;
             const fieldCondition = this.state.game.FieldCondition;
             const date = this.state.game.Date;
-
             Actions.save(teamID, opposingTeam, status, locationID, fieldCondition, date);
         }
     }
@@ -138,7 +145,9 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public errorChecker(date?: Moment.Moment) {
         if (this.state.savedOnce) {
             // We clear the errors
-            this.state.errors.pop();
+            while (this.state.errors.length > 0) {
+                this.state.errors.pop();
+            }
 
             if (this.state.game.TeamID === 0) {
                 this.state.errors.push("Veuillez choisir une équipe");
@@ -158,10 +167,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
             if (date != null) {
                 if (typeof date.date !== typeof undefined) {
-                    if (Moment(date, "YYYY-MMM-DD HH:mm").isAfter(Moment.now())) {
+                    if (Moment(date, "YYYY-MM-DD HH:mm").isAfter(Moment.now())) {
                         this.state.errors.push("La date entrée doit être avant la date actuelle !");
                     }
-                    else if (!Moment(date, "YYYY-MMM-DD HH:mm", true).isValid()) {
+                    else if (!Moment(date, "YYYY-MM-DD HH:mm", true).isValid()) {
                         this.state.errors.push("La date entrée est invalide !");
                     }
                 }
@@ -170,9 +179,8 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                 }
             }
             else if (this.state.game.Date === "") {
-                    this.state.errors.push("Veuillez choisir une date");
+                this.state.errors.push("Veuillez choisir une date");
             }
-
             this.shouldComponentUpdate(this.state);
         }
     }
@@ -351,7 +359,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                 </div>
                             </form>
                         </div>
-                        
                         <div className="modal-footer">
                             <button
                                 onClick={ this.closeForm }
@@ -361,7 +368,8 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                             >
                                 Fermer
                             </button>
-                            <button onClick={ this.onSave } type="button" className="btn btn-primary">
+                            {/* tslint:disable-next-line:jsx-no-bind */}
+                            <button onClick={ this.onSave.bind(this) } type="button" className="btn btn-primary">
                                 Sauvegarder
                             </button>
                         </div>
