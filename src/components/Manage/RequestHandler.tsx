@@ -23,7 +23,7 @@ export function postNewActionType(actionTypeData:string){
 
 export function getCoachs(){
     
-    axios.default.get(serverURL + "/coachs")
+    axios.default.get(serverURL + "/coaches")
         .then(function(response){
             dispatcher.dispatch({type: "GET_COACH",
                 text: response.data});    
@@ -33,7 +33,7 @@ export function getCoachs(){
 }
 
 export function postCoach(coachData:string){
-    axios.default.post(serverURL + "/coachs/addcoach", coachData)
+    axios.default.post(serverURL + "/coaches/addcoach", coachData)
         .then(function(response){
             console.log(response.data);
                 dispatcher.dispatch({type: "POST_COACH", text: coachData});
@@ -79,7 +79,7 @@ export function getAllSports(){
 }
 
 export function putCoach(id:any, stringContenu:string){
-    axios.default.put(serverURL + "/coachs/editcoach/" + id, stringContenu)
+    axios.default.put(serverURL + "/coaches/editcoach/" + id, stringContenu)
     .then(function(response: any){
             dispatcher.dispatch({type:"PUT_COACH",
                 text: response.data});

@@ -316,7 +316,6 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                 joinedTeam += ",";
                 }
             }
-            debugger;
         var text = '{'
                 +'"Fname" :' + '"' + prenom.value + '"' + ','
                 +'"Lname" : '+ '"' + nom.value + '"' + ',' 
@@ -334,11 +333,13 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
             RequestHandler.putCoach(this.state.coachEditId, text);
         }
+        debugger;
         var errorArea = document.getElementById("error_zone") as HTMLTextAreaElement;
         errorArea.hidden = true;
         this.ClearForm();
         RequestHandler.getCoachs();
         CoachStore.emit("change");
+        this.forceUpdate();
     }
     
 
@@ -420,15 +421,12 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               x.id = String(id);
 
 			  var tdNom = document.createElement("td");
-              tdNom.contentEditable = "true";
 			  tdNom.innerHTML=nom;
               
               var tdPrenom =  document.createElement("td");
-              tdPrenom.contentEditable = "true";
 			  tdPrenom.innerHTML= prenom;
               
               var tdEmail = document.createElement("td");
-              tdEmail.contentEditable = "true";
 			  tdEmail.innerHTML= email;
 
               var tdTeam = document.createElement("td");    
@@ -494,7 +492,6 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                 prenom.value = data['Fname'];
                 nom.value = data['Lname'];
                 email.value = data['Email'];
-                debugger;
                 selSeason.selectedIndex = data['SeasonID']+1;
                 this.setState({coachEditId: data['ID']});
             break;

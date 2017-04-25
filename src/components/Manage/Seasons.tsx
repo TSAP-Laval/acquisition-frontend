@@ -52,7 +52,7 @@ sendFormData(e: React.MouseEvent<HTMLInputElement>) {
 	manageActions.postSaison(text);
 }  
 ClearDomElement(nom:string){
-	var doc = document.getElementById(nom);
+	var doc = document.getElementById(nom) as HTMLSelectElement;
     while (doc.hasChildNodes()) {
     	doc.removeChild(doc.lastChild);
 	}

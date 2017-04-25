@@ -52,7 +52,6 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         var Description = document.getElementById("action_desc") as HTMLInputElement;
         var Acquisition = document.getElementById("acquisition") as HTMLSelectElement;
         var Separation = document.getElementById("separation") as HTMLSelectElement;
-        debugger;
 
         var text = '{'
        +'"Description" : '+ '"' +Description.value+ '"' + ','
