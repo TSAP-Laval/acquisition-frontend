@@ -54,10 +54,17 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
  private componentWillMount = () => {
     // Chargement des données dans le store.
+<<<<<<< HEAD
    Actions.getJoueur();
    Actions.getActionsEdit();
 
    Store.on("playersLoaded", () => {
+=======
+    Actions.getJoueur();
+    Actions.getActionsEdit();
+
+    Store.on("playersLoaded", () => {
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
@@ -67,7 +74,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       });
     });
 
+<<<<<<< HEAD
    Store.on("actionsLoaded", () => {
+=======
+    Store.on("actionsLoaded", () => {
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: Store.GetAllActions(),
@@ -77,7 +88,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       });
     });
 
+<<<<<<< HEAD
    Store.on("UnChange", () => {
+=======
+    Store.on("UnChange", () => {
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       this.CheckUneAction();
     });
   }
@@ -175,8 +190,12 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     });
     e.preventDefault();
     const doc = document.getElementById("NomActivite");
+<<<<<<< HEAD
     this.returnFirstStateForm();
     this.closeActionForm();
+=======
+
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
 
@@ -322,8 +341,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
       this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
     } else if ( this.state._firstClick === false && typeAction === "balle perdu") {
+<<<<<<< HEAD
       x3 = 0;
       y3 = 0;
+=======
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
@@ -359,8 +381,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     y1 = 0;
     y2 = 0;
     x2 = 0;
+<<<<<<< HEAD
     y3 = 0;
     x3 = 0;
+=======
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
     this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
@@ -492,10 +517,17 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         </li>,
         );
     }
+<<<<<<< HEAD
 
     // Actions
     let actions: any = [];
 
+=======
+
+    // Actions
+    let actions: any = [];
+
+>>>>>>> 854ed9f433a229f6003fbd16fcb84123e9510e5e
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.state._actions.length; i++) {
       const data = this.state._actions[i];
