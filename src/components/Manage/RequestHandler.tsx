@@ -77,3 +77,14 @@ export function getAllSports(){
             dispatcher.dispatch({type: "GET_SPORTS", text: "failed to retrieve your sports."});
         });
 }
+
+export function putCoach(id:any, stringContenu:string){
+    axios.default.put(serverURL + "/coachs/editcoach/" + id, stringContenu)
+    .then(function(response: any){
+            dispatcher.dispatch({type:"PUT_COACH",
+                text: response.data});
+        })
+        .catch(function(error:string){
+            dispatcher.dispatch({type: "PUT_COACH", text: "failed to edit the coach."});
+        });
+}
