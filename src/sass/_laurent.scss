@@ -372,6 +372,68 @@ footer {
 }
 
 
+/* Stack of actions */
+/*==============================*/
+
+.stack-container {
+    border-style: solid;
+    border-width: 0.1px 1px 0.1px 1px;
+    border-color: lightgrey;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.stack {
+    width: 100%;
+    margin-bottom: 0px;
+
+    thead, tbody, tr, td, th {
+        display: block;
+    }
+
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    thead {
+        background-color: #428bca;
+        color: white;
+        border-radius: 3px 3px 0px 0px;
+    }
+
+    tr:after {
+        content: ' ';
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
+
+    tbody {
+        height: 305px;
+        overflow-y: auto;
+    }
+
+    thead th {
+        max-height: 40px;
+    }
+
+    td:first-child, thead th:first-child {
+        width: 10%;
+        float: left;
+    }
+
+    td:last-child, thead th:last-child {
+        width: 5%;
+    }
+
+    td, thead th{
+        width: 28.333%;
+        float: left;
+    }
+}
+
+
 /* Other */
 /*==============================*/
 
