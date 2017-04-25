@@ -49,10 +49,14 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     //Post action 
     SubmitAction(){
 
+        var Description = document.getElementById("action_desc") as HTMLInputElement;
+        var Acquisition = document.getElementById("acquisition") as HTMLSelectElement;
+        var Separation = document.getElementById("separation") as HTMLSelectElement;
+
         var text = '{'
-       +'"Description" : '+ '"' +$('#action_desc').val() + '"' + ','
-       +'"Acquisition" : '+ '"' +$('#acquisition').val() + '"' + ','
-       +'"Separation" : '+ '"' +$('#separation').val() + '"'
+       +'"Description" : '+ '"' +Description.value+ '"' + ','
+       +'"Acquisition" : '+ '"' + Acquisition.value + '"' + ','
+       +'"Separation" : '+ '"' +Separation.value + '"'
        +'}';
        
        alert("Ajout Réussi");
@@ -79,7 +83,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     //nouvellement ajoutée.
     AddNew(data:any)
     {
-            var doc = document.getElementsByClassName("action_table");
+            var table = document.getElementById('table_action');
 			  var x = document.createElement("tr");
 
               var tdesc =  document.createElement("td");
@@ -98,7 +102,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
               x.appendChild(tc);
               x.appendChild(tm);
 			  console.log(x);
-			  $('#action_table tbody').append(x);
+			  table.appendChild(x);
     }
     
     
@@ -112,36 +116,6 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
     render() {
         
-
-
-//Aucune row trouvée
-$(function(){
-    var $tbody = $('#action_table tbody');
-    var $rowCount = $('#action_table tr').length;
-    var warningTr =   "<tr id='noAction'><td>Aucune action n'a été trouvée</td></tr>"
-    var idWarning = $('#noAction');
-
-    if($rowCount== 0){
-
-        $tbody.append(warningTr);
-    }else{
-        $tbody.remove('#noAction');
-    }
-});
-
-
-    //Ajout d'une nouvelle action
-    function AddRow( actionDesc:string, separation:string, acquisition:string){
-        
-        
-         var trToAdd =   "<tr id='action1'><td>" + String(actionDesc) + "</td><td contenteditable='true'>" 
-                        + String(acquisition) + "</td><td>" 
-                        + String(separation) + "</td></tr>";
-
-            $('#action_table tbody').append(trToAdd)
-
-            $('#action_desc').val("");
-    }
 
         return (
 

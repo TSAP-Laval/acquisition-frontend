@@ -163,16 +163,18 @@ export interface IActions  {
 
 // Coaches les entraineurs
 export interface ICoaches  {
-    ID:           number;
-	Fname:        string;
-	Lname:        string;
-	Email:        string;
-	PassHash:     string;
-	TokenRequest: string;
-	TokenReset:   string;
-	TokenLogin:   string;
-	Teams:        ITeams[];
-	Actif:        string;
+    ID:           number
+	Fname:        string
+	Lname:        string
+	Email:        string
+	PassHash:     string
+	TokenRequest: string
+	TokenReset:   string
+	TokenLogin:   string
+	Teams:        ITeams[]
+	TeamsIDs: 	  string[]
+	Actif:        boolean
+	Season: 	  ISeasons
 }
 
 // Metrics les métriques
