@@ -25,7 +25,6 @@
     "@types/react": "^15.0.22",
     "@types/react-addons-test-utils": "^0.14.17",
     "@types/react-bootstrap": "^0.0.47",
-    "@types/react-bootstrap-table": "^2.6.3",
     "@types/react-dom": "^0.14.20",
     "@types/react-dropzone": "^0.0.30",
     "@types/react-motion": "^0.0.21",
