@@ -12,6 +12,7 @@ import SideBar  from "../layouts/SideBar";
 export interface ILayoutProps {
     hasVideo: boolean;
 }
+// tslint:disable-next-line:no-empty-interface
 export interface ILayoutState {}
 
 export class Upload extends React.Component<ILayoutProps, ILayoutState> {
