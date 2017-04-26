@@ -9,11 +9,37 @@ export function getSaison() {
         dispatcher.dispatch({ type: "getActions", text: response.data  });
     });
 }
+export function getSaisonTeam() {
+     axios.default.get(serverURL + "/saison")
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
+    });
+}
+export function getUneEquipe(Nom: any) {
+     axios.default.get(serverURL + "/equipes/" + Nom )
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getUneEquipe", text: response.data  });
+    });
+}
 // Modif joueur
 export function putJoueur(stringContenu: any, id: any) {
      axios.default.put(serverURL + "/joueur/" + id, stringContenu)
     .then(function(response: any){
         getJoueur();
+    });
+}
+// Delete joueur
+export function deleteJoueur( id: any) {
+     axios.default.delete(serverURL + "/joueur/" + id)
+    .then(function(response: any){
+        getJoueur();
+    });
+}
+// Modif joueur
+export function putTeam(stringContenu: any, id: any) {
+     axios.default.put(serverURL + "/equipes/" + id, stringContenu)
+    .then(function(response: any){
+        getEquipes();
     });
 }
 // Va rechercher toutes les sports

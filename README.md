@@ -85,7 +85,6 @@ $ webpack --watch (dans un autre terminal)
 * TSLint (dans VSCode, installer le plugin TSLint)
 
 #### Linting
-
 Simplement linter le code avant chacun des push, sans quoi les PR seront rejetées...
 
 
