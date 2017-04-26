@@ -269,7 +269,9 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-    // fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
+    fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
+    x2 = e.nativeEvent.offsetX;
+    y2 = e.nativeEvent.offsetY;
     // Effacer le canvas
     let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
     canvas.width = canvas.width;
@@ -442,9 +444,69 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       _firstClick: true,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
+    }, () => {
+     if ( x1 !== 0 && y1 !== 0)
+     {
+       this.redessinerTout();
+     }
     });
   }
+  public redessinerTout(){
+   if ( x3 !== 0 && y3 !== 0){
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
 
+      ctx.strokeStyle = "blue";
+      ctx.fillStyle = "blue";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
+      ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
+      ctx.stroke();
+
+      let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
+      endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+   }
+   else if ( x2 !== 0 && y2 !== 0 && y3 === 0)
+   {
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "green";
+      ctx.fillStyle = "green";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x2 / (ajustement - 0.7), y2  / ajustement);
+      ctx.lineTo(x2 / (ajustement - 0.7), y2 / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y2 - x2) / (x2 - x2));
+      endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
+   }
+   if ( x1 !== 0 && y1 !== 0 )
+   {
+      let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.lineWidth = 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.lineTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y1 - x1) / (x1 - x1));
+      endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
+   }
+  }
   public render() {
     rows = [
         [

@@ -225,11 +225,11 @@ public render() {
                     <h3>Les joueurs :</h3>
                     <form>
                     <h3>Rechercher un joueur</h3>     
-                    <input type="text" id="NomRech" name="NomRech"onInput={this.rech.bind(this)}/> <br /> 
+                    <input type="text" id="NomRech" name="NomRech"onInput={this.rech.bind(this)}/> <br />
                     <input type="radio" name="Champs" value="Fname"/>Prenom
                     <input type="radio" name="Champs" value="Lname"/>Nom
-                    <input type="radio" name="Champs" value="Email"/>Email 
-                    <input type="radio" name="Champs" value="Number"/>Numéro   
+                    <input type="radio" name="Champs" value="Email"/>Email
+                    <input type="radio" name="Champs" value="Number"/>Numéro
                     </form>
                         <div id="TableSelect">
                         <table className="table table-bordered table-hover" id="action_table">
@@ -246,33 +246,33 @@ public render() {
                                     </th>
                                     <th className="text-center">
                                         Email
-                                    </th> 
+                                    </th>
                                      <th className="text-center">
                                         Action
-                                    </th>                                                                               
+                                    </th>
                                     </tr>
                             </thead>
                             <tbody id="tbody"  />
                         </table>
-            </div>		
-            <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">  
-                <h3>Creer un nouveau joueur</h3>     
+            </div>
+            <form onSubmit={this.sendFormData.bind(this)} id="nouvJoueur">
+                <h3>Creer un nouveau joueur</h3>
                 <label className="control-label" htmlFor="Nom">Nom</label>
-                <input  type="text" id="Nom" name="Nom"/> 
+                <input  type="text" id="Nom" name="Nom"/>
                 <label className="control-label" htmlFor="Prenom">Prenom</label>
                 <input type="text"id="Prenom" name="Prenom"/>
                 <label className="control-label" htmlFor="Numero" >Numero</label>
                 {/*tslint:disable-next-line:jsx-boolean-value */}
-                <input type="text"id="Numero" name="Numero" required/> 
+                <input type="text"id="Numero" name="Numero" required/>
                 <label className="control-label" htmlFor="Email">Email</label>
-                <input type="text"id="Email" name="Email"/> 			
-                <label className="control-label" htmlFor="equipe">Équipe</label>                  
-                <select id="equipe" name="equipe"/><br />   
-                <input type="hidden" id="ID"/> 
-                <input type="submit" value="Ajouter" id="btnSubmit"  />                
+                <input type="text"id="Email" name="Email"/>
+                <label className="control-label" htmlFor="equipe">Équipe</label>
+                <select id="equipe" name="equipe"/><br />
+                <input type="hidden" id="ID"/>
+                <input type="submit" value="Ajouter" id="btnSubmit"  />
             </form>
             </div>
-        </div> 
+        </div>
         </div>
 
         );

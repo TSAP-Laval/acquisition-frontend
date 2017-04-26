@@ -70,7 +70,7 @@ class EditStore extends EventEmitter {
                 {
                     this.uneAction.push(action.text[i]);
                 }
-                this.emit("UnChange");
+            this.emit("UnChange");
             break;
             case "GetActionsEdit" :
                 for (let i = 0; i < action.text.length; i++)
@@ -78,7 +78,7 @@ class EditStore extends EventEmitter {
                     this.actions.push(action.text[i]);
                 }
                 this.emit("actionsLoaded");
-            break;
+                break;
             case "PostAction" :
                 if (action.text !== "error")
                 {
@@ -86,7 +86,7 @@ class EditStore extends EventEmitter {
                     this.actions.push(laction);
                 }
                 this.emit("actionChange");
-            break;
+                break;
             default:
             break;
         }

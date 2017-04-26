@@ -142,7 +142,7 @@ private creerUneLigne(data: any){
      const NiveauNom = store.getNiveauNom(data.CategoryID);
      const doc = document.getElementById("tbody");
      const x = document.createElement("tr");
-     const tdBtn =  document.createElement("BUTTON"); ;
+     const tdBtn =  document.createElement("BUTTON"); 
      tdBtn.innerHTML = "Modifier";
      tdBtn.onclick = this.ModifTeam.bind(this, data.Name);
      const tdNom = document.createElement("td");
@@ -298,7 +298,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     }
     const inputSubmit = document.getElementById("btnSubmit") as HTMLButtonElement;
     if (inputSubmit.value === "modifier"){
-        const inputID = document.getElementById("ID") as HTMLInputElement; ;
+        const inputID = document.getElementById("ID") as HTMLInputElement; 
         const text = "{"
         + '"ID" :' +  + inputID.value + ","
         + '"Name" :' + '"' + nomTeam + '",'
@@ -332,7 +332,7 @@ public render() {
                 <h3>Les équipes :</h3>
                 <form>
                 <h3>Rechercher une équipe</h3>     
-                <input type="text" id="NomRech" name="NomRech"onInput={this.rech.bind(this)}/> <br /> 
+                <input type="text" id="NomRech" name="NomRech"onInput={this.rech.bind(this)}/> <br />
                 <input type="radio" name="Champs" value="Name"/>Nom
                 <input type="radio" name="Champs" value="City"/>Ville   
                 <input type="radio" name="Champs" value="Sexe"/>Sexe 
@@ -364,15 +364,15 @@ public render() {
                         <tbody id="tbody" />                                       
                     </table>
                     </div>
-                <form onSubmit={this.sendFormData.bind(this)} id="nouvTeam">  
-                <h3>Creer une nouvelle équipe</h3>     
+                <form onSubmit={this.sendFormData.bind(this)} id="nouvTeam">
+                <h3>Creer une nouvelle équipe</h3>
                 <label htmlFor="Nom">Nom</label>
                 <input type="text" id="Nom" name="Nom"/> <br />
                 <label htmlFor="Ville">Ville</label>
-                <input type="text"id="Ville" name="Ville"/><br />	
-                <label htmlFor="Sport">Sport</label>                  
+                <input type="text"id="Ville" name="Ville"/><br />
+                <label htmlFor="Sport">Sport</label>
                 <select id="Sport" name="Sport"/><br />
-                <label htmlFor="Niveau">Niveau</label>                  
+                <label htmlFor="Niveau">Niveau</label>
                 <select id="Niveau" name="Niveau"/><br />
                 <label htmlFor="Saison">Saison</label>
                 <select id="Saison" name="Saison"/><br />
@@ -380,9 +380,9 @@ public render() {
                 <input type="radio" name="Sexe" value="M"/>Masculin
                 <input type="radio" name="Sexe" value="F"/>Féminin
                 <br/>
-                <input type="hidden" id="ID"/> 
-                <input type="submit" id="btnSubmit" value="Submit"  />            
-                </form> 
+                <input type="hidden" id="ID"/>
+                <input type="submit" id="btnSubmit" value="Submit"  />
+                </form>
                 </div>
              </div>
         </div>
