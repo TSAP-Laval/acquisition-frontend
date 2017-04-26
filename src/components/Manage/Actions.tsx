@@ -16,7 +16,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
 
     //On conponenent mounting 
-    componentWillMount(){
+   public componentWillMount(){
         requesthandler.getActionTypes();
 
         actionStore.on("change",() =>{
@@ -25,7 +25,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
      }
      
     //Retourne la liste des actions déjà créées duh
-    ListAllActions(){
+    public ListAllActions(){
 
         var table = document.getElementById('table_action');
         
@@ -47,7 +47,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     }
     
     //Post action 
-    SubmitAction(){
+    public SubmitAction(){
 
         var Description = document.getElementById("action_desc") as HTMLInputElement;
         var Acquisition = document.getElementById("acquisition") as HTMLSelectElement;
@@ -64,7 +64,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
        requesthandler.postNewActionType(text);
     }
 
-    typeSepAcq(typeMvm:string)
+    private typeSepAcq(typeMvm:string)
     {
 
         var retVal = "";
@@ -81,7 +81,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
 
     //Ajoute une nouvelle ligne contenant les actions ou l'action 
     //nouvellement ajoutée.
-    AddNew(data:any)
+    public AddNew(data:any)
     {
             var table = document.getElementById('table_action');
 			  var x = document.createElement("tr");
@@ -107,14 +107,14 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
     
     
     //Previent le submit sur le bouton OK
-    OnKeyPress(event:any) {
+    public OnKeyPress(event:any) {
     if (event.which === 13 /* Enter */) {
       event.preventDefault();
     }
     }
 
 
-    render() {
+    public render() {
         
 
         return (

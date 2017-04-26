@@ -65,8 +65,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         this.formValidator = this.formValidator.bind(this);
         this.SubmitAction = this.SubmitAction.bind(this);
         this.GetEquipeName = this.GetEquipeName.bind(this);
-        //this.EditCoach = this.EditCoach.bind(this);
-        this.EditCoach_E = this.EditCoach_E.bind(this);
+        this.EditCoach = this.EditCoach.bind(this);
         this.AddNew = this.AddNew.bind(this);
 
         this.OnFnameInput = this.OnFnameInput.bind(this);
@@ -78,7 +77,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         
     }
     
-    componentWillMount(){
+    public componentWillMount(){
 
         RequestHandler.getAllSports();
         RequestHandler.getAllTeams();
@@ -95,30 +94,30 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         CoachStore.on("openEditForm", this._onOpenForm);
     }
 
-    shouldComponentUpdate(nextState: ILayoutState) {
+    public shouldComponentUpdate(nextState: ILayoutState) {
         this.setState(nextState);
         return true;
     }
 
 
-    _onOpenForm() {
+    public _onOpenForm() {
         this.setState({openEditForm: true});
     }
 
-    _onCloseForm() {
+    public _onCloseForm() {
         this.setState({openEditForm: false});
     }
 
 
 
     //Selection de sport changée
-    SportChanged(event: any){
+    public SportChanged(event: any){
 
         this.shouldComponentUpdate(this.state);
         console.log(String(event.target.value));
         this.ListTeams(String(event.target.value));
     }
-    ListAllCoachs(){
+    public ListAllCoachs(){
         var table = document.getElementById('coach_tbody');
         if(table != undefined && table.children.length > 0){
             while (table.hasChildNodes()){
@@ -139,7 +138,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         }   
         
     }
-    ListAllSports(){
+    public ListAllSports(){
 
         var selectSport = document.getElementById('sport_select');
 
@@ -169,7 +168,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     }
 
     //Affiche la liste des equipes pour un sport donné
-    ListTeams(sportId: string){
+    public ListTeams(sportId: string){
        
         var listTeams = CoachStore.GetAllTeams();
         var dataTeam = JSON.stringify(listTeams);
@@ -192,7 +191,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     }
 
 
-    ListSeasons(){
+    public ListSeasons(){
         var allSaison=store.GetAllSeasons();
         var datastringify =JSON.stringify(allSaison);
  	    var tabJson = JSON.parse(datastringify);
@@ -218,28 +217,28 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         }
     }
 
-    OnLnameInput(e: any){
+    public OnLnameInput(e: any){
         this.state.coach.Lname = (e.target as HTMLInputElement).value.trim();
         //this.shouldComponentUpdate(this.state);
     }
 
-     OnFnameInput(e: any){
+    public OnFnameInput(e: any){
         this.state.coach.Fname = (e.target as HTMLInputElement).value.trim();
         //this.shouldComponentUpdate(this.state);
     }
 
-     OnMailInput(e: any){
+    public OnMailInput(e: any){
         this.state.coach.Email = (e.target as HTMLInputElement).value.trim();
         //this.shouldComponentUpdate(this.state);
     }
 
     //Valide le format de l'entrée de l'adresse d'email
-    validateEmail(email: string) {
+    public validateEmail(email: string) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
     }
 
-    formValidator(){
+    public formValidator(){
 
         var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
         var nom = document.getElementById("coach_name") as HTMLInputElement;
@@ -275,7 +274,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         errorArea.className= "Error";
     }
 
-    ClearForm(){
+    public ClearForm(){
         var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
         var nom = document.getElementById("coach_name") as HTMLInputElement;
         var email = document.getElementById("coach_mail") as HTMLInputElement;
@@ -291,7 +290,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
     }
 
-    SubmitAction(){
+    public SubmitAction(){
         var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
         var nom = document.getElementById("coach_name") as HTMLInputElement;
         var email = document.getElementById("coach_mail") as HTMLInputElement;
@@ -337,14 +336,13 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         errorArea.hidden = true;
         this.ClearForm();
         RequestHandler.getCoachs();
-        CoachStore.emit("change");
-        this.forceUpdate();
+        this.shouldComponentUpdate(this.state);
     }
     
 
     }
 
-    GetEquipeName(teamsIds:string) {
+    public GetEquipeName(teamsIds:string) {
         
         var ulTeams = document.createElement("ul");
         var listTeams = CoachStore.GetAllTeams() as ITeams[];
@@ -407,13 +405,13 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     }
 */
     //Evenement lors de la fermeture de la liste
-    CoachTeamOnClose(val: any){
+    public CoachTeamOnClose(val: any){
         var select = val as HTMLSelectElement;
         val.selectedIndex = 0;
     }
 
 
-     AddNew(nom:string, prenom:string, email:string, equipe:string, estActif:string, id:number, season:any)
+     public AddNew(nom:string, prenom:string, email:string, equipe:string, estActif:string, id:number, season:any)
     {   
               var doc = document.getElementById("coach_tbody");
 			  var x = document.createElement("tr");
@@ -458,7 +456,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               editButton.innerHTML = 'Modifier';
               editButton.id = String(id);
 
-              editButton.onclick = this.EditCoach_E;
+              editButton.onclick = this.EditCoach;
 
 
               x.appendChild(tdNom);
@@ -475,7 +473,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
 
-    EditCoach_E(e: any){
+    public EditCoach(e: any){
         var Coachs = this.state.coachsList;
 
         var prenom = document.getElementById("coach_prenom") as HTMLInputElement;
@@ -506,14 +504,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
     ])
   }
 
-    SelectedTeams(val: any[]){
+    public SelectedTeams(val: any[]){
             console.log("Selection : " + val);
             this.setState({selectedValues: val});
     }
     
 
 
-    render() {
+   public  render() {
         
 const te = React.createClass({
 
