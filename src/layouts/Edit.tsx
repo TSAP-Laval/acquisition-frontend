@@ -428,6 +428,12 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   }
 
   private returnFirstStateForm = () => {
+    x1 = 0;
+    x2 = 0;
+    x3 = 0;
+    y1 = 0;
+    y2 = 0;
+    y3 = 0;
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
