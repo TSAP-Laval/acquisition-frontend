@@ -31,10 +31,10 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
                 <div style={style}>
                     <div className="row">
                         <div className="wrapper">
-                            <div className="column col-sm-8 col-xs-8">
+                            <div className="column col-sm-9 col-xs-9">
                                 <EditTest />
                             </div>
-                            <div className="column col-sm-4 col-xs-4" style={stylestack}>
+                            <div className="column col-sm-3 col-xs-3" style={stylestack}>
                                 <Stack />
                             </div>
                         </div>

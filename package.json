@@ -28,7 +28,7 @@
     "@types/react-dropzone": "^0.0.30",
     "@types/react-motion": "^0.0.21",
     "@types/react-router": "^2.0.44",
-    "@types/react-select": "^1.0.44",
+    "@types/react-select": "^1.0.46",
     "@types/react-tabs": "^0.5.21",
     "@types/sinon": "^1.16.35",
     "axios": "^0.15.3",
@@ -55,7 +55,7 @@
     "react-bootstrap": "^0.30.9",
     "react-bootstrap-table": "^2.11.2",
     "react-data-grid": "^2.0.12",
-    "react-datetime": "^2.8.8",
+    "react-datetime": "^2.8.10",
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.9.0",
     "react-html5video": "^1.4.0",
@@ -68,7 +68,7 @@
     "react-tabs": "^0.8.2",
     "sinon": "git+https://github.com/sinonjs/sinon.git",
     "tslint": "^5.1.0",
-    "tslint-react": "^2.6.0",
+    "tslint-react": "^3.0.0",
     "tsutils": "^1.4.0"
   },
   "devDependencies": {

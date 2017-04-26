@@ -27,12 +27,11 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
 
     public render() {
         const elements: any[] = [];
-        for (let index = 0; index < 200; index++) {
+        for (let index = 1; index < 200; index++) {
             elements.push(
                 <tr>
                     <td>{index}</td>
                     <td>Mark</td>
-                    <td>Otto</td>
                     <td>@mdo</td>
                     <td>
                         <button type="button" onClick={this.closeForm.bind(index)} className="close" aria-label="Close">
@@ -51,7 +50,6 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
                             <th>#</th>
                             <th>Joueur</th>
                             <th>Action</th>
-                            <th>Temps</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>

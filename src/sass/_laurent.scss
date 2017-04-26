@@ -424,13 +424,29 @@ footer {
     }
 
     td:last-child, thead th:last-child {
-        width: 5%;
+        width: 10%;
     }
 
     td, thead th{
-        width: 28.333%;
+        width: 40%;
         float: left;
     }
+}
+
+
+/* Search (fields, teams) */
+/*==============================*/
+
+.search-text { 
+    white-space: "nowrap";
+    text-overflow: "ellipsis";
+    overflow: "hidden";
+    display: "inline-block";
+    width: "25%";
+}
+
+.search-text:last-child {
+    text-align: "right";
 }
 
 
