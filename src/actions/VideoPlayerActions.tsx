@@ -123,3 +123,12 @@ export function playVideoFrameByFrameWithDirection(backing: boolean, numberOfFra
         video,
     })
 }
+
+export function modifyFinderValue(increase: boolean, slider: HTMLInputElement, text: HTMLSpanElement) {
+    dispatcher.dispatch({
+        increase,
+        slider,
+        text,
+        type: "VIDEO_PLAYER.MODIFY_FINDER_SPEED",
+    })
+}
