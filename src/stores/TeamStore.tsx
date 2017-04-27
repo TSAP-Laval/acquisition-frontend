@@ -9,13 +9,25 @@ class teamStore extends EventEmitter {
 
     private niveau: string[] = [];
     private equipe: string[] = [];
+    private uneEquipe: string[] = [];
     private sports: string[]= [];
-
+    private saison: string[]= [];
+    private enModif: boolean = false;
     constructor() {
         super();
     }
     public GetAllequipe() {
         return this.equipe;
+    }
+    public GetUneEquipe() {
+        this.enModif = false;
+        return this.uneEquipe;
+    }
+    public EnModification(){
+        return this.enModif;
+    }
+     public GetAllSeason() {
+        return this.saison;
     }
      public GetAllSports() {
         return this.sports;
@@ -23,6 +35,7 @@ class teamStore extends EventEmitter {
     public GetAllNiveau() {
         return this.niveau;
     }
+
     public getSportNom(id: string)
     {
         const datastringify = JSON.stringify(this.sports);
@@ -85,6 +98,26 @@ class teamStore extends EventEmitter {
                 for (let i = 0; i < action.text.length; i++)
                 {
                     this.equipe.push(action.text[i]);
+                }
+                this.emit("change");
+            break;
+            case "getSeasonTeam" :
+                this.saison = [];
+
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
+                {
+                    this.saison.push(action.text[i]);
+                }
+                this.emit("change");
+            break;
+             case "getUneEquipe" :
+                this.uneEquipe = [];
+                this.enModif = true;
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
+                {
+                    this.uneEquipe.push(action.text[i]);
                 }
                 this.emit("change");
             break;

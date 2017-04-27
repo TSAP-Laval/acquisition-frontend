@@ -179,7 +179,6 @@ class UploadStore extends EventEmitter {
             this.emit("field_searched");
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
             this.addMessage(true, error);
             this.cancelUpload();
@@ -214,7 +213,6 @@ class UploadStore extends EventEmitter {
             this.saved = true;
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
             this.addMessage(true, error);
             this.cancelUpload();
@@ -249,12 +247,10 @@ class UploadStore extends EventEmitter {
             this.saved = true;
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
-
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
             this.addMessage(true, error);
         }.bind(this));
     }
-
     public handleActions(action: any){
         switch (action.type) {
             case "UPLOAD.SHOW_MESSAGE":
