@@ -4,6 +4,7 @@ import Store from "../stores/VideoPlayerStore";
 
 export interface ILayoutProps {
     url: string;
+    id_partie: string;
 }
 export interface ILayoutState {
     playing: boolean;
@@ -20,6 +21,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private componentWillMount = () => {
         Store.on("stateChanged", this.changeState);
         Store.on("pausing", this.pauseVideo);
+        this.props.url = "/api/parties/" + this.props.id_partie + "/videos/1"
     }
 
     private componentDidMount = () => {
