@@ -74,7 +74,7 @@ export default class Actions extends React.Component<ILayoutProps, ILayoutState>
         return retVal;
     }
 
-    // Ajoute une nouvelle ligne contenant les actions ou l'action 
+    // Ajoute une nouvelle ligne contenant les actions ou l'action
     // nouvellement ajoutée.
     public AddNew(data: any)
     {

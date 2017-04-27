@@ -321,7 +321,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                     + '"Actif" : ' + '"' + "true" + '"' + ","
                     + '"Email" : ' + '"' + email.value + '"' + ","
                     + '"TeamsIDs" : ' + '"' + joinedTeam + '"' + ","
-                    + '"SeasonID" : ' + '"' + Number(selSeason.value) + '"'
+                    + '"SeasonID" : ' + Number(selSeason.value) +
                     + "}";
 
             if (!this.state.editMode && this.state.coachEditId == null)
