@@ -18,14 +18,12 @@ class VideoPlayerStore extends EventEmitter {
 
     private play = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
-            $("#play-button")
-                .removeClass("glyphicon-pause")
-                .addClass("glyphicon-play");
+            document.getElementById("play-button").classList.remove('glyphicon-pause');
+            document.getElementById("play-button").classList.add('glyphicon-play');
             video.pause();
         } else {
-            $("#play-button")
-                .removeClass("glyphicon-play")
-                .addClass("glyphicon-pause");
+            document.getElementById("play-button").classList.remove('glyphicon-play');
+            document.getElementById("play-button").classList.add('glyphicon-pause');
             video.play();
         }
     }
@@ -33,9 +31,8 @@ class VideoPlayerStore extends EventEmitter {
     private pause = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             video.pause();
-            $("#play-button")
-                .removeClass("glyphicon-pause")
-                .addClass("glyphicon-play");
+            document.getElementById("play-button").classList.remove('glyphicon-pause');
+            document.getElementById("play-button").classList.add('glyphicon-play');
             this.emit("pausing");
         }
     }
@@ -43,9 +40,8 @@ class VideoPlayerStore extends EventEmitter {
     private stop = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             video.pause();
-            $("#play-button")
-                .removeClass("glyphicon-pause")
-                .addClass("glyphicon-play");
+            document.getElementById("play-button").classList.remove('glyphicon-pause');
+            document.getElementById("play-button").classList.add('glyphicon-play');
             video.currentTime = 0;
             this.emit("pausing");
         }
@@ -95,9 +91,9 @@ class VideoPlayerStore extends EventEmitter {
 
     private setSliderPaddingBottom = (state: boolean, slider: HTMLInputElement) => {
         if (state) {
-            $(slider).removeClass("down");
+            slider.classList.remove('down');
         } else {
-            $(slider).addClass("down");
+            slider.classList.add('down');
         }
     }
 
