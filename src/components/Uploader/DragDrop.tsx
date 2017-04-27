@@ -6,7 +6,9 @@ import * as Actions     from "../../actions/UploadActions";
 import Store            from "../../stores/UploaderStore";
 import Form             from "./Form";
 import Message          from "./Message";
+import ConfForm         from "./Confirmation";
 import { IMessages }    from "../../interfaces/interfaces";
+import { ProgressBar }  from "react-bootstrap";
 // tslint:enable:import-spacing
 
 // tslint:disable-next-line:no-empty-interface
@@ -16,6 +18,7 @@ export interface ILayoutState {
     message?: IMessages;
     uploading?: boolean;
     open_form?: boolean;
+    openConfirmForm?: boolean;
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
@@ -30,6 +33,9 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         this._onOpenForm = this._onOpenForm.bind(this);
         this._onCloseForm = this._onCloseForm.bind(this);
+
+        this._onOpenConfirmForm = this._onOpenConfirmForm.bind(this);
+        this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
 
         // Get current actions, message and set progress at 0% and uploading at false
         this.state = {
@@ -48,6 +54,9 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         Store.on("open_form", this._onOpenForm);
         Store.on("close_form", this._onCloseForm);
+
+        Store.on("open_confirm_form", this._onOpenConfirmForm);
+        Store.on("close_confirm_form", this._onCloseConfirmForm);
     }
 
     public componentWillUnmount() {
@@ -58,6 +67,9 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         Store.removeListener("open_form", this._onOpenForm);
         Store.removeListener("close_form", this._onCloseForm);
+
+        Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
+        Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
     }
     private _onMessage() {
         this.setState({message: Store.getMessage()});
@@ -81,6 +93,18 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         this.setState({open_form: false});
     }
 
+    public _onOpenConfirmForm() {
+        this.setState({ openConfirmForm: true });
+    }
+
+    public _onCloseConfirmForm() {
+        this.setState({ openConfirmForm: false });
+    }
+
+    public closeForm() {
+        Actions.closeForm();
+    }
+
     private onDrop(acceptedFiles: File[]){
         let err: boolean = false;
         // We only accept video files
@@ -94,7 +118,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         if (err) {
             Actions.showMessage("FORMAT", true);
         }
-        else if (acceptedFiles.length > 5) {
+        else if (acceptedFiles.length > 10) {
             Actions.showMessage("TOO_MANY", true);
         }
         else if (acceptedFiles.length < 1) {
@@ -108,7 +132,8 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     public render() {
         let form     =  null;
         let message  =  null;
-        const progress =  this.state.progress == null ? 0 : this.state.progress;
+        const confForm = this.state.openConfirmForm ? !this.state.open_form ? <ConfForm /> : null : null;
+        const progress: number = this.state.progress == null ? 0 : Math.floor(parseFloat(this.state.progress[0]));
         let dropzone = (
                         <Dropzone
                             multiple={true}
@@ -127,21 +152,15 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         }
 
         if (this.state.uploading) {
-            const style = {width: progress + "%"};
             dropzone = (
-                        <div className="progress">
-                            <div
-                                className="progress-bar progress-bar-striped active"
-                                role="progressbar"
-                                aria-valuenow="45"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                style={style}
-                            >
-                                <span className="sr-only">{progress}% Complete</span>
-                            </div>
-                            <p> {progress}% Complété</p>
-                        </div>);
+                <div>
+                    {/* tslint:disable-next-line:jsx-boolean-value */}
+                    <ProgressBar active now={progress} label={`${progress}%`} />
+                    <button type="button" onClick={this.closeForm} className="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            );
         }
 
         if (this.state.message != null) {
@@ -149,10 +168,13 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         }
 
         return (
-            <div className="absolute wide">
-                {message}
-                {dropzone}
-                {form}
+            <div>
+                <div className="absolute wide">
+                    {message}
+                    {dropzone}
+                    {form}
+                </div>
+                {confForm }
             </div>
         );
     }

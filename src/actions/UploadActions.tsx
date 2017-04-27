@@ -1,17 +1,17 @@
 import dispatcher from "../dispatcher/dispatcher"
 
-export function showMessage(text: string, isError: boolean) {
+export function showMessage(txt: string, isErr: boolean) {
     dispatcher.dispatch({
+        isError: isErr,
+        text: txt,
         type: "UPLOAD.SHOW_MESSAGE",
-        text: text,
-        isError: isError,
     });
 }
 
-export function upload(files: File[]) {
+export function upload(f: File[]) {
     dispatcher.dispatch({
+        files: f,
         type: "UPLOAD.UPLOAD",
-        files: files,
     });
 }
 
@@ -33,29 +33,29 @@ export function cancelUpload() {
     });
 }
 
-export function save(teamID: number, opposingTeam: string, status: string, 
-                     locationID: number, fieldCondition: string, date: string) {
+export function save(tID: number, oTeam: string, st: string,
+                     lID: number, fieldCond: string, dt: string) {
     dispatcher.dispatch({
+        date: dt,
+        fieldCondition: fieldCond,
+        locationID: lID,
+        opposingTeam: oTeam,
+        status: st,
+        teamID: tID,
         type: "UPLOAD.SAVE",
-        teamID: teamID,
-        opposingTeam: opposingTeam,
-        status: status,
-        locationID: locationID,
-        fieldCondition: fieldCondition,
-        date: date,
     });
 }
 
 export function searchTeam(team: string) {
     dispatcher.dispatch({
-        type: "UPLOAD.SEARCH_TEAM",
         text: team,
+        type: "UPLOAD.SEARCH_TEAM",
     });
 }
 
 export function searchField(field: string) {
     dispatcher.dispatch({
-        type: "UPLOAD.SEARCH_FIELD",
         text: field,
+        type: "UPLOAD.SEARCH_FIELD",
     });
 }

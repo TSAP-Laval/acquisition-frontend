@@ -27,7 +27,7 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 msg = "Le fichier choisi n'est pas dans un format vidéo reconnu";
                 break;
             case "TOO_MANY":
-                msg = "Veuillez ne sélectionner qu'un seul fichier";
+                msg = "Veuillez ne sélectionner qu'un maximum de 10 fichiers";
                 break;
             case "NO_FILE":
                 msg = "Veuillez sélectionner un fichier à ajouter";
@@ -56,6 +56,7 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 msg = this.props.message.message;
                 break;
         }
+
         if (this.props.message.message !== "") {
             style = this.props.message.isError ? "error" : "success";
         }
