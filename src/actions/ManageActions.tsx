@@ -9,11 +9,39 @@ export function getSaison() {
         dispatcher.dispatch({ type: "getActions", text: response.data  });
     });
 }
+export function getSaisonTeam() {
+     axios.default.get(serverURL + "/saison")
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
+    });
+}
+export function getUneEquipe(Nom: any) {
+     axios.default.get(serverURL + "/equipes/" + Nom )
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getUneEquipe", text: response.data  });
+    });
+}
 // Modif joueur
 export function putJoueur(stringContenu: any, id: any) {
-     axios.default.put(serverURL + "/joueur/" + id, stringContenu)
+     axios.default.put(serverURL + "/joueurs/" + id, stringContenu)
     .then(function(response: any){
         getJoueur();
+    });
+}
+// Delete joueur
+export function deleteJoueur( id: any) {
+
+     axios.default.delete(serverURL + "/joueurs/" + id)
+
+    .then(function(response: any){
+        getJoueur();
+    });
+}
+// Modif joueur
+export function putTeam(stringContenu: any, id: any) {
+     axios.default.put(serverURL + "/equipes/" + id, stringContenu)
+    .then(function(response: any){
+        getEquipes();
     });
 }
 // Va rechercher toutes les sports
@@ -48,7 +76,7 @@ export function getNiveauJoueur() {
 }
 // Va rechercher toutes les joueurs
 export function getJoueur() {
-     axios.default.get(serverURL + "/joueur")
+     axios.default.get(serverURL + "/joueurs")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getJoueur", text: response.data  });
     });
@@ -87,7 +115,7 @@ export function postTeam(stringContenu: string) {
 }
 // Ajout d'un joueur
 export function postJoueur(stringContenu: any) {
-        axios.default.post(serverURL + "/joueur", stringContenu).then(function(r: any) {
+        axios.default.post(serverURL + "/joueurs", stringContenu).then(function(r: any) {
             dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });
         }).catch(function(error: string) {
             dispatcher.dispatch({ type: "PostJoueur", text: "error"  });

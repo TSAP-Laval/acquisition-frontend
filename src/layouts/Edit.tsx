@@ -15,12 +15,21 @@ export interface ILayoutProps {}
 export interface ILayoutState {
   _lesJoueurs: any;
   _formState: any;
+  _actions: any;
+  _actionChosen: any;
+  _firstClick: any;
 }
 
 // letiable global pour avoir le numero du joueur
 const numJoueur = 0;
-let idActionType = 0;
-const fleche: [any, any] = [[], []];
+let x1 = 0;
+let y1 = 0;
+let x2 = 0;
+let y2 = 0;
+let x3 = 0;
+let y3 = 0;
+let typeAction = "";
+let fleche: [any, any] = [[], []];
 let rows: any = [
                   [
                     [], [], [],
@@ -32,48 +41,55 @@ let rows: any = [
                     [], [], [],
                   ],
                 ];
-
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   constructor(props: any) {
       super(props);
       this.state = {
+        _actionChosen: "",
+        _actions: [],
+        _firstClick: true,
         _formState: 0,
         _lesJoueurs: [],
       };
   }
-
  private componentWillMount = () => {
-    Actions.getJoueur(); // Charge les joueurs dans le store.
-    Actions.getActionsEdit();
+    // Chargement des données dans le store.
+   Actions.getJoueur();
+   Actions.getActionsEdit();
 
-    // Lorsque les joueurs sont chargés.
-    Store.on("change", () => {
+   Store.on("playersLoaded", () => {
+
       this.setState({
-        _formState: 0,
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: true,
+        _formState: this.state._formState,
         _lesJoueurs: Store.GetAllJoueurs(),
       });
     });
+   Store.on("actionsLoaded", () => {
 
-    Store.on("actionChange", () => {
-      this.RemplirSelect();
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: Store.GetAllActions(),
+        _firstClick: this.state._firstClick,
+        _formState: this.state._formState,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    });
+
+   Store.on("UnChange", () => {
+      this.CheckUneAction();
     });
   }
 
-  private RemplirSelect = () => {
-    this.ClearDomElement("NomActivite");
-    const allActions = Store.GetAllActions();
-    const datastringify = JSON.stringify(allActions);
+  private CheckUneAction = () => {
+    const uneAction = Store.GetUneAction();
+    const datastringify = JSON.stringify(uneAction);
     const tabJson = JSON.parse(datastringify);
-
-    // Rentre le id et le nom de l'action dans le tableau correspondant
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < tabJson.length; i++) {
-      const data = tabJson[i];
-      const doc = document.getElementById("NomActivite");
-      const x = document.createElement("OPTION") as HTMLInputElement;
-      x.innerHTML = data.Description;
-      x.value = data.ID;
-      doc.appendChild(x);
+    if (tabJson.length > 0 ) {
+      const data = tabJson[0];
+      typeAction = data.TypeAction;
     }
   }
 
@@ -104,13 +120,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     }
   }
 
- private demi = () => {
+  private demi = () => {
     this.changeTwoLi("def-gauche-list", "off-droite-list");
     this.changeTwoLi("def-droite-list", "off-gauche-list");
     this.changeTwoLi("def-centre-list", "off-centre-list");
     this.changeTwoLi("mid-gauche-list", "mid-droite-list");
   }
-private  ClearDomElement = (nom: string) => {
+
+  private  ClearDomElement = (nom: string) => {
     let doc = document.getElementById(nom);
     while (doc.hasChildNodes()) {
       doc.removeChild(doc.lastChild);
@@ -120,23 +137,50 @@ private  ClearDomElement = (nom: string) => {
   /**
    * Ouvre le form d'ajout d'action
    */
-private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
+  private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
     Actions.requestActionForm(e, sender, document.getElementsByClassName("Enr")[0] as HTMLDivElement);
   }
 
   /**
    * Ferme le form d'ajout d'action
    */
-private closeActionForm = () => {
+  private closeActionForm = () => {
     Actions.closeActionForm(document.getElementsByClassName("Enr")[0] as HTMLDivElement);
+    /* this.apearPlayeurs(); --> For what? */
+  }
+
+  /**
+   * UNUSED \/
+   */
+  private disapearPlayeurs = () => {
+    const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
+    lesuls.style.display = "none";
+  }
+  /**
+   * UNUSED /\
+   */
+
+  private apearPlayeurs = () => {
+    const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
+    lesuls.style.display = "block";
   }
 
   // Envoie du formulaire à l'api
-private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
+  private sendFormData = (e: React.MouseEvent<HTMLInputElement>) => {
+    this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
+      _firstClick: this.state._firstClick,
+      _formState: 2,
+      _lesJoueurs: this.state._lesJoueurs,
+    });
     e.preventDefault();
-
+    const doc = document.getElementById("NomActivite");
+    this.returnFirstStateForm();
+    this.closeActionForm();
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
+
     // Va chercher le resutltat de l'action
     let letvideo = document.getElementById("my-player") as HTMLVideoElement;
     let tempsAction = letvideo.currentTime;
@@ -147,20 +191,44 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     let video = document.getElementById("my-player") as HTMLVideoElement;
     let TypeAction = 5;
     if (TypeAction !== 0) {
+      let text ;
+      if ( this.state._firstClick === false && typeAction === "reception et action")
+      {
       // Preparation du json que l'on va envoyer au server
-      let text = "{"
-        + '"ActionTypeID" :' + idActionType + ","
+      text = "{"
+        + '"ActionTypeID" :' + this.state._actionChosen + ","
         + '"ZoneID" : 1 ,'
         + '"GameID" : 1 ,'
-        + '"X1" : ' + fleche[0][0] + ","
-        + '"Y1" : ' + fleche[0][1] + ","
-        + '"X2" : ' + fleche[1][0] + ","
-        + '"Y2" : ' + fleche[1][1] + ","
+        + '"X1" : ' + x1 + ","
+        + '"Y1" : ' + y1 + ","
+        + '"X2" : ' + x2 + ","
+        + '"Y2" : ' + y2 + ","
+        + '"X3" : ' + fleche[1][0] + ","
+        + '"Y3" : ' + fleche[1][1] + ","
         + '"Time" : ' + video.currentTime + ","
         + '"HomeScore" : ' + scoreDom + ","
         + '"GuestScore" : ' + scoreAway + ","
         + '"PlayerID" :' + numJoueur
         + "}";
+      }
+      else
+      {
+        text = "{"
+        + '"ActionTypeID" :' + this.state._actionChosen + ","
+        + '"ZoneID" : 1 ,'
+        + '"GameID" : 1 ,'
+        + '"X1" : ' + x1 + ","
+        + '"Y1" : ' + y1 + ","
+        + '"X2" : ' + x2 + ","
+        + '"Y2" : ' + y2 + ","
+        + '"X3" : ' + 0 + ","
+        + '"Y3" : ' + 0 + ","
+        + '"Time" : ' + video.currentTime + ","
+        + '"HomeScore" : ' + scoreDom + ","
+        + '"GuestScore" : ' + scoreAway + ","
+        + '"PlayerID" :' + numJoueur
+        + "}";
+      }
       Actions.postAction(text);
 
       // Fermer le fenetre
@@ -168,58 +236,173 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     }
   }
 
-private setTerrainFromInfo = () => {
+  private setTerrainFromInfo = () => {
     // Définir la position initiale du joueur.
+
   }
 
-private setTerrainToInfo = () => {
+  private setTerrainToInfo = () => {
     // Définir l'action finale du joueur.
     this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
+      _firstClick: this.state._firstClick,
       _formState: 2,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
 
-private setActionFromInfo = () => {
-     let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
-     // tslint:disable-next-line:radix
-     idActionType = parseInt(typeSelect.value);
-    // Affiche le terrain.
-     this.setState({
+  private setActionFromInfo = () => {
+    let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
+    const actionType = parseInt(typeSelect.value, 10);
+    Actions.getActionId(actionType);
+    this.setState({
+      _actionChosen: actionType,
+      _actions: this.state._actions,
+      _firstClick: this.state._firstClick,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
-    });
+    }, () => {
+      if ( x3 !== 0 && y3 !== 0){
+        this.receptionPasse();
+    }});
   }
-private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
- // fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
+
+  private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
+    fleche = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY], fleche[1]];
+    x2 = e.nativeEvent.offsetX;
+    y2 = e.nativeEvent.offsetY;
     // Effacer le canvas
     let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
     canvas.width = canvas.width;
   }
 
-private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
-   // fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
-
+  private setToArrow = (e: any) => {
     // Dessiner la flèche
-    let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
-    let ctx = canvas.getContext("2d");
+    if (this.state._firstClick === true) {
+      x1 = e.nativeEvent.offsetX;
+      y1 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
 
-    let ajustement = 1.8;
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.lineWidth = 2.5;
 
-    ctx.strokeStyle = "blue";
-    ctx.fillStyle = "blue";
-    ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.lineTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y1 - x1) / (x1 - x1));
+      endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: false,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    } else if ( this.state._firstClick === false && typeAction === "reception et action") {
+      fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+      x3 = e.nativeEvent.offsetX;
+      y3 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
 
-    ctx.beginPath();
-    ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
-    ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
-    ctx.stroke();
+      ctx.strokeStyle = "blue";
+      ctx.fillStyle = "blue";
+      ctx.lineWidth = 2;
 
-    let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
-    endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
-    this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+      ctx.beginPath();
+      ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
+      ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
+      ctx.stroke();
+
+      let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
+      endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+    } else if ( this.state._firstClick === false && typeAction === "balle perdu") {
+      x3 = 0;
+      y3 = 0;
+      x2 = e.nativeEvent.offsetX;
+      y2 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "green";
+      ctx.fillStyle = "green";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x2 / (ajustement - 0.7), y2  / ajustement);
+      ctx.lineTo(x2 / (ajustement - 0.7), y2 / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y2 - x2) / (x2 - x2));
+      endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: false,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    }
   }
 
+  private clearCanvas = () => {
+    let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    x1 = 0;
+    y1 = 0;
+    y2 = 0;
+    x2 = 0;
+    y3 = 0;
+    x3 = 0;
+
+    this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: true,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    let canvasArrow = document.getElementById("canvasArrow") as HTMLCanvasElement;
+    let ctx2 = canvasArrow.getContext("2d");
+    ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
+  }
+  private receptionPasse(){
+      let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+      x1 = x3;
+      y1 = y3;
+      x3 = 0;
+      y3 = 0;
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.lineWidth = 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.lineTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y1 - x1) / (x1 - x1));
+      endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions: this.state._actions,
+        _firstClick: false,
+        _formState: 1,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+  }
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
       ctx.save();
       ctx.beginPath();
@@ -233,15 +416,104 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
       ctx.fill();
   }
 
- private returnFirstStateForm = () => {
+  private drawX = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+    ctx.beginPath();
+
+    ctx.moveTo(x - 10, y - 10);
+    ctx.lineTo(x + 10, y + 10);
+
+    ctx.moveTo(x + 10, y - 10);
+    ctx.lineTo(x - 10, y + 10);
+    ctx.stroke();
+  }
+
+  private returnFirstStateForm = () => {
+    x1 = 0;
+    x2 = 0;
+    x3 = 0;
+    y1 = 0;
+    y2 = 0;
+    y3 = 0;
     this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
+      _firstClick: true,
       _formState: 0,
       _lesJoueurs: this.state._lesJoueurs,
     });
   }
 
- public render() {
+  private returnSecondStateForm = () => {
+    this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
+      _firstClick: true,
+      _formState: 1,
+      _lesJoueurs: this.state._lesJoueurs,
+    }, () => {
+     if ( x1 !== 0 && y1 !== 0)
+     {
+       this.redessinerTout();
+     }
+    });
+  }
+  public redessinerTout(){
+   if ( x3 !== 0 && y3 !== 0){
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
 
+      ctx.strokeStyle = "blue";
+      ctx.fillStyle = "blue";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
+      ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
+      ctx.stroke();
+
+      let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
+      endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+   }
+   else if ( x2 !== 0 && y2 !== 0 && y3 === 0)
+   {
+      let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "green";
+      ctx.fillStyle = "green";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x2 / (ajustement - 0.7), y2  / ajustement);
+      ctx.lineTo(x2 / (ajustement - 0.7), y2 / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y2 - x2) / (x2 - x2));
+      endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
+   }
+   if ( x1 !== 0 && y1 !== 0 )
+   {
+      let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.lineWidth = 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.lineTo(x1 / (ajustement - 0.7), y1  / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y1 - x1) / (x1 - x1));
+      endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
+   }
+  }
+  public render() {
     rows = [
         [
           [], [], [],
@@ -289,7 +561,17 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
           </button>
         </li>,
         );
+    }
 
+    // Actions
+    let actions: any = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.state._actions.length; i++) {
+      const data = this.state._actions[i];
+      const selected = (data.ID === this.state._actionChosen ? true : false);
+      actions.push(
+        <option value={data.ID} selected={selected}>{data.Description}</option>,
+      );
     }
 
     // Définit le form
@@ -297,7 +579,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state._formState === 0) {
 
       formAction = (
-        <form onSubmit={this.setActionFromInfo.bind(this)}>  
+        <form onSubmit={this.setActionFromInfo.bind(this)}>
           <div className="Enr">
             <button
               type="button"
@@ -310,15 +592,18 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
               >
             </button>
             <h3>Première action</h3><hr />
-            <div className="form-group">          
-              <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActivite" className="form-control" name="NomActivite"/><br />
+            <div className="form-group">
+              <label htmlFor="Nom">Nom de l'action</label>
+              <select id="NomActivite" className="form-control" name="NomActivite">
+                {actions}
+              </select>
+              <br />
             </div>
             <hr />
             <div className="form-group col-xs-4 col-xs-push-8">
               <input type="submit" className="btn btn-default" value="Trajectoire" />
             </div>
-          </div>  
+          </div>
       </form>);
     } else if (this.state._formState === 1) {
       formAction = (
@@ -339,12 +624,13 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
            id="terrain-container-sm"
            onMouseDown={this.setFromArrow.bind(this)}
            onMouseUp={this.setToArrow.bind(this)}
-          > 
+          >
             <div id="circle-centre" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <canvas id="canvasArrow" />
+            <canvas id="canvasTest" />
           </div>
           <hr />
           <div className="col-xs-2 no-l-padd">
@@ -352,6 +638,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
           </div>
           <div className="col-xs-6 col-xs-push-4">
             <input onClick={this.setTerrainToInfo.bind(this)} className="btn btn-success" value="Action finale" />
+             <input onClick={this.clearCanvas.bind(this)} className="btn reset" value="reset" />
           </div>
         </div>
       </form>
@@ -359,7 +646,7 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
     } else {
 
       formAction = (
-        <form onSubmit={this.setActionFromInfo.bind(this)}>  
+        <form>
           <div className="Enr">
             <button
               type="button"
@@ -371,19 +658,21 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
               <span aria-hidden="true">&times;</span>
             </button>
             <h3>Action finale</h3><hr />
-            <div className="form-group">          
-              <label htmlFor="Nom">Nom de l'action</label>                  
-              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest"/>
+            <div className="form-group">
+              <label htmlFor="Nom">Nom de l'action</label>
+              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest">
+                {actions}
+              </select>
               <br />
             </div>
             <hr />
             <div className="col-xs-2 no-l-padd">
-              <input onClick={this.setActionFromInfo.bind(this)} className="btn btn-default" value="Retour" />
+              <input onClick={this.returnSecondStateForm.bind(this)} className="btn btn-default" value="Retour" />
             </div>
             <div className="col-xs-6 col-xs-push-4">
               <input onClick={this.sendFormData.bind(this)} className="btn btn-success" value="Enregistrer" />
             </div>
-          </div>  
+          </div>
       </form>
       );
     }
@@ -393,13 +682,13 @@ private setToArrow = (e: React.MouseEvent<HTMLDivElement>) => {
         {formAction}
         <input type="button" onClick={this.demi.bind(rows)} value="Demi"/>
 
-        <form onSubmit={this.sendFormData.bind(this)}>  
-            <h3>Pointage</h3><br />             
+        <form onSubmit={this.sendFormData.bind(this)}>
+            <h3>Pointage</h3><br />
             <label htmlFor="ScoreDom">Domicile</label>
-            <input type="text" name="ScoreDom" id="ScoreDom" />            
+            <input type="text" name="ScoreDom" id="ScoreDom" />
             <label htmlFor="ScoreAway">Extérieur</label>
             <input type="text" name="ScoreAway" id="ScoreAway"/>
-      </form>              
+      </form>
         <div id="terrain-container" className="container-fluid">
           <div id="circle-centre" />
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
