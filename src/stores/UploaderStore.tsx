@@ -210,7 +210,7 @@ class UploadStore extends EventEmitter {
 
         axios.default.put(url, gameInfos, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
-            this.saved = true;
+            this.emit("saved");
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;

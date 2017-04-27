@@ -1,4 +1,5 @@
 import * as React from "react";
+import { browserHistory } from "react-router";
 
 // tslint:disable:import-spacing
 import * as Dropzone    from "react-dropzone";
@@ -37,6 +38,8 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
         this._onOpenConfirmForm = this._onOpenConfirmForm.bind(this);
         this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
 
+        this._onSaved = this._onSaved.bind(this);
+
         // Get current actions, message and set progress at 0% and uploading at false
         this.state = {
             message: Store.getMessage(),
@@ -57,20 +60,14 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
         Store.on("open_confirm_form", this._onOpenConfirmForm);
         Store.on("close_confirm_form", this._onCloseConfirmForm);
+
+        Store.on("saved", this._onSaved);
     }
 
     public componentWillUnmount() {
-        Store.removeListener("message", this._onMessage);
-
-        Store.removeListener("uploading", this._onUploading);
-        Store.removeListener("upload_ended", this._onUploadEnd);
-
-        Store.removeListener("open_form", this._onOpenForm);
-        Store.removeListener("close_form", this._onCloseForm);
-
-        Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
-        Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
+        Store.removeAllListeners();
     }
+
     private _onMessage() {
         this.setState({message: Store.getMessage()});
     }
@@ -99,6 +96,10 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
 
     public _onCloseConfirmForm() {
         this.setState({ openConfirmForm: false });
+    }
+
+    public _onSaved() {
+        browserHistory.push("/edit/" + Store.getGameID());
     }
 
     public closeForm() {

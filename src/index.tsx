@@ -1,7 +1,7 @@
 // tslint:disable:import-spacing
 import * as React    from "react";
 import * as ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
 import { Home }   from "./pages/Home";
 import { Upload } from "./pages/Upload";
 import { Edit }   from "./pages/Edit";
@@ -9,7 +9,7 @@ import { Edit }   from "./pages/Edit";
 
 
 ReactDOM.render(
-    <Router history={hashHistory}>
+    <Router history={browserHistory}>
         <Route
             path="/"
             component={Home}
@@ -19,7 +19,7 @@ ReactDOM.render(
             component={Upload}
         />
         <Route
-            path="edit"
+            path="edit/:idPartie"
             component={Edit}
         />
     </Router>,
