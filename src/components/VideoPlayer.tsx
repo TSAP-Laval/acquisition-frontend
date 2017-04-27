@@ -1,11 +1,13 @@
 import * as React from "react";
 import * as Actions from "../actions/VideoPlayerActions";
 import Store from "../stores/VideoPlayerStore";
+import * as keymaster from "keymaster";
 
 export interface ILayoutProps {
     url: string;
 }
 export interface ILayoutState {
+    holdingSearch: boolean;
     playing: boolean;
 }
 
@@ -13,6 +15,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     constructor(props: any) {
         super(props);
         this.state = {
+            holdingSearch: false,
             playing: false,
         };
     }
@@ -20,13 +23,36 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private componentWillMount = () => {
         Store.on("stateChanged", this.changeState);
         Store.on("pausing", this.pauseVideo);
+        Store.on("holdingBackward", this.holdVideoPlayingBackward);
+        Store.on("holdingForward", this.holdVideoPlayingForward);
+        Store.on("holdingSearchStopped", this.stopHoldingSearch);
     }
 
     private componentDidMount = () => {
         const slider = document.getElementById("my-slider") as HTMLInputElement;
         const stepperSlider = document.getElementById("stepRange") as HTMLInputElement;
+        const video = document.getElementById("my-player") as HTMLVideoElement;
         slider.value = "0";
         stepperSlider.value = "100";
+        keymaster('p', this.onPlay);
+        keymaster('s', this.onStop);
+        keymaster('r', this.onRestart);
+        keymaster('left', this.onBackFive);
+        keymaster('right', this.onForwardFive);
+        keymaster('a', this.increaseFinderValue);
+        keymaster('z', this.decreaseFinderValue)
+    }
+
+    private increaseFinderValue = () => {
+        const slider = document.getElementById("stepRange") as HTMLInputElement;
+        const stepInfo = document.getElementsByClassName("time-jump")[0] as HTMLSpanElement;
+        Actions.modifyFinderValue(true, slider, stepInfo);
+    }
+
+    private decreaseFinderValue = () => {
+        const slider = document.getElementById("stepRange") as HTMLInputElement;
+        const stepInfo = document.getElementsByClassName("time-jump")[0] as HTMLSpanElement;
+        Actions.modifyFinderValue(false, slider, stepInfo);
     }
 
     private changeState = () => {
@@ -35,6 +61,24 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     private pauseVideo = () => {
         this.setState({ playing: false});
+    }
+
+    private holdVideoPlayingBackward = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        if (this.state.holdingSearch) {
+            Actions.playVideoFrameByFrameWithDirection(true, 0.1, video)
+        }
+    }
+
+    private holdVideoPlayingForward = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        if (this.state.holdingSearch) {
+            Actions.playVideoFrameByFrameWithDirection(false, 0.1, video)
+        }
+    }
+
+    private stopHoldingSearch = () => {
+        this.setState({ holdingSearch: false });
     }
 
     private onPlay = () => {
@@ -55,6 +99,23 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private onBackFive = () => {
         const video = document.getElementById("my-player") as HTMLVideoElement;
         Actions.backFive(video);
+    }
+
+    private onBackingHold = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        this.setState({ holdingSearch: true });
+        Actions.holdDelay(true, video);
+    }
+
+    private onForwardingHold = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        this.setState({ holdingSearch: true });
+        Actions.holdDelay(false, video);
+    }
+
+    private onBackingStop = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.backingStop(video);
     }
 
     private onForwardFive = () => {
@@ -111,6 +172,10 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         Actions.setVideoMouseOverSliderPaddingBottom(slider, false);
     }
 
+    private onKeyPressed = (event: any) => {
+        console.log(event.key);
+    }
+
     public render() {
         return (
             <div>
@@ -122,10 +187,10 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         step="1"
                         min="0"
                         max="300"
-                        onMouseDown={this.onPause.bind(this)}
-                        onChange={this.onSlide.bind(this)}
-                        onMouseOver={this.onVideoMouseOver.bind(this)}
-                        onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                        onMouseDown={this.onPause}
+                        onChange={this.onSlide}
+                        onMouseOver={this.onVideoMouseOver}
+                        onMouseLeave={this.onVideoMouseLeave}
                     />
                 </div>
                 <video
@@ -133,9 +198,9 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     className="video-js"
                     preload="auto"
                     poster=""
-                    onTimeUpdate={this.onVideoPlaying.bind(this)}
-                    onMouseOver={this.onVideoMouseOver.bind(this)}
-                    onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                    onTimeUpdate={this.onVideoPlaying}
+                    onMouseOver={this.onVideoMouseOver}
+                    onMouseLeave={this.onVideoMouseLeave}
                     data-setup="{}"
                 >
                     <source
@@ -152,8 +217,8 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                 </video>
                 <div
                     className="video-controls-container"
-                    onMouseOver={this.onVideoMouseOver.bind(this)}
-                    onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                    onMouseOver={this.onVideoMouseOver}
+                    onMouseLeave={this.onVideoMouseLeave}
                 >
                     <div id="stepSetter">
                         <div className="slideTrack"/>
@@ -164,26 +229,36 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         </label>
                         <input
                             id="stepRange"
-                            onChange={this.onStepSliderSlide.bind(this)}
+                            onChange={this.onStepSliderSlide}
                             type="range"
                             min="1"
                             step="1"
                             max="200"
                         />
                     </div>
-                    <button className="video-controls" onClick={this.onRestart.bind(this)}>
+                    <button className="video-controls" onClick={this.onRestart}>
                         <i className="glyphicon glyphicon-fast-backward"/>
                     </button>
-                    <button className="video-controls" onClick={this.onBackFive.bind(this)}>
+                    <button
+                        className="video-controls"
+                        onClick={this.onBackFive}
+                        onMouseDown={this.onBackingHold}
+                        onMouseUp={this.onBackingStop}
+                    >
                         <i className="glyphicon glyphicon-step-backward"/> 
                     </button>
-                    <button className="video-controls" onClick={this.onStop.bind(this)}>
+                    <button className="video-controls" onClick={this.onStop}>
                         <i className="glyphicon glyphicon-stop"/>
                     </button>
-                    <button className="video-controls" onClick={this.onPlay.bind(this)}>
+                    <button className="video-controls" onClick={this.onPlay}>
                         <i id="play-button" className="glyphicon glyphicon-play"/>
                     </button>
-                    <button className="video-controls" onClick={this.onForwardFive.bind(this)}>
+                    <button
+                        className="video-controls"
+                        onClick={this.onForwardFive}
+                        onMouseDown={this.onForwardingHold}
+                        onMouseUp={this.onBackingStop}
+                    >
                         <i className="glyphicon glyphicon-step-forward"/>
                     </button>
                     <div id="slowFinder">
@@ -191,9 +266,9 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         <label htmlFor="slowRange">Recherche précise:</label>
                         <input
                             id="slowRange"
-                            onMouseDown={this.onSlowSliderMouseDown.bind(this)}
-                            onMouseUp={this.onSlowSliderMouseUp.bind(this)}
-                            onChange={this.onSlowSliderSlide.bind(this)}
+                            onMouseDown={this.onSlowSliderMouseDown}
+                            onMouseUp={this.onSlowSliderMouseUp}
+                            onChange={this.onSlowSliderSlide}
                             type="range"
                             min="0"
                             step="1"

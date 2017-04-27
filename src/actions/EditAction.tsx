@@ -2,7 +2,7 @@ import dispatcher from "../dispatcher/dispatcher";
 import {serverURL} from "config";
 import * as axios from "axios";
 export function getJoueur() {
-    axios.default.get(serverURL + "/joueur")
+    axios.default.get(serverURL + "/joueurs")
     .then(function(response: any) {
         dispatcher.dispatch({ type: "MATCH_EDIT.GETJOUEURS", text: response.data });
     });
