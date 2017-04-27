@@ -16,7 +16,7 @@ ReactDOM.render(
             component={Upload}
         />
         <Route
-            path="edit"
+            path="edit/:idPartie"
             component={Edit}
         />
     </Router>,
