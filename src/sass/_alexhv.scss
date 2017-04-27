@@ -260,7 +260,7 @@ ul.players-list {
 }
 
 #terrain-container {
-    width: $t-width;
+    max-width: $t-width;
     height: $t-height;
     border: 4px solid $primary;
     position: relative;
