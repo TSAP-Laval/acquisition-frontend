@@ -57,6 +57,16 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         Actions.backFive(video);
     }
 
+    private onBackingHold = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.backingHoldDelay(video);
+    }
+
+    private onBackingStop = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        Actions.backingHoldStop(video);
+    }
+
     private onForwardFive = () => {
         const video = document.getElementById("my-player") as HTMLVideoElement;
         Actions.forwardFive(video);
@@ -122,10 +132,10 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         step="1"
                         min="0"
                         max="300"
-                        onMouseDown={this.onPause.bind(this)}
-                        onChange={this.onSlide.bind(this)}
-                        onMouseOver={this.onVideoMouseOver.bind(this)}
-                        onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                        onMouseDown={this.onPause}
+                        onChange={this.onSlide}
+                        onMouseOver={this.onVideoMouseOver}
+                        onMouseLeave={this.onVideoMouseLeave}
                     />
                 </div>
                 <video
@@ -133,9 +143,9 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     className="video-js"
                     preload="auto"
                     poster=""
-                    onTimeUpdate={this.onVideoPlaying.bind(this)}
-                    onMouseOver={this.onVideoMouseOver.bind(this)}
-                    onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                    onTimeUpdate={this.onVideoPlaying}
+                    onMouseOver={this.onVideoMouseOver}
+                    onMouseLeave={this.onVideoMouseLeave}
                     data-setup="{}"
                 >
                     <source
@@ -152,8 +162,8 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                 </video>
                 <div
                     className="video-controls-container"
-                    onMouseOver={this.onVideoMouseOver.bind(this)}
-                    onMouseLeave={this.onVideoMouseLeave.bind(this)}
+                    onMouseOver={this.onVideoMouseOver}
+                    onMouseLeave={this.onVideoMouseLeave}
                 >
                     <div id="stepSetter">
                         <div className="slideTrack"/>
@@ -164,26 +174,31 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         </label>
                         <input
                             id="stepRange"
-                            onChange={this.onStepSliderSlide.bind(this)}
+                            onChange={this.onStepSliderSlide}
                             type="range"
                             min="1"
                             step="1"
                             max="200"
                         />
                     </div>
-                    <button className="video-controls" onClick={this.onRestart.bind(this)}>
+                    <button className="video-controls" onClick={this.onRestart}>
                         <i className="glyphicon glyphicon-fast-backward"/>
                     </button>
-                    <button className="video-controls" onClick={this.onBackFive.bind(this)}>
+                    <button
+                        className="video-controls"
+                        onClick={this.onBackFive}
+                        onMouseDown={this.onBackingHold}
+                        onMouseUp={this.onBackingStop}
+                    >
                         <i className="glyphicon glyphicon-step-backward"/> 
                     </button>
-                    <button className="video-controls" onClick={this.onStop.bind(this)}>
+                    <button className="video-controls" onClick={this.onStop}>
                         <i className="glyphicon glyphicon-stop"/>
                     </button>
-                    <button className="video-controls" onClick={this.onPlay.bind(this)}>
+                    <button className="video-controls" onClick={this.onPlay}>
                         <i id="play-button" className="glyphicon glyphicon-play"/>
                     </button>
-                    <button className="video-controls" onClick={this.onForwardFive.bind(this)}>
+                    <button className="video-controls" onClick={this.onForwardFive}>
                         <i className="glyphicon glyphicon-step-forward"/>
                     </button>
                     <div id="slowFinder">
@@ -191,9 +206,9 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         <label htmlFor="slowRange">Recherche précise:</label>
                         <input
                             id="slowRange"
-                            onMouseDown={this.onSlowSliderMouseDown.bind(this)}
-                            onMouseUp={this.onSlowSliderMouseUp.bind(this)}
-                            onChange={this.onSlowSliderSlide.bind(this)}
+                            onMouseDown={this.onSlowSliderMouseDown}
+                            onMouseUp={this.onSlowSliderMouseUp}
+                            onChange={this.onSlowSliderSlide}
                             type="range"
                             min="0"
                             step="1"
