@@ -6,6 +6,7 @@ export interface ILayoutProps {
     url: string;
 }
 export interface ILayoutState {
+    holdingSearch: boolean;
     playing: boolean;
 }
 
@@ -13,6 +14,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     constructor(props: any) {
         super(props);
         this.state = {
+            holdingSearch: false,
             playing: false,
         };
     }
@@ -20,6 +22,9 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private componentWillMount = () => {
         Store.on("stateChanged", this.changeState);
         Store.on("pausing", this.pauseVideo);
+        Store.on("holdingBackward", this.holdVideoPlayingBackward);
+        Store.on("holdingForward", this.holdVideoPlayingForward);
+        Store.on("holdingSearchStopped", this.stopHoldingSearch);
     }
 
     private componentDidMount = () => {
@@ -35,6 +40,24 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     private pauseVideo = () => {
         this.setState({ playing: false});
+    }
+
+    private holdVideoPlayingBackward = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        if (this.state.holdingSearch) {
+            Actions.playVideoFrameByFrameWithDirection(true, 0.1, video)
+        }
+    }
+
+    private holdVideoPlayingForward = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        if (this.state.holdingSearch) {
+            Actions.playVideoFrameByFrameWithDirection(false, 0.1, video)
+        }
+    }
+
+    private stopHoldingSearch = () => {
+        this.setState({ holdingSearch: false });
     }
 
     private onPlay = () => {
@@ -59,12 +82,19 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
 
     private onBackingHold = () => {
         const video = document.getElementById("my-player") as HTMLVideoElement;
-        Actions.backingHoldDelay(video);
+        this.setState({ holdingSearch: true });
+        Actions.holdDelay(true, video);
+    }
+
+    private onForwardingHold = () => {
+        const video = document.getElementById("my-player") as HTMLVideoElement;
+        this.setState({ holdingSearch: true });
+        Actions.holdDelay(false, video);
     }
 
     private onBackingStop = () => {
         const video = document.getElementById("my-player") as HTMLVideoElement;
-        Actions.backingHoldStop(video);
+        Actions.backingStop(video);
     }
 
     private onForwardFive = () => {
@@ -198,7 +228,12 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     <button className="video-controls" onClick={this.onPlay}>
                         <i id="play-button" className="glyphicon glyphicon-play"/>
                     </button>
-                    <button className="video-controls" onClick={this.onForwardFive}>
+                    <button
+                        className="video-controls"
+                        onClick={this.onForwardFive}
+                        onMouseDown={this.onForwardingHold}
+                        onMouseUp={this.onBackingStop}
+                    >
                         <i className="glyphicon glyphicon-step-forward"/>
                     </button>
                     <div id="slowFinder">

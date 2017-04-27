@@ -5,6 +5,8 @@ class VideoPlayerStore extends EventEmitter {
     protected currentTime: number;
     protected step: number;
     protected forwadingStep: number;
+    protected timerForHolding: any;
+    protected holdingInterval: any;
 
     constructor() {
         super();
@@ -97,6 +99,28 @@ class VideoPlayerStore extends EventEmitter {
         }
     }
 
+    private startDelaying = (waitTime: number, backing: boolean, video: HTMLVideoElement) => {
+        this.timerForHolding = setTimeout(this.emit.bind(this, (backing ? "holdingBackward" : "holdingForward")), waitTime * 1000);
+    }
+
+    private stopHoldingSearch = (video: HTMLVideoElement) => {
+        clearTimeout(this.timerForHolding);
+        clearInterval(this.holdingInterval);
+        this.pause(true, video);
+    }
+
+    private playVideoFrameByFrameWithDirection = (backing: boolean, numberOfFrameBySecond: number, video: HTMLVideoElement) => {
+        if (backing) {
+            this.holdingInterval = setInterval(function() {
+                this.back(video);
+            }.bind(this), numberOfFrameBySecond * 1000)
+        } else {
+            this.holdingInterval = setInterval(function() {
+                this.forward(video);
+            }.bind(this), numberOfFrameBySecond * 1000)
+        }
+    }
+
     public handlerActions = (action: any) => {
         switch (action.type) {
             case "VIDEO_PLAYER.PLAY_VIDEO": {
@@ -152,6 +176,18 @@ class VideoPlayerStore extends EventEmitter {
             case "VIDEO_PLAYER.SET_RANGE_PADDING_BOTTOM" : {
                 this.setSliderPaddingBottom(action.state, action.slider);
                 break;
+            }
+            case "VIDEO_PLAYER.HOLD_BTN_DELAY" : {
+                this.startDelaying(1, action.backing, action.video);
+                break;
+            }
+            case "VIDEO_PLAYER.HOLD_STOP" : {
+                this.stopHoldingSearch(action.video);
+                this.emit("holdingSearchStopped");
+                break;
+            }
+            case "VIDEO_PLAYER.PLAY_FRAME_BY_FRAME_WITH_DIRECTION": {
+                this.playVideoFrameByFrameWithDirection(action.backing, action.numberOfFrameBySecond, action.video);
             }
             default:
                 break;
