@@ -579,7 +579,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     if (this.state._formState === 0) {
 
       formAction = (
-        <form onSubmit={this.setActionFromInfo.bind(this)}>
+        <form>
           <div className="Enr">
             <button
               type="button"
@@ -600,14 +600,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               <br />
             </div>
             <hr />
-            <div className="form-group col-xs-4 col-xs-push-8">
-              <input type="submit" className="btn btn-default" value="Trajectoire" />
+            <div className="form-group col-xs-4 col-xs-push-6">
+              <input onClick={this.setActionFromInfo.bind(this)} className="btn btn-default" value="Trajectoire" />
             </div>
           </div>
       </form>);
     } else if (this.state._formState === 1) {
       formAction = (
-        <form onSubmit={this.setTerrainFromInfo.bind(this)}>
+        <form>
         <div className="Enr">
           <button
               type="button"

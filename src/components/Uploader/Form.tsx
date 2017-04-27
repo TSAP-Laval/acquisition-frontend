@@ -8,10 +8,16 @@ import * as Moment      from "moment";
 import "../../sass/react-datetime.scss";
 import "../../sass/react-select.scss";
 
-import ConfForm     from "./Confirmation";
-import Store        from "../../stores/UploaderStore";
-import * as Actions from "../../actions/UploadActions";
-import { IGames, ILocations, ITeams } from "../../interfaces/interfaces";
+import ConfForm             from "./Confirmation";
+import Store                from "../../stores/UploaderStore";
+import * as Actions         from "../../actions/UploadActions";
+import TeamSearchOptions    from "./_teamSearchOptions";
+import FieldSearchOptions   from "./_fieldSearchOptions";
+import {
+    IGames,
+    ILocations,
+    ITeams,
+} from "../../interfaces/interfaces";
 // tslint:enable:import-spacing
 
 // tslint:disable-next-line:no-empty-interface
@@ -24,6 +30,8 @@ export interface ILayoutState {
     game?: IGames;
     errors?: string[];
     savedOnce?: boolean;
+    teamIsLoadingExternally?: boolean;
+    fieldIsLoadingExternally?: boolean;
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -100,11 +108,11 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public _onTeamSearch() {
-        this.setState({teams: Store.getTeams()});
+        this.setState({ teams: Store.getTeams(), teamIsLoadingExternally: false});
     }
 
     public _onFieldSearch() {
-        this.setState({fields: Store.getFields()});
+        this.setState({ fields: Store.getFields(), fieldIsLoadingExternally: false});
     }
 
     public closeForm() {
@@ -187,33 +195,30 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
 
     // tslint:disable-next-line:ban-types
     public onTeamSearch(value: any, callback: Function) {
-        if (!value) {
+        if (!value.trim()) {
             return Promise.resolve({ options: [] });
         }
-        Actions.searchTeam(value);
+        this.setState({ teamIsLoadingExternally: true });
+        Actions.searchTeam(value.trim());
 
-        setTimeout(function() {
-            callback(null, {
-                complete: false,
-                options: this.state.teams,
-            });
-        }.bind(this), 1500);
+        callback(null, {
+            complete: false,
+            options: this.state.teams,
+        });
     }
 
     // tslint:disable-next-line:ban-types
     public onFieldSearch(value: any, callback: Function) {
-        if (!value) {
+        if (!value.trim()) {
             return Promise.resolve({ options: [] });
         }
+        this.setState({fieldIsLoadingExternally: true});
+        Actions.searchField(value.trim());
 
-        Actions.searchField(value);
-
-        setTimeout(function() {
-            callback(null, {
-                complete: false,
-                options: this.state.fields,
-            });
-        }.bind(this), 1500);
+        callback(null, {
+            complete: false,
+            options: this.state.fields,
+        });
     }
 
     public onOpposingTeamInput(e: React.FormEvent<HTMLInputElement>) {
@@ -259,7 +264,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     public render() {
 
         const AsyncComponent = Select.Async;
-        const multi = false;
         const confForm = this.state.openConfirmForm ? <ConfForm/> : null;
         const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>);
         return (
@@ -284,14 +288,17 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                     <label  className="col-sm-2 control-label">Équipe</label>
                                     <div className="col-sm-8 section">
                                         <AsyncComponent
-                                            multi={multi}
-                                            autoload={false}
+                                            multi={false}
+                                            autoload={true}
                                             value={ this.state.game.Team }
                                             onChange={ this.teamSelected }
                                             loadOptions={ this.onTeamSearch }
+                                            options={this.state.teams}
+                                            isLoading={this.state.teamIsLoadingExternally}
                                             backspaceRemoves={true}
                                             valueKey="ID"
                                             labelKey="Name"
+                                            optionComponent={TeamSearchOptions}
                                         />
                                     </div>
                                     <div className="onoffswitch col-sm-2">
@@ -324,14 +331,17 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                     <label  className="col-sm-2 control-label">Terrain</label>
                                     <div className="col-sm-10 section">
                                         <AsyncComponent
-                                            multi={multi}
-                                            autoload={false}
+                                            multi={false}
+                                            autoload={true}
                                             value={ this.state.game.Location }
                                             onChange={ this.fieldSelected }
                                             loadOptions={ this.onFieldSearch }
-                                            backspaceRemoves={ true }
-                                            valueKey="id"
+                                            options={ this.state.fields }
+                                            isLoading={this.state.fieldIsLoadingExternally}
+                                            backspaceRemoves={true}
+                                            valueKey="ID"
                                             labelKey="Name"
+                                            optionComponent={FieldSearchOptions}
                                         />
                                     </div>
                                 </div>
