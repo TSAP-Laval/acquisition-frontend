@@ -30,7 +30,7 @@ export function putJoueur(stringContenu: any, id: any) {
 }
 // Delete joueur
 export function deleteJoueur( id: any) {
-     axios.default.delete(serverURL + "/joueur/" + id)
+     axios.default.delete(serverURL + "/joueurs/" + id)
     .then(function(response: any){
         getJoueur();
     });
