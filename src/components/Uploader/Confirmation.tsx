@@ -1,25 +1,27 @@
 import * as React from "react";
 
-import * as Actions from "../../actions/UploadActions"
-import Store from "../../stores/UploaderStore"
+import * as Actions from "../../actions/UploadActions";
+import Store from "../../stores/UploaderStore";
 
+// tslint:disable:no-empty-interface
 export interface ILayoutProps {}
 export interface ILayoutState {}
+// tslint:enable:no-empty-interface
 
 export default class Footer extends React.Component<ILayoutProps, ILayoutState> {
     constructor() {
         super();
     }
 
-    closeForm() {
+    private closeForm() {
         Actions.cancelUpload();
     }
 
-    closeConfirm() {
+    private closeConfirm() {
         Actions.closeConfirmForm();
     }
 
-    render() {
+    public render() {
         return (
             <div>
                 <div id="confirm" className="modal fade in">
@@ -31,7 +33,7 @@ export default class Footer extends React.Component<ILayoutProps, ILayoutState> 
                         <button onClick={ this.closeForm } className="btn btn-primary" id="delete">Terminer</button>
                     </div>
                 </div>
-                <div id="blur-bkg-2" className="modal-backdrop fade in"></div>
+                <div id="blur-bkg-2" className="modal-backdrop fade in" />
             </div>
         );
     }

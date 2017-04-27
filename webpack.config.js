@@ -62,7 +62,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".scss" , ".css"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".scss", ".css"]
     },
 
     module: {
@@ -82,5 +82,5 @@ module.exports = {
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { test: /\.js$/, loader: "source-map-loader" }
         ]
-    },
+    }
 };

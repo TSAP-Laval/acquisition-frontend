@@ -1,97 +1,123 @@
 import dispatcher from "../dispatcher/dispatcher";
-import {serverURL} from "config"
-import * as axios from 'axios';
+import {serverURL} from "config";
+import * as axios from "axios";
 
-//Va rechercher toutes les Saisons
+// Va rechercher toutes les Saisons
 export function getSaison() {
-     axios.default.get(serverURL + '/saison')
+     axios.default.get(serverURL + "/saison")
     .then(function(response: any){
-        dispatcher.dispatch({ type: "getActions", text: response.data  });     
-    });  
+        dispatcher.dispatch({ type: "getActions", text: response.data  });
+    });
 }
-//Modif joueur
-export function putJoueur(stringContenu: string,id:any) {
-     axios.default.put(serverURL + '/joueur/'+id,stringContenu)
+export function getSaisonTeam() {
+     axios.default.get(serverURL + "/saison")
     .then(function(response: any){
-        getJoueur()    
-    });  
+        dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
+    });
 }
-//Va rechercher toutes les sports
+export function getUneEquipe(Nom: any) {
+     axios.default.get(serverURL + "/equipes/" + Nom )
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getUneEquipe", text: response.data  });
+    });
+}
+// Modif joueur
+export function putJoueur(stringContenu: any, id: any) {
+     axios.default.put(serverURL + "/joueurs/" + id, stringContenu)
+    .then(function(response: any){
+        getJoueur();
+    });
+}
+// Delete joueur
+export function deleteJoueur( id: any) {
+
+     axios.default.delete(serverURL + "/joueurs/" + id)
+
+    .then(function(response: any){
+        getJoueur();
+    });
+}
+// Modif joueur
+export function putTeam(stringContenu: any, id: any) {
+     axios.default.put(serverURL + "/equipes/" + id, stringContenu)
+    .then(function(response: any){
+        getEquipes();
+    });
+}
+// Va rechercher toutes les sports
 export function getSport() {
-     axios.default.get(serverURL + '/sports')
+     axios.default.get(serverURL + "/sports")
     .then(function(response: any){
-        dispatcher.dispatch({ type: "getSports", text: response.data  });     
+        dispatcher.dispatch({ type: "getSports", text: response.data  });
 
-    });  
+    });
 }
-//Va rechercher toutes les sports pour les joueurs
+// Va rechercher toutes les sports pour les joueurs
 export function getSportJoueur() {
-     axios.default.get(serverURL + '/sports')
-    .then(function(response:any){
+     axios.default.get(serverURL + "/sports")
+    .then(function(response: any){
 
-    dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });     
-    });  
+    dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });
+    });
 }
-//Va rechercher toutes les niveaux
+// Va rechercher toutes les niveaux
 export function getNiveau() {
-     axios.default.get(serverURL + '/niveau')
+     axios.default.get(serverURL + "/niveau")
     .then(function(response: any){
-        dispatcher.dispatch({ type: "getNiveau", text: response.data  });     
-    });  
+        dispatcher.dispatch({ type: "getNiveau", text: response.data  });
+    });
 }
-//Va rechercher toutes les niveaux pour les joueurs
+// Va rechercher toutes les niveaux pour les joueurs
 export function getNiveauJoueur() {
-     axios.default.get(serverURL + '/niveau')
+     axios.default.get(serverURL + "/niveau")
     .then(function(response: any){
-        dispatcher.dispatch({ type: "getNiveauJoueur", text: response.data  });     
-    });  
+        dispatcher.dispatch({ type: "getNiveauJoueur", text: response.data  });
+    });
 }
-//Va rechercher toutes les joueurs
+// Va rechercher toutes les joueurs
 export function getJoueur() {
-     axios.default.get(serverURL + '/joueur')
+     axios.default.get(serverURL + "/joueurs")
     .then(function(response: any){
-        dispatcher.dispatch({ type: "getJoueur", text: response.data  });     
-    });  
+        dispatcher.dispatch({ type: "getJoueur", text: response.data  });
+    });
 }
-//Va rechercher toutes les équipes
+// Va rechercher toutes les équipes
 export function getEquipes() {
-     axios.default.get(serverURL + '/equipes')
-    .then(function(response: any){ 
-        dispatcher.dispatch({ type: "getEquipe", text: response.data  });     
-    });  
-}
-//Va rechercher toutes les niveaux
-export function getEquipesJoueur() {
-     axios.default.get(serverURL + '/equipes')
+     axios.default.get(serverURL + "/equipes")
     .then(function(response: any){
-        dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });     
-    });  
+        dispatcher.dispatch({ type: "getEquipe", text: response.data  });
+    });
 }
-//Ajout d'une saison
- export function postSaison(stringContenu: string) {
-     axios.default.post(serverURL + '/saison', stringContenu).then(function (r: any) {
+// Va rechercher toutes les niveaux
+export function getEquipesJoueur() {
+     axios.default.get(serverURL + "/equipes")
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });
+    });
+}
+// Ajout d'une saison
+ export function postSaison(stringContenu: any) {
+     axios.default.post(serverURL + "/saison", stringContenu).then(function(r: any) {
        dispatcher.dispatch({ type: "postAction", text: stringContenu  });
-    }).catch(function (error: string) {
+    }).catch(function(error: string) {
        dispatcher.dispatch({ type: "postAction", text: "error"  });
    });
-        
+
 }
-//Ajout d'une équipe
+// Ajout d'une équipe
 export function postTeam(stringContenu: string) {
-        axios.default.post(serverURL + '/equipes', stringContenu).then(function (r: any) {
+        axios.default.post(serverURL + "/equipes", stringContenu).then(function(r: any) {
             dispatcher.dispatch({ type: "PostTeam", text: stringContenu  });
-        }).catch(function (error: string) {
+        }).catch(function(error: string) {
             dispatcher.dispatch({ type: "PostTeam", text: "error"  });
         });
-        
+
 }
-//Ajout d'un joueur
-export function postJoueur(stringContenu: string) {
-        axios.default.post(serverURL + '/joueur', stringContenu).then(function (r: any) {
+// Ajout d'un joueur
+export function postJoueur(stringContenu: any) {
+        axios.default.post(serverURL + "/joueurs", stringContenu).then(function(r: any) {
             dispatcher.dispatch({ type: "PostJoueur", text: stringContenu  });
-        }).catch(function (error: string) {
+        }).catch(function(error: string) {
             dispatcher.dispatch({ type: "PostJoueur", text: "error"  });
         });
 }
-
-    

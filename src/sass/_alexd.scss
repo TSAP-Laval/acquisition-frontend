@@ -16,8 +16,17 @@ body {
 #TableSelect {
     position: absolute;
     left: 0px;
-    overflow: scroll;
+    overflow: auto;
     height: 200px;
+    width: 500px;
+    margin-right: 30px;
+}
+#TableSaison {
+    position: absolute;
+    left: 0px;
+    overflow: auto;
+    height: 200px;
+    width: 200px;
     margin-right: 30px;
 }
 #nouvSaison {
@@ -25,14 +34,41 @@ body {
     top: 0px;
     left: 350px;
 }
-#nouvJoueur {
+
+#nouvJoueur,#nouvTeam  {
     position: absolute;
     top: 0px;
-    left: 500px;
+    left: 600px;
+    
 }
-#Enr {
+
+input[type=text], select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=submit] {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=text], select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=submit] {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.Enr {
     position: absolute;
-    z-index: 99;
+    z-index: 9999;
     top: 0;
     right: 0;
     padding: 20px;
@@ -40,11 +76,25 @@ body {
     display: none;
     background-color: white;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+
+    h3 {
+        margin-top: 0px;
+        margin-bottom: 5px;
+        display: inline-block;
+        color:blue;
+    }
+    hr {
+        margin-top: 5px;
+        margin-bottom: 20px;
+    }
 }
+
 h3{
     display: inline-block;
+    color:blue;
 }
-#Enr.form-open {
+
+.Enr.form-open {
     display: block;
     background-color: white;
 }

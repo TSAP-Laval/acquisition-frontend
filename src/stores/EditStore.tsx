@@ -1,50 +1,59 @@
-import { EventEmitter } from "events"
-import { IAction } from "../interfaces/interfaces"
+import { EventEmitter } from "events";
+import { IAction } from "../interfaces/interfaces";
 import dispatcher from "../dispatcher/dispatcher";
-import * as axios from 'axios';
+import * as axios from "axios";
 
 class EditStore extends EventEmitter {
-    joueurs: string[];
-    actions: string[];
+
+    private joueurs: string[];
+    private actions: string[];
+    private uneAction: string[];
 
     constructor() {
         super();
         this.joueurs = [];
         this.actions = [];
     }
-    
-    GetAllJoueurs = () => {
-        return this.joueurs;  
+
+    public GetAllJoueurs = () => {
+        return this.joueurs;
+    }
+    public GetUneAction = () => {
+        return this.uneAction;
     }
 
-    GetAllActions = () => {
+    public GetAllActions = () => {
         return this.actions;
     }
 
-    sendActionForm = (e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
+    // tslint:disable-next-line:max-line-length
+    public sendActionForm = ( e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
         $(form)
             .css({
                 /**
                  * Si le bouton dépasse le 2/3 de l'écran, le form apparaîtra à la gauche de celui-ci.
                  */
+                // tslint:disable-next-line:object-literal-key-quotes
                 "left": (e.pageX <= ($(window).width() / 3) * 2 ? (e.pageX - 100) + "px" : (e.pageX - 600) + "px"),
-                "top": (e.pageY - $(".video-container").height() - $("#Enr").height()) + "px"
+                // tslint:disable-next-line:object-literal-key-quotes
+                "top": (e.pageY - $(".video-container").height() - $("#Enr").height()) + "px",
             })
             .toggleClass("form-open");
     }
 
-    closeActionForm = (form: HTMLDivElement) => {
+    public closeActionForm = (form: HTMLDivElement) => {
         $(form).toggleClass("form-open");
     }
 
-    handleActions(action: any){ 
-        switch(action.type) {
+    public handleActions(action: any){
+        switch (action.type) {
             case "MATCH_EDIT.GETJOUEURS": {
-                for(var i = 0; i < action.text.length; i++)
+                // tslint:disable:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
                 {
-                    this.joueurs.push(action.text[i]);  
+                    this.joueurs.push(action.text[i]);
                 }
-                this.emit("change");
+                this.emit("playersLoaded");
                 break;
             }
             case "MATCH_EDIT.REQUEST_ACTION_FORM": {
@@ -55,30 +64,35 @@ class EditStore extends EventEmitter {
                 this.closeActionForm(action.form);
                 break;
             }
+            case "GetUneAction":
+            this.uneAction = [];
+            for (let i = 0; i < action.text.length; i++)
+                {
+                    this.uneAction.push(action.text[i]);
+                }
+            this.emit("UnChange");
+            break;
             case "GetActionsEdit" :
-                this.actions=[];
-                for(var i=0;i<action.text.length;i++)
+                for (let i = 0; i < action.text.length; i++)
                 {
                     this.actions.push(action.text[i]);
                 }
-                this.emit("change");
-            break;
+                this.emit("actionsLoaded");
+                break;
             case "PostAction" :
-                if(action.text !="error")
+                if (action.text !== "error")
                 {
-                    var laction =JSON.parse(action.text);
-                    this.actions.push(laction); 
+                    const laction = JSON.parse(action.text);
+                    this.actions.push(laction);
                 }
-                this.emit("change");
-            break;         
+                this.emit("actionChange");
+                break;
+            default:
+            break;
         }
     }
 }
 
-
-
-
-
-const store = new EditStore;
+const store = new EditStore();
 export default store;
 dispatcher.register(store.handleActions.bind(store));

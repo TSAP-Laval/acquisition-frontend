@@ -1,24 +1,29 @@
-import * as React   from "react";
-import * as Select  from "react-select";
-require('../../sass/react-select.scss');
-import * as DateTime from "react-datetime";
-require('../../sass/react-datetime.scss')
-import * as Moment from "moment"
+// tslint:disable:import-spacing
+import * as React       from "react";
 
-import * as Actions from "../../actions/UploadActions"
-import Store        from "../../stores/UploaderStore"
-import ConfForm     from "./Confirmation"
-import { ILocations, ITeams, IGames } from "../../interfaces/interfaces"
+import * as Select      from "react-select";
+import * as DateTime    from "react-datetime";
+import * as Moment      from "moment";
 
+import "../../sass/react-datetime.scss";
+import "../../sass/react-select.scss";
+
+import ConfForm     from "./Confirmation";
+import Store        from "../../stores/UploaderStore";
+import * as Actions from "../../actions/UploadActions";
+import { IGames, ILocations, ITeams } from "../../interfaces/interfaces";
+// tslint:enable:import-spacing
+
+// tslint:disable-next-line:no-empty-interface
 export interface ILayoutProps {}
 export interface ILayoutState {
-    teams?: any[]
-    fields?: any[]
-    openConfirmForm?: boolean
-    checkboxChecked?: boolean
-    game?: IGames
-    errors?: string[]
-    savedOnce?: boolean
+    teams?: any[];
+    fields?: any[];
+    openConfirmForm?: boolean;
+    checkboxChecked?: boolean;
+    game?: IGames;
+    errors?: string[];
+    savedOnce?: boolean;
 }
 
 export default class Form extends React.Component<ILayoutProps, ILayoutState> {
@@ -30,7 +35,8 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         this._onCloseConfirmForm = this._onCloseConfirmForm.bind(this);
         this._onTeamSearch = this._onTeamSearch.bind(this);
         this._onFieldSearch = this._onFieldSearch.bind(this);
-        
+        this._sendInfos = this._sendInfos.bind(this);
+
         this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
         this.onTeamSearch = this.onTeamSearch.bind(this);
         this.teamSelected = this.teamSelected.bind(this);
@@ -43,197 +49,219 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         this.errorChecker = this.errorChecker.bind(this);
 
         this.state = {
-            teams: Store.getTeams(), 
-            fields: Store.getFields(),
-            openConfirmForm: false, 
             checkboxChecked: true,
+            errors: [],
+            fields: Store.getFields(),
             game: {
-                ID: 0,
-                Team:           null,
-                TeamID:         0,
-                Status:         "local", // Local/visiteur
+                Action:         null,
+                Date:           "",
+                FieldCondition: "",
+                ID:             0,
+                Location:       null,
+                LocationID:     0,
                 OpposingTeam:   "",
                 Season:         null,
                 SeasonID:       0,
-                Location:       null,
-                LocationID:     0,
-                FieldCondition: "",
-                Date:           "",
-                Action:         null,
+                Status:         "local", // Local/visiteur
+                Team:           null,
+                TeamID:         0,
             },
-            errors: [],
+            openConfirmForm: false,
             savedOnce: false,
+            teams: Store.getTeams(),
         };
     }
 
-    componentWillMount(){
+    public componentWillMount() {
         Store.on("open_confirm_form", this._onOpenConfirmForm);
         Store.on("close_confirm_form", this._onCloseConfirmForm);
         Store.on("team_searched", this._onTeamSearch);
         Store.on("field_searched", this._onFieldSearch);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
         Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
         Store.removeListener("team_searched", this._onTeamSearch);
         Store.removeListener("field_searched", this._onFieldSearch);
     }
 
-    shouldComponentUpdate(nextState: ILayoutState) {
+    public shouldComponentUpdate(nextState: ILayoutState) {
         this.setState(nextState);
         return true;
     }
 
-    _onOpenConfirmForm(){
+    public _onOpenConfirmForm() {
         this.setState({openConfirmForm: true});
     }
 
-    _onCloseConfirmForm(){
+    public _onCloseConfirmForm() {
         this.setState({openConfirmForm: false});
     }
 
-    _onTeamSearch() {
+    public _onTeamSearch() {
         this.setState({teams: Store.getTeams()});
     }
 
-    _onFieldSearch() {
+    public _onFieldSearch() {
         this.setState({fields: Store.getFields()});
     }
 
-    closeForm() {
-        Actions.closeForm()
+    public closeForm() {
+        Actions.closeForm();
     }
 
-    handleCheckboxChange() {
-        let game = this.state.game;
+    public handleCheckboxChange() {
+        const g = this.state.game;
         this.setState({checkboxChecked: !this.state.checkboxChecked});
-        game.Status = this.state.checkboxChecked ? "local": "visiteur";
-        this.setState({game: game});
+        g.Status = this.state.checkboxChecked ? "local" : "visiteur";
+        this.setState({game: g});
     }
 
-    onSave() {
+    public onSave() {
         if (!this.state.savedOnce) {
-            this.state.savedOnce = true;
-            this.shouldComponentUpdate(this.state);
+            this.setState({savedOnce: true}, () => {
+                this._sendInfos();
+            });
+        } else {
+            this._sendInfos();
         }
+    }
 
-        this.errorChecker();
+    public _sendInfos() {
+        this.errorChecker(null);
 
         if (this.state.errors.length === 0) {
-            let teamID = this.state.game.TeamID;
-            let opposingTeam = this.state.game.OpposingTeam
-            let status = this.state.game.Status
-            let locationID = this.state.game.LocationID;
-            let fieldCondition = this.state.game.FieldCondition
-            let date = this.state.game.Date;
-
+            const teamID = this.state.game.TeamID;
+            const opposingTeam = this.state.game.OpposingTeam;
+            const status = this.state.game.Status;
+            const locationID = this.state.game.LocationID;
+            const fieldCondition = this.state.game.FieldCondition;
+            const date = this.state.game.Date;
             Actions.save(teamID, opposingTeam, status, locationID, fieldCondition, date);
         }
     }
 
-    errorChecker(date?: Moment.Moment) {
+    public errorChecker(date?: Moment.Moment) {
         if (this.state.savedOnce) {
             // We clear the errors
-            this.state.errors = [];
+            while (this.state.errors.length > 0) {
+                this.state.errors.pop();
+            }
 
-            if (this.state.game.TeamID === 0)
+            if (this.state.game.TeamID === 0) {
                 this.state.errors.push("Veuillez choisir une équipe");
+            }
 
-            if (this.state.game.OpposingTeam === "")
+            if (this.state.game.OpposingTeam === "") {
                 this.state.errors.push("Veuillez entrer une équipe adverse");
+            }
 
-            if (this.state.game.LocationID === 0)
+            if (this.state.game.LocationID === 0) {
                 this.state.errors.push("Veuillez choisir un terrain");
+            }
 
-            if (this.state.game.FieldCondition === "")
+            if (this.state.game.FieldCondition === "") {
                 this.state.errors.push("Veuillez entrer la condition du terrain lors de la partie");
+            }
 
             if (date != null) {
                 if (typeof date.date !== typeof undefined) {
-                    if (Moment(date, "YYYY-MMM-DD HH:mm").isAfter(Moment.now()))
+                    if (Moment(date, "YYYY-MM-DD HH:mm").isAfter(Moment.now())) {
                         this.state.errors.push("La date entrée doit être avant la date actuelle !");
-                    else if (!Moment(date, "YYYY-MMM-DD HH:mm", true).isValid())
+                    }
+                    else if (!Moment(date, "YYYY-MM-DD HH:mm", true).isValid()) {
                         this.state.errors.push("La date entrée est invalide !");
+                    }
                 }
-                else
+                else {
                     this.state.errors.push("Veuillez choisir une date valide");
+                }
             }
-            else if (this.state.game.Date === "")
+            else if (this.state.game.Date === "") {
                 this.state.errors.push("Veuillez choisir une date");
-
+            }
             this.shouldComponentUpdate(this.state);
         }
     }
 
-    onTeamSearch(value: any, callback: Function) {
+    // tslint:disable-next-line:ban-types
+    public onTeamSearch(value: any, callback: Function) {
         if (!value) {
-			return Promise.resolve({ options: [] });
-		}
+            return Promise.resolve({ options: [] });
+        }
         Actions.searchTeam(value);
-        callback(null, {
-            options: this.state.teams,
-            complete: false
-        });
-    }  
-    onFieldSearch(value: any, callback: Function) {
+
+        setTimeout(function() {
+            callback(null, {
+                complete: false,
+                options: this.state.teams,
+            });
+        }.bind(this), 1500);
+    }
+
+    // tslint:disable-next-line:ban-types
+    public onFieldSearch(value: any, callback: Function) {
         if (!value) {
-			return Promise.resolve({ options: [] });
-		}
+            return Promise.resolve({ options: [] });
+        }
 
         Actions.searchField(value);
-        callback(null, {
-            options: this.state.fields,
-            complete: false
-        });
-    } 
 
-    onOpposingTeamInput(e: React.FormEvent<HTMLInputElement>) {
+        setTimeout(function() {
+            callback(null, {
+                complete: false,
+                options: this.state.fields,
+            });
+        }.bind(this), 1500);
+    }
+
+    public onOpposingTeamInput(e: React.FormEvent<HTMLInputElement>) {
         this.state.game.OpposingTeam = (e.target as HTMLInputElement).value.trim();
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
-    } 
+    }
 
-    onConditionInput(e: React.FormEvent<HTMLInputElement>) {
+    public onConditionInput(e: React.FormEvent<HTMLInputElement>) {
         this.state.game.FieldCondition = (e.target as HTMLInputElement).value.trim();
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
-    } 
+    }
 
-    onDateInput(date: Moment.Moment) {
+    public onDateInput(date: Moment.Moment) {
         if (typeof date.date !== typeof undefined) {
             if (Moment(date, "YYYY-MMM-DD HH:mm").isSameOrBefore(Moment.now()) &&
                 Moment(date, "YYYY-MMM-DD HH:mm", true).isValid()) {
                     this.state.game.Date = date.format("YYYY-MM-DD HH:mm").toString();
                 }
-            else 
+            else {
                 this.state.game.Date = "";
+            }
         }
         this.errorChecker(date);
         this.shouldComponentUpdate(this.state);
-    } 
+    }
 
-    teamSelected(team: ITeams) {
+    public teamSelected(team: ITeams) {
         this.state.game.Team = team;
         this.state.game.TeamID = team === null ? 0 : team.ID;
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
     }
 
-    fieldSelected(location: ILocations) {
+    public fieldSelected(location: ILocations) {
         this.state.game.Location = location;
         this.state.game.LocationID = location === null ? 0 : location.ID;
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
     }
 
-    render() {
+    public render() {
 
         const AsyncComponent = Select.Async;
-        let multi = false;
-        let confForm = this.state.openConfirmForm ? <ConfForm/> : null;
-        const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>)
-
+        const multi = false;
+        const confForm = this.state.openConfirmForm ? <ConfForm/> : null;
+        const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>);
         return (
             <div>
                 <div className="modal-dialog relative" id="modal">
@@ -255,62 +283,99 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Équipe</label>
                                     <div className="col-sm-8 section">
-                                        <AsyncComponent multi={multi} autoload={false} value={this.state.game.Team} 
-                                            onChange={ this.teamSelected } valueKey="ID" labelKey="Name"
-                                            loadOptions={ this.onTeamSearch } backspaceRemoves={true} />
+                                        <AsyncComponent
+                                            multi={multi}
+                                            autoload={false}
+                                            value={ this.state.game.Team }
+                                            onChange={ this.teamSelected }
+                                            loadOptions={ this.onTeamSearch }
+                                            backspaceRemoves={true}
+                                            valueKey="ID"
+                                            labelKey="Name"
+                                        />
                                     </div>
                                     <div className="onoffswitch col-sm-2">
-                                        <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" 
-                                                onChange={ this.handleCheckboxChange } checked={ this.state.checkboxChecked } />
+                                        <input
+                                            type="checkbox"
+                                            name="onoffswitch"
+                                            className="onoffswitch-checkbox"
+                                            id="myonoffswitch"
+                                            onChange={ this.handleCheckboxChange }
+                                            checked={ this.state.checkboxChecked }
+                                        />
                                         <label className="onoffswitch-label" htmlFor="myonoffswitch">
-                                            <span className="onoffswitch-inner"></span>
-                                            <span className="onoffswitch-switch"></span>
+                                            <span className="onoffswitch-inner" />
+                                            <span className="onoffswitch-switch" />
                                         </label>
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Équipe adverse</label>
                                     <div className="col-sm-10">
-                                        <input type="text" className="form-control" 
-                                        placeholder="Équipe adverse" onInput={ e => this.onOpposingTeamInput(e) }/>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Équipe adverse"
+                                            onInput={ (e) => this.onOpposingTeamInput(e) }
+                                        />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Terrain</label>
                                     <div className="col-sm-10 section">
-                                        <AsyncComponent multi={multi} autoload={false} value={this.state.game.Location} 
-                                            onChange={ this.fieldSelected } valueKey="id" labelKey="Name"
-                                            loadOptions={ this.onFieldSearch } backspaceRemoves={true} />
+                                        <AsyncComponent
+                                            multi={multi}
+                                            autoload={false}
+                                            value={ this.state.game.Location }
+                                            onChange={ this.fieldSelected }
+                                            loadOptions={ this.onFieldSearch }
+                                            backspaceRemoves={ true }
+                                            valueKey="id"
+                                            labelKey="Name"
+                                        />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Condition(s) du terrain</label>
                                     <div className="col-sm-10">
-                                        <input type="text" className="form-control"
-                                        placeholder="Condition(s) du terrain" onInput={ e => this.onConditionInput(e) }/>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Condition(s) du terrain"
+                                            onInput={ (e) => this.onConditionInput(e) }
+                                        />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label  className="col-sm-2 control-label">Date</label>
                                     <div className="col-sm-8">
-                                        <DateTime locale="fr-ca" dateFormat="YYYY-MM-DD" timeFormat="HH:mm" onBlur={e => this.onDateInput(e)} />
+                                        <DateTime
+                                            locale="fr-ca"
+                                            dateFormat="YYYY-MM-DD"
+                                            timeFormat="HH:mm"
+                                            onBlur={ (e) => this.onDateInput(e) }
+                                        />
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        
                         <div className="modal-footer">
-                            <button onClick={ this.closeForm } type="button" className="btn btn-default"
-                                    data-dismiss="modal">
-                                        Fermer
+                            <button
+                                onClick={ this.closeForm }
+                                type="button"
+                                className="btn btn-default"
+                                data-dismiss="modal"
+                            >
+                                Fermer
                             </button>
-                            <button onClick={ this.onSave } type="button" className="btn btn-primary">
+                            {/* tslint:disable-next-line:jsx-no-bind */}
+                            <button onClick={ this.onSave.bind(this) } type="button" className="btn btn-primary">
                                 Sauvegarder
                             </button>
                         </div>
                     </div>
                 </div>
-                <div id="blur-bkg" className="modal-backdrop fade in"></div>
+                <div id="blur-bkg" className="modal-backdrop fade in" />
                 {confForm}
             </div>
         );
