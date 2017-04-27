@@ -208,7 +208,6 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     {
     const text = {
             Lname: nomjoueur,
-            // tslint:disable-next-line:object-literal-sort-keys
             Fname: prenomjoueur,
             Number: numerojoueur,
             Email: emailJoueur,
