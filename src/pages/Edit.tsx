@@ -9,10 +9,15 @@ import VideoPlayer  from "../components/VideoPlayer";
 import SideBar      from "../layouts/SideBar";
 import Footer       from "../layouts/Footer";
 import Stack        from "../layouts/Stack";
+import { serverURL } from "config";
 // tslint:enable:import-spacing
 
 // tslint:disable:no-empty-interface
-export interface ILayoutProps {}
+export interface ILayoutProps {
+    params?: {
+        idPartie: number;
+    }
+}
 export interface ILayoutState {}
 // tslint:enable:no-empty-interface
 
@@ -24,7 +29,7 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
             <div>
                 <div className="video-container">
                     <VideoPlayer
-                        url="//vjs.zencdn.net/v/oceans.mp4"
+                        url={serverURL + "/parties/" + this.props.params.idPartie + "/videos/1"}
                     />
                 </div>
                 <SideBar />
