@@ -293,6 +293,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                             value={ this.state.game.Team }
                                             onChange={ this.teamSelected }
                                             loadOptions={ this.onTeamSearch }
+                                            options={this.state.teams}
                                             isLoading={this.state.teamIsLoadingExternally}
                                             backspaceRemoves={true}
                                             valueKey="ID"
@@ -336,6 +337,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
                                             onChange={ this.fieldSelected }
                                             loadOptions={ this.onFieldSearch }
                                             options={ this.state.fields }
+                                            isLoading={this.state.fieldIsLoadingExternally}
                                             backspaceRemoves={true}
                                             valueKey="ID"
                                             labelKey="Name"
