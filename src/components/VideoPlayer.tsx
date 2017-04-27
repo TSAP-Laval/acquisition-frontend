@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as Actions from "../actions/VideoPlayerActions";
 import Store from "../stores/VideoPlayerStore";
+import * as keymaster from "keymaster";
 
 export interface ILayoutProps {
     url: string;
@@ -30,8 +31,28 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private componentDidMount = () => {
         const slider = document.getElementById("my-slider") as HTMLInputElement;
         const stepperSlider = document.getElementById("stepRange") as HTMLInputElement;
+        const video = document.getElementById("my-player") as HTMLVideoElement;
         slider.value = "0";
         stepperSlider.value = "100";
+        keymaster('p', this.onPlay);
+        keymaster('s', this.onStop);
+        keymaster('r', this.onRestart);
+        keymaster('left', this.onBackFive);
+        keymaster('right', this.onForwardFive);
+        keymaster('a', this.increaseFinderValue);
+        keymaster('z', this.decreaseFinderValue)
+    }
+
+    private increaseFinderValue = () => {
+        const slider = document.getElementById("stepRange") as HTMLInputElement;
+        const stepInfo = document.getElementsByClassName("time-jump")[0] as HTMLSpanElement;
+        Actions.modifyFinderValue(true, slider, stepInfo);
+    }
+
+    private decreaseFinderValue = () => {
+        const slider = document.getElementById("stepRange") as HTMLInputElement;
+        const stepInfo = document.getElementsByClassName("time-jump")[0] as HTMLSpanElement;
+        Actions.modifyFinderValue(false, slider, stepInfo);
     }
 
     private changeState = () => {
@@ -149,6 +170,10 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private onVideoMouseLeave = () => {
         const slider = document.getElementById("my-slider") as HTMLInputElement;
         Actions.setVideoMouseOverSliderPaddingBottom(slider, false);
+    }
+
+    private onKeyPressed = (event: any) => {
+        console.log(event.key);
     }
 
     public render() {

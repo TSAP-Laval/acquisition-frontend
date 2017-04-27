@@ -121,6 +121,11 @@ class VideoPlayerStore extends EventEmitter {
         }
     }
 
+    private modifySliderSpeed = (increase: boolean, slider: HTMLInputElement, text: HTMLSpanElement) => {
+        slider.value = (parseInt(slider.value, 10) + (increase ? 5 : -5)).toString();
+        this.setStep(text, slider);
+    }
+
     public handlerActions = (action: any) => {
         switch (action.type) {
             case "VIDEO_PLAYER.PLAY_VIDEO": {
@@ -188,6 +193,11 @@ class VideoPlayerStore extends EventEmitter {
             }
             case "VIDEO_PLAYER.PLAY_FRAME_BY_FRAME_WITH_DIRECTION": {
                 this.playVideoFrameByFrameWithDirection(action.backing, action.numberOfFrameBySecond, action.video);
+                break;
+            }
+            case "VIDEO_PLAYER.MODIFY_FINDER_SPEED" : {
+                this.modifySliderSpeed(action.increase, action.slider, action.text);
+                break;
             }
             default:
                 break;
