@@ -132,7 +132,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     id="my-player"
                     className="video-js"
                     preload="auto"
-                    poster="//vjs.zencdn.net/v/oceans.png"
+                    poster=""
                     onTimeUpdate={this.onVideoPlaying.bind(this)}
                     onMouseOver={this.onVideoMouseOver.bind(this)}
                     onMouseLeave={this.onVideoMouseLeave.bind(this)}
