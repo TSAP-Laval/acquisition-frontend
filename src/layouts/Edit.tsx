@@ -16,6 +16,8 @@ export interface ILayoutState {
   _lesJoueurs: any;
   _formState: any;
   _actions: any;
+  _receptionsChosen: any;
+  _receptions: any ;
   _actionChosen: any;
   _firstClick: any;
 }
@@ -28,6 +30,7 @@ let x2 = 0;
 let y2 = 0;
 let x3 = 0;
 let y3 = 0;
+let idReception: any;
 let typeAction = "";
 let fleche: [any, any] = [[], []];
 let rows: any = [
@@ -47,6 +50,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.state = {
         _actionChosen: "",
         _actions: [],
+        _receptionsChosen: "",
+        _receptions: [],
         _firstClick: true,
         _formState: 0,
         _lesJoueurs: [],
@@ -56,12 +61,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     // Chargement des données dans le store.
    Actions.getJoueur();
    Actions.getActionsEdit();
-
+   Actions.getReception();
    Store.on("playersLoaded", () => {
 
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
+        _receptionsChosen: this.state._receptionsChosen,
+        _receptions: this.state._receptions,
         _firstClick: true,
         _formState: this.state._formState,
         _lesJoueurs: Store.GetAllJoueurs(),
@@ -72,6 +79,17 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: Store.GetAllActions(),
+        _firstClick: this.state._firstClick,
+        _formState: this.state._formState,
+        _lesJoueurs: this.state._lesJoueurs,
+      });
+    });
+   Store.on("receptionLoaded", () => {
+      this.setState({
+        _actionChosen: this.state._actionChosen,
+        _actions:this.state._actions,
+        _receptionsChosen: this.state._receptionsChosen,
+        _receptions: Store.GetAllReception(),
         _firstClick: this.state._firstClick,
         _formState: this.state._formState,
         _lesJoueurs: this.state._lesJoueurs,
@@ -149,35 +167,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     /* this.apearPlayeurs(); --> For what? */
   }
 
-  /**
-   * UNUSED \/
-   */
-  private disapearPlayeurs = () => {
-    const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
-    lesuls.style.display = "none";
-  }
-  /**
-   * UNUSED /\
-   */
-
-  private apearPlayeurs = () => {
-    const lesuls = document.getElementsByClassName("players-list")[0] as HTMLDivElement;
-    lesuls.style.display = "block";
-  }
-
   // Envoie du formulaire à l'api
   private sendFormData = (e: React.MouseEvent<HTMLInputElement>) => {
-    this.setState({
-      _actionChosen: this.state._actionChosen,
-      _actions: this.state._actions,
-      _firstClick: this.state._firstClick,
-      _formState: 2,
-      _lesJoueurs: this.state._lesJoueurs,
-    });
-    e.preventDefault();
     const doc = document.getElementById("NomActivite");
-    this.returnFirstStateForm();
-    this.closeActionForm();
+
     // Va rechercher le formulaire
     let form = e.target as HTMLFormElement;
 
@@ -187,9 +180,24 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let letscoreDom = document.getElementById("ScoreDom") as HTMLInputElement;
     let scoreDom = letscoreDom.value;
     let letscoreAway = document.getElementById("ScoreAway") as HTMLInputElement;
+    let error = document.getElementById("error") as HTMLLabelElement;
     let scoreAway = letscoreAway.value;
     let video = document.getElementById("my-player") as HTMLVideoElement;
     let TypeAction = 5;
+    if ( scoreDom !== "" && scoreAway !== "" && x1 !== 0 && x2 !== 0 && y1 !== 0 && y2 !== 0)
+    {
+    error.innerHTML ="";
+    this.setState({
+      _actionChosen: this.state._actionChosen,
+      _actions: this.state._actions,
+      _receptionsChosen: this.state._receptionsChosen,
+      _receptions:this.state._receptions,
+      _firstClick: this.state._firstClick,
+      _formState: 2,
+      _lesJoueurs: this.state._lesJoueurs,
+    });
+    e.preventDefault();
+   
     if (TypeAction !== 0) {
       let text ;
       if ( this.state._firstClick === false && typeAction === "reception et action")
@@ -197,14 +205,15 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       // Preparation du json que l'on va envoyer au server
       text = "{"
         + '"ActionTypeID" :' + this.state._actionChosen + ","
+        + '"ReceptionTypeID" :' + idReception + ","
         + '"ZoneID" : 1 ,'
         + '"GameID" : 1 ,'
         + '"X1" : ' + x1 + ","
         + '"Y1" : ' + y1 + ","
         + '"X2" : ' + x2 + ","
         + '"Y2" : ' + y2 + ","
-        + '"X3" : ' + fleche[1][0] + ","
-        + '"Y3" : ' + fleche[1][1] + ","
+        + '"X3" : ' + x3 + ","
+        + '"Y3" : ' + y3 + ","
         + '"Time" : ' + video.currentTime + ","
         + '"HomeScore" : ' + scoreDom + ","
         + '"GuestScore" : ' + scoreAway + ","
@@ -215,6 +224,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       {
         text = "{"
         + '"ActionTypeID" :' + this.state._actionChosen + ","
+        + '"ReceptionTypeID" :' + idReception + ","
         + '"ZoneID" : 1 ,'
         + '"GameID" : 1 ,'
         + '"X1" : ' + x1 + ","
@@ -229,10 +239,18 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         + '"PlayerID" :' + numJoueur
         + "}";
       }
+      console.log(text);
       Actions.postAction(text);
 
       // Fermer le fenetre
+      this.returnFirstStateForm();
+      this.closeActionForm();
       this.closeActionForm.bind(this);
+    }
+    }
+    else
+    {
+      error.innerHTML = "informations manquantes";
     }
   }
 
@@ -246,6 +264,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
+      _receptionsChosen: this.state._receptionsChosen,
+      _receptions: this.state._receptions,
       _firstClick: this.state._firstClick,
       _formState: 2,
       _lesJoueurs: this.state._lesJoueurs,
@@ -259,6 +279,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.setState({
       _actionChosen: actionType,
       _actions: this.state._actions,
+      _receptions: this.state._receptions,
+      _receptionsChosen: this.state._receptionsChosen,
       _firstClick: this.state._firstClick,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
@@ -300,16 +322,52 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
+        _receptionsChosen: this.state._receptionsChosen,
+        _receptions: this.state._receptions,
         _firstClick: false,
         _formState: 1,
         _lesJoueurs: this.state._lesJoueurs,
       });
-    } else if ( this.state._firstClick === false && typeAction === "reception et action") {
+    } else if( this.state._firstClick === false &&  x2 === 0 && typeAction !== "balle perdu"){
+      x2 = e.nativeEvent.offsetX;
+      y2 = e.nativeEvent.offsetY;
+      let canvas = document.getElementById("canvasDeuxiemeClick") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d");
+      let ajustement = 1.8;
+
+      ctx.strokeStyle = "orange";
+      ctx.fillStyle = "orange";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x2 / (ajustement - 0.7), y2  / ajustement);
+      ctx.lineTo(x2 / (ajustement - 0.7), y2 / ajustement);
+      ctx.stroke();
+      let endRadians = Math.atan((y2 - x2) / (x2 - x2));
+      endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
+    }else if ( this.state._firstClick === false &&  x2 !== 0 && typeAction === "reception et action") {
       fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
       x3 = e.nativeEvent.offsetX;
       y3 = e.nativeEvent.offsetY;
+
+      let canvasTroisieme = document.getElementById("canvasTroisiemeClick") as HTMLCanvasElement;
+      let ctxTroisieme = canvasTroisieme.getContext("2d");
+      ctxTroisieme.clearRect(0, 0, canvasTroisieme.width, canvasTroisieme.height);
+      let ajustement2 = 1.8;
+      ctxTroisieme.strokeStyle = "green";
+      ctxTroisieme.fillStyle = "green";
+      ctxTroisieme.lineWidth = 2.5;
+      ctxTroisieme.beginPath();
+      ctxTroisieme.moveTo(x3 / (ajustement2 - 0.7), y3  / ajustement2);
+      ctxTroisieme.lineTo(x3 / (ajustement2 - 0.7), y3  / ajustement2);
+      ctxTroisieme.stroke();
+      let endRadiansTroisieme = Math.atan((y3 - x3) / (x3 - x3));
+      endRadiansTroisieme += ((x3 > y3) ? 90 : -90) * Math.PI / 180;
+      this.drawX(ctxTroisieme, x3 / (ajustement2 - 0.7), y3 / ajustement2);
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
       let ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       let ajustement = 1.8;
 
       ctx.strokeStyle = "blue";
@@ -317,13 +375,13 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       ctx.lineWidth = 2;
 
       ctx.beginPath();
-      ctx.moveTo(fleche[0][0] / (ajustement - 0.7), fleche[0][1]  / ajustement);
-      ctx.lineTo(fleche[1][0] / (ajustement - 0.7), fleche[1][1]  / ajustement);
+      ctx.moveTo(x2 / (ajustement - 0.7), y2  / ajustement);
+      ctx.lineTo(x3 / (ajustement - 0.7), y3 / ajustement);
       ctx.stroke();
 
-      let endRadians = Math.atan((fleche[1][1] - fleche[0][1]) / (fleche[1][0] - fleche[0][0]));
-      endRadians += ((fleche[1][0] > fleche[0][0]) ? 90 : -90) * Math.PI / 180;
-      this.drawArrowhead(ctx, fleche[1][0] / (ajustement - 0.7), fleche[1][1] / ajustement, endRadians);
+      let endRadians = Math.atan((y3 - y2) / (x3 - x2));
+      endRadians += ((x3 > x2) ? 90 : -90) * Math.PI / 180;
+      this.drawArrowhead(ctx, x3 / (ajustement - 0.7), y3 / ajustement, endRadians);
     } else if ( this.state._firstClick === false && typeAction === "balle perdu") {
       x3 = 0;
       y3 = 0;
@@ -331,6 +389,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasArrow") as HTMLCanvasElement;
       let ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       let ajustement = 1.8;
 
       ctx.strokeStyle = "green";
@@ -347,6 +406,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
+        _receptionsChosen: this.state._receptionsChosen,
+        _receptions: this.state._receptions,
         _firstClick: false,
         _formState: 1,
         _lesJoueurs: this.state._lesJoueurs,
@@ -368,6 +429,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
+        _receptionsChosen: this.state._receptionsChosen,
+        _receptions: this.state._receptions,
         _firstClick: true,
         _formState: 1,
         _lesJoueurs: this.state._lesJoueurs,
@@ -375,6 +438,12 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let canvasArrow = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx2 = canvasArrow.getContext("2d");
     ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
+    let canvasDeux = document.getElementById("canvasDeuxiemeClick") as HTMLCanvasElement;
+    let ctx3 = canvasDeux.getContext("2d");
+    ctx3.clearRect(0, 0, canvasDeux.width, canvasDeux.height);
+    let canvastrois = document.getElementById("canvasTroisiemeClick") as HTMLCanvasElement;
+    let ctx4 = canvastrois.getContext("2d");
+    ctx4.clearRect(0, 0, canvastrois.width, canvastrois.height);
   }
   private receptionPasse(){
       let canvas = document.getElementById("canvasTest") as HTMLCanvasElement;
@@ -398,6 +467,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       this.setState({
         _actionChosen: this.state._actionChosen,
         _actions: this.state._actions,
+        _receptionsChosen: this.state._receptionsChosen,
+        _receptions: this.state._receptions,
         _firstClick: false,
         _formState: 1,
         _lesJoueurs: this.state._lesJoueurs,
@@ -415,7 +486,12 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       ctx.restore();
       ctx.fill();
   }
-
+  private changeReception()
+  {
+     const sel = document.getElementById("NomReception") as HTMLSelectElement;
+     const opt = sel.options[sel.selectedIndex] as HTMLOptionElement;
+     idReception = opt.value;
+  }
   private drawX = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
     ctx.beginPath();
 
@@ -430,13 +506,13 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   private returnFirstStateForm = () => {
     x1 = 0;
     x2 = 0;
-    x3 = 0;
     y1 = 0;
     y2 = 0;
-    y3 = 0;
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
+      _receptionsChosen: this.state._receptionsChosen,
+      _receptions: this.state._receptions,
       _firstClick: true,
       _formState: 0,
       _lesJoueurs: this.state._lesJoueurs,
@@ -447,6 +523,8 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     this.setState({
       _actionChosen: this.state._actionChosen,
       _actions: this.state._actions,
+      _receptionsChosen: this.state._receptionsChosen,
+      _receptions:this.state._receptions,
       _firstClick: true,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
@@ -573,6 +651,20 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
         <option value={data.ID} selected={selected}>{data.Description}</option>,
       );
     }
+    // reception
+    let reception: any = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.state._receptions.length; i++) {
+      const data = this.state._receptions[i];
+      if(i === 0)
+      {
+        idReception = data.ID;
+      }
+      const selected = (data.ID === this.state._receptionsChosen ? true : false);
+      reception.push(
+        <option value={data.ID} selected={selected}>{data.Name}</option>,
+      );
+    }
 
     // Définit le form
     let formAction: any;
@@ -593,6 +685,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             </button>
             <h3>Première action</h3><hr />
             <div className="form-group">
+              <label htmlFor="NomReception">type de reception</label>
+              <select id="NomReception" className="form-control" name="NomReception"
+               onChange={this.changeReception.bind(this)}>
+                {reception}
+              </select>
               <label htmlFor="Nom">Nom de l'action</label>
               <select id="NomActivite" className="form-control" name="NomActivite">
                 {actions}
@@ -619,11 +716,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
               <span aria-hidden="true">&times;</span>
           </button>
           <h3>Définir la trajectoire</h3><hr />
-
+          <label id="error" />
           <div
            id="terrain-container-sm"
-           onMouseDown={this.setFromArrow.bind(this)}
-           onMouseUp={this.setToArrow.bind(this)}
+           //onMouseDown={this.setFromArrow.bind(this)}
+           onClick={this.setToArrow.bind(this)}
           >
             <div id="circle-centre" />
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
@@ -631,52 +728,21 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             <div id="def-container" className="col-xs-12 col-sm-4 terrain-third" />
             <canvas id="canvasArrow" />
             <canvas id="canvasTest" />
+            <canvas id="canvasDeuxiemeClick" />
+            <canvas id="canvasTroisiemeClick" />
           </div>
           <hr />
           <div className="col-xs-2 no-l-padd">
             <input onClick={this.returnFirstStateForm.bind(this)} className="btn btn-default" value="Retour" />
           </div>
           <div className="col-xs-6 col-xs-push-4">
-            <input onClick={this.setTerrainToInfo.bind(this)} className="btn btn-success" value="Action finale" />
+            <input onClick={this.sendFormData.bind(this)} className="btn btn-success" value="Enregistrer" />
              <input onClick={this.clearCanvas.bind(this)} className="btn reset" value="reset" />
           </div>
         </div>
       </form>
       );
-    } else {
-
-      formAction = (
-        <form>
-          <div className="Enr">
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-              onClick={this.closeActionForm.bind(this)}
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h3>Action finale</h3><hr />
-            <div className="form-group">
-              <label htmlFor="Nom">Nom de l'action</label>
-              <select id="NomActiviteTest" className="form-control" name="NomActiviteTest">
-                {actions}
-              </select>
-              <br />
-            </div>
-            <hr />
-            <div className="col-xs-2 no-l-padd">
-              <input onClick={this.returnSecondStateForm.bind(this)} className="btn btn-default" value="Retour" />
-            </div>
-            <div className="col-xs-6 col-xs-push-4">
-              <input onClick={this.sendFormData.bind(this)} className="btn btn-success" value="Enregistrer" />
-            </div>
-          </div>
-      </form>
-      );
     }
-
     return (
       <div>
         {formAction}
