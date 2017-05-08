@@ -30,7 +30,7 @@ let x2 = 0;
 let y2 = 0;
 let x3 = 0;
 let y3 = 0;
-let idReception: any;
+let idReception: number;
 let typeAction = "";
 let fleche: [any, any] = [[], []];
 let rows: any = [
@@ -184,63 +184,61 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let scoreAway = letscoreAway.value;
     let video = document.getElementById("my-player") as HTMLVideoElement;
     let TypeAction = 5;
+    let homeScoreInt = parseInt(scoreDom);
+    let awayScoreInt = parseInt(scoreAway);
     if ( scoreDom !== "" && scoreAway !== "" && x1 !== 0 && x2 !== 0 && y1 !== 0 && y2 !== 0)
     {
     error.innerHTML ="";
-    this.setState({
-      _actionChosen: this.state._actionChosen,
-      _actions: this.state._actions,
-      _receptionsChosen: this.state._receptionsChosen,
-      _receptions:this.state._receptions,
-      _firstClick: this.state._firstClick,
-      _formState: 2,
-      _lesJoueurs: this.state._lesJoueurs,
-    });
-    e.preventDefault();
-   
     if (TypeAction !== 0) {
       let text ;
-      if ( this.state._firstClick === false && typeAction === "reception et action")
+      if ( this.state._firstClick === false && (typeAction === "reception et action" ||typeAction === "passe incomplete"))
       {
-      // Preparation du json que l'on va envoyer au server
-      text = "{"
-        + '"ActionTypeID" :' + this.state._actionChosen + ","
-        + '"ReceptionTypeID" :' + idReception + ","
-        + '"ZoneID" : 1 ,'
-        + '"GameID" : 1 ,'
-        + '"X1" : ' + x1 + ","
-        + '"Y1" : ' + y1 + ","
-        + '"X2" : ' + x2 + ","
-        + '"Y2" : ' + y2 + ","
-        + '"X3" : ' + x3 + ","
-        + '"Y3" : ' + y3 + ","
-        + '"Time" : ' + video.currentTime + ","
-        + '"HomeScore" : ' + scoreDom + ","
-        + '"GuestScore" : ' + scoreAway + ","
-        + '"PlayerID" :' + numJoueur
-        + "}";
+        text = {
+            ActionTypeID : this.state._actionChosen,
+            ReceptionTypeID : idReception,
+            ZoneID : 1, 
+            GameID : 1,
+            X1 : x1,
+            Y1 : y1,
+            X2 : x2,
+            Y2 : y2,
+            X3 : x3,
+            Y3 : y3,
+            Time : video.currentTime,
+            HomeScore : homeScoreInt,
+            GuestScore : awayScoreInt,
+            PlayerID : numJoueur,
+
+      };
+      if(typeAction === "passe incomplete")
+      {
+        x3=0;
+        y3=0;
+      }
       }
       else
       {
-        text = "{"
-        + '"ActionTypeID" :' + this.state._actionChosen + ","
-        + '"ReceptionTypeID" :' + idReception + ","
-        + '"ZoneID" : 1 ,'
-        + '"GameID" : 1 ,'
-        + '"X1" : ' + x1 + ","
-        + '"Y1" : ' + y1 + ","
-        + '"X2" : ' + x2 + ","
-        + '"Y2" : ' + y2 + ","
-        + '"X3" : ' + 0 + ","
-        + '"Y3" : ' + 0 + ","
-        + '"Time" : ' + video.currentTime + ","
-        + '"HomeScore" : ' + scoreDom + ","
-        + '"GuestScore" : ' + scoreAway + ","
-        + '"PlayerID" :' + numJoueur
-        + "}";
+        text = {
+            ActionTypeID : this.state._actionChosen,
+            ReceptionTypeID : idReception,
+            ZoneID : 1, 
+            GameID : 1,
+            X1 : x1,
+            Y1 : y1,
+            X2 : x2,
+            Y2 : y2,
+            X3 : 0,
+            Y3 : 0,
+            Time : video.currentTime,
+            HomeScore : homeScoreInt,
+            GuestScore : awayScoreInt,
+            PlayerID : numJoueur,
+        };
+
       }
-      console.log(text);
-      Actions.postAction(text);
+      const textJSon = JSON.stringify(text);
+      console.log(textJSon);
+      Actions.postAction(textJSon);
 
       // Fermer le fenetre
       this.returnFirstStateForm();
@@ -346,7 +344,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       let endRadians = Math.atan((y2 - x2) / (x2 - x2));
       endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
       this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
-    }else if ( this.state._firstClick === false &&  x2 !== 0 && typeAction === "reception et action") {
+    }else if ( this.state._firstClick === false &&  x2 !== 0 && (typeAction === "reception et action" ||typeAction === "passe incomplete") ) {
       fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
       x3 = e.nativeEvent.offsetX;
       y3 = e.nativeEvent.offsetY;
@@ -656,10 +654,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.state._receptions.length; i++) {
       const data = this.state._receptions[i];
-      if(i === 0)
-      {
-        idReception = data.ID;
-      }
       const selected = (data.ID === this.state._receptionsChosen ? true : false);
       reception.push(
         <option value={data.ID} selected={selected}>{data.Name}</option>,
