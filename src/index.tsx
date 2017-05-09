@@ -5,9 +5,6 @@ import { Router, Route, IndexRoute, hashHistory } from "react-router";
 import { Home }   from "./pages/Home";
 import { Upload } from "./pages/Upload";
 import { Edit }   from "./pages/Edit";
-// tslint:enable:import-spacing
-
-
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route

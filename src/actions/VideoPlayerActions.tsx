@@ -99,3 +99,36 @@ export function setVideoMouseOverSliderPaddingBottom(slider: HTMLInputElement, s
         type: "VIDEO_PLAYER.SET_RANGE_PADDING_BOTTOM",
     });
 }
+
+export function holdDelay(backing: boolean, video: HTMLVideoElement) {
+    dispatcher.dispatch({
+        backing,
+        type: "VIDEO_PLAYER.HOLD_BTN_DELAY",
+        video,
+    })
+}
+
+export function backingStop(video: HTMLVideoElement) {
+    dispatcher.dispatch({
+        type: "VIDEO_PLAYER.HOLD_STOP",
+        video,
+    })
+}
+
+export function playVideoFrameByFrameWithDirection(backing: boolean, numberOfFrameBySecond: number, video: HTMLVideoElement) {
+    dispatcher.dispatch({
+        backing,
+        numberOfFrameBySecond,
+        type: "VIDEO_PLAYER.PLAY_FRAME_BY_FRAME_WITH_DIRECTION",
+        video,
+    })
+}
+
+export function modifyFinderValue(increase: boolean, slider: HTMLInputElement, text: HTMLSpanElement) {
+    dispatcher.dispatch({
+        increase,
+        slider,
+        text,
+        type: "VIDEO_PLAYER.MODIFY_FINDER_SPEED",
+    })
+}
