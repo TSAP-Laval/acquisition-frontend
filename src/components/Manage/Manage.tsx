@@ -3,7 +3,7 @@ import * as React from "react";
 import { Tab, Tabs, TabList, TabPanel} from "react-tabs";
 
 import Seasons from "./Seasons";
-import Coachs from "./Coachs";
+// import Coachs from "./Coachs";
 import Teams from "./Teams";
 import Actions from "./Actions";
 import Players from "./Players";
@@ -33,9 +33,9 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                     <TabPanel> 
                         <Teams/>
                     </TabPanel>
-                    <TabPanel> 
+                    {/*<TabPanel> 
                         <Coachs/>
-                    </TabPanel>
+                    </TabPanel>*/}
                     <TabPanel> 
                         <Players/>
                     </TabPanel>
@@ -44,7 +44,6 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                     </TabPanel>
                 </Tabs>
             </div>
-
         );
     }
 }
