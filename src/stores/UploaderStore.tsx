@@ -1,4 +1,3 @@
-
 // tslint:disable:import-spacing
 import { EventEmitter }     from "events";
 import * as axios           from "axios";
@@ -251,11 +250,11 @@ class UploadStore extends EventEmitter {
             this.addMessage(true, error);
         }.bind(this));
     }
+
     public handleActions(action: any){
         switch (action.type) {
             case "UPLOAD.SHOW_MESSAGE":
                 this.addMessage(action.isError, action.text);
-
                 break;
             case "UPLOAD.UPLOAD":
                 this.addMessage();
@@ -301,6 +300,7 @@ class UploadStore extends EventEmitter {
         }
     }
 }
+
 const store = new UploadStore();
 export default store;
 dispatcher.register(store.handleActions.bind(store));
