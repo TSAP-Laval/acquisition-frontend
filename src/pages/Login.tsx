@@ -1,7 +1,7 @@
 // tslint:disable:import-spacing
-import * as React       from "react";
-import * as ReactDOM    from "react-dom";
-import { Link }         from "react-router";
+import * as React                from "react";
+import * as ReactDOM             from "react-dom";
+import { Link, browserHistory }  from "react-router";
 import {
     Form,
     FormControl,
@@ -16,8 +16,6 @@ import Store            from "../stores/AuthStore";
 import * as Action      from "../actions/AuthActions";
 import { IMessages }    from "../interfaces/interfaces";
 // tslint:enable:import-spacing
-// tslint:disable-next-line:no-var-requires
-const auth = require("../components/auth");
 
 // tslint:disable:no-empty-interface
 export interface ILayoutProps { }
@@ -119,6 +117,12 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     private _onLoggedIn() {
+        console.log("REDIRECT !*!*! ");
+        // Go to /some/path.
+        browserHistory.push("/home");
+        // Go back to previous location.
+        browserHistory.goBack();
+        console.log("REDIRECT !*!*! ");
         this.setState({ token: Store.getToken() });
     }
 

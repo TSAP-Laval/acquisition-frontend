@@ -2,7 +2,7 @@ import * as React from "react";
 
 // tslint:disable:no-empty-interface
 export interface ILayoutProps { }
-export interface ILayoutState {}
+export interface ILayoutState { }
 // tslint:enable:no-empty-interface
 
 class Auth extends React.Component<ILayoutProps, ILayoutState> {
