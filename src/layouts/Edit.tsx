@@ -62,6 +62,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
    Actions.getJoueur();
    Actions.getActionsEdit();
    Actions.getReception();
+   
    Store.on("playersLoaded", () => {
 
       this.setState({
@@ -110,7 +111,11 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       typeAction = data.TypeAction;
     }
   }
-
+private  getParameterByName = () => {
+   const url = window.location.href;
+   const res = url.split("/");
+   return res[res.length -1];
+  }
  private changeTwoLi = (nom1: string, nom2: string) => {
     // tslint:disable:prefer-const
     let lisPremier = document.getElementById(nom1).getElementsByTagName("li");
@@ -186,6 +191,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     let TypeAction = 5;
     let homeScoreInt = parseInt(scoreDom);
     let awayScoreInt = parseInt(scoreAway);
+    const idGame = parseInt(this.getParameterByName());
     if ( scoreDom !== "" && scoreAway !== "" && x1 !== 0 && x2 !== 0 && y1 !== 0 && y2 !== 0)
     {
     error.innerHTML ="";
@@ -197,7 +203,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             ActionTypeID : this.state._actionChosen,
             ReceptionTypeID : idReception,
             ZoneID : 1, 
-            GameID : 1,
+            GameID : idGame,
             X1 : x1,
             Y1 : y1,
             X2 : x2,
@@ -273,12 +279,14 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
   private setActionFromInfo = () => {
     let typeSelect = document.getElementsByName("NomActivite")[0] as HTMLInputElement;
     const actionType = parseInt(typeSelect.value, 10);
+    let ReceptionSelect = document.getElementsByName("NomReception")[0] as HTMLInputElement;
+    idReception = parseInt(ReceptionSelect.value, 10);
     Actions.getActionId(actionType);
     this.setState({
       _actionChosen: actionType,
       _actions: this.state._actions,
       _receptions: this.state._receptions,
-      _receptionsChosen: this.state._receptionsChosen,
+      _receptionsChosen: idReception,
       _firstClick: this.state._firstClick,
       _formState: 1,
       _lesJoueurs: this.state._lesJoueurs,
