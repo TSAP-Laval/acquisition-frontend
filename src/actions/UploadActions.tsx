@@ -1,4 +1,4 @@
-import dispatcher from "../dispatcher/dispatcher"
+import dispatcher from "../dispatcher/dispatcher";
 
 export function showMessage(txt: string, isErr: boolean) {
     dispatcher.dispatch({

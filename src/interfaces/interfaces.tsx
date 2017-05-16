@@ -7,6 +7,12 @@ export interface IAction {
     text:   string;
 }
 
+export interface IAuth {
+	type: string;
+	username: string;
+	password: string;
+}
+
 export interface IMessages {
     message: string;
     isError: boolean;

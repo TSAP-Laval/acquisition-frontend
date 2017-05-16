@@ -13,6 +13,12 @@ export function getActionsEdit() {
         dispatcher.dispatch({ type: "GetActionsEdit", text: response.data });
     });
 }
+export function getReception() {
+     axios.default.get(serverURL + "/reception")
+    .then(function(response: any){
+        dispatcher.dispatch({ type: "getReception", text: response.data });
+    });
+}
 export function getActionId(id: any) {
      axios.default.get(serverURL + "/actionType/" + id)
     .then(function(response: any){

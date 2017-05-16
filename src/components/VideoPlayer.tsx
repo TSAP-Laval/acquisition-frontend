@@ -34,13 +34,13 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         const video = document.getElementById("my-player") as HTMLVideoElement;
         slider.value = "0";
         stepperSlider.value = "100";
-        keymaster('p', this.onPlay);
-        keymaster('s', this.onStop);
-        keymaster('r', this.onRestart);
-        keymaster('left', this.onBackFive);
-        keymaster('right', this.onForwardFive);
-        keymaster('a', this.increaseFinderValue);
-        keymaster('z', this.decreaseFinderValue)
+        keymaster("p", this.onPlay);
+        keymaster("s", this.onStop);
+        keymaster("r", this.onRestart);
+        keymaster("left", this.onBackFive);
+        keymaster("right", this.onForwardFive);
+        keymaster("a", this.increaseFinderValue);
+        keymaster("z", this.decreaseFinderValue);
     }
 
     private increaseFinderValue = () => {
@@ -66,14 +66,14 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     private holdVideoPlayingBackward = () => {
         const video = document.getElementById("my-player") as HTMLVideoElement;
         if (this.state.holdingSearch) {
-            Actions.playVideoFrameByFrameWithDirection(true, 0.1, video)
+            Actions.playVideoFrameByFrameWithDirection(true, 0.1, video);
         }
     }
 
     private holdVideoPlayingForward = () => {
         const video = document.getElementById("my-player") as HTMLVideoElement;
         if (this.state.holdingSearch) {
-            Actions.playVideoFrameByFrameWithDirection(false, 0.1, video)
+            Actions.playVideoFrameByFrameWithDirection(false, 0.1, video);
         }
     }
 
@@ -173,7 +173,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     private onKeyPressed = (event: any) => {
-        console.log(event.key);
+        // console.log(event.key);
     }
 
     public render() {
@@ -213,7 +213,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         <a href="http://videojs.com/html5-video-support/" target="_blank">
                             supports HTML5 video
                         </a>
-                    </p>      
+                    </p>
                 </video>
                 <div
                     className="video-controls-container"
@@ -245,7 +245,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         onMouseDown={this.onBackingHold}
                         onMouseUp={this.onBackingStop}
                     >
-                        <i className="glyphicon glyphicon-step-backward"/> 
+                        <i className="glyphicon glyphicon-step-backward"/>
                     </button>
                     <button className="video-controls" onClick={this.onStop}>
                         <i className="glyphicon glyphicon-stop"/>
@@ -259,7 +259,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         onMouseDown={this.onForwardingHold}
                         onMouseUp={this.onBackingStop}
                     >
-                        <i className="glyphicon glyphicon-step-forward"/>
+                    <i className="glyphicon glyphicon-step-forward"/>
                     </button>
                     <div id="slowFinder">
                         <div className="slideTrack"/>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { hashHistory } from "react-router";
+import { browserHistory } from "react-router";
 
 // tslint:disable:import-spacing
 import * as Dropzone    from "react-dropzone";
@@ -99,7 +99,8 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     public _onSaved() {
-        hashHistory.push("/edit/" + Store.getGameID());
+        console.log("GAME ID : ", Store.getGameID());
+        browserHistory.push("edit/" + Store.getGameID());
     }
 
     public closeForm() {

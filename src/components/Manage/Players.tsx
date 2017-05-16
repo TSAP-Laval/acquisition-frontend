@@ -173,6 +173,7 @@ private RemplirSelect(){
 }
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
+    console.log("wowo");
     // Va rechercher le formulaire
     const form = e.target as HTMLFormElement;
     // Va chercher le type de l'active
@@ -181,7 +182,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     const letPrenomJoueur = document.getElementById("Prenom")as HTMLInputElement;
     const prenomjoueur = letPrenomJoueur.value;
     const letNumeroJoueur = document.getElementById("Numero")as HTMLInputElement;
-    const numerojoueur = letNumeroJoueur.value;
+    const numerojoueur = parseInt(letNumeroJoueur.value);
     const letEmailJoueur = document.getElementById("Email")as HTMLInputElement;
     const emailJoueur = letEmailJoueur.value;
     const letEquipeSelect = document.getElementsByName("equipe")[0] as HTMLSelectElement;

@@ -4,13 +4,13 @@ import * as axios from "axios";
 
 // Va rechercher toutes les Saisons
 export function getSaison() {
-     axios.default.get(serverURL + "/saison")
+     axios.default.get(serverURL + "/saisons")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getActions", text: response.data  });
     });
 }
 export function getSaisonTeam() {
-     axios.default.get(serverURL + "/saison")
+     axios.default.get(serverURL + "/saisons")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
     });
@@ -60,14 +60,14 @@ export function getSportJoueur() {
 }
 // Va rechercher toutes les niveaux
 export function getNiveau() {
-     axios.default.get(serverURL + "/niveau")
+     axios.default.get(serverURL + "/niveaux")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getNiveau", text: response.data  });
     });
 }
 // Va rechercher toutes les niveaux pour les joueurs
 export function getNiveauJoueur() {
-     axios.default.get(serverURL + "/niveau")
+     axios.default.get(serverURL + "/niveaux")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getNiveauJoueur", text: response.data  });
     });
@@ -93,15 +93,17 @@ export function getEquipesJoueur() {
         dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });
     });
 }
+
 // Ajout d'une saison
  export function postSaison(stringContenu: any) {
-     axios.default.post(serverURL + "/saison", stringContenu).then(function(r: any) {
-       dispatcher.dispatch({ type: "postAction", text: stringContenu  });
+    axios.default.post(serverURL + "/saison", stringContenu)
+    .then(function(r: any) {
+        dispatcher.dispatch({ type: "postAction", text: stringContenu  });
     }).catch(function(error: string) {
-       dispatcher.dispatch({ type: "postAction", text: "error"  });
-   });
-
+        dispatcher.dispatch({ type: "postAction", text: "error"  });
+    });
 }
+
 // Ajout d'une équipe
 export function postTeam(stringContenu: string) {
         axios.default.post(serverURL + "/equipes", stringContenu).then(function(r: any) {

@@ -1,4 +1,3 @@
-
 // tslint:disable:import-spacing
 import { EventEmitter }     from "events";
 import * as axios           from "axios";
@@ -6,6 +5,8 @@ import { IAction }          from "../interfaces/interfaces";
 import dispatcher           from "../dispatcher/dispatcher";
 import { serverURL }        from "config";
 import { IMessages }        from "../interfaces/interfaces";
+import AuthStore            from "./AuthStore";
+import { browserHistory }   from "react-router";
 // tslint:enable:import-spacing
 
 class UploadStore extends EventEmitter {
@@ -86,7 +87,10 @@ class UploadStore extends EventEmitter {
 
         const config = {
             cancelToken: this.source.token,
-            headers: {"Content-Type": "multipart/form-data; boundary=------------------------" + boundary},
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+                "Content-Type": "multipart/form-data; boundary=------------------------" + boundary,
+            },
             onUploadProgress: this.onProgress.bind(this),
         };
 
@@ -97,7 +101,7 @@ class UploadStore extends EventEmitter {
             form.append(file.lastModifiedDate, file, file.name);
         });
 
-        axios.default.post(serverURL + "/parties").then(function(r: axios.AxiosResponse) {
+        axios.default.post(serverURL + "/parties", null, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             if (r.data != null) {
                 this.gameID = r.data.game_id;
@@ -142,7 +146,10 @@ class UploadStore extends EventEmitter {
 
     private searchTeam(text: string) {
         const config = {
-            headers: {"Content-Type": "application/json;"},
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+                "Content-Type": "application/json;",
+            },
         };
         const url = text === "" ? serverURL + "/equipes" : serverURL + "/equipes/" + text;
 
@@ -162,6 +169,8 @@ class UploadStore extends EventEmitter {
                         this.emit("upload_ended");
                         this.emit("close_form");
                     }.bind(this), 500);
+                } else if (error.response.status === 401) {
+                    browserHistory.push("home");
                 }
             }
         }.bind(this));
@@ -169,7 +178,10 @@ class UploadStore extends EventEmitter {
 
     private searchFields(text: string) {
         const config = {
-            headers: {"Content-Type": "application/json;"},
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+                "Content-Type": "application/json;",
+            },
         };
         const url = text === "" ? serverURL + "/terrains" : serverURL + "/terrains/" + text;
 
@@ -204,7 +216,10 @@ class UploadStore extends EventEmitter {
         };
 
         const config = {
-            headers: {"Content-Type": "application/json;"},
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+                "Content-Type": "application/json;",
+            },
         };
         const url = serverURL + "/parties/" + this.gameID;
 
@@ -240,9 +255,12 @@ class UploadStore extends EventEmitter {
     }
 
     private sendCancel() {
+        const config = {
+            headers: { Authorization: "Bearer " + AuthStore.getToken() },
+        };
         const url = serverURL + "/upload/" + this.gameID;
 
-        axios.default.delete(url).then(function(r: axios.AxiosResponse) {
+        axios.default.delete(url, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.saved = true;
         }.bind(this)).catch(function(error: axios.AxiosError) {
@@ -251,11 +269,11 @@ class UploadStore extends EventEmitter {
             this.addMessage(true, error);
         }.bind(this));
     }
+
     public handleActions(action: any){
         switch (action.type) {
             case "UPLOAD.SHOW_MESSAGE":
                 this.addMessage(action.isError, action.text);
-
                 break;
             case "UPLOAD.UPLOAD":
                 this.addMessage();
@@ -301,6 +319,7 @@ class UploadStore extends EventEmitter {
         }
     }
 }
+
 const store = new UploadStore();
 export default store;
 dispatcher.register(store.handleActions.bind(store));

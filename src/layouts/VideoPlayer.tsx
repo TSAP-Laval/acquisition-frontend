@@ -1,19 +1,18 @@
-import * as React from "react"
+import * as React from "react";
 
-export interface ILayoutProps {
-}
-export interface ILayoutState {
-
-}
+// tslint:disable:no-empty-interface
+export interface ILayoutProps {}
+export interface ILayoutState {}
+// tslint:enable:no-empty-interface
 
 export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutState> {
-    constructor (props: any) {
+    constructor(props: any) {
         super(props);
     }
 
-    playState = false;
+    public playState = false;
 
-    componentDidMount = () => {
+    public componentDidMount = () => {
         let _slider = document.getElementById("my-slider") as HTMLInputElement;
         _slider.value = "0";
     }

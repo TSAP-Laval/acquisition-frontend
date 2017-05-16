@@ -8,6 +8,7 @@ class EditStore extends EventEmitter {
     private joueurs: string[];
     private actions: string[];
     private uneAction: string[];
+    private reception: string[];
 
     constructor() {
         super();
@@ -17,6 +18,9 @@ class EditStore extends EventEmitter {
 
     public GetAllJoueurs = () => {
         return this.joueurs;
+    }
+    public GetAllReception = () => {
+        return this.reception;
     }
     public GetUneAction = () => {
         return this.uneAction;
@@ -28,21 +32,19 @@ class EditStore extends EventEmitter {
 
     // tslint:disable-next-line:max-line-length
     public sendActionForm = ( e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
-        $(form)
+        /*$(form)
             .css({
-                /**
                  * Si le bouton dépasse le 2/3 de l'écran, le form apparaîtra à la gauche de celui-ci.
-                 */
                 // tslint:disable-next-line:object-literal-key-quotes
                 "left": (e.pageX <= ($(window).width() / 3) * 2 ? (e.pageX - 100) + "px" : (e.pageX - 600) + "px"),
                 // tslint:disable-next-line:object-literal-key-quotes
                 "top": (e.pageY - $(".video-container").height() - $("#Enr").height()) + "px",
             })
-            .toggleClass("form-open");
+            .toggleClass("form-open");*/
     }
 
     public closeActionForm = (form: HTMLDivElement) => {
-        $(form).toggleClass("form-open");
+        // $(form).toggleClass("form-open");
     }
 
     public handleActions(action: any){
@@ -71,6 +73,14 @@ class EditStore extends EventEmitter {
                     this.uneAction.push(action.text[i]);
                 }
             this.emit("UnChange");
+            break;
+            case "getReception" :
+            this.reception = [];
+            for (let i = 0; i < action.text.length; i++)
+            {
+                    this.reception.push(action.text[i]);
+            }
+            this.emit("receptionLoaded");
             break;
             case "GetActionsEdit" :
                 for (let i = 0; i < action.text.length; i++)
