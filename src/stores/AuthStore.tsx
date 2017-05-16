@@ -29,11 +29,11 @@ class AuthStore extends EventEmitter {
     }
 
     private removeToken(newToken: string) {
-        this.token = null;
+        this.token = "";
     }
 
     public getToken() {
-        return this.token;
+        return localStorage.token;
     }
 
     public getMessage() {
@@ -43,15 +43,15 @@ class AuthStore extends EventEmitter {
     private login(username: string, password: string) {
         const userInfos = {
             Email: username,
-            Password: password,
+            PassHash: password,
         };
 
         const url = serverURL + "/auth";
 
         axios.default.post(url, userInfos, this.config).then(function(r: axios.AxiosResponse) {
-            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
-            this.addToken(r.data.token);
+            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             localStorage.token = r.data.token;
+            this.addToken(r.data.token);
             this.emit("logged_in");
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): %o", error.response);
@@ -61,17 +61,9 @@ class AuthStore extends EventEmitter {
     }
 
     private logout() {
-        const url = serverURL + "/logout";
-
-        axios.default.post(url, this.config).then(function(r: axios.AxiosResponse) {
-            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
-            this.removeToken();
-            this.emit("logged_out");
-        }.bind(this)).catch(function(error: axios.AxiosError) {
-            // console.log("ERROR (XHR): \n" + error);
-            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
-            this.addMessage(true, error);
-        }.bind(this));
+        localStorage.token = null;
+        this.removeToken(this.token);
+        this.emit("logged_out");
     }
 
     public handleActions(action: IAuth) {

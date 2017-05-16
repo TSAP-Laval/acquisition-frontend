@@ -99,7 +99,8 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     public _onSaved() {
-        browserHistory.push("/edit/" + Store.getGameID());
+        console.log("GAME ID : ", Store.getGameID());
+        browserHistory.push("edit/" + Store.getGameID());
     }
 
     public closeForm() {

@@ -8,11 +8,11 @@ import { Edit }   from "./pages/Edit";
 import { Layout } from "./pages/Layout";
 import { Login }  from "./pages/login";
 // tslint:disable-next-line:no-var-requires
-const auth = require("./components/auth");
+import AuthStore  from "./stores/AuthStore";
 // tslint:enable:import-spacing
 
 function requireAuth(nextState: any, replace: any) {
-    if (!auth.loggedIn()) {
+    if (AuthStore.getToken() === "") {
         replace({
             pathname: "/",
             state: { nextPathname: nextState.location.pathname },
@@ -31,24 +31,3 @@ ReactDOM.render(
     </Router>,
   document.getElementById("root"),
 );
-
-/* TO KEEP PLZ
-    <Router history={hashHistory}>
-        <Route
-            path="/"
-            component={Home}
-        />
-        <Route
-            path="/"
-            component={Home}
-        />
-        <Route
-            path="upload"
-            component={Upload}
-        />
-        <Route
-            path="edit/:gameID"
-            component={Edit}
-        />
-    </Router>,
-*/

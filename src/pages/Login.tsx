@@ -117,12 +117,7 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     private _onLoggedIn() {
-        console.log("REDIRECT !*!*! ");
-        // Go to /some/path.
-        browserHistory.push("/home");
-        // Go back to previous location.
-        browserHistory.goBack();
-        console.log("REDIRECT !*!*! ");
+        browserHistory.push("home");
         this.setState({ token: Store.getToken() });
     }
 
