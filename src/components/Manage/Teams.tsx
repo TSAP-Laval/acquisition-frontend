@@ -10,6 +10,7 @@ let Allequipe: any;
 let allSaison: any;
 let allSport: any;
 let allNiveau: any;
+
 export default class Teams extends React.Component<ILayoutProps, ILayoutState> {
 private componentWillMount(){
     manageActions.getSport();

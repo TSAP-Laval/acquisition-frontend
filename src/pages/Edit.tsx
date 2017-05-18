@@ -15,8 +15,8 @@ import { serverURL } from "config";
 // tslint:disable:no-empty-interface
 export interface ILayoutProps {
     params?: {
-        idPartie: number;
-    }
+        gameID: number;
+    };
 }
 export interface ILayoutState {}
 // tslint:enable:no-empty-interface
@@ -29,7 +29,7 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
             <div>
                 <div className="video-container">
                     <VideoPlayer
-                        url={serverURL + "/parties/" + this.props.params.idPartie + "/videos/1"}
+                        url={serverURL + "/parties/" + this.props.params.gameID + "/videos/1"}
                     />
                 </div>
                 <SideBar />

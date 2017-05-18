@@ -1,153 +1,120 @@
 import { EventEmitter} from "events";
-
 import Dispatcher from "../dispatcher/dispatcher";
 import {IAction} from "../interfaces/interfaces";
 
-/*************************************
-   Auteur : Mehdi Laribi
-   Store  : Coachs  
- *************************************/
-
 class CoachStore extends EventEmitter{
 
+    private coaches: any[] = [];
+    private sports: any[] = [];
+    private teams: any[] = [];
 
-/*************************************
-   Variables
- *************************************/
-lstCoachs: any[] = [];
-lstTeams:any[] = [];  
-lstSports:any[] = [];
+    private teamTempo: any[] = [];
+    private tempo: any[] = [];
+    private sportTempo: any[] = [];
 
-TeamTempo:any[] = [];
-tempo:any[] = [];  
-sportTempo:any[] = [];
+    constructor(){
+        super();
 
-
-constructor(){
-    super();
-
-    this.tempo = [
+        this.tempo = [
             {
+                Email: "m.laribi@hotmail.com",
                 Nom: "Ouyous",
                 Prenom: "Youssef",
-                Email: "m.laribi@hotmail.com"
             },
             {
+                Email: "m.aribi@homtail.com",
                 Nom: "Mehdi",
                 Prenom: "laribi",
-                Email: "m.aribi@homtail.com"  
+            },
+        ];
+
+        this.teamTempo = [
+            {
+                City: "Quebec",
+                ID: 1,
+                Name: "Test Lions",
+            },
+
+            {
+                City: "Trois-Rivières",
+                ID: 2,
+                Name: "Tempo Ligres",
+            },
+        ];
+
+        this.sportTempo = [
+            {
+                ID: 1,
+                Name: "Soccer",
+            },
+        ];
     }
-    
-    ]
 
-    this.TeamTempo = [
+    // Retourne la liste des coachs
+    private getAllCoachs(){
+        if (this.coaches != null)
         {
-            ID: 1,
-            Name: "Test Lions",
-            City: "Quebec"
-        },
-
-        {
-            ID: 2,
-            Name: "Tempo Ligres",
-            City: "Trois-Rivières"
-        }
-    ]
-
-    this.sportTempo = [
-        {
-            ID: 1,
-            Name: "Soccer"
-        }
-    ]
-}
-
-
-
-/*************************************
-   Public functions
- *************************************/
-
-///
-/// Retourne la liste des coachs 
-///
-
-    GetAllCoachs(){
-        if(this.lstCoachs != null)
-        {
-            return this.lstCoachs;
+            return this.coaches;
         }else  {
             return this.tempo;
         }
     }
 
-    
-
-///
-/// Retourne la liste des équipes disponibles
-///
-
-    GetAllTeams(){
-        if(this.lstTeams != null){
-            return this.lstTeams;
+    // Retourne la liste des équipes disponibles
+    private getAllTeams(){
+        if (this.teams != null){
+            return this.teams;
         }else  {
-            return this.TeamTempo;
+            return this.teamTempo;
         }
-    }    
+    }
 
-
-///
-/// Retourne la liste des sports disponibles
-///
-
-        GetAllSports(){
-        if(this.lstSports != null)
+    // Retourne la liste des sports disponibles
+    private getAllSports(){
+        if (this.sports != null)
         {
-            return this.lstSports;
-        }else  {
+            return this.sports;
+        } else  {
             return this.sportTempo;
         }
-    }    
+    }
 
-///
-/// Gestion des evenement  (Listener)
-///
-    handleActions(action: IAction){
+    // Gestion des evenement  (Listener)
+    public handleActions(action: IAction){
 
         switch (action.type) {
             case "POST_COACH":
-            if(action.text !="error")
-            {
-                var c =JSON.parse(action.text);
-                this.lstCoachs.push(c);
-                this.emit("change");
-            }
+                if (action.text !== "error")
+                {
+                    const c = JSON.parse(action.text);
+                    this.coaches.push(c);
+                    this.emit("change");
+                }
                 break;
             case "GET_COACH":
-
-            this.lstCoachs= [];
-                for(var i=0;i<action.text.length;i++)
-                {     
-                    this.lstCoachs.push(action.text[i]);  
-                }
-            this.emit("change");
-                break;
-                
-             case "GET_TEAMS":
-                this.lstTeams = [];
-                   for(var i=0;i<action.text.length;i++)
-                {     
-                    this.lstTeams.push(action.text[i]);  
+                this.coaches = [];
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i  < action.text.length; i++)
+                {
+                    this.coaches.push(action.text[i]);
                 }
                 this.emit("change");
                 break;
-
-
+             case "GET_TEAMS":
+                this.teams = [];
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i <  action.text.length ; i++)
+                {
+                    this.teams.push(action.text[i]);
+                }
+                this.emit("change");
+                break;
             case "GET_SPORTS":
-                this.lstSports = [];
-                for(var i=0;i<action.text.length;i++)
-                {     
-                    this.lstSports.push(action.text[i]);  
+                this.sports = [];
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++)
+                {
+                    this.sports.push(action.text[i]);
                 }
                 this.emit("change");
                 break;
@@ -158,8 +125,7 @@ constructor(){
 }
 }
 
-
-const coachStore = new CoachStore;
+const coachStore = new CoachStore();
 
 export default coachStore;
 Dispatcher.register(coachStore.handleActions.bind(coachStore));

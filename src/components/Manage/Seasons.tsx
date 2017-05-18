@@ -47,6 +47,7 @@ private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     const text = {
             Years : annee,
         };
+    var textJson = JSON.stringify(text);
     manageActions.postSaison(text);
 }
 private ClearDomElement(nom: string){

@@ -1,16 +1,18 @@
 import dispatcher from "../dispatcher/dispatcher";
 import {serverURL} from "config";
+import AuthStore            from "../stores/AuthStore";
 import * as axios from "axios";
+
 
 // Va rechercher toutes les Saisons
 export function getSaison() {
-     axios.default.get(serverURL + "/saison")
+     axios.default.get(serverURL + "/saisons")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getActions", text: response.data  });
     });
 }
 export function getSaisonTeam() {
-     axios.default.get(serverURL + "/saison")
+     axios.default.get(serverURL + "/saisons")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
     });
@@ -58,50 +60,81 @@ export function getSportJoueur() {
     dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });
     });
 }
-// Va rechercher toutes les niveaux
+// Va rechercher toutes les niveau
 export function getNiveau() {
-     axios.default.get(serverURL + "/niveau")
+     axios.default.get(serverURL + "/niveaux")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getNiveau", text: response.data  });
     });
 }
 // Va rechercher toutes les niveaux pour les joueurs
 export function getNiveauJoueur() {
-     axios.default.get(serverURL + "/niveau")
+     axios.default.get(serverURL + "/niveaux")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getNiveauJoueur", text: response.data  });
     });
 }
 // Va rechercher toutes les joueurs
 export function getJoueur() {
-     axios.default.get(serverURL + "/joueurs")
+        let source: axios.CancelTokenSource;
+        source = axios.default.CancelToken.source();
+        console.log(source);
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+        };
+     axios.default.get(serverURL + "/joueurs",config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "getJoueur", text: response.data  });
     });
 }
 // Va rechercher toutes les équipes
 export function getEquipes() {
-     axios.default.get(serverURL + "/equipes")
+         let source: axios.CancelTokenSource;
+         source = axios.default.CancelToken.source();
+         
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+           
+        };
+     axios.default.get(serverURL + "/equipes",config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "getEquipe", text: response.data  });
     });
 }
 // Va rechercher toutes les niveaux
 export function getEquipesJoueur() {
-     axios.default.get(serverURL + "/equipes")
+      let source: axios.CancelTokenSource;
+         source = axios.default.CancelToken.source();
+         
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+           
+        };
+     axios.default.get(serverURL + "/equipes",config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });
     });
 }
+
 // Ajout d'une saison
  export function postSaison(stringContenu: any) {
-     axios.default.post(serverURL + "/saison", stringContenu).then(function(r: any) {
-       dispatcher.dispatch({ type: "postAction", text: stringContenu  });
+    axios.default.post(serverURL + "/saisons", stringContenu)
+    .then(function(r: any) {
+        dispatcher.dispatch({ type: "postAction", text: stringContenu  });
     }).catch(function(error: string) {
-       dispatcher.dispatch({ type: "postAction", text: "error"  });
-   });
-
+        dispatcher.dispatch({ type: "postAction", text: "error"  });
+    });
 }
+
 // Ajout d'une équipe
 export function postTeam(stringContenu: string) {
         axios.default.post(serverURL + "/equipes", stringContenu).then(function(r: any) {
