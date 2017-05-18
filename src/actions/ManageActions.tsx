@@ -6,13 +6,13 @@ import * as axios from "axios";
 
 // Va rechercher toutes les Saisons
 export function getSaison() {
-     axios.default.get(serverURL + "/saison")
+     axios.default.get(serverURL + "/saisons")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getActions", text: response.data  });
     });
 }
 export function getSaisonTeam() {
-     axios.default.get(serverURL + "/saison")
+     axios.default.get(serverURL + "/saisons")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
     });
@@ -127,7 +127,7 @@ export function getEquipesJoueur() {
 
 // Ajout d'une saison
  export function postSaison(stringContenu: any) {
-    axios.default.post(serverURL + "/saison", stringContenu)
+    axios.default.post(serverURL + "/saisons", stringContenu)
     .then(function(r: any) {
         dispatcher.dispatch({ type: "postAction", text: stringContenu  });
     }).catch(function(error: string) {

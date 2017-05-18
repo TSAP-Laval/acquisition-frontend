@@ -15,7 +15,7 @@ export function getActionsEdit() {
     });
 }
 export function getReception() {
-     axios.default.get(serverURL + "/reception")
+     axios.default.get(serverURL + "/receptions")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getReception", text: response.data });
     });
