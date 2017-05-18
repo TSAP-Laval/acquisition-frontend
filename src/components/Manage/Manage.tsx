@@ -23,9 +23,8 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                     <TabList> 
                         <Tab>Saison</Tab>
                         <Tab>Équipe</Tab>
-                        <Tab>Entraîneurs</Tab>
                         <Tab>Joueurs</Tab>
-                        <Tab>Actions</Tab> 
+                    
                     </TabList>
                     <TabPanel> 
                         <Seasons/>
@@ -33,15 +32,10 @@ export default class Manage extends React.Component<ILayoutProps, ILayoutState> 
                     <TabPanel> 
                         <Teams/>
                     </TabPanel>
-                    {/*<TabPanel> 
-                        <Coachs/>
-                    </TabPanel>*/}
                     <TabPanel> 
                         <Players/>
                     </TabPanel>
-                    <TabPanel> 
-                        <Actions/>
-                    </TabPanel>
+
                 </Tabs>
             </div>
         );
