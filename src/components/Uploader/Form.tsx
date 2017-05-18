@@ -88,10 +88,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public componentWillUnmount() {
-        Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
-        Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
-        Store.removeListener("team_searched", this._onTeamSearch);
-        Store.removeListener("field_searched", this._onFieldSearch);
+        Store.removeAllListeners();
     }
 
     public shouldComponentUpdate(nextState: ILayoutState) {
@@ -99,34 +96,34 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         return true;
     }
 
-    public _onOpenConfirmForm() {
+    private _onOpenConfirmForm() {
         this.setState({openConfirmForm: true});
     }
 
-    public _onCloseConfirmForm() {
+    private _onCloseConfirmForm() {
         this.setState({openConfirmForm: false});
     }
 
-    public _onTeamSearch() {
+    private _onTeamSearch() {
         this.setState({ teams: Store.getTeams(), teamIsLoadingExternally: false});
     }
 
-    public _onFieldSearch() {
+    private _onFieldSearch() {
         this.setState({ fields: Store.getFields(), fieldIsLoadingExternally: false});
     }
 
-    public closeForm() {
+    private closeForm() {
         Actions.closeForm();
     }
 
-    public handleCheckboxChange() {
+    private handleCheckboxChange() {
         const g = this.state.game;
         this.setState({checkboxChecked: !this.state.checkboxChecked});
         g.Status = this.state.checkboxChecked ? "local" : "visiteur";
         this.setState({game: g});
     }
 
-    public onSave() {
+    private onSave() {
         if (!this.state.savedOnce) {
             this.setState({savedOnce: true}, () => {
                 this._sendInfos();
@@ -136,7 +133,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         }
     }
 
-    public _sendInfos() {
+    private _sendInfos() {
         this.errorChecker(null);
 
         if (this.state.errors.length === 0) {
@@ -150,7 +147,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         }
     }
 
-    public errorChecker(date?: Moment.Moment) {
+    private errorChecker(date?: Moment.Moment) {
         if (this.state.savedOnce) {
             // We clear the errors
             while (this.state.errors.length > 0) {
@@ -194,7 +191,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     // tslint:disable-next-line:ban-types
-    public onTeamSearch(value: any, callback: Function) {
+    private onTeamSearch(value: any, callback: Function) {
         if (!value.trim()) {
             return Promise.resolve({ options: [] });
         }
@@ -208,7 +205,7 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     // tslint:disable-next-line:ban-types
-    public onFieldSearch(value: any, callback: Function) {
+    private onFieldSearch(value: any, callback: Function) {
         if (!value.trim()) {
             return Promise.resolve({ options: [] });
         }
@@ -221,19 +218,19 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         });
     }
 
-    public onOpposingTeamInput(e: React.FormEvent<HTMLInputElement>) {
+    private onOpposingTeamInput(e: React.FormEvent<HTMLInputElement>) {
         this.state.game.OpposingTeam = (e.target as HTMLInputElement).value.trim();
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
     }
 
-    public onConditionInput(e: React.FormEvent<HTMLInputElement>) {
+    private onConditionInput(e: React.FormEvent<HTMLInputElement>) {
         this.state.game.FieldCondition = (e.target as HTMLInputElement).value.trim();
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
     }
 
-    public onDateInput(date: Moment.Moment) {
+    private onDateInput(date: Moment.Moment) {
         if (typeof date.date !== typeof undefined) {
             if (Moment(date, "YYYY-MMM-DD HH:mm").isSameOrBefore(Moment.now()) &&
                 Moment(date, "YYYY-MMM-DD HH:mm", true).isValid()) {
@@ -247,14 +244,14 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
         this.shouldComponentUpdate(this.state);
     }
 
-    public teamSelected(team: ITeams) {
+    private teamSelected(team: ITeams) {
         this.state.game.Team = team;
         this.state.game.TeamID = team === null ? 0 : team.ID;
         this.errorChecker();
         this.shouldComponentUpdate(this.state);
     }
 
-    public fieldSelected(location: ILocations) {
+    private fieldSelected(location: ILocations) {
         this.state.game.Location = location;
         this.state.game.LocationID = location === null ? 0 : location.ID;
         this.errorChecker();
@@ -262,7 +259,6 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public render() {
-
         const AsyncComponent = Select.Async;
         const confForm = this.state.openConfirmForm ? <ConfForm/> : null;
         const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>);

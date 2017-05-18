@@ -6,7 +6,7 @@ import { IAction } from "../interfaces/interfaces"
 
 /*************************************
    Auteur : Mehdi Laribi
-   Store  : Actions   
+   Store  : Actions
  *************************************/
 class ActionStore extends EventEmitter{
 

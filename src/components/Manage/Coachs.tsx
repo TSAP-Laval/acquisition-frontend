@@ -1,20 +1,15 @@
-import * as React from "react";
-
-
+/*import * as React from "react";
 import {Button, Alert, Modal} from "react-bootstrap";
-import * as Select from 'react-select';
+import * as Select from "react-select";
 import CoachStore from "../../stores/CoachStore";
 import * as RequestHandler from "./RequestHandler";
-
-
-
 
 export interface ILayoutProps {}
 export interface ILayoutState {}
 
 
 
-///Ajout d'une équipe modale
+// Ajout d"une équipe modale
 const modalInstance = React.createClass({
     render() {
         return (
@@ -105,7 +100,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         });
     }
     ListAllCoachs(){
-        var table = document.getElementById('coach_tbody');
+        var table = document.getElementById("coach_tbody");
         if(table != undefined && table.children.length > 0){
             while (table.hasChildNodes()){
                 table.removeChild(table.firstChild);
@@ -119,14 +114,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         for(var i= 0; i < jsonTab.length; i++)
         {
             var data = jsonTab[i];
-            this.AddNew(data['Lname'],data['Fname'],data['Email'], data['Teams'], data['Actif'], i);
+            this.AddNew(data["Lname"],data["Fname"],data["Email"], data["Teams"], data["Actif"], i);
 
         }   
         
     }
     ListAllTeamsAndSports(){
 
-        var selectSport = document.getElementById('sport_select');
+        var selectSport = document.getElementById("sport_select");
 
         if(selectSport != undefined && selectSport.children.length > 0){
             while (selectSport.hasChildNodes()){
@@ -141,13 +136,13 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         {
             var dataS = jsonS[i];
             var option = document.createElement("option");
-            option.text = dataS['Name'];
-            option.value = dataS['ID'];
+            option.text = dataS["Name"];
+            option.value = dataS["ID"];
             
             selectSport.appendChild(option);
         }
 
-        var teams_control = document.getElementById('teams_multi');
+        var teams_control = document.getElementById("teams_multi");
         if(teams_control != undefined && teams_control.children.length > 0){
             while (teams_control.children.length  != 0){
                 teams_control.removeChild(teams_control.firstChild);
@@ -161,8 +156,8 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         {
             var dataT = jsonT[i];
             var option = document.createElement("option");
-            option.text = dataT['Name'];
-            option.value = dataT['ID'];
+            option.text = dataT["Name"];
+            option.value = dataT["ID"];
             
             teams_control.appendChild(option);
         }
@@ -174,23 +169,21 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
 
          var teams : Number[] = []; 
-            $('#teams_multi :selected').each(function(i, selected){ 
-            teams[i] = Number($(selected).val()); 
-            });
+            // $("#teams_multi :selected").each(function(i, selected){ 
+            // teams[i] = Number($(selected).val()); 
+            // });
             
             
             
             var jsonTeams = JSON.stringify(teams);
             
-        var text = '{'
-                +'"Fname" :' + '"' +$('#coach_prenom').val() + '"' + ','
-                +'"Lname" : '+ '"' +$('#coach_name').val() + '"' + ',' 
-                +'"Actif" : '+ '"' + "true" + '"' + ','
-                +'"Email" : '+ '"' +$('#coach_mail').val() + '",'
-                +'"Teams" : ' + jsonTeams
-                +'}';
-
-                debugger;
+         var text = "{"
+                +""Fname" :" + """ +$("#coach_prenom").val() + """ + ","
+                +""Lname" : "+ """ +$("#coach_name").val() + """ + "," 
+                +""Actif" : "+ """ + "true" + """ + ","
+                +""Email" : "+ """ +$("#coach_mail").val() + "","
+                +""Teams" : " + jsonTeams
+                +"}";
 
        RequestHandler.postCoach(text);
     }
@@ -214,14 +207,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
               var tdTeam = document.createElement("td");
               if(equipe != undefined && equipe.length > 0){
-                tdEmail.innerHTML = equipe.join(',');
+                tdEmail.innerHTML = equipe.join(",");
               }
 
               var tdActif = document.createElement("td");
-                if(estActif == 'true'){
-                tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true' checked >";
+                if(estActif == "true"){
+                tdActif.innerHTML = "<input className="coach_actif" type="checkbox" name="Actif" value="true" checked >";
                 }else {
-                    tdActif.innerHTML = "<input className='coach_actif' type='checkbox' name='Actif' value='true'>";
+                    tdActif.innerHTML = "<input className="coach_actif" type="checkbox" name="Actif" value="true">";
                 }
 
               x.appendChild(tdNom);
@@ -230,7 +223,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
               x.appendChild(tdTeam);
               x.appendChild(tdActif);
 
-              $('#coach_tbody').append(x);
+              $("#coach_tbody").append(x);
     }
 
 
@@ -251,12 +244,12 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
         
         
         
-         var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable='true'>" 
-                        + String(coachName) + "</td><td contenteditable='true'>" 
+         var trToAdd =   "<tr><td>" + String(coachPrenom) + "</td><td contenteditable="true">" 
+                        + String(coachName) + "</td><td contenteditable="true">" 
                         + String(coachMail) + "</td>"
-                        + "<td></td><td>type='checkbox' className='coach_actif' value='true' checked></td></tr>";
+                        + "<td></td><td>type="checkbox" className="coach_actif" value="true" checked></td></tr>";
 
-            $('.coach_table tbody').append(trToAdd);
+            $(".coach_table tbody").append(trToAdd);
 
            
     }
@@ -296,7 +289,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                 <form method="post" title="Entraineur :" id="coachForm">
                                     <div className="form-group ">
                                         <label className="control-label" htmlFor="coach_name">
-                                        Nom de l'entraineur :
+                                        Nom de l"entraineur :
                                         <span className="asteriskField">
                                             *
                                         </span>
@@ -306,7 +299,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
                                     <div className="form-group ">
                                         <label className="control-label" htmlFor="coach_prenom">
-                                        Prenom de l'entraineur :
+                                        Prenom de l"entraineur :
                                         <span className="asteriskField">
                                             *
                                         </span>
@@ -316,7 +309,7 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 
                                     <div className="form-group ">
                                         <label className="control-label" htmlFor="coach_mail">
-                                        Email de l'entraineur :
+                                        Email de l"entraineur :
                                         <span className="asteriskField">
                                             *
                                         </span>
@@ -353,14 +346,14 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
                                                     <option value="recreatif">Récreatif</option>
                                                 </select>
 
-                                       {/* <Select
+                                       { <Select
                                                 name="form-field-name"
                                                 multi={true}
                                                 searchable={true}
                                                 options={this.Option}
                                                 onChange={this.SelectedTeams}
                                                 backspaceRemoves={false}
-/>*/}
+/>}
                                         </div>
 
                                 </form>
@@ -373,4 +366,4 @@ export default class Coachs extends React.Component<ILayoutProps, ILayoutState> 
 </div>
         );
     }
-}
+}*/
