@@ -63,7 +63,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
    Actions.getJoueur();
    Actions.getActionsEdit();
    Actions.getReception();
-   
+
    Store.on("playersLoaded", () => {
 
       this.setState({
@@ -228,7 +228,7 @@ private  getParameterByName = () => {
         text = {
             ActionTypeID : this.state._actionChosen,
             ReceptionTypeID : idReception,
-            ZoneID : 1, 
+            ZoneID : 1,
             GameID : 1,
             X1 : x1,
             Y1 : y1,
