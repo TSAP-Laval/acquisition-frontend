@@ -2,10 +2,21 @@
 import dispatcher    from "../../dispatcher/dispatcher";
 import * as axios    from "axios";
 import { serverURL } from "config";
+import AuthStore            from "../../stores/AuthStore";
 // tslint:enable:import-spacing
 
 export function getActionTypes(){
-    axios.default.get(serverURL + "/action/actiontype")
+    let source: axios.CancelTokenSource;
+         source = axios.default.CancelToken.source();
+         
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+           
+     };
+    axios.default.get(serverURL + "/action/types")
         .then(function(response: axios.AxiosResponse){
             dispatcher.dispatch({
                 text: response.data,

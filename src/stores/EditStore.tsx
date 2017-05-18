@@ -32,19 +32,19 @@ class EditStore extends EventEmitter {
 
     // tslint:disable-next-line:max-line-length
     public sendActionForm = ( e: React.MouseEvent<HTMLInputElement>, joueur: HTMLButtonElement, form: HTMLDivElement) => {
-        /*$(form)
+        $(form)
             .css({
-                 * Si le bouton dépasse le 2/3 de l'écran, le form apparaîtra à la gauche de celui-ci.
+                 // Si le bouton dépasse le 2/3 de l'écran, le form apparaîtra à la gauche de celui-ci.
                 // tslint:disable-next-line:object-literal-key-quotes
                 "left": (e.pageX <= ($(window).width() / 3) * 2 ? (e.pageX - 100) + "px" : (e.pageX - 600) + "px"),
                 // tslint:disable-next-line:object-literal-key-quotes
                 "top": (e.pageY - $(".video-container").height() - $("#Enr").height()) + "px",
             })
-            .toggleClass("form-open");*/
+            .toggleClass("form-open");
     }
 
     public closeActionForm = (form: HTMLDivElement) => {
-        // $(form).toggleClass("form-open");
+        $(form).toggleClass("form-open");
     }
 
     public handleActions(action: any){
@@ -68,10 +68,8 @@ class EditStore extends EventEmitter {
             }
             case "GetUneAction":
             this.uneAction = [];
-            for (let i = 0; i < action.text.length; i++)
-                {
-                    this.uneAction.push(action.text[i]);
-                }
+            this.uneAction.push(action.text);
+            console.log(this.uneAction)
             this.emit("UnChange");
             break;
             case "getReception" :

@@ -1,3 +1,4 @@
+
 // tslint:disable:import-spacing
 import * as React     from "react";
 import * as ReactDOM  from "react-dom";
@@ -62,7 +63,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
    Actions.getJoueur();
    Actions.getActionsEdit();
    Actions.getReception();
-
+   
    Store.on("playersLoaded", () => {
 
       this.setState({
@@ -201,9 +202,9 @@ private  getParameterByName = () => {
       {
         text = {
             ActionTypeID : this.state._actionChosen,
-            GameID: idGame,
             ReceptionTypeID : idReception,
-            ZoneID : 1,
+            ZoneID : 1, 
+            GameID : idGame,
             X1 : x1,
             Y1 : y1,
             X2 : x2,
@@ -227,7 +228,7 @@ private  getParameterByName = () => {
         text = {
             ActionTypeID : this.state._actionChosen,
             ReceptionTypeID : idReception,
-            ZoneID : 1,
+            ZoneID : 1, 
             GameID : 1,
             X1 : x1,
             Y1 : y1,
@@ -307,6 +308,7 @@ private  getParameterByName = () => {
 
   private setToArrow = (e: any) => {
     // Dessiner la flèche
+    console.log(typeAction )
     if (this.state._firstClick === true) {
       x1 = e.nativeEvent.offsetX;
       y1 = e.nativeEvent.offsetY;
@@ -334,7 +336,7 @@ private  getParameterByName = () => {
         _formState: 1,
         _lesJoueurs: this.state._lesJoueurs,
       });
-    } else if ( this.state._firstClick === false &&  x2 === 0 && typeAction !== "balle perdu"){
+    } else if( this.state._firstClick === false &&  x2 === 0 && typeAction !== "balle perdu"){
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasDeuxiemeClick") as HTMLCanvasElement;
@@ -496,7 +498,7 @@ private  getParameterByName = () => {
   {
      const sel = document.getElementById("NomReception") as HTMLSelectElement;
      const opt = sel.options[sel.selectedIndex] as HTMLOptionElement;
-     idReception = parseInt(opt.value, 10);
+     idReception = opt.value;
   }
   private drawX = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
     ctx.beginPath();
@@ -613,7 +615,7 @@ private  getParameterByName = () => {
     let nbTempo = 0;
     let nbTempo2 = 0;
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i <  this.state._lesJoueurs.length; i++) {
+    for (let i = 0; i <  this.state._lesJoueurs.length; i++) {
       if (nbTempo === 3)
       {
         nbTempo2++;
@@ -799,3 +801,4 @@ private  getParameterByName = () => {
     );
   }
 }
+

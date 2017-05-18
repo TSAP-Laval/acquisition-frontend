@@ -1,16 +1,18 @@
 import dispatcher from "../dispatcher/dispatcher";
 import {serverURL} from "config";
+import AuthStore            from "../stores/AuthStore";
 import * as axios from "axios";
+
 
 // Va rechercher toutes les Saisons
 export function getSaison() {
-     axios.default.get(serverURL + "/saisons")
+     axios.default.get(serverURL + "/saison")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getActions", text: response.data  });
     });
 }
 export function getSaisonTeam() {
-     axios.default.get(serverURL + "/saisons")
+     axios.default.get(serverURL + "/saison")
     .then(function(response: any){
         dispatcher.dispatch({ type: "getSeasonTeam", text: response.data  });
     });
@@ -74,21 +76,50 @@ export function getNiveauJoueur() {
 }
 // Va rechercher toutes les joueurs
 export function getJoueur() {
-     axios.default.get(serverURL + "/joueurs")
+        let source: axios.CancelTokenSource;
+        source = axios.default.CancelToken.source();
+        console.log(source);
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+        };
+     axios.default.get(serverURL + "/joueurs",config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "getJoueur", text: response.data  });
     });
 }
 // Va rechercher toutes les équipes
 export function getEquipes() {
-     axios.default.get(serverURL + "/equipes")
+         let source: axios.CancelTokenSource;
+         source = axios.default.CancelToken.source();
+         
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+           
+        };
+     axios.default.get(serverURL + "/equipes",config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "getEquipe", text: response.data  });
     });
 }
 // Va rechercher toutes les niveaux
 export function getEquipesJoueur() {
-     axios.default.get(serverURL + "/equipes")
+      let source: axios.CancelTokenSource;
+         source = axios.default.CancelToken.source();
+         
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+           
+        };
+     axios.default.get(serverURL + "/equipes",config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "getEquipesJoueur", text: response.data  });
     });

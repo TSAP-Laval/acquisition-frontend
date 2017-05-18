@@ -1,5 +1,6 @@
 import dispatcher from "../dispatcher/dispatcher";
 import {serverURL} from "config";
+import AuthStore            from "../stores/AuthStore";
 import * as axios from "axios";
 export function getJoueur() {
     axios.default.get(serverURL + "/joueurs")
@@ -20,8 +21,19 @@ export function getReception() {
     });
 }
 export function getActionId(id: any) {
-     axios.default.get(serverURL + "/actionType/" + id)
+      let source: axios.CancelTokenSource;
+         source = axios.default.CancelToken.source();
+         
+        const config = {
+            cancelToken: source.token,
+            headers: {
+                "Authorization": "Bearer " + AuthStore.getToken(),
+            },
+           
+        };
+     axios.default.get(serverURL + "/actions/types/" + id,config)
     .then(function(response: any){
+        console.log(response.data)
         dispatcher.dispatch({ type: "GetUneAction", text: response.data });
     });
 }
