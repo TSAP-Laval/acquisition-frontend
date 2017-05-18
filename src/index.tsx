@@ -6,7 +6,7 @@ import { Home }   from "./pages/Home";
 import { Upload } from "./pages/Upload";
 import { Edit }   from "./pages/Edit";
 import { Layout } from "./pages/Layout";
-import { Login }  from "./pages/login";
+import { Login }  from "./pages/Login";
 // tslint:disable-next-line:no-var-requires
 import AuthStore  from "./stores/AuthStore";
 // tslint:enable:import-spacing
