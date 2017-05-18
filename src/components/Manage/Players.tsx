@@ -173,7 +173,6 @@ private RemplirSelect(){
 }
 private sendFormData(e: React.MouseEvent<HTMLInputElement>) {
     e.preventDefault();
-    console.log("wowo");
     // Va rechercher le formulaire
     const form = e.target as HTMLFormElement;
     // Va chercher le type de l'active
