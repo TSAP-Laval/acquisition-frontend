@@ -33,7 +33,6 @@ export function getActionId(id: any) {
         };
      axios.default.get(serverURL + "/actions/types/" + id,config)
     .then(function(response: any){
-        console.log(response.data)
         dispatcher.dispatch({ type: "GetUneAction", text: response.data });
     });
 }

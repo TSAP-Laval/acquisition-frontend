@@ -60,7 +60,7 @@ export function getSportJoueur() {
     dispatcher.dispatch({ type: "getSportJoueur", text: response.data  });
     });
 }
-// Va rechercher toutes les niveaux
+// Va rechercher toutes les niveau
 export function getNiveau() {
      axios.default.get(serverURL + "/niveaux")
     .then(function(response: any){

@@ -244,7 +244,6 @@ private  getParameterByName = () => {
 
       }
       const textJSon = JSON.stringify(text);
-      console.log(textJSon);
       Actions.postAction(textJSon);
 
       // Fermer le fenetre
@@ -308,7 +307,6 @@ private  getParameterByName = () => {
 
   private setToArrow = (e: any) => {
     // Dessiner la flèche
-    console.log(typeAction )
     if (this.state._firstClick === true) {
       x1 = e.nativeEvent.offsetX;
       y1 = e.nativeEvent.offsetY;

@@ -69,7 +69,6 @@ class EditStore extends EventEmitter {
             case "GetUneAction":
             this.uneAction = [];
             this.uneAction.push(action.text);
-            console.log(this.uneAction)
             this.emit("UnChange");
             break;
             case "getReception" :
