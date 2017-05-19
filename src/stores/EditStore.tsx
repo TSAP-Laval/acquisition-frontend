@@ -51,7 +51,7 @@ class EditStore extends EventEmitter {
         switch (action.type) {
             case "MATCH_EDIT.GETJOUEURS": {
                 // tslint:disable:prefer-for-of
-                for (let i = 0; i < action.text.length; i++)
+                for (let i = 0; i < action.text.length; i++
                 {
                     this.joueurs.push(action.text[i]);
                 }
