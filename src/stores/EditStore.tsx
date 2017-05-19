@@ -44,7 +44,7 @@ class EditStore extends EventEmitter {
     }
 
     public closeActionForm = (form: HTMLDivElement) => {
-        // $(form).toggleClass("form-open");
+         $(form).toggleClass("form-open");
     }
 
     public handleActions(action: any){
