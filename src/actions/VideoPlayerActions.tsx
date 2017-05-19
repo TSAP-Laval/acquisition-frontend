@@ -9,6 +9,7 @@ export function playVideo(state: boolean, video: HTMLVideoElement) {
     });
 }
 
+// Met le vidéo en pause
 export function pauseVideo(state: boolean, video: HTMLVideoElement) {
     dispatcher.dispatch({
         state,
@@ -17,6 +18,7 @@ export function pauseVideo(state: boolean, video: HTMLVideoElement) {
     });
 }
 
+// Recommence la lecture de la vidéo depuis le début
 export function restart(video: HTMLVideoElement) {
     dispatcher.dispatch({
         type: "VIDEO_PLAYER.RESTART",
@@ -24,6 +26,7 @@ export function restart(video: HTMLVideoElement) {
     });
 }
 
+// Recule la lecture de 5 secondes
 export function backFive(video: HTMLVideoElement) {
     dispatcher.dispatch({
         type: "VIDEO_PLAYER.BACK_FIVE",
@@ -31,6 +34,7 @@ export function backFive(video: HTMLVideoElement) {
     });
 }
 
+// Avance la lecture de 5 secondes
 export function forwardFive(video: HTMLVideoElement) {
     dispatcher.dispatch({
         type: "VIDEO_PLAYER.FORWARD_FIVE",
@@ -38,6 +42,7 @@ export function forwardFive(video: HTMLVideoElement) {
     });
 }
 
+// Arrêt de la lecture de la vidéo
 export function stopVideo(state: boolean, video: HTMLVideoElement) {
     dispatcher.dispatch({
         state,
@@ -46,6 +51,7 @@ export function stopVideo(state: boolean, video: HTMLVideoElement) {
     });
 }
 
+// Lecture précise de la vidéo
 export function slideTime(video: HTMLVideoElement, slider: HTMLInputElement) {
     dispatcher.dispatch({
         slider,
@@ -105,23 +111,25 @@ export function holdDelay(backing: boolean, video: HTMLVideoElement) {
         backing,
         type: "VIDEO_PLAYER.HOLD_BTN_DELAY",
         video,
-    })
+    });
 }
 
 export function backingStop(video: HTMLVideoElement) {
     dispatcher.dispatch({
         type: "VIDEO_PLAYER.HOLD_STOP",
         video,
-    })
+    });
 }
 
-export function playVideoFrameByFrameWithDirection(backing: boolean, numberOfFrameBySecond: number, video: HTMLVideoElement) {
+export function playVideoFrameByFrameWithDirection(backing: boolean,
+                                                   numberOfFrameBySecond: number,
+                                                   video: HTMLVideoElement) {
     dispatcher.dispatch({
         backing,
         numberOfFrameBySecond,
         type: "VIDEO_PLAYER.PLAY_FRAME_BY_FRAME_WITH_DIRECTION",
         video,
-    })
+    });
 }
 
 export function modifyFinderValue(increase: boolean, slider: HTMLInputElement, text: HTMLSpanElement) {
@@ -130,5 +138,5 @@ export function modifyFinderValue(increase: boolean, slider: HTMLInputElement, t
         slider,
         text,
         type: "VIDEO_PLAYER.MODIFY_FINDER_SPEED",
-    })
+    });
 }

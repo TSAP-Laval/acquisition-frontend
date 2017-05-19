@@ -188,7 +188,6 @@ footer {
     margin: auto;
 }
 
-
 /* Confirmation form */
 
 #confirm {
@@ -225,6 +224,19 @@ footer {
     max-height: 439px;
     overflow-y: auto;
     min-height: 0px;
+}
+
+
+/* Login page */
+/*==============================*/
+
+.center-login-div {
+    margin-top: 100px;
+    margin-left: 25%;
+}
+
+.panel-heading {
+    text-align: center !important;
 }
 
 
@@ -272,7 +284,7 @@ footer {
 }
 
 #sidebar>.nav>li span {
-    padding-left: 12px;
+    padding-left: 15px;
 }
 
 
@@ -455,4 +467,8 @@ footer {
 
 .invisible {
     display: none;
+}
+
+.close {
+    padding-right: 40px !important;
 }

@@ -1,87 +1,59 @@
-import { EventEmitter} from "events";
+// tslint:disable:import-spacing
+import { EventEmitter}  from "events";
+import Dispatcher       from "../dispatcher/dispatcher";
+import { IAction }      from "../interfaces/interfaces";
+// tslint:enable:import-spacing
 
-import Dispatcher from '../dispatcher/dispatcher';
-import { IAction } from "../interfaces/interfaces"
-
-
-/*************************************
-   Auteur : Mehdi Laribi
-   Store  : Actions
- *************************************/
 class ActionStore extends EventEmitter{
 
+    private actionsType: any[] = [];
+    private mvmActions: any[]= [];
 
-/*************************************
-   Variables
- *************************************/
-
-    actionsType: any[] = [];
-    mvmActions: any[]=[];
-    constructor(){
-        super()
+    public constructor(){
+        super();
     }
 
-
-
-
-/*************************************
-   Public functions
- *************************************/
-
-///
-/// Retourne la liste des actions 
-///
-
-    getAllActions(){
-        if(this.actionsType != null)
-        {
+    // Liste des actions
+    public getAllActions(){
+        if (this.actionsType != null) {
             return this.actionsType;
         }
-        }
+    }
 
-///
-/// Gestion des evenement  (Listener)
-///
-    handleActions(action: IAction){
-
+    public handleActions(action: IAction){
         switch (action.type) {
             case "POST_ACTIONTYPE":
-            if(action.text !="error")
-         {
-             var a =JSON.parse(action.text);
-             this.actionsType.push(a);
-         }
-               this.emit("change");
+                console.log("OKOK");
+                if (action.text !== "error")
+                {
+                    const a = JSON.parse(action.text);
+                    this.actionsType.push(a);
+                }
+                this.emit("change");
+                this.emit("action_added");
                 break;
             case "GET_ACTIONTYPE":
-
-            this.actionsType= [];
-                for(var i=0;i<action.text.length;i++)
-                {     
-                    this.actionsType.push(action.text[i]);  
+                this.actionsType = [];
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++) {
+                    this.actionsType.push(action.text[i]);
                 }
-            this.emit("change");
+                this.emit("change");
                 break;
-            
             case "GET_MVMTYPE":
                 this.mvmActions = [];
-                for(var i=0;i<action.text.length;i++)
-                {     
-                    this.mvmActions.push(action.text[i]);  
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < action.text.length; i++) {
+                    this.mvmActions.push(action.text[i]);
                 }
-            this.emit("change");
+                this.emit("change");
                 break;
-            
-
-
             default:
                 break;
         }
-
     }
-
 }
 
-const actionStore = new ActionStore;
+const actionStore = new ActionStore();
 Dispatcher.register(actionStore.handleActions.bind(actionStore));
 export default actionStore;

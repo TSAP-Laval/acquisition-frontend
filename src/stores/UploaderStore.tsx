@@ -20,6 +20,7 @@ class UploadStore extends EventEmitter {
     // tslint:disable-next-line:ban-types
     private response: Object = null;
     private gameID: number;
+    private gameInfos: any;
 
     constructor() {
         super();
@@ -67,13 +68,11 @@ class UploadStore extends EventEmitter {
 
         if (percentCompleted === 100) {
             this.addMessage(false, "UPLOAD_SUCCESS");
-
             this.emit("upload_ended");
         }
         else {
             // Only if it is still uploading. If the Operation
             // is canceled, it wont update...
-
             if (this.uploading) {
                 this.emit("uploading");
             }
@@ -130,17 +129,14 @@ class UploadStore extends EventEmitter {
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
 
-            if (typeof error.response !== typeof "undefined") {
-                if (error.response.status >= 500) {
-                    this.addMessage(true, error);
-                    this.cancelUpload();
-                    this.sendCancel();
-                    setTimeout(function() {
-                        this.emit("upload_ended");
-                        this.emit("close_form");
-                    }.bind(this), 500);
-                }
-            }
+            error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
+            this.addMessage(true, error);
+            this.cancelUpload();
+            this.sendCancel();
+            setTimeout(function() {
+                this.emit("upload_ended");
+                this.emit("close_form");
+            }.bind(this), 500);
         }.bind(this));
     }
 
@@ -205,7 +201,7 @@ class UploadStore extends EventEmitter {
 
     private save(teamID: number, opposingTeam: string, status: string,
                  locationID: number, fieldCondition: string, date: string) {
-        const gameInfos = {
+        this.gameInfos = {
             Date: date,
             FieldCondition: fieldCondition,
             LocationID: locationID,
@@ -221,11 +217,14 @@ class UploadStore extends EventEmitter {
                 "Content-Type": "application/json;",
             },
         };
+
         const url = serverURL + "/parties/" + this.gameID;
 
-        axios.default.put(url, gameInfos, config).then(function(r: axios.AxiosResponse) {
+        axios.default.put(url, this.gameInfos, config).then(function(r: axios.AxiosResponse) {
             // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.emit("saved");
+            this.addMessage(false, "SAVE");
+            this.emit("close_form");
         }.bind(this)).catch(function(error: axios.AxiosError) {
             // console.log("ERROR (XHR): \n" + error);
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
@@ -238,7 +237,6 @@ class UploadStore extends EventEmitter {
                 this.emit("close_form");
             }.bind(this), 500);
         }.bind(this));
-
     }
 
     private addMessage(isError: boolean = false, message: string = null) {
@@ -276,7 +274,7 @@ class UploadStore extends EventEmitter {
                 this.addMessage(action.isError, action.text);
                 break;
             case "UPLOAD.UPLOAD":
-                this.addMessage();
+                this.addMessage(false, "");
                 this.emit("uploading");
                 this.sendVideo(action.files);
                 this.emit("open_form");
@@ -304,8 +302,6 @@ class UploadStore extends EventEmitter {
             case "UPLOAD.SAVE":
                 this.save(action.teamID, action.opposingTeam, action.status,
                           action.locationID, action.fieldCondition, action.date);
-                this.addMessage(false, "SAVE");
-                this.emit("close_form");
                 break;
             case "UPLOAD.SEARCH_TEAM":
                 this.searchTeam(action.text);

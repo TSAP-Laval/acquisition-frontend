@@ -52,6 +52,8 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
                 msg = "Une erreur inconnue est survenue !" +
                 " Veuillez contacter l'administrateur pour plus de soutient";
                 break;
+            case "":
+                msg = "";
             default:
                 msg = this.props.message.message;
                 break;
@@ -59,11 +61,13 @@ export default class Message extends React.Component<ILayoutProps, ILayoutState>
 
         if (this.props.message.message !== "") {
             style = this.props.message.isError ? "error" : "success";
+        } else {
+            style = "";
         }
 
         return (
             <div className={style}>
-                    {msg}
+                {msg}
             </div>
         );
     }

@@ -5,19 +5,48 @@ import {
     ListGroupItem,
     Table,
 } from "react-bootstrap";
-import ActionsStore from "../stores/ActionsStore";
+import EditStore from "../stores/EditStore";
 import * as Actions from "../actions/UploadActions";
 // tslint:enable:import-spacing
 
 // tslint:disable:no-empty-interface
 export interface ILayoutProps { }
-export interface ILayoutState { }
+export interface ILayoutState {
+    actions: any[];
+ }
 // tslint:enable:no-empty-interface
 
 export default class Uploader extends React.Component<ILayoutProps, ILayoutState> {
 
     constructor() {
         super();
+
+        this.onActionAdded = this.onActionAdded.bind(this);
+
+        this.state = {
+            actions: [],
+        };
+    }
+
+    private componentWillMount() {
+        EditStore.on("actionChange", this.onActionAdded);
+    }
+
+    private componentDidMount() {
+        const url = window.location.href;
+        const res = url.split("/");
+        const gameID = parseInt(res[res.length - 1], 10);
+
+        EditStore.getActionsFromDB(gameID);
+    }
+
+    private componentWillUnmount() {
+        EditStore.removeListener("actionChange", this.onActionAdded);
+    }
+
+    private onActionAdded() {
+        console.log("NEW ACTION %o", EditStore.GetAllActions());
+        this.setState({ actions: EditStore.GetAllActions() });
     }
 
     public closeForm(index: number) {
@@ -27,12 +56,30 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
 
     public render() {
         const elements: any[] = [];
-        for (let index = 1; index < 200; index++) {
+
+        const joueurs = EditStore.GetAllJoueurs() as any[];
+        const actions = EditStore.GetAllActionsTypes() as any[];
+
+        for (let index = 0; index < this.state.actions.length; index++) {
+            let joueur: any;
+            joueurs.forEach((j) => {
+                if (j.ID === this.state.actions[index].PlayerID) {
+                    joueur = j;
+                }
+            });
+
+            let act: any;
+            actions.forEach((a) => {
+                if (a.ID === this.state.actions[index].ActionTypeID)  {
+                    act = a;
+                }
+            });
+
             elements.push(
                 <tr>
-                    <td>{index}</td>
-                    <td>Mark</td>
-                    <td>@mdo</td>
+                    <td>{index + 1}</td>
+                    <td>{joueur.Number}</td>
+                    <td>{act.Description}</td>
                     <td>
                         <button type="button" onClick={this.closeForm.bind(index)} className="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

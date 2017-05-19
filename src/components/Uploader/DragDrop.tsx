@@ -1,6 +1,8 @@
 import * as React from "react";
 import { browserHistory } from "react-router";
 
+import "../../sass/Layout.scss";
+
 // tslint:disable:import-spacing
 import * as Dropzone    from "react-dropzone";
 import * as Actions     from "../../actions/UploadActions";
@@ -20,6 +22,7 @@ export interface ILayoutState {
     uploading?: boolean;
     open_form?: boolean;
     openConfirmForm?: boolean;
+    saved?: boolean;
 }
 
 export default class DragDrop extends React.Component<ILayoutProps, ILayoutState> {
@@ -45,6 +48,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
             message: Store.getMessage(),
             open_form: false,
             progress: ["0"],
+            saved: false,
             uploading: false,
         };
     }
@@ -65,7 +69,16 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     public componentWillUnmount() {
-        Store.removeAllListeners();
+        Store.removeListener("message", this._onMessage);
+
+        Store.removeListener("uploading", this._onUploading);
+        Store.removeListener("upload_ended", this._onUploadEnd);
+
+        Store.removeListener("open_form", this._onOpenForm);
+        Store.removeListener("close_form", this._onCloseForm);
+
+        Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
+        Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
     }
 
     private _onMessage() {
@@ -73,13 +86,15 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     private _onUploading() {
-        this.setState({progress: Store.getProgress()});
-        this.setState({uploading: true});
+        this.setState({ progress: Store.getProgress(), uploading: true });
     }
 
     private _onUploadEnd() {
-        this.setState({progress: Store.getProgress()});
-        this.setState({uploading: false});
+        if (this.state.saved && Store.getProgress()[0] === "100") {
+            browserHistory.push("edit/" + Store.getGameID());
+        } else {
+            this.setState({ progress: Store.getProgress(), uploading: false });
+        }
     }
 
     private _onOpenForm() {
@@ -99,8 +114,11 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
     }
 
     public _onSaved() {
-        console.log("GAME ID : ", Store.getGameID());
-        browserHistory.push("edit/" + Store.getGameID());
+        if (!this.state.uploading && Store.getProgress()[0] === "100") {
+            browserHistory.push("edit/" + Store.getGameID());
+        } else {
+            this.setState({ saved: true });
+        }
     }
 
     public closeForm() {

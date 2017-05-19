@@ -1,5 +1,6 @@
 import dispatcher from "../dispatcher/dispatcher";
 
+// Affichage d'un message de succès ou d'erreur
 export function showMessage(txt: string, isErr: boolean) {
     dispatcher.dispatch({
         isError: isErr,
@@ -8,6 +9,7 @@ export function showMessage(txt: string, isErr: boolean) {
     });
 }
 
+// Upload d'un ou de plusieurs fichiers
 export function upload(f: File[]) {
     dispatcher.dispatch({
         files: f,
@@ -15,24 +17,28 @@ export function upload(f: File[]) {
     });
 }
 
+// Fermeture du formulaire et ouverture du formulaire de confirmations d'annulation
 export function closeForm() {
     dispatcher.dispatch({
         type: "UPLOAD.OPEN_CONFIRM_FORM",
     });
 }
 
+// Fermeture du formulaire de confimation d'annulation de l'upload
 export function closeConfirmForm() {
     dispatcher.dispatch({
         type: "UPLOAD.CLOSE_CONFIRM_FORM",
     });
 }
 
+// Annulation de l'upload du ou des fichiers
 export function cancelUpload() {
     dispatcher.dispatch({
         type: "UPLOAD.CANCEL_UPLOAD",
     });
 }
 
+// Sauvegarde des informations sur la partie
 export function save(tID: number, oTeam: string, st: string,
                      lID: number, fieldCond: string, dt: string) {
     dispatcher.dispatch({
@@ -46,6 +52,7 @@ export function save(tID: number, oTeam: string, st: string,
     });
 }
 
+// Recherche sur les équipes
 export function searchTeam(team: string) {
     dispatcher.dispatch({
         text: team,
@@ -53,6 +60,7 @@ export function searchTeam(team: string) {
     });
 }
 
+// Recherche sur les terrains
 export function searchField(field: string) {
     dispatcher.dispatch({
         text: field,
