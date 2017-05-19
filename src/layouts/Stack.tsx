@@ -45,7 +45,6 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
     }
 
     private onActionAdded() {
-        console.log("NEW ACTION %o", EditStore.GetAllActions());
         this.setState({ actions: EditStore.GetAllActions() });
     }
 

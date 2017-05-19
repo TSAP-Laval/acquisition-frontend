@@ -23,7 +23,6 @@ class ActionStore extends EventEmitter{
     public handleActions(action: IAction){
         switch (action.type) {
             case "POST_ACTIONTYPE":
-                console.log("OKOK");
                 if (action.text !== "error")
                 {
                     const a = JSON.parse(action.text);
