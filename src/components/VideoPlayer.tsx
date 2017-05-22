@@ -9,6 +9,7 @@ export interface ILayoutProps {
 export interface ILayoutState {
     holdingSearch: boolean;
     playing: boolean;
+    overVideoZooming: boolean;
 }
 
 export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutState> {
@@ -16,6 +17,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         super(props);
         this.state = {
             holdingSearch: false,
+            overVideoZooming: false,
             playing: false,
         };
     }
@@ -29,9 +31,9 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
     }
 
     private componentDidMount = () => {
-        const slider = document.getElementById("my-slider") as HTMLInputElement;
+        const slider        = document.getElementById("my-slider") as HTMLInputElement;
         const stepperSlider = document.getElementById("stepRange") as HTMLInputElement;
-        const video = document.getElementById("my-player") as HTMLVideoElement;
+
         slider.value = "0";
         stepperSlider.value = "100";
         keymaster("p", this.onPlay);
@@ -41,6 +43,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         keymaster("right", this.onForwardFive);
         keymaster("a", this.increaseFinderValue);
         keymaster("z", this.decreaseFinderValue);
+        keymaster("l", this.setDrawZoom);
     }
 
     private increaseFinderValue = () => {
@@ -176,6 +179,29 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
         // console.log(event.key);
     }
 
+    private drawZoom = (e: React.MouseEvent<HTMLInputElement>) => {
+        const video         = document.getElementById("my-player") as HTMLVideoElement;
+        const canvas        = document.getElementById("video-cvs") as HTMLCanvasElement;
+        const x             = e.pageX - (
+            (window.innerWidth - (video.videoWidth / 1.2)) / (video.videoWidth / video.videoHeight)
+            );
+        const y             = e.pageY - 40;
+        const mouse         = {x: e.pageX, y: e.pageY};
+        if (this.state.overVideoZooming) {
+            Actions.setZoomOnVideo(video, canvas, x, y, mouse);
+        } else {
+            Actions.removeZoomOnVideo(canvas);
+        }
+    }
+
+    private setDrawZoom = () => {
+        const canvas = document.getElementById("video-cvs") as HTMLCanvasElement;
+        this.setState({overVideoZooming: !this.state.overVideoZooming});
+        if (!this.state.overVideoZooming) {
+            Actions.removeZoomOnVideo(canvas);
+        }
+    }
+
     public render() {
         return (
             <div>
@@ -201,10 +227,11 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     onTimeUpdate={this.onVideoPlaying}
                     onMouseOver={this.onVideoMouseOver}
                     onMouseLeave={this.onVideoMouseLeave}
+                    onMouseMove={this.drawZoom.bind(this)}
                     data-setup="{}"
                 >
                     <source
-                        src={this.props.url}
+                        src="http://vjs.zencdn.net/v/oceans.mp4"
                         type="video/mp4"
                     />
                     <p className="vjs-no-js">
@@ -215,6 +242,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         </a>
                     </p>
                 </video>
+                <canvas id="video-cvs" className="hidden"/>
                 <div
                     className="video-controls-container"
                     onMouseOver={this.onVideoMouseOver}
@@ -259,7 +287,10 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                         onMouseDown={this.onForwardingHold}
                         onMouseUp={this.onBackingStop}
                     >
-                    <i className="glyphicon glyphicon-step-forward"/>
+                        <i className="glyphicon glyphicon-step-forward"/>
+                    </button>
+                    <button className="video-controls" onClick={this.setDrawZoom}>
+                        <i className="glyphicon glyphicon-zoom-in"/>
                     </button>
                     <div id="slowFinder">
                         <div className="slideTrack"/>

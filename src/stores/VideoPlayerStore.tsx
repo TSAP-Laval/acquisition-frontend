@@ -7,11 +7,19 @@ class VideoPlayerStore extends EventEmitter {
     protected forwadingStep: number;
     protected timerForHolding: any;
     protected holdingInterval: any;
+    protected zoom: {
+        height: number,
+        width: number,
+    };
+    protected zoomHeight: number;
+    protected zoomWidth: number;
 
     constructor() {
         super();
         this.currentTime = 0;
         this.step = 5;
+        this.zoomHeight = 80;
+        this.zoomWidth = 80;
     }
 
     public getStep = () => {
@@ -20,12 +28,12 @@ class VideoPlayerStore extends EventEmitter {
 
     private play = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
-            document.getElementById("play-button").classList.remove('glyphicon-pause');
-            document.getElementById("play-button").classList.add('glyphicon-play');
+            document.getElementById("play-button").classList.remove("glyphicon-pause");
+            document.getElementById("play-button").classList.add("glyphicon-play");
             video.pause();
         } else {
-            document.getElementById("play-button").classList.remove('glyphicon-play');
-            document.getElementById("play-button").classList.add('glyphicon-pause');
+            document.getElementById("play-button").classList.remove("glyphicon-play");
+            document.getElementById("play-button").classList.add("glyphicon-pause");
             video.play();
         }
     }
@@ -33,8 +41,8 @@ class VideoPlayerStore extends EventEmitter {
     private pause = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             video.pause();
-            document.getElementById("play-button").classList.remove('glyphicon-pause');
-            document.getElementById("play-button").classList.add('glyphicon-play');
+            document.getElementById("play-button").classList.remove("glyphicon-pause");
+            document.getElementById("play-button").classList.add("glyphicon-play");
             this.emit("pausing");
         }
     }
@@ -42,8 +50,8 @@ class VideoPlayerStore extends EventEmitter {
     private stop = (state: boolean, video: HTMLVideoElement) => {
         if (state) {
             video.pause();
-            document.getElementById("play-button").classList.remove('glyphicon-pause');
-            document.getElementById("play-button").classList.add('glyphicon-play');
+            document.getElementById("play-button").classList.remove("glyphicon-pause");
+            document.getElementById("play-button").classList.add("glyphicon-play");
             video.currentTime = 0;
             this.emit("pausing");
         }
@@ -93,14 +101,15 @@ class VideoPlayerStore extends EventEmitter {
 
     private setSliderPaddingBottom = (state: boolean, slider: HTMLInputElement) => {
         if (state) {
-            slider.classList.remove('down');
+            slider.classList.remove("down");
         } else {
-            slider.classList.add('down');
+            slider.classList.add("down");
         }
     }
 
     private startDelaying = (waitTime: number, backing: boolean, video: HTMLVideoElement) => {
-        this.timerForHolding = setTimeout(this.emit.bind(this, (backing ? "holdingBackward" : "holdingForward")), waitTime * 1000);
+        this.timerForHolding = setTimeout(this.emit.bind(this,
+        (backing ? "holdingBackward" : "holdingForward")), waitTime * 1000);
     }
 
     private stopHoldingSearch = (video: HTMLVideoElement) => {
@@ -109,21 +118,38 @@ class VideoPlayerStore extends EventEmitter {
         this.pause(true, video);
     }
 
-    private playVideoFrameByFrameWithDirection = (backing: boolean, numberOfFrameBySecond: number, video: HTMLVideoElement) => {
+    private playVideoFrameByFrameWithDirection = (
+        backing: boolean,
+        numberOfFrameBySecond: number,
+        video: HTMLVideoElement) => {
         if (backing) {
             this.holdingInterval = setInterval(function() {
                 this.back(video);
-            }.bind(this), numberOfFrameBySecond * 1000)
+            }.bind(this), numberOfFrameBySecond * 1000);
         } else {
             this.holdingInterval = setInterval(function() {
                 this.forward(video);
-            }.bind(this), numberOfFrameBySecond * 1000)
+            }.bind(this), numberOfFrameBySecond * 1000);
         }
     }
 
     private modifySliderSpeed = (increase: boolean, slider: HTMLInputElement, text: HTMLSpanElement) => {
         slider.value = (parseInt(slider.value, 10) + (increase ? 5 : -5)).toString();
         this.setStep(text, slider);
+    }
+
+    private setZoomOnVideo = (video: HTMLVideoElement, canvas: HTMLCanvasElement, x: number, y: number, mouse: any) => {
+        this.pause(true, video);
+        const context = canvas.getContext("2d");
+        canvas.style.left = mouse.x - (canvas.width / 2.5) + "px";
+        canvas.style.top = mouse.y + 50 + "px";
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(video, x, y, this.zoomWidth, this.zoomHeight, 0, 0, canvas.width, canvas.height);
+        canvas.classList.remove("hidden");
+    }
+
+    private removeZoomOnVideo = (canvas: HTMLCanvasElement) => {
+        canvas.classList.add("hidden");
     }
 
     public handlerActions = (action: any) => {
@@ -197,6 +223,14 @@ class VideoPlayerStore extends EventEmitter {
             }
             case "VIDEO_PLAYER.MODIFY_FINDER_SPEED" : {
                 this.modifySliderSpeed(action.increase, action.slider, action.text);
+                break;
+            }
+            case "VIDEO_PLAYER.SET_ZOOM_ON_VIDEO" : {
+                this.setZoomOnVideo(action.video, action.canvas, action.x, action.y, action.mouse);
+                break;
+            }
+            case "VIDEO_PLAYER.REMOVE_ZOOM_ON_VIDEO" : {
+                this.removeZoomOnVideo(action.canvas);
                 break;
             }
             default:
