@@ -231,7 +231,7 @@ export default class VideoPlayer extends React.Component<ILayoutProps, ILayoutSt
                     data-setup="{}"
                 >
                     <source
-                        src="http://vjs.zencdn.net/v/oceans.mp4"
+                        src={this.props.url}
                         type="video/mp4"
                     />
                     <p className="vjs-no-js">
