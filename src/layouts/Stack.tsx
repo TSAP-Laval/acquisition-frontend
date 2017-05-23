@@ -79,14 +79,14 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
         const actions = EditStore.GetAllActionsTypes() as any[];
 
         for (let index = this.state.actions.length - 1; index >= 0; index--) {
-            let joueur: any;
+            let joueur: any = joueurs[0];
             joueurs.forEach((j) => {
                 if (j.ID === this.state.actions[index].PlayerID) {
                     joueur = j;
                 }
             });
 
-            let act: any;
+            let act: any = actions[0];
             actions.forEach((a) => {
                 if (a.ID === this.state.actions[index].ActionTypeID)  {
                     act = a;

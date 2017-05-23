@@ -22,10 +22,10 @@ class StackStore extends EventEmitter {
         const url = serverURL + "/actions/" + index;
 
         axios.default.delete(url, config).then(function(r: axios.AxiosResponse) {
-            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.emit("action_deleted");
         }.bind(this)).catch(function(error: axios.AxiosError) {
-            console.log("ERROR (XHR): \n" + error);
+            // console.log("ERROR (XHR): \n" + error);
             error = typeof error.response === "undefined" ? "UNKNOWN" : error.response.data.error;
             // this.addMessage(true, error);
         }.bind(this));
