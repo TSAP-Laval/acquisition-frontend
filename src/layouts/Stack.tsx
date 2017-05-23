@@ -5,36 +5,106 @@ import {
     ListGroupItem,
     Table,
 } from "react-bootstrap";
-import ActionsStore from "../stores/ActionsStore";
-import * as Actions from "../actions/UploadActions";
+import EditStore from "../stores/EditStore";
+import StackStore from "../stores/StackStore";
+import * as UploadActions from "../actions/UploadActions";
+import * as StackActions from "../actions/StackActions";
 // tslint:enable:import-spacing
 
 // tslint:disable:no-empty-interface
 export interface ILayoutProps { }
-export interface ILayoutState { }
+export interface ILayoutState {
+    actions: any[];
+ }
 // tslint:enable:no-empty-interface
 
 export default class Uploader extends React.Component<ILayoutProps, ILayoutState> {
 
+    private gameID: number = 0;
+
     constructor() {
         super();
+
+        this.onActionAdded = this.onActionAdded.bind(this);
+        this.onActionLoaded = this.onActionLoaded.bind(this);
+        this.onActionDelete = this.onActionDelete.bind(this);
+
+        this.state = {
+            actions: [],
+        };
     }
 
-    public closeForm(index: number) {
+    private componentWillMount() {
+        EditStore.on("actionChange", this.onActionAdded);
+        EditStore.on("action_loaded", this.onActionLoaded);
+        StackStore.on("action_deleted", this.onActionDelete);
+    }
+
+    private componentDidMount() {
+        const url = window.location.href;
+        const res = url.split("/");
+        this.gameID = parseInt(res[res.length - 1], 10);
+
+        EditStore.getActionsFromDB(this.gameID);
+    }
+
+    private componentWillUnmount() {
+        EditStore.removeListener("actionChange", this.onActionAdded);
+        EditStore.removeListener("action_loaded", this.onActionLoaded);
+        StackStore.removeListener("action_deleted", this.onActionDelete);
+    }
+
+    private onActionAdded() {
+        EditStore.getActionsFromDB(this.gameID);
+    }
+
+    private onActionDelete() {
+        EditStore.getActionsFromDB(this.gameID);
+    }
+
+    private onActionLoaded() {
+        this.setState({ actions: EditStore.GetAllActions() });
+    }
+
+    public deleteAction(e: React.MouseEvent<HTMLButtonElement>, index: number) {
         /* TODO : DELETE actions(index) from the store/DB */
-        Actions.closeForm();
+        // Actions.closeForm();
+        StackActions.deleteAction(index);
     }
 
     public render() {
         const elements: any[] = [];
-        for (let index = 1; index < 200; index++) {
+
+        const joueurs = EditStore.GetAllJoueurs() as any[];
+        const actions = EditStore.GetAllActionsTypes() as any[];
+
+        for (let index = this.state.actions.length - 1; index >= 0; index--) {
+            let joueur: any;
+            joueurs.forEach((j) => {
+                if (j.ID === this.state.actions[index].PlayerID) {
+                    joueur = j;
+                }
+            });
+
+            let act: any;
+            actions.forEach((a) => {
+                if (a.ID === this.state.actions[index].ActionTypeID)  {
+                    act = a;
+                }
+            });
+
             elements.push(
                 <tr>
-                    <td>{index}</td>
-                    <td>Mark</td>
-                    <td>@mdo</td>
+                    <td>{index + 1}</td>
+                    <td>{joueur.Number}</td>
+                    <td>{act.Description}</td>
                     <td>
-                        <button type="button" onClick={this.closeForm.bind(index)} className="close" aria-label="Close">
+                        <button
+                            type="button"
+                            onClick={(e) => this.deleteAction(e, this.state.actions[index].ID)}
+                            className="close"
+                            aria-label="Close"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </td>

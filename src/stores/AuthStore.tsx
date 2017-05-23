@@ -40,10 +40,11 @@ class AuthStore extends EventEmitter {
         return this.message;
     }
 
-    private login(username: string, password: string) {
+    private login(username: string, password: string, remember: boolean) {
         const userInfos = {
             Email: username,
             PassHash: password,
+            Remember: remember,
         };
 
         const url = serverURL + "/auth";
@@ -61,15 +62,14 @@ class AuthStore extends EventEmitter {
     }
 
     private logout() {
-        localStorage.token = null;
+        localStorage.token = "";
         this.removeToken(this.token);
-        this.emit("logged_out");
     }
 
     public handleActions(action: IAuth) {
         switch (action.type) {
             case "AUTH.LOGIN":
-                this.login(action.username, action.password);
+                this.login(action.username, action.password, action.remember);
                 break;
             case "AUTH.LOGOUT":
                 this.logout();

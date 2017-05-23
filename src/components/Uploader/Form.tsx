@@ -88,7 +88,10 @@ export default class Form extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public componentWillUnmount() {
-        Store.removeAllListeners();
+        Store.removeListener("open_confirm_form", this._onOpenConfirmForm);
+        Store.removeListener("close_confirm_form", this._onCloseConfirmForm);
+        Store.removeListener("team_searched", this._onTeamSearch);
+        Store.removeListener("field_searched", this._onFieldSearch);
     }
 
     public shouldComponentUpdate(nextState: ILayoutState) {

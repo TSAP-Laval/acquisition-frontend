@@ -1,10 +1,11 @@
 import dispatcher from "../dispatcher/dispatcher";
 
-export function login(usr: string, pass: string) {
+export function login(username: string, password: string, remember: boolean) {
     dispatcher.dispatch({
-        password: pass,
+        password,
+        remember,
         type: "AUTH.LOGIN",
-        username: usr,
+        username,
     });
 }
 
