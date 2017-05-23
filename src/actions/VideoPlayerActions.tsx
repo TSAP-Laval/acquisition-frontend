@@ -121,9 +121,10 @@ export function backingStop(video: HTMLVideoElement) {
     });
 }
 
-export function playVideoFrameByFrameWithDirection(backing: boolean,
-                                                   numberOfFrameBySecond: number,
-                                                   video: HTMLVideoElement) {
+export function playVideoFrameByFrameWithDirection(
+    backing: boolean,
+    numberOfFrameBySecond: number,
+    video: HTMLVideoElement) {
     dispatcher.dispatch({
         backing,
         numberOfFrameBySecond,
@@ -138,5 +139,23 @@ export function modifyFinderValue(increase: boolean, slider: HTMLInputElement, t
         slider,
         text,
         type: "VIDEO_PLAYER.MODIFY_FINDER_SPEED",
+    });
+}
+
+export function setZoomOnVideo(video: HTMLVideoElement, canvas: HTMLCanvasElement, x: number, y: number, mouse: any) {
+    dispatcher.dispatch({
+        canvas,
+        mouse,
+        type: "VIDEO_PLAYER.SET_ZOOM_ON_VIDEO",
+        video,
+        x,
+        y,
+    });
+}
+
+export function removeZoomOnVideo(canvas: HTMLCanvasElement) {
+    dispatcher.dispatch({
+        canvas,
+        type: "VIDEO_PLAYER.REMOVE_ZOOM_ON_VIDEO",
     });
 }
