@@ -206,7 +206,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
                         HomeScore: homeScoreInt,
                         PlayerID : numJoueur,
                         ReceptionTypeID: idReception,
-                        Time: video.currentTime,
+                        Time: parseFloat(video.currentTime.toFixed(4)),
                         X1: x1,
                         X2: x2,
                         X3: x3,
@@ -229,7 +229,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
                         HomeScore: homeScoreInt,
                         PlayerID: numJoueur,
                         ReceptionTypeID : idReception,
-                        Time: video.currentTime,
+                        Time: parseFloat(video.currentTime.toFixed(4)),
                         X1 : x1,
                         X2 : x2,
                         X3: 0,
@@ -239,7 +239,6 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
                         ZoneID: 1,
                     };
                 }
-
                 const textJSon = JSON.stringify(text);
                 Actions.postAction(textJSon);
 

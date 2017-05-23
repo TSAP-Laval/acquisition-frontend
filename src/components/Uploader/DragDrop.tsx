@@ -176,7 +176,7 @@ export default class DragDrop extends React.Component<ILayoutProps, ILayoutState
                 <div>
                     {/* tslint:disable-next-line:jsx-boolean-value */}
                     <ProgressBar active now={progress} label={`${progress}%`} />
-                    <button type="button" onClick={this.closeForm} className="close" aria-label="Close">
+                    <button type="button" onClick={this.closeForm} className="close-upload" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

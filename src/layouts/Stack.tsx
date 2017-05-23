@@ -6,7 +6,9 @@ import {
     Table,
 } from "react-bootstrap";
 import EditStore from "../stores/EditStore";
-import * as Actions from "../actions/UploadActions";
+import StackStore from "../stores/StackStore";
+import * as UploadActions from "../actions/UploadActions";
+import * as StackActions from "../actions/StackActions";
 // tslint:enable:import-spacing
 
 // tslint:disable:no-empty-interface
@@ -18,10 +20,14 @@ export interface ILayoutState {
 
 export default class Uploader extends React.Component<ILayoutProps, ILayoutState> {
 
+    private gameID: number = 0;
+
     constructor() {
         super();
 
         this.onActionAdded = this.onActionAdded.bind(this);
+        this.onActionLoaded = this.onActionLoaded.bind(this);
+        this.onActionDelete = this.onActionDelete.bind(this);
 
         this.state = {
             actions: [],
@@ -30,27 +36,40 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
 
     private componentWillMount() {
         EditStore.on("actionChange", this.onActionAdded);
+        EditStore.on("action_loaded", this.onActionLoaded);
+        StackStore.on("action_deleted", this.onActionDelete);
     }
 
     private componentDidMount() {
         const url = window.location.href;
         const res = url.split("/");
-        const gameID = parseInt(res[res.length - 1], 10);
+        this.gameID = parseInt(res[res.length - 1], 10);
 
-        EditStore.getActionsFromDB(gameID);
+        EditStore.getActionsFromDB(this.gameID);
     }
 
     private componentWillUnmount() {
         EditStore.removeListener("actionChange", this.onActionAdded);
+        EditStore.removeListener("action_loaded", this.onActionLoaded);
+        StackStore.removeListener("action_deleted", this.onActionDelete);
     }
 
     private onActionAdded() {
+        EditStore.getActionsFromDB(this.gameID);
+    }
+
+    private onActionDelete() {
+        EditStore.getActionsFromDB(this.gameID);
+    }
+
+    private onActionLoaded() {
         this.setState({ actions: EditStore.GetAllActions() });
     }
 
-    public closeForm(index: number) {
+    public deleteAction(e: React.MouseEvent<HTMLButtonElement>, index: number) {
         /* TODO : DELETE actions(index) from the store/DB */
-        Actions.closeForm();
+        // Actions.closeForm();
+        StackActions.deleteAction(index);
     }
 
     public render() {
@@ -59,7 +78,7 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
         const joueurs = EditStore.GetAllJoueurs() as any[];
         const actions = EditStore.GetAllActionsTypes() as any[];
 
-        for (let index = 0; index < this.state.actions.length; index++) {
+        for (let index = this.state.actions.length - 1; index >= 0; index--) {
             let joueur: any;
             joueurs.forEach((j) => {
                 if (j.ID === this.state.actions[index].PlayerID) {
@@ -80,7 +99,12 @@ export default class Uploader extends React.Component<ILayoutProps, ILayoutState
                     <td>{joueur.Number}</td>
                     <td>{act.Description}</td>
                     <td>
-                        <button type="button" onClick={this.closeForm.bind(index)} className="close" aria-label="Close">
+                        <button
+                            type="button"
+                            onClick={(e) => this.deleteAction(e, this.state.actions[index].ID)}
+                            className="close"
+                            aria-label="Close"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </td>

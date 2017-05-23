@@ -435,13 +435,25 @@ footer {
         float: left;
     }
 
-    td:last-child, thead th:last-child {
-        width: 10%;
+    td:nth-child(2), thead th:nth-child(2) {
+        width: 20%;
     }
 
-    td, thead th{
-        width: 40%;
+    td:last-child, thead th:last-child {
+        width: 15%;
+    }
+
+    thead th:nth-child(3) {
+        text-align: center;
+    }
+
+    td, thead th {
+        width: 55%;
         float: left;
+    }
+
+    tr button {
+        z-index: 15;
     }
 }
 
@@ -469,6 +481,6 @@ footer {
     display: none;
 }
 
-.close {
+.close-upload {
     padding-right: 40px !important;
 }

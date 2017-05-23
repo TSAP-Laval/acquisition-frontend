@@ -21,7 +21,7 @@ export function getJoueur() {
 
 // Récupération de toutes les types d'actions
 export function getActionsEdit() {
-     axios.default.get(serverURL + "/actions", config)
+     axios.default.get(serverURL + "/actions/types", config)
     .then(function(response: any){
         dispatcher.dispatch({ type: "GetActionsEdit", text: response.data });
     });
@@ -48,7 +48,8 @@ export function postAction(stringContenu: any) {
     axios.default.post(serverURL + "/actions", stringContenu, config)
     .then(function(r: any) {
         dispatcher.dispatch({ type: "postActionEdit", text: stringContenu });
-    }).catch(function(error: string) {
+    }).catch(function(error: axios.AxiosError) {
+        // console.log("ERROR (XHR): \n" + error);
         dispatcher.dispatch({ type: "postActionEdit", text: "error" });
     });
 }
