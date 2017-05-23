@@ -8,6 +8,8 @@ import UploaderStore  from "../stores/UploaderStore";
 import * as Actions   from "../actions/EditAction";
 import Header         from "./Header";
 import * as Motion    from "react-motion";
+import * as Draggable from "react-draggable";
+import * as d3        from "d3";
 // tslint:enable:import-spacing
 
 import "../sass/Layout.scss";
@@ -45,17 +47,19 @@ let rows: any = [
                     [], [], [],
                   ],
                 ];
+let joeursBanc: any = [];
+
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
   constructor(props: any) {
       super(props);
       this.state = {
         _actionChosen: "",
         _actions: [],
-        _receptionsChosen: "",
-        _receptions: [],
         _firstClick: true,
         _formState: 0,
         _lesJoueurs: [],
+        _receptions: [],
+        _receptionsChosen: "",
       };
   }
  private componentWillMount = () => {
@@ -66,15 +70,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
    Store.on("playersLoaded", () => {
 
-      this.setState({
-        _actionChosen: this.state._actionChosen,
-        _actions: this.state._actions,
-        _receptionsChosen: this.state._receptionsChosen,
-        _receptions: this.state._receptions,
-        _firstClick: true,
-        _formState: this.state._formState,
-        _lesJoueurs: Store.GetAllJoueurs(),
-      });
+      this.setState({_firstClick: true, _lesJoueurs: Store.GetAllJoueurs()});
     });
    Store.on("actionsLoaded", () => {
 
@@ -87,15 +83,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
       });
     });
    Store.on("receptionLoaded", () => {
-      this.setState({
-        _actionChosen: this.state._actionChosen,
-        _actions:this.state._actions,
-        _receptionsChosen: this.state._receptionsChosen,
-        _receptions: Store.GetAllReception(),
-        _firstClick: this.state._firstClick,
-        _formState: this.state._formState,
-        _lesJoueurs: this.state._lesJoueurs,
-      });
+      this.setState({_receptions: Store.GetAllReception()});
     });
 
    Store.on("UnChange", () => {
@@ -115,7 +103,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 private  getParameterByName = () => {
    const url = window.location.href;
    const res = url.split("/");
-   return res[res.length -1];
+   return res[res.length - 1];
   }
  private changeTwoLi = (nom1: string, nom2: string) => {
     // tslint:disable:prefer-const
@@ -190,67 +178,63 @@ private  getParameterByName = () => {
     let scoreAway = letscoreAway.value;
     let video = document.getElementById("my-player") as HTMLVideoElement;
     let TypeAction = 5;
-    let homeScoreInt = parseInt(scoreDom);
-    let awayScoreInt = parseInt(scoreAway);
-    const idGame = parseInt(this.getParameterByName());
-    if ( scoreDom !== "" && scoreAway !== "" && x1 !== 0 && x2 !== 0 && y1 !== 0 && y2 !== 0)
-    {
-    error.innerHTML ="";
-    if (TypeAction !== 0) {
-      let text ;
-      if ( this.state._firstClick === false && (typeAction === "reception et action" ||typeAction === "passe incomplete"))
-      {
-        text = {
-            ActionTypeID : this.state._actionChosen,
-            ReceptionTypeID : idReception,
-            ZoneID : 1, 
-            GameID : idGame,
-            X1 : x1,
-            Y1 : y1,
-            X2 : x2,
-            Y2 : y2,
-            X3 : x3,
-            Y3 : y3,
-            Time : video.currentTime,
-            HomeScore : homeScoreInt,
-            GuestScore : awayScoreInt,
-            PlayerID : numJoueur,
-
-      };
-      if(typeAction === "passe incomplete")
-      {
-        x3=0;
-        y3=0;
-      }
-      }
-      else
-      {
-        text = {
-            ActionTypeID : this.state._actionChosen,
-            ReceptionTypeID : idReception,
-            ZoneID : 1,
-            GameID : 1,
-            X1 : x1,
-            Y1 : y1,
-            X2 : x2,
-            Y2 : y2,
-            X3 : 0,
-            Y3 : 0,
-            Time : video.currentTime,
-            HomeScore : homeScoreInt,
-            GuestScore : awayScoreInt,
-            PlayerID : numJoueur,
+    let homeScoreInt = parseInt(scoreDom, 10);
+    let awayScoreInt = parseInt(scoreAway, 10);
+    const idGame = parseInt(this.getParameterByName(), 10);
+    if ( scoreDom !== "" && scoreAway !== "" && x1 !== 0 && x2 !== 0 && y1 !== 0 && y2 !== 0) {
+      error.innerHTML = "";
+      if (TypeAction !== 0) {
+        let text ;
+        if (
+          this.state._firstClick === false &&
+          (typeAction === "reception et action" || typeAction === "passe incomplete")) {
+          text = {
+              ActionTypeID : this.state._actionChosen,
+              GameID : idGame,
+              GuestScore : awayScoreInt,
+              HomeScore : homeScoreInt,
+              PlayerID : numJoueur,
+              ReceptionTypeID : idReception,
+              Time : video.currentTime,
+              X1 : x1,
+              X2 : x2,
+              X3 : x3,
+              Y1 : y1,
+              Y2 : y2,
+              Y3 : y3,
+              ZoneID : 1,
         };
+          if (typeAction === "passe incomplete") {
+            x3 = 0;
+            y3 = 0;
+          }
+        } else {
+          text = {
+              ActionTypeID : this.state._actionChosen,
+              GameID : 1,
+              GuestScore : awayScoreInt,
+              HomeScore : homeScoreInt,
+              PlayerID : numJoueur,
+              ReceptionTypeID : idReception,
+              Time : video.currentTime,
+              X1 : x1,
+              X2 : x2,
+              X3 : 0,
+              Y1 : y1,
+              Y2 : y2,
+              Y3 : 0,
+              ZoneID : 1,
+          };
 
+        }
+        const textJSon = JSON.stringify(text);
+        Actions.postAction(textJSon);
+
+        // Fermer le fenetre
+        this.returnFirstStateForm();
+        this.closeActionForm();
+        this.closeActionForm.bind(this);
       }
-      const textJSon = JSON.stringify(text);
-      Actions.postAction(textJSon);
-
-      // Fermer le fenetre
-      this.returnFirstStateForm();
-      this.closeActionForm();
-      this.closeActionForm.bind(this);
-    }
     }
     else
     {
@@ -265,15 +249,7 @@ private  getParameterByName = () => {
 
   private setTerrainToInfo = () => {
     // Définir l'action finale du joueur.
-    this.setState({
-      _actionChosen: this.state._actionChosen,
-      _actions: this.state._actions,
-      _receptionsChosen: this.state._receptionsChosen,
-      _receptions: this.state._receptions,
-      _firstClick: this.state._firstClick,
-      _formState: 2,
-      _lesJoueurs: this.state._lesJoueurs,
-    });
+    this.setState({_formState: 2});
   }
 
   private setActionFromInfo = () => {
@@ -282,18 +258,11 @@ private  getParameterByName = () => {
     let ReceptionSelect = document.getElementsByName("NomReception")[0] as HTMLInputElement;
     idReception = parseInt(ReceptionSelect.value, 10);
     Actions.getActionId(actionType);
-    this.setState({
-      _actionChosen: actionType,
-      _actions: this.state._actions,
-      _receptions: this.state._receptions,
-      _receptionsChosen: idReception,
-      _firstClick: this.state._firstClick,
-      _formState: 1,
-      _lesJoueurs: this.state._lesJoueurs,
-    }, () => {
+    this.setState({_actionChosen: actionType, _formState: 1}, () => {
       if ( x3 !== 0 && y3 !== 0){
         this.receptionPasse();
-    }});
+      }
+    });
   }
 
   private setFromArrow = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -325,16 +294,8 @@ private  getParameterByName = () => {
       let endRadians = Math.atan((y1 - x1) / (x1 - x1));
       endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
       this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
-      this.setState({
-        _actionChosen: this.state._actionChosen,
-        _actions: this.state._actions,
-        _receptionsChosen: this.state._receptionsChosen,
-        _receptions: this.state._receptions,
-        _firstClick: false,
-        _formState: 1,
-        _lesJoueurs: this.state._lesJoueurs,
-      });
-    } else if( this.state._firstClick === false &&  x2 === 0 && typeAction !== "balle perdu"){
+      this.setState({_firstClick: false, _formState: 1});
+    } else if (this.state._firstClick === false &&  x2 === 0 && typeAction !== "balle perdu") {
       x2 = e.nativeEvent.offsetX;
       y2 = e.nativeEvent.offsetY;
       let canvas = document.getElementById("canvasDeuxiemeClick") as HTMLCanvasElement;
@@ -352,7 +313,8 @@ private  getParameterByName = () => {
       let endRadians = Math.atan((y2 - x2) / (x2 - x2));
       endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
       this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
-    }else if ( this.state._firstClick === false &&  x2 !== 0 && (typeAction === "reception et action" ||typeAction === "passe incomplete") ) {
+    } else if (this.state._firstClick === false &&
+    x2 !== 0 && (typeAction === "reception et action" || typeAction === "passe incomplete")) {
       fleche =  [fleche[0], [e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
       x3 = e.nativeEvent.offsetX;
       y3 = e.nativeEvent.offsetY;
@@ -409,15 +371,7 @@ private  getParameterByName = () => {
       let endRadians = Math.atan((y2 - x2) / (x2 - x2));
       endRadians += ((x2 > y2) ? 90 : -90) * Math.PI / 180;
       this.drawX(ctx, x2 / (ajustement - 0.7), y2 / ajustement);
-      this.setState({
-        _actionChosen: this.state._actionChosen,
-        _actions: this.state._actions,
-        _receptionsChosen: this.state._receptionsChosen,
-        _receptions: this.state._receptions,
-        _firstClick: false,
-        _formState: 1,
-        _lesJoueurs: this.state._lesJoueurs,
-      });
+      this.setState({_firstClick: false, _formState: 1});
     }
   }
 
@@ -432,15 +386,7 @@ private  getParameterByName = () => {
     y3 = 0;
     x3 = 0;
 
-    this.setState({
-        _actionChosen: this.state._actionChosen,
-        _actions: this.state._actions,
-        _receptionsChosen: this.state._receptionsChosen,
-        _receptions: this.state._receptions,
-        _firstClick: true,
-        _formState: 1,
-        _lesJoueurs: this.state._lesJoueurs,
-      });
+    this.setState({_firstClick: true, _formState: 1});
     let canvasArrow = document.getElementById("canvasArrow") as HTMLCanvasElement;
     let ctx2 = canvasArrow.getContext("2d");
     ctx2.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
@@ -470,15 +416,7 @@ private  getParameterByName = () => {
       let endRadians = Math.atan((y1 - x1) / (x1 - x1));
       endRadians += ((x1 > y1) ? 90 : -90) * Math.PI / 180;
       this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
-      this.setState({
-        _actionChosen: this.state._actionChosen,
-        _actions: this.state._actions,
-        _receptionsChosen: this.state._receptionsChosen,
-        _receptions: this.state._receptions,
-        _firstClick: false,
-        _formState: 1,
-        _lesJoueurs: this.state._lesJoueurs,
-      });
+      this.setState({_firstClick: false, _formState: 1});
   }
   private drawArrowhead = (ctx: CanvasRenderingContext2D, x: number, y: number, radians: number) => {
       ctx.save();
@@ -496,7 +434,7 @@ private  getParameterByName = () => {
   {
      const sel = document.getElementById("NomReception") as HTMLSelectElement;
      const opt = sel.options[sel.selectedIndex] as HTMLOptionElement;
-     idReception = opt.value;
+     idReception = parseInt(opt.value, 10);
   }
   private drawX = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
     ctx.beginPath();
@@ -514,29 +452,12 @@ private  getParameterByName = () => {
     x2 = 0;
     y1 = 0;
     y2 = 0;
-    this.setState({
-      _actionChosen: this.state._actionChosen,
-      _actions: this.state._actions,
-      _receptionsChosen: this.state._receptionsChosen,
-      _receptions: this.state._receptions,
-      _firstClick: true,
-      _formState: 0,
-      _lesJoueurs: this.state._lesJoueurs,
-    });
+    this.setState({_firstClick: true, _formState: 0});
   }
 
   private returnSecondStateForm = () => {
-    this.setState({
-      _actionChosen: this.state._actionChosen,
-      _actions: this.state._actions,
-      _receptionsChosen: this.state._receptionsChosen,
-      _receptions:this.state._receptions,
-      _firstClick: true,
-      _formState: 1,
-      _lesJoueurs: this.state._lesJoueurs,
-    }, () => {
-     if ( x1 !== 0 && y1 !== 0)
-     {
+    this.setState({_firstClick: true, _formState: 1}, () => {
+     if ( x1 !== 0 && y1 !== 0) {
        this.redessinerTout();
      }
     });
@@ -614,37 +535,60 @@ private  getParameterByName = () => {
     let nbTempo2 = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i <  this.state._lesJoueurs.length; i++) {
-      if (nbTempo === 3)
-      {
-        nbTempo2++;
-        nbTempo = 0;
-      }
 
-      /**
-       * Obtenir la dernière ligne jouée (défensive, centre ou offensive).
-       */
-      // let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ?
-      // 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
-      const ligne = (nbTempo === 0 ? 0 : ( nbTempo === 2 ? 1 : 2));
-      /**
-       * Obtenir la dernière position jouée (gauche, centre ou droite).
-       */
-      // let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0
-      // : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
-      nbTempo++;
-      rows[ligne][nbTempo2].push(
-        <li>
-          <button
-            className="btn btn-primary"
-            // tslint:disable-next-line:no-string-literal
-            value={this.state._lesJoueurs[i]["Number"]}
-            onClick={this.openActionForm.bind(this)}
-          >
-              {/*tslint:disable-next-line:no-string-literal*/}
-              {this.state._lesJoueurs[i]["Number"]}
-          </button>
+      if (i > 11) {
+        joeursBanc.push(
+          <li>
+          <Draggable>
+            <button
+              className="btn btn-primary draggable-element"
+              // tslint:disable-next-line:no-string-literal
+              value={this.state._lesJoueurs[i]["Number"]}
+              onClick={this.openActionForm.bind(this)}
+            >
+                {/*tslint:disable-next-line:no-string-literal*/}
+                {this.state._lesJoueurs[i]["Number"]}
+            </button>
+          </Draggable>
         </li>,
         );
+      } else {
+        if (nbTempo === 3) {
+          nbTempo2++;
+          nbTempo = 0;
+        }
+
+        /**
+         * Obtenir la dernière ligne jouée (défensive, centre ou offensive).
+         */
+        // let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ?
+        // 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
+        const ligne = (nbTempo === 0 ? 0 : ( nbTempo === 2 ? 1 : 2));
+        /**
+         * Obtenir la dernière position jouée (gauche, centre ou droite).
+         */
+        // let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0
+        // : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
+        nbTempo++;
+        rows[ligne][nbTempo2].push(
+          <li>
+            <Draggable handle="i">
+              <div className="draggable-element">
+                <button
+                  className="btn btn-primary"
+                  // tslint:disable-next-line:no-string-literal
+                  value={this.state._lesJoueurs[i]["Number"]}
+                  onClick={this.openActionForm.bind(this)}
+                >
+                    {/*tslint:disable-next-line:no-string-literal*/}
+                    {this.state._lesJoueurs[i]["Number"]}
+                </button>
+                <i className="glyphicon glyphicon-move"/>
+              </div>
+            </Draggable>
+          </li>,
+          );
+      }
     }
 
     // Actions
@@ -688,8 +632,11 @@ private  getParameterByName = () => {
             <h3>Première action</h3><hr />
             <div className="form-group">
               <label htmlFor="NomReception">type de reception</label>
-              <select id="NomReception" className="form-control" name="NomReception"
-               onChange={this.changeReception.bind(this)}>
+              <select
+                id="NomReception"
+                className="form-control"
+                name="NomReception"
+                onChange={this.changeReception.bind(this)}>
                 {reception}
               </select>
               <label htmlFor="Nom">Nom de l'action</label>
@@ -756,8 +703,13 @@ private  getParameterByName = () => {
             <input type="text" name="ScoreDom" id="ScoreDom" />
             <label htmlFor="ScoreAway">Extérieur</label>
             <input type="text" name="ScoreAway" id="ScoreAway"/>
-      </form>
-        <div id="terrain-container" className="container-fluid">
+        </form>
+        <div id="banc" className="col-xs-1">
+          <ul>
+            {joeursBanc[0]}
+          </ul>
+        </div>
+        <div id="terrain-container" className="container-fluid col-xs-11">
           <div id="circle-centre" />
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
             <div id="def-gauche">

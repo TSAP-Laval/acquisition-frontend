@@ -430,3 +430,14 @@ ul.players-list {
     visibility: hidden;
     opacity: 0;
 }
+
+.draggable-element {
+    position: absolute;
+    z-index: 3;
+
+    i {
+        vertical-align: middle;
+        font-size: 18pt;
+        cursor: move;
+    }
+}
