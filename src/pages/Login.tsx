@@ -12,6 +12,9 @@ import {
     Col,
     Checkbox,
 } from "react-bootstrap";
+
+import "../sass/Layout.scss";
+
 import Store            from "../stores/AuthStore";
 import * as Action      from "../actions/AuthActions";
 import { IMessages }    from "../interfaces/interfaces";
@@ -25,8 +28,11 @@ export interface ILayoutState {
     password?: any;
     token?: string;
     username?: any;
+    remember?: boolean;
  }
 // tslint:enable:no-empty-interface
+
+// TODO : Add error messages
 
 export class Login extends React.Component<ILayoutProps, ILayoutState> {
 
@@ -34,6 +40,7 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
         [key: string]: (Element);
         email: (HTMLInputElement);
         password: (HTMLInputElement);
+        remember: (HTMLInputElement);
     };
 
     public constructor() {
@@ -44,6 +51,7 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
 
         this.onEmailInput = this.onEmailInput.bind(this);
         this.onPasswordInput = this.onPasswordInput.bind(this);
+        this.onRememberChange = this.onRememberChange.bind(this);
 
         this.state = {
             errors: [],
@@ -64,7 +72,8 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     private componentWillUnmount() {
-        Store.removeAllListeners();
+        Store.removeListener("message", this._onMessage);
+        Store.removeListener("logged_in", this._onLoggedIn);
     }
 
     private errorChecker() {
@@ -97,8 +106,9 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
         if (this.state.errors.length === 0) {
             const username = this.state.username;
             const password = this.state.password;
+            const remember = this.state.remember;
             // Authentificate the user
-            Action.login(username, password);
+            Action.login(username, password, remember);
         }
     }
 
@@ -112,6 +122,11 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
         this.setState({ password: password.value.trim() });
     }
 
+    private onRememberChange(e: React.FormEvent<Checkbox>) {
+        const remember = ReactDOM.findDOMNode(this.refs.remember) as HTMLInputElement;
+        this.setState({ remember: remember.checked });
+    }
+
     private _onMessage() {
         this.setState({ message: Store.getMessage() });
     }
@@ -122,6 +137,12 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
     }
 
     public render() {
+        // Dans le cas où la personne est déjà authentifiée,
+        // on la redirige vers la page d'accueil
+        if (Store.getToken() !== "") {
+            browserHistory.push("/home");
+        }
+
         const errors = this.state.errors.map((e, i) => <li key={i}>{e}</li>);
         const titre = (
             <h3>Connexion</h3>
@@ -130,54 +151,51 @@ export class Login extends React.Component<ILayoutProps, ILayoutState> {
         return (
             <div>
                 <h1>TSAP</h1>
-                <Col sm={8} className={"center"}>
-                    <Panel header={titre} bsStyle="primary">
-                        <Form horizontal={true}>
-                            <div>
-                                <ul className="errors">{errors}</ul>
-                            </div>
-                            <FormGroup controlId="formHorizontalEmail">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Email
-                                </Col>
-                                <Col sm={10}>
-                                    <FormControl
-                                        type="email"
-                                        placeholder="Email"
-                                        onInput={this.onEmailInput}
-                                        inputRef={(usr: HTMLInputElement) => { this.refs.email = usr; }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                            <FormGroup controlId="formHorizontalPassword">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Password
-                                </Col>
-                                <Col sm={10}>
-                                    <FormControl
-                                        type="password"
-                                        placeholder="Mot de passe"
-                                        onInput={this.onPasswordInput}
-                                        inputRef={(pass: HTMLInputElement) => { this.refs.password = pass; }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                            <FormGroup>
-                                <Col smOffset={2} sm={10}>
-                                    <Checkbox>Rester connecté</Checkbox>
-                                </Col>
-                            </FormGroup>
+                <div className="center-login-div">
+                    <Col sm={8} className={"center"}>
+                        <Panel header={titre} bsStyle="primary">
+                            <Form horizontal={true}>
+                                <div>
+                                    <ul className="errors">{errors}</ul>
+                                </div>
+                                <FormGroup controlId="formHorizontalEmail">
+                                    <Col componentClass={ControlLabel} sm={2}>
+                                        Email
+                                    </Col>
+                                    <Col sm={10}>
+                                        <FormControl
+                                            type="email"
+                                            placeholder="Email"
+                                            onInput={this.onEmailInput}
+                                            inputRef={(usr: HTMLInputElement) => { this.refs.email = usr; }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup controlId="formHorizontalPassword">
+                                    <Col componentClass={ControlLabel} sm={2}>
+                                        Password
+                                    </Col>
+                                    <Col sm={10}>
+                                        <FormControl
+                                            type="password"
+                                            placeholder="Mot de passe"
+                                            onInput={this.onPasswordInput}
+                                            inputRef={(pass: HTMLInputElement) => { this.refs.password = pass; }}
+                                        />
+                                    </Col>
+                                </FormGroup>
 
-                            <FormGroup>
-                                <Col smOffset={2} sm={10}>
-                                    <Button type="submit" onClick={(e) => this.onSubmit(e)}>
-                                        Connexion
-                                    </Button>
-                                </Col>
-                            </FormGroup>
-                        </Form>
-                    </Panel>
-                </Col>
+                                <FormGroup>
+                                    <Col smOffset={2} sm={10}>
+                                        <Button type="submit" onClick={(e) => this.onSubmit(e)}>
+                                            Connexion
+                                        </Button>
+                                    </Col>
+                                </FormGroup>
+                            </Form>
+                        </Panel>
+                    </Col>
+                </div>
             </div>
         );
     }
