@@ -282,6 +282,10 @@ ul.players-list {
     .terrain-third {
         height: 100%;
 
+        .terrain-hauteur {
+            height: $t-height / 3;
+        }
+
         &:after {
             text-align: center;
             font-weight: 200;
@@ -429,6 +433,12 @@ ul.players-list {
 #video-cvs.hidden {
     visibility: hidden;
     opacity: 0;
+}
+
+#banc {
+    border: 2px solid firebrick;
+    padding: 10px;
+    height: $t-height;
 }
 
 .draggable-element {

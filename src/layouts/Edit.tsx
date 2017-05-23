@@ -518,6 +518,11 @@ private  getParameterByName = () => {
       this.drawX(ctx, x1 / (ajustement - 0.7), y1 / ajustement);
    }
   }
+
+  private test = (e: any) => {
+    console.log("test");
+  }
+
   public render() {
     rows = [
         [
@@ -705,6 +710,7 @@ private  getParameterByName = () => {
             <input type="text" name="ScoreAway" id="ScoreAway"/>
         </form>
         <div id="banc" className="col-xs-1">
+          Banc
           <ul>
             {joeursBanc[0]}
           </ul>
@@ -712,37 +718,37 @@ private  getParameterByName = () => {
         <div id="terrain-container" className="container-fluid col-xs-11">
           <div id="circle-centre" />
           <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
-            <div id="def-gauche">
+            <div id="def-gauche" className="terrain-hauteur" onDrop={this.test}>
               <ul className="players-list" id="def-gauche-list">{rows[0][0]}</ul>
             </div>
-            <div id="def-centre">
+            <div id="def-centre" className="terrain-hauteur">
               <ul className="players-list" id="def-centre-list">{rows[0][1]}</ul>
             </div>
-            <div id="def-droite">
+            <div id="def-droite" className="terrain-hauteur">
               <ul className="players-list" id="def-droite-list">{rows[0][2]}</ul>
             </div>
           </div>
 
           <div id="mid-container" className="col-xs-12 col-sm-4 terrain-third">
-            <div id="mid-gauche">
+            <div id="mid-gauche" className="terrain-hauteur">
               <ul className="players-list" id="mid-gauche-list">{rows[1][0]}</ul>
             </div>
-            <div id="mid-centre">
+            <div id="mid-centre" className="terrain-hauteur">
               <ul className="players-list" id="mid-centre-list">{rows[1][1]}</ul>
             </div>
-            <div id="mid-droite">
+            <div id="mid-droite" className="terrain-hauteur">
               <ul className="players-list" id="mid-droite-list">{rows[1][2]}</ul>
             </div>
           </div>
 
           <div id="off-container" className="col-xs-12 col-sm-4 terrain-third">
-            <div id="off-gauche">
+            <div id="off-gauche" className="terrain-hauteur">
               <ul className="players-list" id="off-gauche-list">{rows[2][0]}</ul>
             </div>
-            <div id="off-centre">
+            <div id="off-centre" className="terrain-hauteur">
               <ul className="players-list" id="off-centre-list">{rows[2][1]}</ul>
             </div>
-            <div id="off-droite">
+            <div id="off-droite" className="terrain-hauteur">
               <ul className="players-list" id="off-droite-list">{rows[2][2]}</ul>
             </div>
           </div>
@@ -751,4 +757,3 @@ private  getParameterByName = () => {
     );
   }
 }
-
