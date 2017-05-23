@@ -20,7 +20,7 @@ export class Upload extends React.Component<ILayoutProps, ILayoutState> {
         return (
             <div className="wrapper absolute">
                 <div className="row row-offcanvas row-offcanvas-left">
-                    <Header title="Page d'analyse vidéo"/>
+                    <Header title="Page d'envoie vidéo"/>
                     <SideBar />
                     <Uploader params={ window.location.href.split("is_new=")[1] }/>
                 </div>

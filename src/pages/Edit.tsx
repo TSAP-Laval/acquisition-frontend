@@ -45,7 +45,6 @@ export class Edit extends React.Component<ILayoutProps, ILayoutState> {
                         </div>
                     </div>
                 </div>
-                <Footer />
             </div>
         );
     }

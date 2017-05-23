@@ -1,7 +1,7 @@
 // tslint:disable:import-spacing
 import * as React    from "react";
 import * as ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, browserHistory } from "react-router";
+import { Router, Route, IndexRoute, browserHistory, Redirect } from "react-router";
 import { Home }   from "./pages/Home";
 import { Upload } from "./pages/Upload";
 import { Edit }   from "./pages/Edit";

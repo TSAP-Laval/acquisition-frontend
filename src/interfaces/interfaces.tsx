@@ -11,6 +11,7 @@ export interface IAuth {
 	type: string;
 	username: string;
 	password: string;
+	remember: boolean;
 }
 
 export interface IMessages {

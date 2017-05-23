@@ -16,7 +16,6 @@ export class Layout extends React.Component<ILayoutProps, ILayoutState> {
         return (
                 <div>
                     {this.props.children}
-                    <Footer />
                 </div>
         );
     }
