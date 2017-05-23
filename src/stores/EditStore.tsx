@@ -36,11 +36,11 @@ class EditStore extends EventEmitter {
         const url = serverURL + "/parties/" + gameID + "/actions";
 
         axios.default.get(url, config).then(function(r: axios.AxiosResponse) {
-            // console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
+            console.log("RESULT (XHR): \n %o\nSTATUS: %s", r.data, r.status);
             this.actionsStack = r.data;
             this.emit("action_loaded");
         }.bind(this)).catch(function(error: axios.AxiosError) {
-            // console.log("ERROR (XHR): \n" + error);
+            console.log("ERROR (XHR): \n" + error);
         }.bind(this));
     }
     public GetAllActions = () => {
@@ -73,7 +73,7 @@ class EditStore extends EventEmitter {
         switch (action.type) {
             case "MATCH_EDIT.GETJOUEURS":
                 // tslint:disable:prefer-for-of
-                for (let i = 0; i < action.text.length; i++
+                for (let i = 0; i < action.text.length; i++)
                 {
                     this.joueurs.push(action.text[i]);
                 }
