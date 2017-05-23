@@ -22,10 +22,10 @@ export interface ILayoutState {
     _receptions: any ;
     _actionChosen: any;
     _firstClick: any;
+    numJoueur?: number;
 }
 
 // les variables globales pour avoir le numero du joueur
-const numJoueur = 1; /* LE ****S*S&#*&?$*?DSH*SHD du joueur est hard-codé ?!?!?!?!?! */
 let x1: number = 0;
 let y1: number = 0;
 let x2: number = 0;
@@ -46,12 +46,16 @@ let rows: any = [
                         [], [], [],
                     ],
                 ];
+
 let joeursBanc: any = [];
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
 
     constructor(props: any) {
         super(props);
+
+        this.openActionForm = this.openActionForm.bind(this);
+
         this.state = {
             _actionChosen: "",
             _actions: [],
@@ -60,6 +64,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
             _lesJoueurs: [],
             _receptions: [],
             _receptionsChosen: "",
+            numJoueur: 0,
         };
     }
 
@@ -163,7 +168,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
     }
 
     // Ouvre le form d'ajout d'action
-    private openActionForm = (e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) => {
+    private openActionForm(e: React.MouseEvent<HTMLInputElement>, sender: HTMLButtonElement) {
+        console.log(e.currentTarget.value);
+        const num = parseInt(e.currentTarget.value, 10);
+        this.setState({ numJoueur: num});
         Actions.requestActionForm(e, sender, document.getElementsByClassName("Enr")[0] as HTMLDivElement);
     }
 
@@ -206,7 +214,7 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
                         GameID : idGame,
                         GuestScore: awayScoreInt,
                         HomeScore: homeScoreInt,
-                        PlayerID : numJoueur,
+                        PlayerID : this.state.numJoueur,
                         ReceptionTypeID: idReception,
                         Time: parseFloat(video.currentTime.toFixed(4)),
                         X1: x1,
@@ -226,10 +234,10 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
                 else {
                     text = {
                         ActionTypeID : this.state._actionChosen,
-                        GameID: 1,
+                        GameID: idGame,
                         GuestScore: awayScoreInt,
                         HomeScore: homeScoreInt,
-                        PlayerID: numJoueur,
+                        PlayerID: this.state.numJoueur,
                         ReceptionTypeID : idReception,
                         Time: parseFloat(video.currentTime.toFixed(4)),
                         X1 : x1,
