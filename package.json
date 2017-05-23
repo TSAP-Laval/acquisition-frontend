@@ -59,6 +59,7 @@
     "react-data-grid": "^2.0.12",
     "react-datetime": "^2.8.10",
     "react-dom": "^15.4.2",
+    "react-draggable": "^2.2.6",
     "react-dropzone": "^3.9.0",
     "react-html5video": "^1.4.0",
     "react-icons": "^2.2.3",

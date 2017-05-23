@@ -5367,6 +5367,12 @@ react-dom@^15.4.2:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
+react-draggable@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-2.2.6.tgz#3a806e10f2da6babfea4136be6510e89b0d76901"
+  dependencies:
+    classnames "^2.2.5"
+
 react-dropzone@^3.9.0:
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-3.13.0.tgz#a6a438df289971f909d498583d67ab0c4f214b17"

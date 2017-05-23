@@ -7,6 +7,7 @@ import UploaderStore  from "../stores/UploaderStore";
 import Header         from "./Header";
 import * as Actions   from "../actions/EditAction";
 import * as Motion    from "react-motion";
+import * as Draggable from "react-draggable";
 // tslint:enable:import-spacing
 
 import "../sass/Layout.scss";
@@ -45,6 +46,7 @@ let rows: any = [
                         [], [], [],
                     ],
                 ];
+let joeursBanc: any = [];
 
 export default class EditTest extends React.Component<ILayoutProps, ILayoutState> {
 
@@ -611,32 +613,59 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
 
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i <  this.state._lesJoueurs.length; i++) {
-            if (nbTempo === 3)
-            {
-                nbTempo2++;
-                nbTempo = 0;
-            }
-
-            // Obtenir la dernière ligne jouée (défensive, centre ou offensive).
-            const ligne = (nbTempo === 0 ? 0 : ( nbTempo === 2 ? 1 : 2));
-
-            // Obtenir la dernière position jouée (gauche, centre ou droite).
-            nbTempo++;
-
-            rows[ligne][nbTempo2].push(
+            if (i > 11) {
+              joeursBanc.push(
                 <li>
-                <button
-                    className="btn btn-primary"
+                <Draggable>
+                  <button
+                    className="btn btn-primary draggable-element"
                     // tslint:disable-next-line:no-string-literal
                     value={this.state._lesJoueurs[i]["Number"]}
-                    // tslint:disable-next-line:jsx-no-bind
                     onClick={this.openActionForm.bind(this)}
-                >
-                    {/* tslint:disable-next-line:no-string-literal */}
-                    {this.state._lesJoueurs[i]["Number"]}
-                </button>
+                  >
+                      {/*tslint:disable-next-line:no-string-literal*/}
+                      {this.state._lesJoueurs[i]["Number"]}
+                  </button>
+                </Draggable>
+              </li>,
+              );
+            } else {
+              if (nbTempo === 3) {
+                nbTempo2++;
+                nbTempo = 0;
+              }
+
+              /**
+               * Obtenir la dernière ligne jouée (défensive, centre ou offensive).
+               */
+              // let ligne = (this.state._lesJoueurs[i]["LastLignePlayed"] == "def" ?
+              // 0 : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
+              const ligne = (nbTempo === 0 ? 0 : ( nbTempo === 2 ? 1 : 2));
+              /**
+               * Obtenir la dernière position jouée (gauche, centre ou droite).
+               */
+              // let position = (this.state._lesJoueurs[i]["LastPositionPlayed"] == "gau" ? 0
+              // : (this.state._lesJoueurs[i]["LastLignePlayed"] == "cen" ? 1 : 2));
+              nbTempo++;
+              rows[ligne][nbTempo2].push(
+                <li>
+                  <Draggable handle="i">
+                    <div className="draggable-element">
+                      <button
+                        className="btn btn-primary"
+                        // tslint:disable-next-line:no-string-literal
+                        value={this.state._lesJoueurs[i]["Number"]}
+                        onClick={this.openActionForm.bind(this)}
+                      >
+                          {/*tslint:disable-next-line:no-string-literal*/}
+                          {this.state._lesJoueurs[i]["Number"]}
+                      </button>
+                      <i className="glyphicon glyphicon-move"/>
+                    </div>
+                  </Draggable>
                 </li>,
-            );
+                );
+            }
         }
 
         // Actions
@@ -755,45 +784,51 @@ export default class EditTest extends React.Component<ILayoutProps, ILayoutState
                 <label htmlFor="ScoreAway">Extérieur</label>
                 <input type="text" name="ScoreAway" id="ScoreAway"/>
             </form>
-            <div id="terrain-container" className="container-fluid">
-            <div id="circle-centre" />
-            <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
-                <div id="def-gauche">
-                <ul className="players-list" id="def-gauche-list">{rows[0][0]}</ul>
-                </div>
-                <div id="def-centre">
-                <ul className="players-list" id="def-centre-list">{rows[0][1]}</ul>
-                </div>
-                <div id="def-droite">
-                <ul className="players-list" id="def-droite-list">{rows[0][2]}</ul>
-                </div>
+            <div id="banc" className="col-xs-1">
+              Banc
+              <ul>
+                {joeursBanc}
+              </ul>
             </div>
+            <div id="terrain-container" className="container-fluid col-xs-11">
+              <div id="circle-centre" />
+              <div id="def-container" className="col-xs-12 col-sm-4 terrain-third">
+                <div id="def-gauche" className="terrain-hauteur">
+                  <ul className="players-list" id="def-gauche-list">{rows[0][0]}</ul>
+                </div>
+                <div id="def-centre" className="terrain-hauteur">
+                  <ul className="players-list" id="def-centre-list">{rows[0][1]}</ul>
+                </div>
+                <div id="def-droite" className="terrain-hauteur">
+                  <ul className="players-list" id="def-droite-list">{rows[0][2]}</ul>
+                </div>
+              </div>
 
-            <div id="mid-container" className="col-xs-12 col-sm-4 terrain-third">
-                <div id="mid-gauche">
-                <ul className="players-list" id="mid-gauche-list">{rows[1][0]}</ul>
+              <div id="mid-container" className="col-xs-12 col-sm-4 terrain-third">
+                <div id="mid-gauche" className="terrain-hauteur">
+                  <ul className="players-list" id="mid-gauche-list">{rows[1][0]}</ul>
                 </div>
-                <div id="mid-centre">
-                <ul className="players-list" id="mid-centre-list">{rows[1][1]}</ul>
+                <div id="mid-centre" className="terrain-hauteur">
+                  <ul className="players-list" id="mid-centre-list">{rows[1][1]}</ul>
                 </div>
-                <div id="mid-droite">
-                <ul className="players-list" id="mid-droite-list">{rows[1][2]}</ul>
+                <div id="mid-droite" className="terrain-hauteur">
+                  <ul className="players-list" id="mid-droite-list">{rows[1][2]}</ul>
                 </div>
-            </div>
+              </div>
 
-            <div id="off-container" className="col-xs-12 col-sm-4 terrain-third">
-                <div id="off-gauche">
-                <ul className="players-list" id="off-gauche-list">{rows[2][0]}</ul>
+              <div id="off-container" className="col-xs-12 col-sm-4 terrain-third">
+                <div id="off-gauche" className="terrain-hauteur">
+                  <ul className="players-list" id="off-gauche-list">{rows[2][0]}</ul>
                 </div>
-                <div id="off-centre">
-                <ul className="players-list" id="off-centre-list">{rows[2][1]}</ul>
+                <div id="off-centre" className="terrain-hauteur">
+                  <ul className="players-list" id="off-centre-list">{rows[2][1]}</ul>
                 </div>
-                <div id="off-droite">
-                <ul className="players-list" id="off-droite-list">{rows[2][2]}</ul>
+                <div id="off-droite" className="terrain-hauteur">
+                  <ul className="players-list" id="off-droite-list">{rows[2][2]}</ul>
                 </div>
+              </div>
             </div>
-            </div>
-        </div>
+          </div>
         );
     }
 }
